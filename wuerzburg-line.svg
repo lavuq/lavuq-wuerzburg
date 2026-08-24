@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-labelledby="t d">
+<title id="t">Stilisierte Würzburg-Silhouette</title><desc id="d">Abstrakte Stadtgrafik mit Festung, Brücke und Main in den LAVUQ-Farben</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b2344"/><stop offset="1" stop-color="#07182f"/></linearGradient></defs>
+<rect width="900" height="420" rx="36" fill="url(#bg)"/>
+<circle cx="730" cy="90" r="48" fill="#d8b46a" opacity=".16"/>
+<path d="M70 300 C200 278 285 280 385 304 C505 333 610 325 830 292" fill="none" stroke="#9fb1c6" stroke-width="6" opacity=".36"/>
+<path d="M112 278h678" stroke="#d8b46a" stroke-width="5" stroke-linecap="round"/>
+<path d="M178 277c16-38 42-57 78-57s62 19 78 57M335 277c16-38 42-57 78-57s62 19 78 57M492 277c16-38 42-57 78-57s62 19 78 57" fill="none" stroke="#d8b46a" stroke-width="6"/>
+<path d="M120 214h164v52H120zM145 166h114v48H145zM180 126h48v40H180z" fill="#f7f3ea" opacity=".95"/>
+<path d="M595 210h142v56H595zM620 165h94v45H620zM655 120h24v45H655zM720 182h55v84H720z" fill="#f7f3ea" opacity=".92"/>
+<path d="M116 300c116 25 224 25 331 0 118-27 237-22 355 0" fill="none" stroke="#d8b46a" stroke-width="3" opacity=".55"/>
+<g fill="#d8b46a"><circle cx="268" cy="350" r="5"/><circle cx="300" cy="350" r="5"/><circle cx="332" cy="350" r="5"/><circle cx="364" cy="350" r="5"/></g>
+</svg>

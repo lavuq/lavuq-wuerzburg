@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="t d">
+<title id="t">Öffentliches Gruppentreffen</title><desc id="d">Vier Personen sitzen gemeinsam an einem Tisch in einem öffentlichen Café</desc>
+<rect width="760" height="420" rx="36" fill="#0b2344"/>
+<rect x="140" y="250" width="480" height="18" rx="9" fill="#d8b46a"/>
+<rect x="185" y="267" width="14" height="95" rx="7" fill="#d8b46a"/><rect x="560" y="267" width="14" height="95" rx="7" fill="#d8b46a"/>
+<g fill="#f7f3ea"><circle cx="220" cy="150" r="32"/><circle cx="340" cy="135" r="32"/><circle cx="420" cy="135" r="32"/><circle cx="540" cy="150" r="32"/></g>
+<g stroke="#f7f3ea" stroke-width="8" stroke-linecap="round"><path d="M185 235c8-48 24-72 35-72s27 24 35 72"/><path d="M305 235c8-48 24-72 35-72s27 24 35 72"/><path d="M385 235c8-48 24-72 35-72s27 24 35 72"/><path d="M505 235c8-48 24-72 35-72s27 24 35 72"/></g>
+<path d="M300 205h160" stroke="#d8b46a" stroke-width="5" stroke-linecap="round"/>
+<circle cx="380" cy="205" r="7" fill="#d8b46a"/>
+</svg>

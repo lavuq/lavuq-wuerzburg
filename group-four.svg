@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="t d">
+<title id="t">Vier Menschen in einer Freundesgruppe</title><desc id="d">Neutrale Illustration von vier Personen in einem Kreis, ohne romantische Symbolik</desc>
+<rect width="760" height="420" rx="36" fill="#ffffff"/>
+<circle cx="380" cy="210" r="150" fill="#f3efe6"/>
+<g stroke="#07182f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+<circle cx="255" cy="155" r="34"/><path d="M203 255c9-55 32-82 52-82s43 27 52 82"/>
+<circle cx="505" cy="155" r="34"/><path d="M453 255c9-55 32-82 52-82s43 27 52 82"/>
+<circle cx="295" cy="292" r="34"/><path d="M243 392c9-55 32-82 52-82s43 27 52 82"/>
+<circle cx="465" cy="292" r="34"/><path d="M413 392c9-55 32-82 52-82s43 27 52 82"/>
+</g>
+<g stroke="#d8b46a" stroke-width="5" stroke-linecap="round"><path d="M305 171c37 20 113 20 150 0"/><path d="M338 283c28-18 56-18 84 0"/></g>
+<g fill="#d8b46a"><circle cx="380" cy="92" r="7"/><circle cx="610" cy="250" r="7"/><circle cx="150" cy="250" r="7"/></g>
+</svg>
