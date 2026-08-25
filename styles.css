@@ -103,3 +103,14 @@ footer{background:#041124;color:#c7d0dc;padding:52px 0 24px}.footer-grid{display
     max-width: 100%;
   }
 }
+/* Q-Logo im Header optisch zentrieren */
+.brand-mark {
+  object-fit: contain;
+  object-position: center center;
+  transform: translateX(3px);
+}
+@media (max-width: 520px) {
+  .brand-mark {
+    transform: translateX(3px);
+  }
+}
