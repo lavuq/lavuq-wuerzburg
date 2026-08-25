@@ -20,3 +20,4 @@ Statische, responsive Website für das LAVUQ-Freundschaftskonzept.
 3. Bewerbungsformular an Backend/Form-Dienst anbinden (aktuell werden keine Daten versendet).
 4. Markenname LAVUQ vor kommerzieller Nutzung rechtlich final prüfen.
 5. Optional Domain, E-Mail, Analytics und Spam-Schutz einrichten.
+    Website v38
