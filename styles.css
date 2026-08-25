@@ -80,3 +80,26 @@ footer{background:#041124;color:#c7d0dc;padding:52px 0 24px}.footer-grid{display
 @media(max-width:520px){.companion-note{font-size:.9rem;line-height:1.45;margin-top:12px;padding:9px 11px}}
 
 .bot-field{position:absolute!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;height:1px!important;width:1px!important;margin:-1px!important;padding:0!important;border:0!important}
+/* Mobile Fix – kein Abschneiden rechts */
+@media (max-width: 520px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.45rem, 11vw, 3.2rem);
+    max-width: 100%;
+  }
+
+  .hero h1 span {
+    display: block;
+  }
+
+  .companion-note {
+    width: 100%;
+    max-width: 100%;
+  }
+}
