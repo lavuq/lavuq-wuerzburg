@@ -28,7 +28,6 @@ document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()
 
 const form=document.querySelector('#applyForm');
 if(form){
-  // Kontaktdaten ergänzen, damit LAVUQ Bewerber zuverlässig erreichen kann.
   const firstStep=form.querySelector('.form-step');
   const nameField=firstStep?.querySelector('#name')?.closest('.field');
   if(firstStep && nameField && !form.querySelector('[name="Email"]')){
@@ -43,15 +42,16 @@ if(form){
   const label=document.querySelector('#progressLabel');
   function show(){
     steps.forEach((s,i)=>s.classList.toggle('active',i===step));
-    bar.style.width=((step+1)/steps.length*100)+'%';
-    label.textContent=`Schritt ${step+1} von ${steps.length}`;
+    if(bar) bar.style.width=((step+1)/steps.length*100)+'%';
+    if(label) label.textContent=`Schritt ${step+1} von ${steps.length}`;
     window.scrollTo({top:0,behavior:'smooth'});
   }
   document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
     const section=steps[step];
-    const req=[...section.querySelectorAll('[required]')];
-    if(req.some(x=>!x.checkValidity())){
-      req.find(x=>!x.checkValidity())?.reportValidity();
+    const invalid=section.querySelector(':invalid');
+    if(invalid){
+      invalid.reportValidity?.();
+      invalid.scrollIntoView?.({behavior:'smooth',block:'center'});
       return;
     }
     step=Math.min(step+1,steps.length-1);
@@ -64,23 +64,40 @@ if(form){
 
   form.addEventListener('submit',async(e)=>{
     e.preventDefault();
-    if(!form.checkValidity()){
-      form.reportValidity();
+    const invalid=form.querySelector(':invalid');
+    if(invalid){
+      invalid.reportValidity?.();
+      invalid.scrollIntoView?.({behavior:'smooth',block:'center'});
       return;
     }
+
     const btn=form.querySelector('button[type="submit"]');
-    const original=btn.textContent;
-    btn.disabled=true;
-    btn.textContent='Wird gesendet …';
+    const original=btn?.textContent || 'Bewerbung absenden';
+    if(btn){btn.disabled=true;btn.textContent='Wird gesendet …';}
     const success=document.querySelector('#formSuccess');
     const error=document.querySelector('#formError');
     if(success)success.hidden=true;
     if(error)error.hidden=true;
+
     try{
       const data=new FormData(form);
-      const res=await fetch('https://lavuq-bewerbung.lavuq.workers.dev',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});
-      const result=await res.json().catch(()=>({}));
-      if(!res.ok || result.ok!==true) throw new Error(result.error || ('HTTP '+res.status));
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),15000);
+      const res=await fetch('https://lavuq-bewerbung.lavuq.workers.dev/',{
+        method:'POST',
+        mode:'cors',
+        credentials:'omit',
+        cache:'no-store',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+        body:new URLSearchParams(data).toString(),
+        signal:controller.signal
+      });
+      clearTimeout(timer);
+      const raw=await res.text();
+      let result={};
+      try{result=raw?JSON.parse(raw):{};}catch(_){result={error:raw || 'Ungültige Serverantwort'};}
+      if(!res.ok || result.ok!==true) throw new Error(result.error || `HTTP ${res.status}`);
+
       form.hidden=true;
       document.querySelector('.progress-head')?.setAttribute('hidden','');
       document.querySelector('.progress')?.setAttribute('hidden','');
@@ -92,13 +109,17 @@ if(form){
         success.scrollIntoView({behavior:'smooth',block:'start'});
       }
     }catch(err){
-      console.error(err);
+      console.error('LAVUQ Bewerbungsfehler:',err);
       if(error){
+        const p=error.querySelector('p');
+        if(p){
+          const detail=err?.name==='AbortError' ? 'Der Server hat nicht rechtzeitig geantwortet.' : (err?.message || 'Unbekannter Fehler');
+          p.textContent=`Die Bewerbung konnte nicht übermittelt werden. Technischer Hinweis: ${detail}`;
+        }
         error.hidden=false;
         error.scrollIntoView({behavior:'smooth',block:'start'});
       }
-      btn.disabled=false;
-      btn.textContent=original;
+      if(btn){btn.disabled=false;btn.textContent=original;}
     }
   });
   show();
