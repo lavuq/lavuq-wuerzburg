@@ -23,8 +23,86 @@ if(toggle&&nav){
   backdrop.addEventListener('click',closeMenu);
   nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
 }
+
 document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>btn.parentElement.classList.toggle('open')));
-const form=document.querySelector('#applyForm');if(form){let step=0;const steps=[...document.querySelectorAll('.form-step')];const bar=document.querySelector('.progress-bar');const label=document.querySelector('#progressLabel');function show(){steps.forEach((s,i)=>s.classList.toggle('active',i===step));bar.style.width=((step+1)/steps.length*100)+'%';label.textContent=`Schritt ${step+1} von ${steps.length}`;window.scrollTo({top:0,behavior:'smooth'})}document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{const section=steps[step];const req=[...section.querySelectorAll('[required]')];if(req.some(x=>!x.checkValidity())){req.find(x=>!x.checkValidity())?.reportValidity();return}step=Math.min(step+1,steps.length-1);show()}));document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>{step=Math.max(0,step-1);show()}));form.addEventListener('submit',async(e)=>{e.preventDefault();if(!form.checkValidity()){form.reportValidity();return}const btn=form.querySelector('button[type="submit"]');const original=btn.textContent;btn.disabled=true;btn.textContent='Wird gesendet …';const success=document.querySelector('#formSuccess');const error=document.querySelector('#formError');if(success)success.hidden=true;if(error)error.hidden=true;try{const data=new FormData(form);const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});if(!res.ok)throw new Error('HTTP '+res.status);form.hidden=true;document.querySelector('.progress-head')?.setAttribute('hidden','');document.querySelector('.progress')?.setAttribute('hidden','');document.querySelector('.application-intro')?.setAttribute('hidden','');if(success){success.hidden=false;success.scrollIntoView({behavior:'smooth',block:'start'})}}catch(err){console.error(err);if(error){error.hidden=false;error.scrollIntoView({behavior:'smooth',block:'start'})}btn.disabled=false;btn.textContent=original}});show()}
+
+const form=document.querySelector('#applyForm');
+if(form){
+  // Kontaktdaten ergänzen, damit LAVUQ Bewerber zuverlässig erreichen kann.
+  const firstStep=form.querySelector('.form-step');
+  const nameField=firstStep?.querySelector('#name')?.closest('.field');
+  if(firstStep && nameField && !form.querySelector('[name="Email"]')){
+    const contact=document.createElement('div');
+    contact.innerHTML=`<div class="grid-2"><div class="field"><label for="email">E-Mail-Adresse *</label><input id="email" name="Email" type="email" required autocomplete="email" placeholder="name@beispiel.de"></div><div class="field"><label for="mobile">Mobilnummer / WhatsApp <span class="muted">(freiwillig)</span></label><input id="mobile" name="Mobilnummer" type="tel" autocomplete="tel" placeholder="z. B. 0171 1234567"></div></div>`;
+    nameField.insertAdjacentElement('afterend',contact.firstElementChild);
+  }
+
+  let step=0;
+  const steps=[...document.querySelectorAll('.form-step')];
+  const bar=document.querySelector('.progress-bar');
+  const label=document.querySelector('#progressLabel');
+  function show(){
+    steps.forEach((s,i)=>s.classList.toggle('active',i===step));
+    bar.style.width=((step+1)/steps.length*100)+'%';
+    label.textContent=`Schritt ${step+1} von ${steps.length}`;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
+    const section=steps[step];
+    const req=[...section.querySelectorAll('[required]')];
+    if(req.some(x=>!x.checkValidity())){
+      req.find(x=>!x.checkValidity())?.reportValidity();
+      return;
+    }
+    step=Math.min(step+1,steps.length-1);
+    show();
+  }));
+  document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>{
+    step=Math.max(0,step-1);
+    show();
+  }));
+
+  form.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    if(!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+    const btn=form.querySelector('button[type="submit"]');
+    const original=btn.textContent;
+    btn.disabled=true;
+    btn.textContent='Wird gesendet …';
+    const success=document.querySelector('#formSuccess');
+    const error=document.querySelector('#formError');
+    if(success)success.hidden=true;
+    if(error)error.hidden=true;
+    try{
+      const data=new FormData(form);
+      const res=await fetch('https://lavuq-bewerbung.lavuq.workers.dev',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});
+      const result=await res.json().catch(()=>({}));
+      if(!res.ok || result.ok!==true) throw new Error(result.error || ('HTTP '+res.status));
+      form.hidden=true;
+      document.querySelector('.progress-head')?.setAttribute('hidden','');
+      document.querySelector('.progress')?.setAttribute('hidden','');
+      document.querySelector('.application-intro')?.setAttribute('hidden','');
+      if(success){
+        const p=success.querySelector('p');
+        if(p && result.bewerberId) p.textContent=`Deine Bewerbung wurde erfolgreich an LAVUQ übermittelt. Deine Bewerber-ID lautet ${result.bewerberId}. Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt, und melden uns, sobald der nächste Schritt ansteht.`;
+        success.hidden=false;
+        success.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    }catch(err){
+      console.error(err);
+      if(error){
+        error.hidden=false;
+        error.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+      btn.disabled=false;
+      btn.textContent=original;
+    }
+  });
+  show();
+}
 
 if(location.pathname.includes('unsere-regeln')){
   document.querySelectorAll('.card .safety-list .safety-item').forEach(item=>{
