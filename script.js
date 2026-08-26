@@ -1,3 +1,8 @@
+// Keep the same LAVUQ logo in every header and footer.
+document.querySelectorAll('.brand-mark').forEach(img=>{
+  img.src='favicon.svg';
+});
+
 const toggle=document.querySelector('.nav-toggle');
 const nav=document.querySelector('.nav');
 if(toggle&&nav){
