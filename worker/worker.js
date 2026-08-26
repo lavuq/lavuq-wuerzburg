@@ -2,6 +2,7 @@ const AIRTABLE_BASE_ID = "apphnIBhuAbmMTUtY";
 const AIRTABLE_TABLE_ID = "tblzLtbR5Yh4nR5aQ";
 const ALLOWED_ORIGINS = ["https://lavuq.github.io"];
 
+// Deployment marker: triggers the first Cloudflare Git build.
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
