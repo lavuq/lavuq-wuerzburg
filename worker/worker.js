@@ -2,7 +2,6 @@ const AIRTABLE_BASE_ID = "apphnIBhuAbmMTUtY";
 const AIRTABLE_TABLE_ID = "tblzLtbR5Yh4nR5aQ";
 const ALLOWED_ORIGINS = ["https://lavuq.github.io"];
 
-// Deployment marker: triggers the first Cloudflare Git build.
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -12,6 +11,7 @@ export default {
       "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
       "Access-Control-Allow-Headers": "Content-Type",
       "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
     };
 
     if (request.method === "OPTIONS") {
@@ -19,10 +19,55 @@ export default {
     }
 
     if (request.method === "GET") {
-      return new Response(JSON.stringify({ ok: true, service: "LAVUQ Bewerbung" }), {
-        status: 200,
-        headers: corsHeaders,
-      });
+      if (!env.AIRTABLE_TOKEN) {
+        return new Response(JSON.stringify({
+          ok: false,
+          service: "LAVUQ Bewerbung",
+          airtable: "secret-fehlt",
+          error: "AIRTABLE_TOKEN ist im Worker nicht vorhanden."
+        }), { status: 500, headers: corsHeaders });
+      }
+
+      try {
+        const check = await fetch(
+          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}?maxRecords=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!check.ok) {
+          let details = "";
+          try {
+            const body = await check.json();
+            details = body?.error?.type || body?.error?.message || "Airtable-Fehler";
+          } catch (_) {}
+
+          return new Response(JSON.stringify({
+            ok: false,
+            service: "LAVUQ Bewerbung",
+            airtable: "nicht-verbunden",
+            status: check.status,
+            error: details || `Airtable HTTP ${check.status}`
+          }), { status: 500, headers: corsHeaders });
+        }
+
+        return new Response(JSON.stringify({
+          ok: true,
+          service: "LAVUQ Bewerbung",
+          airtable: "verbunden"
+        }), { status: 200, headers: corsHeaders });
+      } catch (error) {
+        return new Response(JSON.stringify({
+          ok: false,
+          service: "LAVUQ Bewerbung",
+          airtable: "verbindungsfehler",
+          error: String(error?.message || error)
+        }), { status: 500, headers: corsHeaders });
+      }
     }
 
     if (request.method !== "POST") {
@@ -121,9 +166,16 @@ export default {
       );
 
       if (!airtableResponse.ok) {
-        const airtableError = await airtableResponse.text();
-        console.error("Airtable Fehler:", airtableResponse.status, airtableError);
-        throw new Error("Airtable konnte nicht speichern.");
+        let detail = "";
+        try {
+          const body = await airtableResponse.json();
+          detail = body?.error?.type || body?.error?.message || "";
+        } catch (_) {}
+        console.error("Airtable Fehler:", airtableResponse.status, detail);
+        return new Response(JSON.stringify({
+          ok: false,
+          error: detail ? `Airtable: ${detail}` : `Airtable HTTP ${airtableResponse.status}`
+        }), { status: 500, headers: corsHeaders });
       }
 
       const result = await airtableResponse.json();
