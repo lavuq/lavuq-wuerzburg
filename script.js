@@ -1,5 +1,5 @@
 document.querySelectorAll('.brand-mark').forEach(img=>{
-  img.src='lavuq-q-square.png?v=correct-logo';
+  img.src='lavuq-q-square.png?v=exact-8816e372';
 });
 
 const toggle=document.querySelector('.nav-toggle');
