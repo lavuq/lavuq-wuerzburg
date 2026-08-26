@@ -1,5 +1,11 @@
 document.querySelectorAll('.brand-mark').forEach(img=>{
-  img.src='lavuq-q-square.png?v=exact-8816e372';
+  img.src='lavuq-q-square.png?v=full-logo-20260826-2';
+  img.style.setProperty('display','block','important');
+  img.style.setProperty('visibility','visible','important');
+  img.style.setProperty('opacity','1','important');
+  img.style.setProperty('width','48px','important');
+  img.style.setProperty('height','48px','important');
+  img.style.setProperty('object-fit','cover','important');
 });
 
 const toggle=document.querySelector('.nav-toggle');
