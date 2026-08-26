@@ -1,6 +1,5 @@
-// Keep the same LAVUQ logo in every header and footer.
 document.querySelectorAll('.brand-mark').forEach(img=>{
-  img.src='favicon.svg';
+  img.src='favicon.svg?v=4bb17d';
 });
 
 const toggle=document.querySelector('.nav-toggle');
@@ -21,7 +20,6 @@ if(toggle&&nav){
 document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>btn.parentElement.classList.toggle('open')));
 const form=document.querySelector('#applyForm');if(form){let step=0;const steps=[...document.querySelectorAll('.form-step')];const bar=document.querySelector('.progress-bar');const label=document.querySelector('#progressLabel');function show(){steps.forEach((s,i)=>s.classList.toggle('active',i===step));bar.style.width=((step+1)/steps.length*100)+'%';label.textContent=`Schritt ${step+1} von ${steps.length}`;window.scrollTo({top:0,behavior:'smooth'})}document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{const section=steps[step];const req=[...section.querySelectorAll('[required]')];if(req.some(x=>!x.checkValidity())){req.find(x=>!x.checkValidity())?.reportValidity();return}step=Math.min(step+1,steps.length-1);show()}));document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>{step=Math.max(0,step-1);show()}));form.addEventListener('submit',async(e)=>{e.preventDefault();if(!form.checkValidity()){form.reportValidity();return}const btn=form.querySelector('button[type="submit"]');const original=btn.textContent;btn.disabled=true;btn.textContent='Wird gesendet …';const success=document.querySelector('#formSuccess');const error=document.querySelector('#formError');if(success)success.hidden=true;if(error)error.hidden=true;try{const data=new FormData(form);const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});if(!res.ok)throw new Error('HTTP '+res.status);form.hidden=true;document.querySelector('.progress-head')?.setAttribute('hidden','');document.querySelector('.progress')?.setAttribute('hidden','');document.querySelector('.application-intro')?.setAttribute('hidden','');if(success){success.hidden=false;success.scrollIntoView({behavior:'smooth',block:'start'})}}catch(err){console.error(err);if(error){error.hidden=false;error.scrollIntoView({behavior:'smooth',block:'start'})}btn.disabled=false;btn.textContent=original}});show()}
 
-// Improve contrast in the white summary card on the rules page.
 if(location.pathname.includes('unsere-regeln')){
   document.querySelectorAll('.card .safety-list .safety-item').forEach(item=>{
     item.style.setProperty('color','#24324a','important');
