@@ -163,8 +163,8 @@ if(location.pathname.includes('unsere-regeln')){
   });
 }
 
-// Mobile Startseite: LAVU/Würzburg links, Marken-Q unabhängig exakt mittig, Menü rechts.
-if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && window.matchMedia('(max-width: 520px)').matches){
+// Globaler mobiler Header: LAVU/Würzburg links, Marken-Q exakt mittig, Menü rechts.
+if(window.matchMedia('(max-width: 520px)').matches){
   const mobileHeader=document.querySelector('.site-header');
   const mobileWrap=mobileHeader?.querySelector('.nav-wrap');
   const mobileBrand=mobileHeader?.querySelector('.brand');
@@ -176,7 +176,7 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
     mobileWrap.querySelector('.mobile-brand-q')?.remove();
     const mobileQ=document.createElement('img');
     mobileQ.className='mobile-brand-q';
-    mobileQ.src='lavuq-q-square.png?v=mobile-centered-q-20260828-3';
+    mobileQ.src='lavuq-q-square.png?v=mobile-centered-q-global-20260828';
     mobileQ.alt='LAVUQ Q Logo';
     mobileWrap.appendChild(mobileQ);
 
@@ -185,6 +185,11 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
     mobileHeaderStyle.id='lavuq-mobile-header-fix';
     mobileHeaderStyle.textContent=`
       @media (max-width:520px){
+        .site-header{
+          background:#041529!important;
+          border-bottom:1px solid rgba(216,180,106,.9)!important;
+          backdrop-filter:none!important;
+        }
         .site-header .nav-wrap{
           position:relative!important;
           width:100%!important;
@@ -272,6 +277,7 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
           z-index:43!important;
         }
         .site-header .nav{
+          top:156px!important;
           background:#041529!important;
           border:1px solid rgba(216,180,106,.42)!important;
           box-shadow:0 22px 55px rgba(0,0,0,.34)!important;
