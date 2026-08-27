@@ -302,3 +302,21 @@ if(window.matchMedia('(max-width: 520px)').matches){
     document.head.appendChild(mobileHeaderStyle);
   }
 }
+
+// Startseite mobil: Hero kompakter und Sicherheitsbox etwas höher.
+if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' || location.pathname.endsWith('/index.html'))){
+  const heroCompactStyle=document.createElement('style');
+  heroCompactStyle.id='lavuq-hero-compact-20260828';
+  heroCompactStyle.textContent=`
+    @media(max-width:520px){
+      .hero:has(.mobile-hero-photo){padding-top:42px!important}
+      .hero:has(.mobile-hero-photo) .eyebrow{margin-bottom:18px!important}
+      .hero:has(.mobile-hero-photo) h1{margin-bottom:16px!important}
+      .hero:has(.mobile-hero-photo) h1:before,
+      .hero:has(.mobile-hero-photo) h1:after{font-size:clamp(3.05rem,13.4vw,4.2rem)!important}
+      .hero:has(.mobile-hero-photo) .companion-note{transform:translateY(-4px)!important}
+      .hero:has(.mobile-hero-photo) .mobile-hero-photo img{height:440px!important}
+    }
+  `;
+  document.head.appendChild(heroCompactStyle);
+}
