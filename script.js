@@ -163,7 +163,7 @@ if(location.pathname.includes('unsere-regeln')){
   });
 }
 
-// Mobile Startseite: LAVU links, Marken-Q exakt mittig, Menü rechts.
+// Mobile Startseite: LAVU/Würzburg ganz links, Marken-Q exakt mittig, Menü rechts.
 if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && window.matchMedia('(max-width: 520px)').matches){
   const mobileHeader=document.querySelector('.site-header');
   const mobileWrap=mobileHeader?.querySelector('.nav-wrap');
@@ -181,7 +181,7 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
           position:relative!important;
           width:100%!important;
           height:150px!important;
-          padding:0 18px!important;
+          padding:0 8px!important;
           margin:0!important;
           display:flex!important;
           align-items:center!important;
@@ -189,7 +189,7 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
         }
         .site-header .brand{
           position:absolute!important;
-          left:18px!important;
+          left:8px!important;
           top:50%!important;
           transform:translateY(-50%)!important;
           margin:0!important;
