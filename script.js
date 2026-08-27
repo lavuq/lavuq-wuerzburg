@@ -162,3 +162,94 @@ if(location.pathname.includes('unsere-regeln')){
     item.style.setProperty('opacity','1','important');
   });
 }
+
+// Mobile Startseite: LAVU links, Marken-Q exakt mittig, Menü rechts.
+if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && window.matchMedia('(max-width: 520px)').matches){
+  const mobileHeader=document.querySelector('.site-header');
+  const mobileWrap=mobileHeader?.querySelector('.nav-wrap');
+  const mobileBrand=mobileHeader?.querySelector('.brand');
+  const mobileToggle=mobileHeader?.querySelector('.nav-toggle');
+
+  if(mobileHeader && mobileWrap && mobileBrand && mobileToggle){
+    mobileBrand.innerHTML=`<span class="mobile-brand-copy"><span class="mobile-brand-name">LAVU</span><span class="mobile-brand-city">Würzburg</span></span><img class="mobile-brand-q" src="lavuq-q-square.png?v=mobile-centered-q-20260828" alt="LAVUQ Q Logo">`;
+
+    const mobileHeaderStyle=document.createElement('style');
+    mobileHeaderStyle.id='lavuq-mobile-header-fix';
+    mobileHeaderStyle.textContent=`
+      @media (max-width:520px){
+        .site-header .nav-wrap{
+          position:relative!important;
+          width:100%!important;
+          height:150px!important;
+          padding:0 18px!important;
+          margin:0!important;
+          display:flex!important;
+          align-items:center!important;
+          justify-content:space-between!important;
+        }
+        .site-header .brand{
+          position:absolute!important;
+          left:18px!important;
+          top:50%!important;
+          transform:translateY(-50%)!important;
+          margin:0!important;
+          padding:0!important;
+          display:block!important;
+          width:auto!important;
+          color:#fff!important;
+        }
+        .site-header .mobile-brand-copy{
+          display:flex!important;
+          flex-direction:column!important;
+          align-items:flex-start!important;
+          line-height:1!important;
+        }
+        .site-header .mobile-brand-name{
+          color:#fff!important;
+          font-family:Georgia,'Times New Roman',serif!important;
+          font-size:2.05rem!important;
+          font-weight:500!important;
+          letter-spacing:.18em!important;
+        }
+        .site-header .mobile-brand-city{
+          color:#d8b46a!important;
+          font-family:Georgia,'Times New Roman',serif!important;
+          font-size:1.05rem!important;
+          font-weight:500!important;
+          letter-spacing:.01em!important;
+          margin-top:8px!important;
+        }
+        .site-header .mobile-brand-q{
+          position:fixed!important;
+          left:50%!important;
+          top:75px!important;
+          transform:translate(-50%,-50%)!important;
+          width:58px!important;
+          height:58px!important;
+          object-fit:contain!important;
+          object-position:center!important;
+          border-radius:0!important;
+          box-shadow:none!important;
+          margin:0!important;
+          z-index:42!important;
+        }
+        .site-header .nav-toggle{
+          position:absolute!important;
+          right:18px!important;
+          top:50%!important;
+          transform:translateY(-50%)!important;
+          margin:0!important;
+          width:44px!important;
+          height:44px!important;
+          background:transparent!important;
+          color:#d8b46a!important;
+          box-shadow:none!important;
+          border-radius:0!important;
+          font-size:1.65rem!important;
+          z-index:43!important;
+        }
+      }
+    `;
+    document.head.appendChild(mobileHeaderStyle);
+  }
+}
