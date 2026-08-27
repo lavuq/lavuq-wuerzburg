@@ -163,7 +163,7 @@ if(location.pathname.includes('unsere-regeln')){
   });
 }
 
-// Mobile Startseite: LAVU/Würzburg ganz links, Marken-Q exakt mittig, Menü rechts.
+// Mobile Startseite: LAVU/Würzburg links, Marken-Q unabhängig exakt mittig, Menü rechts.
 if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && window.matchMedia('(max-width: 520px)').matches){
   const mobileHeader=document.querySelector('.site-header');
   const mobileWrap=mobileHeader?.querySelector('.nav-wrap');
@@ -171,8 +171,16 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
   const mobileToggle=mobileHeader?.querySelector('.nav-toggle');
 
   if(mobileHeader && mobileWrap && mobileBrand && mobileToggle){
-    mobileBrand.innerHTML=`<span class="mobile-brand-copy"><span class="mobile-brand-name">LAVU</span><span class="mobile-brand-city">Würzburg</span></span><img class="mobile-brand-q" src="lavuq-q-square.png?v=mobile-centered-q-20260828" alt="LAVUQ Q Logo">`;
+    mobileBrand.innerHTML=`<span class="mobile-brand-copy"><span class="mobile-brand-name">LAVU</span><span class="mobile-brand-city">Würzburg</span></span>`;
 
+    mobileWrap.querySelector('.mobile-brand-q')?.remove();
+    const mobileQ=document.createElement('img');
+    mobileQ.className='mobile-brand-q';
+    mobileQ.src='lavuq-q-square.png?v=mobile-centered-q-20260828-2';
+    mobileQ.alt='LAVUQ Q Logo';
+    mobileWrap.appendChild(mobileQ);
+
+    document.querySelector('#lavuq-mobile-header-fix')?.remove();
     const mobileHeaderStyle=document.createElement('style');
     mobileHeaderStyle.id='lavuq-mobile-header-fix';
     mobileHeaderStyle.textContent=`
@@ -198,31 +206,46 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
           width:auto!important;
           color:#fff!important;
         }
+        .site-header .brand>span:before,
+        .site-header .brand>span:after,
+        .site-header .mobile-brand-copy:before,
+        .site-header .mobile-brand-copy:after{
+          content:none!important;
+          display:none!important;
+        }
         .site-header .mobile-brand-copy{
           display:flex!important;
           flex-direction:column!important;
           align-items:flex-start!important;
+          justify-content:center!important;
+          transform:none!important;
+          position:static!important;
           line-height:1!important;
+          font-size:initial!important;
         }
         .site-header .mobile-brand-name{
+          display:block!important;
           color:#fff!important;
           font-family:Georgia,'Times New Roman',serif!important;
           font-size:2.05rem!important;
           font-weight:500!important;
           letter-spacing:.18em!important;
+          line-height:1!important;
         }
         .site-header .mobile-brand-city{
+          display:block!important;
           color:#d8b46a!important;
           font-family:Georgia,'Times New Roman',serif!important;
           font-size:1.05rem!important;
           font-weight:500!important;
           letter-spacing:.01em!important;
+          line-height:1!important;
           margin-top:8px!important;
         }
         .site-header .mobile-brand-q{
-          position:fixed!important;
+          position:absolute!important;
           left:50%!important;
-          top:75px!important;
+          top:50%!important;
           transform:translate(-50%,-50%)!important;
           width:58px!important;
           height:58px!important;
