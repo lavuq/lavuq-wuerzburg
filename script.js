@@ -28,8 +28,6 @@ document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()
 
 const form=document.querySelector('#applyForm');
 if(form){
-  // Eigene Mehrschritt-Validierung verwenden. So blockiert Safari den Submit nicht
-  // stillschweigend wegen eines Pflichtfelds in einem ausgeblendeten Schritt.
   form.noValidate=true;
 
   const firstStep=form.querySelector('.form-step');
@@ -127,13 +125,17 @@ if(form){
       if(!res.ok || result.ok!==true) throw new Error(result.error || `HTTP ${res.status}`);
 
       form.hidden=true;
-      document.querySelector('.progress-head')?.setAttribute('hidden','');
-      document.querySelector('.progress')?.setAttribute('hidden','');
-      document.querySelector('.application-intro')?.setAttribute('hidden','');
+      form.style.display='none';
+      const progressHead=document.querySelector('.progress-head');
+      const progress=document.querySelector('.progress');
+      const intro=document.querySelector('.application-intro');
+      const photo=document.querySelector('.apply-photo');
+      [progressHead,progress,intro,photo].forEach(el=>{if(el){el.hidden=true;el.style.display='none';}});
       if(success){
         const p=success.querySelector('p');
         if(p && result.bewerberId) p.textContent=`Deine Bewerbung wurde erfolgreich an LAVUQ übermittelt. Deine Bewerber-ID lautet ${result.bewerberId}. Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt, und melden uns, sobald der nächste Schritt ansteht. Bitte hab Verständnis dafür, dass die Zusammenstellung deiner Freundesgruppe etwas Zeit in Anspruch nehmen kann. Wir stellen die Gruppen bewusst nicht nach dem Zufallsprinzip zusammen, sondern achten darauf, dass die Personen möglichst gut zu deinen Angaben und Vorstellungen passen. Je nach aktuellen Bewerbungen kann es deshalb etwas dauern, bis wir eine passende Gruppe für dich gefunden haben.`;
         success.hidden=false;
+        success.style.setProperty('display','block','important');
         success.scrollIntoView({behavior:'smooth',block:'start'});
       }
     }catch(err){
@@ -145,6 +147,7 @@ if(form){
           p.textContent=`Die Bewerbung konnte nicht übermittelt werden. Technischer Hinweis: ${detail}`;
         }
         error.hidden=false;
+        error.style.setProperty('display','block','important');
         error.scrollIntoView({behavior:'smooth',block:'start'});
       }
       if(btn){btn.disabled=false;btn.textContent=original;}
