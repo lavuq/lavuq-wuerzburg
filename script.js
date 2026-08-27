@@ -271,6 +271,26 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
           font-size:1.65rem!important;
           z-index:43!important;
         }
+        .site-header .nav{
+          background:#041529!important;
+          border:1px solid rgba(216,180,106,.42)!important;
+          box-shadow:0 22px 55px rgba(0,0,0,.34)!important;
+          color:#fff!important;
+        }
+        .site-header .nav a{
+          color:#fff!important;
+          border-bottom:1px solid rgba(216,180,106,.22)!important;
+        }
+        .site-header .nav a:hover,
+        .site-header .nav a:focus{
+          color:#d8b46a!important;
+          background:rgba(216,180,106,.07)!important;
+        }
+        .site-header .nav .btn-primary{
+          background:#d8b46a!important;
+          color:#07182f!important;
+          border-color:#d8b46a!important;
+        }
       }
     `;
     document.head.appendChild(mobileHeaderStyle);
