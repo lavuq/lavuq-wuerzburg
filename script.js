@@ -28,6 +28,10 @@ document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()
 
 const form=document.querySelector('#applyForm');
 if(form){
+  // Eigene Mehrschritt-Validierung verwenden. So blockiert Safari den Submit nicht
+  // stillschweigend wegen eines Pflichtfelds in einem ausgeblendeten Schritt.
+  form.noValidate=true;
+
   const firstStep=form.querySelector('.form-step');
   const nameField=firstStep?.querySelector('#name')?.closest('.field');
   if(firstStep && nameField && !form.querySelector('[name="Email"]')){
@@ -36,12 +40,9 @@ if(form){
     nameField.insertAdjacentElement('afterend',contact.firstElementChild);
   }
 
-  // Alte doppelte Datenschutzabfrage aus der Netlify-Version bereinigen.
-  // Es bleibt genau eine verpflichtende Datenschutzbestätigung übrig.
   const oldPrivacy=form.querySelector('[name="Datenschutzhinweise_gelesen"]');
-  if(oldPrivacy){
-    oldPrivacy.closest('label')?.remove();
-  }
+  if(oldPrivacy) oldPrivacy.closest('label')?.remove();
+
   const privacy=form.querySelector('[name="Datenschutz_bestaetigt"]');
   const submitBtn=form.querySelector('button[type="submit"]');
   const finalActions=submitBtn?.closest('.form-actions');
@@ -54,26 +55,39 @@ if(form){
   }
 
   let step=0;
-  const steps=[...document.querySelectorAll('.form-step')];
+  const steps=[...form.querySelectorAll('.form-step')];
   const bar=document.querySelector('.progress-bar');
   const label=document.querySelector('#progressLabel');
+
   function show(){
     steps.forEach((s,i)=>s.classList.toggle('active',i===step));
     if(bar) bar.style.width=((step+1)/steps.length*100)+'%';
     if(label) label.textContent=`Schritt ${step+1} von ${steps.length}`;
     window.scrollTo({top:0,behavior:'smooth'});
   }
-  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
-    const section=steps[step];
-    const invalid=section.querySelector(':invalid');
-    if(invalid){
+
+  function showInvalid(invalid){
+    if(!invalid) return false;
+    const invalidStep=invalid.closest('.form-step');
+    const index=steps.indexOf(invalidStep);
+    if(index>=0 && index!==step){
+      step=index;
+      show();
+    }
+    setTimeout(()=>{
       invalid.reportValidity?.();
       invalid.scrollIntoView?.({behavior:'smooth',block:'center'});
-      return;
-    }
+    },80);
+    return true;
+  }
+
+  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
+    const invalid=steps[step]?.querySelector(':invalid');
+    if(showInvalid(invalid)) return;
     step=Math.min(step+1,steps.length-1);
     show();
   }));
+
   document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>{
     step=Math.max(0,step-1);
     show();
@@ -81,12 +95,9 @@ if(form){
 
   form.addEventListener('submit',async(e)=>{
     e.preventDefault();
+
     const invalid=form.querySelector(':invalid');
-    if(invalid){
-      invalid.reportValidity?.();
-      invalid.scrollIntoView?.({behavior:'smooth',block:'center'});
-      return;
-    }
+    if(showInvalid(invalid)) return;
 
     const btn=form.querySelector('button[type="submit"]');
     const original=btn?.textContent || 'Bewerbung absenden';
