@@ -176,7 +176,7 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
     mobileWrap.querySelector('.mobile-brand-q')?.remove();
     const mobileQ=document.createElement('img');
     mobileQ.className='mobile-brand-q';
-    mobileQ.src='lavuq-q-square.png?v=mobile-centered-q-20260828-2';
+    mobileQ.src='lavuq-q-square.png?v=mobile-centered-q-20260828-3';
     mobileQ.alt='LAVUQ Q Logo';
     mobileWrap.appendChild(mobileQ);
 
@@ -240,7 +240,7 @@ if((location.pathname==='/' || location.pathname.endsWith('/index.html')) && win
           font-weight:500!important;
           letter-spacing:.01em!important;
           line-height:1!important;
-          margin-top:8px!important;
+          margin-top:20px!important;
         }
         .site-header .mobile-brand-q{
           position:absolute!important;
