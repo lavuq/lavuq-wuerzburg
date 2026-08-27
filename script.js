@@ -36,6 +36,23 @@ if(form){
     nameField.insertAdjacentElement('afterend',contact.firstElementChild);
   }
 
+  // Alte doppelte Datenschutzabfrage aus der Netlify-Version bereinigen.
+  // Es bleibt genau eine verpflichtende Datenschutzbestätigung übrig.
+  const oldPrivacy=form.querySelector('[name="Datenschutzhinweise_gelesen"]');
+  if(oldPrivacy){
+    oldPrivacy.closest('label')?.remove();
+  }
+  const privacy=form.querySelector('[name="Datenschutz_bestaetigt"]');
+  const submitBtn=form.querySelector('button[type="submit"]');
+  const finalActions=submitBtn?.closest('.form-actions');
+  if(privacy && finalActions){
+    const privacyLabel=privacy.closest('label');
+    if(privacyLabel){
+      privacyLabel.style.margin='18px 0';
+      finalActions.parentElement?.insertBefore(privacyLabel,finalActions);
+    }
+  }
+
   let step=0;
   const steps=[...document.querySelectorAll('.form-step')];
   const bar=document.querySelector('.progress-bar');
