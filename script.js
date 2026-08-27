@@ -133,7 +133,7 @@ if(form){
       [progressHead,progress,intro,photo].forEach(el=>{if(el){el.hidden=true;el.style.display='none';}});
       if(success){
         const p=success.querySelector('p');
-        if(p && result.bewerberId) p.textContent=`Deine Bewerbung wurde erfolgreich an LAVUQ übermittelt. Deine Bewerber-ID lautet ${result.bewerberId}. Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt, und melden uns, sobald der nächste Schritt ansteht. Bitte hab Verständnis dafür, dass die Zusammenstellung deiner Freundesgruppe etwas Zeit in Anspruch nehmen kann. Wir stellen die Gruppen bewusst nicht nach dem Zufallsprinzip zusammen, sondern achten darauf, dass die Personen möglichst gut zu deinen Angaben und Vorstellungen passen. Je nach aktuellen Bewerbungen kann es deshalb etwas dauern, bis wir eine passende Gruppe für dich gefunden haben.`;
+        if(p && result.bewerberId) p.textContent=`Deine Bewerbung wurde erfolgreich an LAVUQ übermittelt. Deine Bewerber-ID lautet ${result.bewerberId}. Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt, und melden uns, sobald der nächste Schritt ansteht. Bitte hab Verständnis dafür, dass die Zusammenstellung deiner Freundesgruppe etwas Zeit in Anspruch nehmen kann. Wir stellen die Gruppen bewusst nicht nach dem Zufallsprinzip zusammen, sondern achten darauf, dass die Personen möglichst gut zu deinen Angaben und Vorstellungen passen. Je nach aktueller Bewerberlage kann es deshalb etwas dauern, bis wir eine passende Gruppe für dich gefunden haben.`;
         success.hidden=false;
         success.style.setProperty('display','block','important');
         success.scrollIntoView({behavior:'smooth',block:'start'});
