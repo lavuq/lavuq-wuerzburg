@@ -330,3 +330,15 @@ if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
     safetyButton.style.setProperty('border-color','#ffffff','important');
   }
 }
+
+// Startseite mobil: Goldene 6-Personen-Silhouette in der Box "ECHTE MENSCHEN".
+if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' || location.pathname.endsWith('/index.html'))){
+  const peopleLabel=document.querySelector('.mobile-photo-label');
+  if(peopleLabel){
+    const peopleIcon='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MiA0MiI+CjxnIGZpbGw9IiNkOGI0NmEiPgo8Y2lyY2xlIGN4PSIxMCIgY3k9IjkiIHI9IjQiLz48cmVjdCB4PSI2IiB5PSIxNSIgd2lkdGg9IjgiIGhlaWdodD0iMTciIHJ4PSI0Ii8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iNyIgcj0iNCIvPjxyZWN0IHg9IjE2IiB5PSIxMyIgd2lkdGg9IjgiIGhlaWdodD0iMjAiIHJ4PSI0Ii8+CjxjaXJjbGUgY3g9IjMwIiBjeT0iOSIgcj0iNCIvPjxyZWN0IHg9IjI2IiB5PSIxNSIgd2lkdGg9IjgiIGhlaWdodD0iMTciIHJ4PSI0Ii8+CjxjaXJjbGUgY3g9IjQyIiBjeT0iOSIgcj0iNCIvPjxyZWN0IHg9IjM4IiB5PSIxNSIgd2lkdGg9IjgiIGhlaWdodD0iMTciIHJ4PSI0Ii8+CjxjaXJjbGUgY3g9IjUyIiBjeT0iNyIgcj0iNCIvPjxyZWN0IHg9IjQ4IiB5PSIxMyIgd2lkdGg9IjgiIGhlaWdodD0iMjAiIHJ4PSI0Ii8+CjxjaXJjbGUgY3g9IjYyIiBjeT0iOSIgcj0iNCIvPjxyZWN0IHg9IjU4IiB5PSIxNSIgd2lkdGg9IjgiIGhlaWdodD0iMTciIHJ4PSI0Ii8+CjwvZz48L3N2Zz4=';
+    peopleLabel.style.setProperty('background-image',`url("${peopleIcon}"), radial-gradient(circle at 38px 50%,rgba(216,180,106,.18) 0 22px,transparent 23px)`,'important');
+    peopleLabel.style.setProperty('background-position','12px 50%, 0 0','important');
+    peopleLabel.style.setProperty('background-size','52px 31px, auto','important');
+    peopleLabel.style.setProperty('background-repeat','no-repeat, no-repeat','important');
+  }
+}
