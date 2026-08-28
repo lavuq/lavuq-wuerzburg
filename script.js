@@ -314,7 +314,7 @@ if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' |
       .hero:has(.mobile-hero-photo) h1{margin-bottom:16px!important}
       .hero:has(.mobile-hero-photo) h1:before,
       .hero:has(.mobile-hero-photo) h1:after{font-size:clamp(3.05rem,13.4vw,4.2rem)!important}
-      .hero:has(.mobile-hero-photo) .companion-note{transform:translateY(8px)!important}
+      .hero:has(.mobile-hero-photo) .companion-note{transform:translateY(18px)!important}
       .hero:has(.mobile-hero-photo) .mobile-hero-photo img{height:440px!important}
     }
   `;
