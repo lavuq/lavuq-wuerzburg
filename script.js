@@ -52,16 +52,121 @@ if(form){
     }
   }
 
+  // Klare 4-Schritt-Struktur: Basisdaten → Situation & Gruppe → Über dich & Freundschaft → Wünsche & Abschluss.
+  const originalSteps=[...form.querySelectorAll('.form-step')];
+  if(originalSteps.length===4){
+    const [basisStep,situationStep,aboutStep,finishStep]=originalSteps;
+    const situationOriginalQuestions=[...situationStep.querySelectorAll('fieldset')];
+    const aboutOriginalQuestions=[...aboutStep.querySelectorAll('fieldset')];
+
+    const genderField=basisStep.querySelector('[name="Geschlecht"]')?.closest('fieldset');
+    const lifeField=basisStep.querySelector('[name="Aktuelle_Lebenssituation"]')?.closest('.field');
+    const radiusField=basisStep.querySelector('[name="Maximaler_Umkreis"]')?.closest('.field');
+    const groupField=basisStep.querySelector('[name="Gewuenschte_Gruppe"]')?.closest('fieldset');
+    const situationActions=situationStep.querySelector('.form-actions');
+
+    situationStep.querySelector('h2').textContent='Deine Situation & Gruppe';
+    [genderField,lifeField,radiusField,groupField].forEach(el=>{
+      if(el && situationActions) situationStep.insertBefore(el,situationActions);
+    });
+
+    const aboutHeading=aboutStep.querySelector('h2');
+    if(aboutHeading) aboutHeading.textContent='Über dich & Freundschaft';
+    const aboutReference=aboutOriginalQuestions[0] || aboutStep.querySelector('.form-actions');
+    situationOriginalQuestions.forEach(el=>{
+      if(el && aboutReference) aboutStep.insertBefore(el,aboutReference);
+    });
+
+    const finishHeading=finishStep.querySelector('h2');
+    if(finishHeading) finishHeading.textContent='Deine Wünsche & Abschluss';
+    const finishReference=finishStep.querySelector('fieldset') || finishStep.querySelector('.field');
+    const q6=aboutOriginalQuestions[2];
+    if(q6 && finishReference) finishStep.insertBefore(q6,finishReference);
+
+    [
+      [basisStep,'Deine Kontaktdaten – kurz und unkompliziert.'],
+      [situationStep,'Damit wir die passende Gruppe für deinen Alltag finden.'],
+      [aboutStep,'Jetzt geht es darum, was menschlich und im Alltag zu dir passt.'],
+      [finishStep,'Zum Schluss noch deine Wünsche und die notwendigen Bestätigungen.']
+    ].forEach(([section,text])=>{
+      if(section && !section.querySelector('.step-intro')){
+        const intro=document.createElement('p');
+        intro.className='step-intro';
+        intro.textContent=text;
+        section.querySelector('h2')?.insertAdjacentElement('afterend',intro);
+      }
+    });
+  }
+
+  // Moderne Schritt-Navigation und hochwertiger Formular-Look.
+  const progressHead=document.querySelector('.progress-head');
+  if(progressHead && !document.querySelector('.application-step-nav')){
+    const stepNav=document.createElement('div');
+    stepNav.className='application-step-nav';
+    stepNav.innerHTML=`<span>1 <b>Basis</b></span><span>2 <b>Gruppe</b></span><span>3 <b>Über dich</b></span><span>4 <b>Abschluss</b></span>`;
+    progressHead.parentElement?.insertBefore(stepNav,progressHead);
+  }
+
+  if(!document.querySelector('#lavuq-application-premium-style')){
+    const premium=document.createElement('style');
+    premium.id='lavuq-application-premium-style';
+    premium.textContent=`
+      .application-step-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:30px 0 16px}
+      .application-step-nav span{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:8px 10px;border:1px solid #ddd5c8;border-radius:999px;background:#fff;color:#667085;font-size:.82rem;font-weight:800;transition:.2s ease}
+      .application-step-nav span.active{background:#07182f;color:#fff;border-color:#07182f;box-shadow:0 8px 22px rgba(7,24,47,.13)}
+      .application-step-nav span.active b{color:#e2c178}
+      #applyForm .form-step{display:none!important;background:rgba(255,255,255,.96);border:1px solid rgba(7,24,47,.08);border-radius:26px;padding:28px;box-shadow:0 18px 50px rgba(7,24,47,.07)}
+      #applyForm .form-step.active{display:block!important;animation:lavuqStepIn .22s ease}
+      @keyframes lavuqStepIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+      #applyForm .form-step h2{font-size:clamp(1.75rem,4vw,2.35rem);letter-spacing:-.035em;margin-bottom:7px}
+      #applyForm .step-intro{margin:0 0 24px;color:#667085;font-size:.96rem}
+      #applyForm .field,#applyForm fieldset.field{margin-bottom:20px}
+      #applyForm .field label,#applyForm .legend{font-size:.94rem;font-weight:850;letter-spacing:-.01em;margin-bottom:8px;color:#132033}
+      #applyForm .field input,#applyForm .field select,#applyForm .field textarea{min-height:52px;border:1px solid #d9dfe7;border-radius:14px;background:#fbfcfd;padding:13px 14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);transition:.18s ease}
+      #applyForm .field input:focus,#applyForm .field select:focus,#applyForm .field textarea:focus{background:#fff;border-color:#c6a65c;outline:3px solid rgba(216,180,106,.18)}
+      #applyForm .options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+      #applyForm .option{position:relative;min-height:54px;align-items:center;border:1px solid #dfe3e9;background:#fff;border-radius:14px;padding:13px 14px;font-weight:750;transition:.18s ease}
+      #applyForm .option:hover{border-color:#c7aa68}
+      #applyForm .option:has(input:checked){border-color:#c29c4c;background:#fff9eb;box-shadow:0 0 0 2px rgba(216,180,106,.12)}
+      #applyForm .option input[type="radio"],#applyForm .option input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:20px!important;height:20px!important;min-height:20px!important;flex:0 0 20px!important;margin:0!important;border:1.5px solid #9aa6b5;background:#fff;display:grid;place-content:center}
+      #applyForm .option input[type="radio"]{border-radius:50%}
+      #applyForm .option input[type="checkbox"]{border-radius:6px}
+      #applyForm .option input:checked{border-color:#b48c39;background:#d8b46a}
+      #applyForm .option input[type="radio"]:checked:after{content:"";width:8px;height:8px;border-radius:50%;background:#07182f}
+      #applyForm .option input[type="checkbox"]:checked:after{content:"✓";font-size:13px;line-height:1;color:#07182f;font-weight:950}
+      #applyForm .form-actions{padding-top:8px}
+      #applyForm .form-actions .btn{min-height:50px;padding-left:26px;padding-right:26px}
+      #applyForm .btn-primary{background:linear-gradient(135deg,#cda656,#e4c77f);box-shadow:0 10px 24px rgba(205,166,86,.22)}
+      @media(max-width:640px){
+        .application-step-nav{gap:5px;margin-top:24px}
+        .application-step-nav span{min-height:38px;padding:7px 5px;font-size:.75rem}
+        .application-step-nav span b{display:none}
+        #applyForm .form-step{border-radius:20px;padding:20px 16px}
+        #applyForm .form-step h2{font-size:1.7rem}
+        #applyForm .step-intro{font-size:.9rem;margin-bottom:20px}
+        #applyForm .options{grid-template-columns:1fr;gap:8px}
+        #applyForm .option{min-height:50px;padding:11px 12px;font-size:.94rem}
+        #applyForm .field input,#applyForm .field select,#applyForm .field textarea{min-height:50px;background:#fff}
+        #applyForm .form-actions{gap:9px}
+      }
+    `;
+    document.head.appendChild(premium);
+  }
+
   let step=0;
   const steps=[...form.querySelectorAll('.form-step')];
   const bar=document.querySelector('.progress-bar');
   const label=document.querySelector('#progressLabel');
+  const stepNavItems=[...document.querySelectorAll('.application-step-nav span')];
 
   function show(){
     steps.forEach((s,i)=>s.classList.toggle('active',i===step));
+    stepNavItems.forEach((item,i)=>item.classList.toggle('active',i===step));
     if(bar) bar.style.width=((step+1)/steps.length*100)+'%';
     if(label) label.textContent=`Schritt ${step+1} von ${steps.length}`;
-    window.scrollTo({top:0,behavior:'smooth'});
+    const target=document.querySelector('.application-step-nav') || form;
+    const y=target.getBoundingClientRect().top+window.scrollY-18;
+    window.scrollTo({top:y,behavior:'smooth'});
   }
 
   function showInvalid(invalid){
@@ -130,7 +235,8 @@ if(form){
       const progress=document.querySelector('.progress');
       const intro=document.querySelector('.application-intro');
       const photo=document.querySelector('.apply-photo');
-      [progressHead,progress,intro,photo].forEach(el=>{if(el){el.hidden=true;el.style.display='none';}});
+      const stepNav=document.querySelector('.application-step-nav');
+      [progressHead,progress,intro,photo,stepNav].forEach(el=>{if(el){el.hidden=true;el.style.display='none';}});
       if(success){
         const p=success.querySelector('p');
         if(p && result.bewerberId) p.textContent=`Deine Bewerbung wurde erfolgreich an LAVUQ übermittelt. Deine Bewerber-ID lautet ${result.bewerberId}. Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt, und melden uns, sobald der nächste Schritt ansteht. Bitte hab Verständnis dafür, dass die Zusammenstellung deiner Freundesgruppe etwas Zeit in Anspruch nehmen kann. Wir stellen die Gruppen bewusst nicht nach dem Zufallsprinzip zusammen, sondern achten darauf, dass die Personen möglichst gut zu deinen Angaben und Vorstellungen passen. Je nach aktueller Bewerberlage kann es deshalb etwas dauern, bis wir eine passende Gruppe für dich gefunden haben.`;
