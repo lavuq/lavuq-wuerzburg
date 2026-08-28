@@ -134,6 +134,8 @@ export default {
         fld0n0lHsBXYnPosF: String(data.Mobilnummer || "").trim() || undefined,
         fldEIDovX5FIgFdif: alter,
         fldPI0pg4zB5cDMDm: plz,
+        fldQ7YMAFTABnbrLo: data.Geschlecht || undefined,
+        fldFD6TqjrhGH2fip: data.Aktuelle_Lebenssituation || undefined,
         fld49bquWX3QtAGur: data.Gewuenschte_Gruppe || undefined,
         fldbnsrvWQa1z3QGo: getAll("Freizeit_Interessen").join(", ") || undefined,
         fld78D6tSGN6F62Ec: data.Persoenlichkeit || undefined,
