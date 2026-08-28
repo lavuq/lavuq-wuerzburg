@@ -19,3 +19,57 @@ footer{background:#041124;color:#c7d0dc;padding:52px 0 24px}.footer-grid{display
 .companion-note{margin:14px 0 0;padding:10px 12px;border-left:3px solid var(--gold);background:rgba(255,255,255,.06);border-radius:0 10px 10px 0;color:#eef3f8;font-size:.96rem;max-width:680px}.companion-note strong{color:#f1d38c}
 .bot-field{position:absolute!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;height:1px!important;width:1px!important;margin:-1px!important;padding:0!important;border:0!important}
 @media (max-width:520px){html,body{width:100%;max-width:100%;overflow-x:hidden}.topbar{display:none!important}.site-header{position:relative!important;top:auto!important;background:#041529!important;border-bottom:1px solid rgba(216,180,106,.9)!important;backdrop-filter:none!important}.site-header .nav-wrap{position:relative!important;width:100%!important;height:150px!important;padding:0 8px!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important}.site-header .brand{position:static!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;gap:0!important;color:#fff!important}.site-header .brand>span:not(.mobile-brand-copy){font-size:0!important;position:absolute!important;left:8px!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;width:auto!important;line-height:1!important}.site-header .brand>span:not(.mobile-brand-copy):before{content:"LAVU"!important;display:block!important;font-family:Georgia,'Times New Roman',serif!important;font-size:2.05rem!important;font-weight:500!important;letter-spacing:.18em!important;color:#fff!important;line-height:1!important}.site-header .brand>span:not(.mobile-brand-copy):after{content:"Würzburg"!important;display:block!important;margin-top:20px!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.05rem!important;font-weight:500!important;letter-spacing:.01em!important;color:#d8b46a!important;white-space:nowrap!important;line-height:1!important}.site-header .brand-city{display:none!important}.site-header .brand-mark,.site-header .mobile-brand-q{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:58px!important;height:58px!important;object-fit:contain!important;object-position:center!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;margin:0!important;z-index:42!important}.site-header .nav-toggle{position:absolute!important;right:18px!important;top:50%!important;transform:translateY(-50%)!important;display:grid!important;margin:0!important;width:44px!important;height:44px!important;background:transparent!important;color:#d8b46a!important;border:0!important;border-radius:0!important;box-shadow:none!important;font-size:1.65rem!important;z-index:43!important}.site-header .nav{top:156px!important;left:12px!important;right:12px!important;padding:16px!important;background:#041529!important;border:1px solid rgba(216,180,106,.42)!important;border-radius:24px!important;box-shadow:0 22px 55px rgba(0,0,0,.34)!important;color:#fff!important}.site-header .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.22)!important}.site-header .nav .btn-primary{background:#d8b46a!important;color:#07182f!important;border-color:#d8b46a!important}}
+
+/* Mobile homepage safety section fix */
+@media(max-width:520px){
+  .safety-feature{padding:44px 0!important}
+  .safety-feature .visual-split{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:24px!important;
+    align-items:stretch!important;
+  }
+  .safety-feature .visual-frame{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    border-radius:20px!important;
+  }
+  .safety-feature .visual-frame img{
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:16/10!important;
+    object-fit:cover!important;
+  }
+  .safety-feature .visual-caption{
+    padding:14px 16px!important;
+    font-size:.9rem!important;
+  }
+  .safety-feature .visual-copy{
+    width:100%!important;
+    max-width:none!important;
+  }
+  .safety-feature .visual-copy h2{
+    font-size:2rem!important;
+    line-height:1.08!important;
+  }
+  .safety-feature .compact-checks{
+    display:grid!important;
+    gap:12px!important;
+    margin:20px 0!important;
+  }
+  .safety-feature .visual-copy>div:last-child{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+  .safety-feature .visual-copy>div:last-child .btn{
+    width:100%!important;
+  }
+  #so-gehts a[href="sicherheit.html"]{
+    background:#fff!important;
+    color:#07182f!important;
+    border:1px solid rgba(7,24,47,.14)!important;
+    box-shadow:none!important;
+  }
+}
