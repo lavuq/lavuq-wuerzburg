@@ -320,3 +320,13 @@ if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' |
   `;
   document.head.appendChild(heroCompactStyle);
 }
+
+// Startseite: "Mehr über Sicherheit" als weißer Sekundär-Button.
+if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
+  const safetyButton=document.querySelector('#so-gehts a[href="sicherheit.html"]');
+  if(safetyButton){
+    safetyButton.style.setProperty('background','#ffffff','important');
+    safetyButton.style.setProperty('color','#07182f','important');
+    safetyButton.style.setProperty('border-color','#ffffff','important');
+  }
+}
