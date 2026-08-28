@@ -342,3 +342,15 @@ if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' |
     peopleLabel.style.setProperty('background-repeat','no-repeat, no-repeat','important');
   }
 }
+
+// Startseite: Terminversuche-Karte sprachlich präzisieren.
+if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
+  document.querySelectorAll('.compact-card').forEach(card=>{
+    const heading=card.querySelector('h3');
+    if(heading?.textContent.trim()==='Maximal 5 Terminversuche'){
+      heading.textContent='Maximal 5 Versuche pro Treffen';
+      const text=card.querySelector('p');
+      if(text) text.textContent='Kommt nach fünf verbindlichen Versuchen kein Treffen zustande, wird die Runde beendet.';
+    }
+  });
+}
