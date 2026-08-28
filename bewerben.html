@@ -1,8 +1,184 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Für eine Freundesgruppe bewerben – LAVUQ</title><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="styles.css"></head><body><div class="topbar"><div class="container">Jetzt kostenlos dabei sein. <span>Die aktuelle Startphase ist kostenlos. Für zukünftige Angebote können später Teilnahmegebühren gelten.</span></div></div><header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html"><img class="brand-mark" src="favicon.svg" alt=""><span>LAVUQ <span class="brand-city">WÜRZBURG</span></span></a><button class="nav-toggle">☰</button><nav class="nav"><a href="index.html">Startseite</a><a href="sicherheit.html">Sicherheit</a><a href="fuer-wen-ist-lavuq.html">Für wen ist LAVUQ?</a><a href="so-finden-wir-deine-gruppe.html">So finden wir deine Gruppe</a><a href="warum-wir-in-wuerzburg-starten.html">Warum wir in Würzburg starten</a><a href="unsere-regeln.html">Unsere Regeln</a><a href="kein-dating.html">Freundschaft im Fokus</a><a href="faq.html">FAQ</a></nav></div></header><main><section class="section apply-section"><div class="container form-shell"><div class="application-intro"><div class="eyebrow">Bewerbung</div><h1>Finde deine passende Freundesgruppe.</h1><p class="muted">9 kurze Gruppenfragen + Basisdaten. Damit wir eine möglichst passende 4er-Gruppe für dich zusammenstellen können.</p><div class="application-meta"><span class="free-badge">Aktuelle Startphase: 0 €</span><span class="muted">Keine Anmeldegebühr · keine Mitgliedschaft</span></div><div class="notice application-notice"><strong>Wichtig:</strong> LAVUQ ist ein Angebot für Freundschaften und gemeinsame Unternehmungen. Das erste Treffen findet an einem öffentlichen Ort statt und jede teilnehmende Person darf bei jedem Treffen eine Begleitperson mitbringen.</div></div><div class="progress-head"><strong id="progressLabel">Schritt 1 von 4</strong><span class="muted">ca. 3–5 Minuten</span></div><div class="progress"><div class="progress-bar"></div></div>
-<form id="applyForm" name="lavuq-bewerbung" method="POST" data-netlify="true" data-netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="lavuq-bewerbung"><p class="bot-field" aria-hidden="true"><label>Nicht ausfüllen: <input name="bot-field"></label></p>
-<section class="form-step active"><h2>Basisdaten</h2><div class="field"><label for="name">Vorname *</label><input id="name" name="Vorname" required autocomplete="given-name"></div><div class="grid-2"><div class="field"><label for="age">Alter *</label><input id="age" name="Alter" type="number" min="18" max="99" required></div><div class="field"><label for="zip">PLZ *</label><input id="zip" name="PLZ" inputmode="numeric" pattern="[0-9]{5}" required></div></div><fieldset class="field"><legend class="legend">Geschlecht für die Gruppenzusammenstellung *</legend><div class="options"><label class="option"><input type="radio" name="Geschlecht" value="Männlich" required> Männlich</label><label class="option"><input type="radio" name="Geschlecht" value="Weiblich"> Weiblich</label><label class="option"><input type="radio" name="Geschlecht" value="Divers / keine Zuordnung"> Divers / keine Zuordnung</label></div></fieldset><div class="field"><label for="lifeSituation">Aktuelle Lebenssituation *</label><select id="lifeSituation" name="Aktuelle_Lebenssituation" required><option value="">Bitte wählen</option><option>Berufstätig</option><option>Studium / Ausbildung</option><option>Familienalltag mit Kindern</option><option>Schichtdienst / unregelmäßige Zeiten</option><option>Ruhestand</option><option>Sonstiges</option></select></div><div class="field"><label for="radius">Maximaler Umkreis *</label><select id="radius" name="Maximaler_Umkreis" required><option value="">Bitte wählen</option><option>10 km</option><option>20 km</option><option>30 km</option><option>50 km</option></select></div><fieldset class="field"><legend class="legend">Gewünschte Gruppenzusammensetzung *</legend><div class="options"><label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Nur Männer" required> Nur Männer</label><label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Nur Frauen"> Nur Frauen</label><label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Gemischte Gruppe"> Gemischte Gruppe</label><label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Keine Präferenz"> Keine Präferenz</label></div></fieldset><div class="form-actions"><span></span><button class="btn btn-primary" type="button" data-next>Weiter</button></div></section>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Für eine Freundesgruppe bewerben – LAVUQ</title>
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="topbar"><div class="container">Jetzt kostenlos dabei sein. <span>Die aktuelle Startphase ist kostenlos. Für zukünftige Angebote können später Teilnahmegebühren gelten.</span></div></div>
 
-<section class="form-step"><h2>Dein Alltag</h2><fieldset class="field"><legend class="legend">1. Wie verbringst du deine Freizeit am liebsten?</legend><div class="options"><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Essen gehen / Café"> Essen gehen / Café</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Sport"> Sport</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Natur / Spaziergänge"> Natur / Spaziergänge</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Reisen / Ausflüge"> Reisen / Ausflüge</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Gaming"> Gaming</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Kultur / Veranstaltungen"> Kultur / Veranstaltungen</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Spieleabende"> Spieleabende</label><label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Gemütlich zusammensitzen"> Gemütlich zusammensitzen</label></div></fieldset><fieldset class="field"><legend class="legend">2. Wie würdest du dich selbst beschreiben? *</legend><div class="options"><label class="option"><input type="radio" name="Persoenlichkeit" value="Eher ruhig und zurückhaltend" required> Eher ruhig und zurückhaltend</label><label class="option"><input type="radio" name="Persoenlichkeit" value="Ausgeglichen"> Ausgeglichen</label><label class="option"><input type="radio" name="Persoenlichkeit" value="Eher offen und kontaktfreudig"> Eher offen und kontaktfreudig</label></div></fieldset><fieldset class="field"><legend class="legend">3. Wie planst du gemeinsame Unternehmungen am liebsten? *</legend><div class="options"><label class="option"><input type="radio" name="Planung_von_Unternehmungen" value="Gerne frühzeitig geplant" required> Gerne frühzeitig geplant</label><label class="option"><input type="radio" name="Planung_von_Unternehmungen" value="Mischung aus geplant und spontan"> Mischung aus geplant und spontan</label><label class="option"><input type="radio" name="Planung_von_Unternehmungen" value="Am liebsten spontan"> Am liebsten spontan</label></div></fieldset><div class="form-actions"><button class="btn btn-outline" type="button" data-prev>Zurück</button><button class="btn btn-primary" type="button" data-next>Weiter</button></div></section>
-<section class="form-step"><h2>Freundschaft & gemeinsame Zeit</h2><fieldset class="field"><legend class="legend">4. Wie häufig möchtest du neue Freunde ungefähr sehen? *</legend><div class="options"><label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Mehrmals pro Woche" required> Mehrmals pro Woche</label><label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Ungefähr einmal pro Woche"> Ungefähr einmal pro Woche</label><label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Ungefähr alle zwei Wochen"> Ungefähr alle zwei Wochen</label><label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Ein paar Mal im Monat"> Ein paar Mal im Monat</label><label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Eher gelegentlich"> Eher gelegentlich</label></div></fieldset><fieldset class="field"><legend class="legend">5. Was ist dir in einer Freundschaft besonders wichtig?</legend><div class="options"><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Verlässlichkeit"> Verlässlichkeit</label><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Humor"> Humor</label><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Ehrlichkeit"> Ehrlichkeit</label><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Tiefgründige Gespräche"> Tiefgründige Gespräche</label><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Gemeinsame Unternehmungen"> Gemeinsame Unternehmungen</label><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Gegenseitige Unterstützung"> Gegenseitige Unterstützung</label><label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Respekt"> Respekt</label></div></fieldset><fieldset class="field"><legend class="legend">6. Wie verbringst du gemeinsame Zeit mit Freunden am liebsten?</legend><div class="options"><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Zusammensitzen und reden"> Zusammensitzen und reden</label><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Essen gehen / Café"> Essen gehen / Café</label><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Aktivitäten / Unternehmungen"> Aktivitäten / Unternehmungen</label><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Sport / Bewegung"> Sport / Bewegung</label><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Ausflüge / Natur"> Ausflüge / Natur</label><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Veranstaltungen / Konzerte"> Veranstaltungen / Konzerte</label><label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Spieleabende"> Spieleabende</label></div></fieldset><div class="form-actions"><button class="btn btn-outline" type="button" data-prev>Zurück</button><button class="btn btn-primary" type="button" data-next>Weiter</button></div></section>
-<section class="form-step"><h2>Was passt zu dir?</h2><fieldset class="field"><legend class="legend">7. Wie wichtig ist dir eine ähnliche Lebenssituation? *</legend><div class="options"><label class="option"><input type="radio" name="Aehnliche_Lebenssituation" value="Sehr wichtig" required> Sehr wichtig</label><label class="option"><input type="radio" name="Aehnliche_Lebenssituation" value="Teilweise wichtig"> Teilweise wichtig</label><label class="option"><input type="radio" name="Aehnliche_Lebenssituation" value="Eher unwichtig"> Eher unwichtig</label></div></fieldset><fieldset class="field"><legend class="legend">8. Wie fühlst du dich beim Kennenlernen neuer Menschen am wohlsten? *</legend><div class="options"><label class="option"><input type="radio" name="Kennenlernen_in_Gruppe" value="In einer kleinen Gruppe" required> In einer kleinen Gruppe</label><label class="option"><input type="radio" name="Kennenlernen_in_Gruppe" value="In einer größeren Gruppe"> In einer größeren Gruppe</label><label class="option"><input type="radio" name="Kennenlernen_in_Gruppe" value="Beides ist in Ordnung"> Beides ist in Ordnung</label></div></fieldset><fieldset class="field"><legend class="legend">9. Was wünschst du dir hauptsächlich aus einer neuen Freundschaft? *</legend><div class="options"><label class="option"><input type="radio" name="Freundschaftsziel" value="Eine enge, langfristige Freundschaft" required> Eine enge, langfristige Freundschaft</label><label class="option"><input type="radio" name="Freundschaftsziel" value="Regelmäßigen Kontakt"> Regelmäßigen Kontakt</label><label class="option"><input type="radio" name="Freundschaftsziel" value="Menschen für gemeinsame Unternehmungen"> Menschen für gemeinsame Unternehmungen</label><label class="option"><input type="radio" name="Freundschaftsziel" value="Meinen Freundeskreis erweitern"> Meinen Freundeskreis erweitern</label><label class="option"><input type="radio" name="Freundschaftsziel" value="Erstmal neue Menschen kennenlernen"> Erstmal neue Menschen kennenlernen</label></div></fieldset><div class="field"><label for="note">Gibt es etwas, das wir bei der Gruppenzusammenstellung unbedingt berücksichtigen sollten? <span class="muted">(freiwillig)</span></label><textarea id="note" name="Besonderer_Hinweis" rows="4"></textarea></div><label class="option"><input type="checkbox" name="Kein_Partnersuche_Regel_bestaetigt" value="Ja" required> Ich suche ausschließlich platonische Freundschaften und akzeptiere die Kein-Freundschaftsregel. *</label><label class="option"><input type="checkbox" name="Regeln_und_Sicherheit_bestaetigt" value="Ja" required> Ich habe zur Kenntnis genommen, dass das erste Treffen an einem öffentlichen Ort stattfindet und dass jede teilnehmende Person bei jedem Treffen eine Begleitperson mitbringen darf. *</label><label class="option"><input type="checkbox" name="Datenschutzhinweise_gelesen" value="Ja" required> Ich habe die <a href="datenschutz.html" target="_blank" style="text-decoration:underline">Datenschutzhinweise</a> gelesen. *</label><div class="form-actions"><button class="btn btn-outline" type="button" data-prev>Zurück</button><label class="option" style="margin:18px 0"><input type="checkbox" name="Datenschutz_bestaetigt" value="Ja" required> <span>Ich habe die <a href="datenschutz.html" target="_blank" style="text-decoration:underline">Datenschutzerklärung</a> zur Kenntnis genommen.</span></label><button class="btn btn-primary" type="submit">Bewerbung absenden</button></div></section>
-</form><div class="apply-photo"><div class="visual-frame city-photo"><img src="apply-team.jpg" alt="Kleine Gruppe plant gemeinsam den nächsten Schritt an einem Laptop"><div class="visual-caption"><strong>Ein guter Start beginnt unkompliziert.</strong> Deine Bewerbung hilft uns, eine passende 4er-Gruppe in Würzburg & Umgebung zusammenzustellen – für echte Begegnungen, Freundschaften und gemeinsame Unternehmungen.</div></div></div></div><div class="success-box" id="formSuccess" hidden><h2>Danke für deine Bewerbung.</h2><p>Deine Angaben wurden an LAVUQ übermittelt. Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt, und melden uns, sobald der nächste Schritt ansteht.</p><a class="btn btn-dark" href="index.html">Zur Startseite</a></div><div class="success-box" id="formError" hidden><h2>Das hat leider nicht funktioniert.</h2><p>Die Bewerbung konnte gerade nicht übermittelt werden. Bitte versuche es noch einmal oder schreibe uns an <a href="mailto:lavuq@web.de">lavuq@web.de</a>.</p></div></div></section></main><footer><div class="container"><div class="footer-bottom" style="border-top:0;margin-top:0">© 2026 LAVUQ · <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></div></div></footer><script src="script.js"></script></body></html>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html"><img class="brand-mark" src="favicon.svg" alt=""><span>LAVUQ <span class="brand-city">WÜRZBURG</span></span></a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+      <nav class="nav">
+        <a href="index.html">Startseite</a>
+        <a href="sicherheit.html">Sicherheit</a>
+        <a href="fuer-wen-ist-lavuq.html">Für wen ist LAVUQ?</a>
+        <a href="so-finden-wir-deine-gruppe.html">So finden wir deine Gruppe</a>
+        <a href="warum-wir-in-wuerzburg-starten.html">Warum wir in Würzburg starten</a>
+        <a href="unsere-regeln.html">Unsere Regeln</a>
+        <a href="kein-dating.html">Freundschaft im Fokus</a>
+        <a href="faq.html">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section apply-section">
+      <div class="container form-shell">
+        <div class="application-intro">
+          <div class="eyebrow">Bewerbung</div>
+          <h1>Finde deine passende Freundesgruppe.</h1>
+          <p class="muted">9 kurze Gruppenfragen + Basisdaten. Damit wir eine möglichst passende 4er-Gruppe für dich zusammenstellen können.</p>
+          <div class="application-meta">
+            <span class="free-badge">Aktuelle Startphase: 0 €</span>
+            <span class="muted">Keine Anmeldegebühr · keine Mitgliedschaft</span>
+          </div>
+          <div class="notice application-notice"><strong>Wichtig:</strong> LAVUQ ist ein Angebot für Freundschaften und gemeinsame Unternehmungen. Das erste Treffen findet an einem öffentlichen Ort statt und jede teilnehmende Person darf bei jedem Treffen eine Begleitperson mitbringen.</div>
+        </div>
+
+        <div class="progress-head"><strong id="progressLabel">Schritt 1 von 4</strong><span class="muted">ca. 3–5 Minuten</span></div>
+        <div class="progress"><div class="progress-bar"></div></div>
+
+        <form id="applyForm" name="lavuq-bewerbung" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="lavuq-bewerbung">
+          <p class="bot-field" aria-hidden="true"><label>Nicht ausfüllen: <input name="bot-field"></label></p>
+
+          <section class="form-step active">
+            <h2>Basisdaten</h2>
+            <div class="field"><label for="name">Vorname *</label><input id="name" name="Vorname" required autocomplete="given-name"></div>
+            <div class="field"><label for="email">E-Mail-Adresse *</label><input id="email" name="Email" type="email" required autocomplete="email" placeholder="name@beispiel.de"></div>
+            <div class="field"><label for="mobile">Mobilnummer / WhatsApp <span class="muted">(freiwillig)</span></label><input id="mobile" name="Mobilnummer" type="tel" autocomplete="tel" placeholder="z. B. 0171 1234567"></div>
+            <div class="grid-2">
+              <div class="field"><label for="age">Alter *</label><input id="age" name="Alter" type="number" min="18" max="99" required></div>
+              <div class="field"><label for="zip">PLZ *</label><input id="zip" name="PLZ" inputmode="numeric" pattern="[0-9]{5}" required></div>
+            </div>
+            <div class="form-actions"><span></span><button class="btn btn-primary" type="button" data-next>Weiter</button></div>
+          </section>
+
+          <section class="form-step">
+            <h2>Deine Situation &amp; Gruppe</h2>
+            <fieldset class="field">
+              <legend class="legend">Geschlecht für die Gruppenzusammenstellung *</legend>
+              <div class="options">
+                <label class="option"><input type="radio" name="Geschlecht" value="Männlich" required> Männlich</label>
+                <label class="option"><input type="radio" name="Geschlecht" value="Weiblich"> Weiblich</label>
+                <label class="option"><input type="radio" name="Geschlecht" value="Divers / keine Zuordnung"> Divers / keine Zuordnung</label>
+              </div>
+            </fieldset>
+            <div class="field"><label for="lifeSituation">Aktuelle Lebenssituation *</label><select id="lifeSituation" name="Aktuelle_Lebenssituation" required><option value="">Bitte wählen</option><option>Berufstätig</option><option>Studium / Ausbildung</option><option>Familienalltag mit Kindern</option><option>Schichtdienst / unregelmäßige Zeiten</option><option>Ruhestand</option><option>Sonstiges</option></select></div>
+            <div class="field"><label for="radius">Maximaler Umkreis *</label><select id="radius" name="Maximaler_Umkreis" required><option value="">Bitte wählen</option><option>10 km</option><option>20 km</option><option>30 km</option><option>50 km</option></select></div>
+            <fieldset class="field">
+              <legend class="legend">Gewünschte Gruppenzusammensetzung *</legend>
+              <div class="options">
+                <label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Nur Männer" required> Nur Männer</label>
+                <label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Nur Frauen"> Nur Frauen</label>
+                <label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Gemischte Gruppe"> Gemischte Gruppe</label>
+                <label class="option"><input type="radio" name="Gewuenschte_Gruppe" value="Keine Präferenz"> Keine Präferenz</label>
+              </div>
+            </fieldset>
+            <div class="form-actions"><button class="btn btn-outline" type="button" data-prev>Zurück</button><button class="btn btn-primary" type="button" data-next>Weiter</button></div>
+          </section>
+
+          <section class="form-step">
+            <h2>Über dich &amp; Freundschaft</h2>
+            <fieldset class="field"><legend class="legend">1. Wie verbringst du deine Freizeit am liebsten?</legend><div class="options">
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Essen gehen / Café"> Essen gehen / Café</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Sport"> Sport</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Natur / Spaziergänge"> Natur / Spaziergänge</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Reisen / Ausflüge"> Reisen / Ausflüge</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Gaming"> Gaming</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Kultur / Veranstaltungen"> Kultur / Veranstaltungen</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Spieleabende"> Spieleabende</label>
+              <label class="option"><input type="checkbox" name="Freizeit_Interessen" value="Gemütlich zusammensitzen"> Gemütlich zusammensitzen</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">2. Wie würdest du dich selbst beschreiben? *</legend><div class="options">
+              <label class="option"><input type="radio" name="Persoenlichkeit" value="Eher ruhig und zurückhaltend" required> Eher ruhig und zurückhaltend</label>
+              <label class="option"><input type="radio" name="Persoenlichkeit" value="Ausgeglichen"> Ausgeglichen</label>
+              <label class="option"><input type="radio" name="Persoenlichkeit" value="Eher offen und kontaktfreudig"> Eher offen und kontaktfreudig</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">3. Wie planst du gemeinsame Unternehmungen am liebsten? *</legend><div class="options">
+              <label class="option"><input type="radio" name="Planung_von_Unternehmungen" value="Gerne frühzeitig geplant" required> Gerne frühzeitig geplant</label>
+              <label class="option"><input type="radio" name="Planung_von_Unternehmungen" value="Mischung aus geplant und spontan"> Mischung aus geplant und spontan</label>
+              <label class="option"><input type="radio" name="Planung_von_Unternehmungen" value="Am liebsten spontan"> Am liebsten spontan</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">4. Wie häufig möchtest du neue Freunde ungefähr sehen? *</legend><div class="options">
+              <label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Mehrmals pro Woche" required> Mehrmals pro Woche</label>
+              <label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Ungefähr einmal pro Woche"> Ungefähr einmal pro Woche</label>
+              <label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Ungefähr alle zwei Wochen"> Ungefähr alle zwei Wochen</label>
+              <label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Ein paar Mal im Monat"> Ein paar Mal im Monat</label>
+              <label class="option"><input type="radio" name="Gewuenschte_Kontaktfrequenz" value="Eher gelegentlich"> Eher gelegentlich</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">5. Was ist dir in einer Freundschaft besonders wichtig?</legend><div class="options">
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Verlässlichkeit"> Verlässlichkeit</label>
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Humor"> Humor</label>
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Ehrlichkeit"> Ehrlichkeit</label>
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Tiefgründige Gespräche"> Tiefgründige Gespräche</label>
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Gemeinsame Unternehmungen"> Gemeinsame Unternehmungen</label>
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Gegenseitige Unterstützung"> Gegenseitige Unterstützung</label>
+              <label class="option"><input type="checkbox" name="Wichtige_Freundschaftswerte" value="Respekt"> Respekt</label>
+            </div></fieldset>
+            <div class="form-actions"><button class="btn btn-outline" type="button" data-prev>Zurück</button><button class="btn btn-primary" type="button" data-next>Weiter</button></div>
+          </section>
+
+          <section class="form-step">
+            <h2>Deine Wünsche &amp; Abschluss</h2>
+            <fieldset class="field"><legend class="legend">6. Wie verbringst du gemeinsame Zeit mit Freunden am liebsten?</legend><div class="options">
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Zusammensitzen und reden"> Zusammensitzen und reden</label>
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Essen gehen / Café"> Essen gehen / Café</label>
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Aktivitäten / Unternehmungen"> Aktivitäten / Unternehmungen</label>
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Sport / Bewegung"> Sport / Bewegung</label>
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Ausflüge / Natur"> Ausflüge / Natur</label>
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Veranstaltungen / Konzerte"> Veranstaltungen / Konzerte</label>
+              <label class="option"><input type="checkbox" name="Gemeinsame_Zeit" value="Spieleabende"> Spieleabende</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">7. Wie wichtig ist dir eine ähnliche Lebenssituation? *</legend><div class="options">
+              <label class="option"><input type="radio" name="Aehnliche_Lebenssituation" value="Sehr wichtig" required> Sehr wichtig</label>
+              <label class="option"><input type="radio" name="Aehnliche_Lebenssituation" value="Teilweise wichtig"> Teilweise wichtig</label>
+              <label class="option"><input type="radio" name="Aehnliche_Lebenssituation" value="Eher unwichtig"> Eher unwichtig</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">8. Wie fühlst du dich beim Kennenlernen neuer Menschen am wohlsten? *</legend><div class="options">
+              <label class="option"><input type="radio" name="Kennenlernen_in_Gruppe" value="In einer kleinen Gruppe" required> In einer kleinen Gruppe</label>
+              <label class="option"><input type="radio" name="Kennenlernen_in_Gruppe" value="In einer größeren Gruppe"> In einer größeren Gruppe</label>
+              <label class="option"><input type="radio" name="Kennenlernen_in_Gruppe" value="Beides ist in Ordnung"> Beides ist in Ordnung</label>
+            </div></fieldset>
+            <fieldset class="field"><legend class="legend">9. Was wünschst du dir hauptsächlich aus einer neuen Freundschaft? *</legend><div class="options">
+              <label class="option"><input type="radio" name="Freundschaftsziel" value="Eine enge, langfristige Freundschaft" required> Eine enge, langfristige Freundschaft</label>
+              <label class="option"><input type="radio" name="Freundschaftsziel" value="Regelmäßigen Kontakt"> Regelmäßigen Kontakt</label>
+              <label class="option"><input type="radio" name="Freundschaftsziel" value="Menschen für gemeinsame Unternehmungen"> Menschen für gemeinsame Unternehmungen</label>
+              <label class="option"><input type="radio" name="Freundschaftsziel" value="Meinen Freundeskreis erweitern"> Meinen Freundeskreis erweitern</label>
+              <label class="option"><input type="radio" name="Freundschaftsziel" value="Erstmal neue Menschen kennenlernen"> Erstmal neue Menschen kennenlernen</label>
+            </div></fieldset>
+            <div class="field"><label for="note">Gibt es etwas, das wir bei der Gruppenzusammenstellung unbedingt berücksichtigen sollten? <span class="muted">(freiwillig)</span></label><textarea id="note" name="Besonderer_Hinweis" rows="4"></textarea></div>
+            <label class="option"><input type="checkbox" name="Kein_Partnersuche_Regel_bestaetigt" value="Ja" required> <span>Ich suche ausschließlich platonische Freundschaften und akzeptiere die Kein-Dating-Regel. *</span></label>
+            <label class="option"><input type="checkbox" name="Regeln_und_Sicherheit_bestaetigt" value="Ja" required> <span>Ich habe zur Kenntnis genommen, dass das erste Treffen an einem öffentlichen Ort stattfindet und dass jede teilnehmende Person bei jedem Treffen eine Begleitperson mitbringen darf. *</span></label>
+            <label class="option" style="margin-top:12px"><input type="checkbox" name="Datenschutz_bestaetigt" value="Ja" required> <span>Ich habe die <a href="datenschutz.html" target="_blank" style="text-decoration:underline">Datenschutzerklärung</a> zur Kenntnis genommen. *</span></label>
+            <div class="form-actions"><button class="btn btn-outline" type="button" data-prev>Zurück</button><button class="btn btn-primary" type="submit">Bewerbung absenden</button></div>
+          </section>
+        </form>
+
+        <div id="formSuccess" class="success-box" hidden>
+          <h2>Bewerbung angekommen</h2>
+          <p>Deine Bewerbung wurde erfolgreich an LAVUQ übermittelt.</p>
+        </div>
+        <div id="formError" class="notice" hidden>
+          <strong>Das hat leider nicht funktioniert.</strong>
+          <p>Bitte versuche es noch einmal.</p>
+        </div>
+
+        <div class="visual-frame apply-photo" style="margin-top:34px">
+          <img src="apply-team.jpg" alt="Eine kleine Freundesgruppe sitzt gemeinsam an einem Tisch">
+          <div class="visual-caption"><strong>Ein guter Start beginnt unkompliziert.</strong><br>Deine Bewerbung hilft uns, eine passende 4er-Gruppe in Würzburg &amp; Umgebung zusammenzustellen – für echte Begegnungen, Freundschaften und gemeinsame Unternehmungen.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="container"><div class="footer-bottom">© 2026 LAVUQ · <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></div></div></footer>
+  <script src="script.js"></script>
+</body>
+</html>
