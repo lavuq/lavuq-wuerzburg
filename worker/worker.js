@@ -1,6 +1,85 @@
 const AIRTABLE_BASE_ID = "apphnIBhuAbmMTUtY";
 const AIRTABLE_TABLE_ID = "tblzLtbR5Yh4nR5aQ";
 const ALLOWED_ORIGINS = ["https://lavuq.github.io"];
+const FIELD_CONFIRMATION_SENT = "fldyEd3DYTo5fQoMf";
+
+async function sendConfirmationEmail(env, { email, vorname, bewerberId }) {
+  if (!env.BREVO_API_KEY) {
+    console.warn("BREVO_API_KEY fehlt – Eingangsbestätigung wurde nicht versendet.");
+    return false;
+  }
+
+  const senderEmail = env.BREVO_SENDER_EMAIL || "lavuq@web.de";
+  const senderName = env.BREVO_SENDER_NAME || "LAVUQ Würzburg";
+
+  const subject = "Deine LAVUQ-Bewerbung ist angekommen";
+  const htmlContent = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0b1f3a;max-width:620px;margin:0 auto;">
+      <h2 style="margin-bottom:8px;">Hallo ${vorname},</h2>
+      <p>vielen Dank für deine Bewerbung bei <strong>LAVUQ Würzburg</strong>.</p>
+      <p>Deine Angaben sind erfolgreich bei uns eingegangen.</p>
+      <p><strong>Deine Bewerber-ID:</strong><br>${bewerberId}</p>
+      <p>Wir prüfen nun, welche 4er-Gruppe möglichst gut zu deinen Angaben passt. Die Zusammenstellung erfolgt bewusst nicht nach dem Zufallsprinzip. Je nach aktueller Bewerberlage kann es deshalb etwas dauern, bis eine passende Gruppe gefunden ist.</p>
+      <p>Du musst im Moment nichts weiter tun. Wir melden uns, sobald der nächste Schritt ansteht.</p>
+      <p style="margin-top:28px;">Viele Grüße<br><strong>LAVUQ Würzburg</strong></p>
+      <p style="font-size:12px;color:#667085;margin-top:28px;">LAVUQ ist kein Dating-Angebot. Im Mittelpunkt stehen Freundschaft, Austausch und gemeinsame Unternehmungen.</p>
+    </div>`;
+
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": env.BREVO_API_KEY,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { email: senderEmail, name: senderName },
+      to: [{ email, name: vorname }],
+      subject,
+      htmlContent,
+    }),
+  });
+
+  if (!response.ok) {
+    let detail = "";
+    try {
+      const body = await response.json();
+      detail = body?.message || JSON.stringify(body);
+    } catch (_) {}
+    console.error("Brevo Fehler:", response.status, detail);
+    return false;
+  }
+
+  return true;
+}
+
+async function markConfirmationSent(env, recordId) {
+  if (!recordId) return false;
+
+  const response = await fetch(
+    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${recordId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fields: { [FIELD_CONFIRMATION_SENT]: true } }),
+    }
+  );
+
+  if (!response.ok) {
+    let detail = "";
+    try {
+      const body = await response.json();
+      detail = body?.error?.type || body?.error?.message || "";
+    } catch (_) {}
+    console.error("Airtable Bestätigungsstatus Fehler:", response.status, detail);
+    return false;
+  }
+
+  return true;
+}
 
 export default {
   async fetch(request, env) {
@@ -58,7 +137,8 @@ export default {
         return new Response(JSON.stringify({
           ok: true,
           service: "LAVUQ Bewerbung",
-          airtable: "verbunden"
+          airtable: "verbunden",
+          emailConfirmation: env.BREVO_API_KEY ? "konfiguriert" : "nicht-konfiguriert"
         }), { status: 200, headers: corsHeaders });
       } catch (error) {
         return new Response(JSON.stringify({
@@ -181,8 +261,20 @@ export default {
       }
 
       const result = await airtableResponse.json();
+      const recordId = result.records?.[0]?.id;
+
+      let emailSent = false;
+      try {
+        emailSent = await sendConfirmationEmail(env, { email, vorname, bewerberId });
+        if (emailSent) {
+          await markConfirmationSent(env, recordId);
+        }
+      } catch (emailError) {
+        console.error("Eingangsbestätigung Fehler:", emailError);
+      }
+
       return new Response(
-        JSON.stringify({ ok: true, bewerberId, recordId: result.records?.[0]?.id }),
+        JSON.stringify({ ok: true, bewerberId, recordId, emailSent }),
         { status: 200, headers: corsHeaders }
       );
     } catch (error) {
