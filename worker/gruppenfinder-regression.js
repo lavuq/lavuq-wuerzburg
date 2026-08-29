@@ -1,4 +1,4 @@
-import { weightedPairScore, evaluateFourPersonGroup } from "./gruppenfinder.js";
+import { weightedPairScore, evaluateFourPersonGroup, rankReplacementCandidates } from "./gruppenfinder.js";
 
 // Regressionstest für die bereits manuell geprüfte Testgruppe A/B/C/D.
 // Zweck: Jede spätere Änderung am Algorithmus muss dieselben Referenzwerte liefern.
@@ -116,14 +116,49 @@ export function runGruppenfinderRegression() {
 
   const group = evaluateFourPersonGroup(pairs.map((pair) => pair.actual));
 
+  // Ersatztest: B fällt aus, A/C/D bleiben bestehen.
+  // E entspricht im kontrollierten Testprofil A. Entfernung ist hier bewusst
+  // noch nicht Bestandteil dieser Regression, damit die bekannten Referenzwerte
+  // unverändert abgesichert bleiben.
+  const replacementRanking = rankReplacementCandidates(
+    [
+      { id: "E", pairScores: [100.0, 86.9, 82.1] },
+      { id: "SCHWACH", pairScores: [90, 90, 60] },
+    ],
+    [86.9, 82.1, 86.7],
+  );
+
+  const replacementPassed =
+    replacementRanking[0]?.id === "E" &&
+    replacementRanking[0]?.eligible === true &&
+    replacementRanking[0]?.groupAverage === 87.5 &&
+    replacementRanking[0]?.weakestPair === 82.1 &&
+    replacementRanking[1]?.id === "SCHWACH" &&
+    replacementRanking[1]?.eligible === false &&
+    replacementRanking[1]?.weakestPair === 60;
+
   return {
-    passed: pairs.every((pair) => pair.passed) && group.average === 87.0 && group.weakestPair === 82.1,
+    passed:
+      pairs.every((pair) => pair.passed) &&
+      group.average === 87.0 &&
+      group.weakestPair === 82.1 &&
+      replacementPassed,
     pairs,
     group,
     expectedGroup: {
       average: 87.0,
       weakestPair: 82.1,
       recommendation: "Vorschlag geeignet",
+    },
+    replacement: {
+      passed: replacementPassed,
+      ranking: replacementRanking,
+      expectedTopCandidate: {
+        id: "E",
+        groupAverage: 87.5,
+        weakestPair: 82.1,
+        eligible: true,
+      },
     },
   };
 }
