@@ -1,6 +1,6 @@
 const AIRTABLE_BASE_ID = "apphnIBhuAbmMTUtY";
 const AIRTABLE_TABLE_ID = "tblzLtbR5Yh4nR5aQ";
-const ALLOWED_ORIGINS = ["https://lavuq.github.io"];
+const ALLOWED_ORIGINS = ["https://lavuq.github.io", "https://lavuq-wue.de", "https://www.lavuq-wue.de"];
 const FIELD_CONFIRMATION_SENT = "fldyEd3DYTo5fQoMf";
 
 async function sendConfirmationEmail(env, { email, vorname, bewerberId }) {
