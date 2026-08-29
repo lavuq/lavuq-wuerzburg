@@ -6,12 +6,29 @@ import { calculateDistanceCompatibility } from "./gruppenfinder-distance.js";
 
 function text(value) {
   if (value == null) return "";
-  if (typeof value === "object" && value.name) return String(value.name).trim();
+  if (typeof value === "object" && !Array.isArray(value) && value.name) return String(value.name).trim();
   return String(value).trim();
 }
 
+function valuesFromMultiSelect(value) {
+  if (value == null) return [];
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (item == null) return "";
+        if (typeof item === "object" && item.name) return String(item.name).trim();
+        return String(item).trim();
+      })
+      .filter(Boolean);
+  }
+  return text(value)
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean);
+}
+
 function setFromCsv(value) {
-  return new Set(text(value).split(",").map((v) => v.trim()).filter(Boolean));
+  return new Set(valuesFromMultiSelect(value));
 }
 
 function overlapCount(a, b) {
