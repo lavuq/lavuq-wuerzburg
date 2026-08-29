@@ -18,7 +18,7 @@ function jsonResponse(payload, status, headers) {
 
 async function airtableGetRecord(env, tableId, recordId) {
   const response = await fetch(
-    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}/${recordId}`,
+    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}/${recordId}?returnFieldsByFieldId=true`,
     {
       headers: {
         Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
