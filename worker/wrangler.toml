@@ -1,4 +1,4 @@
 name = "lavuq-bewerbung"
-main = "worker-with-replacement.js"
+main = "worker-with-preview.js"
 compatibility_date = "2026-08-26"
 keep_vars = true
