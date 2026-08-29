@@ -1,7 +1,200 @@
 const AIRTABLE_BASE_ID = "apphnIBhuAbmMTUtY";
 const AIRTABLE_TABLE_ID = "tblzLtbR5Yh4nR5aQ";
+const AIRTABLE_MEMBERS_TABLE_ID = "tbl4QX0NIB3tUKtF4";
 const ALLOWED_ORIGINS = ["https://lavuq.github.io", "https://lavuq-wue.de", "https://www.lavuq-wue.de"];
 const FIELD_CONFIRMATION_SENT = "fldyEd3DYTo5fQoMf";
+
+const MEMBER_FIELD_STATUS = "fldBS2hoKQX0Rr1aX";
+const MEMBER_FIELD_CONTACT_SHARED = "fld3LCPTEbAl46bF1";
+const MEMBER_FIELD_INVITE_STATUS = "fldUmjMa2j7MLG5RA";
+const MEMBER_FIELD_INVITE_SENT_AT = "fldMiaXKZ4goKsPMK";
+const MEMBER_FIELD_INVITE_ANSWERED_AT = "fldXuLbkNFl2MZrJi";
+const MEMBER_FIELD_INVITE_TOKEN = "fldbbkqZ7VRvtbzB0";
+const MEMBER_FIELD_INVITE_VALID_UNTIL = "fldbKNNUAaUYBY1JX";
+
+function jsonResponse(payload, status, headers) {
+  return new Response(JSON.stringify(payload), { status, headers });
+}
+
+async function airtableGetRecord(env, tableId, recordId) {
+  const response = await fetch(
+    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}/${recordId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) return null;
+  return response.json();
+}
+
+async function airtablePatchRecord(env, tableId, recordId, fields) {
+  const response = await fetch(
+    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}/${recordId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fields }),
+    }
+  );
+
+  if (!response.ok) {
+    let detail = "";
+    try {
+      const body = await response.json();
+      detail = body?.error?.type || body?.error?.message || "";
+    } catch (_) {}
+    throw new Error(detail || `Airtable HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+function validateInvitationRecord(record, token) {
+  if (!record || !record.fields) {
+    return { ok: false, status: 404, error: "Diese Einladung wurde nicht gefunden." };
+  }
+
+  const storedToken = String(record.fields[MEMBER_FIELD_INVITE_TOKEN] || "");
+  if (!token || !storedToken || token !== storedToken) {
+    return { ok: false, status: 403, error: "Dieser Einladungslink ist ungültig." };
+  }
+
+  const inviteStatus = String(record.fields[MEMBER_FIELD_INVITE_STATUS] || "Nicht versendet");
+  const validUntil = record.fields[MEMBER_FIELD_INVITE_VALID_UNTIL] || null;
+
+  if (inviteStatus === "Gesendet" && validUntil) {
+    const expiry = new Date(validUntil).getTime();
+    if (Number.isFinite(expiry) && Date.now() > expiry) {
+      return {
+        ok: true,
+        expired: true,
+        inviteStatus: "Abgelaufen",
+        validUntil,
+      };
+    }
+  }
+
+  return { ok: true, expired: false, inviteStatus, validUntil };
+}
+
+async function handleInvitationStatus(request, env, corsHeaders) {
+  if (!env.AIRTABLE_TOKEN) {
+    return jsonResponse({ ok: false, error: "Airtable-Zugang ist nicht eingerichtet." }, 500, corsHeaders);
+  }
+
+  const url = new URL(request.url);
+  const memberId = String(url.searchParams.get("member") || "").trim();
+  const token = String(url.searchParams.get("token") || "").trim();
+
+  if (!/^rec[A-Za-z0-9]{14}$/.test(memberId) || !token) {
+    return jsonResponse({ ok: false, error: "Dieser Einladungslink ist unvollständig." }, 400, corsHeaders);
+  }
+
+  try {
+    const record = await airtableGetRecord(env, AIRTABLE_MEMBERS_TABLE_ID, memberId);
+    const check = validateInvitationRecord(record, token);
+
+    if (!check.ok) {
+      return jsonResponse({ ok: false, error: check.error }, check.status, corsHeaders);
+    }
+
+    if (check.expired) {
+      try {
+        await airtablePatchRecord(env, AIRTABLE_MEMBERS_TABLE_ID, memberId, {
+          [MEMBER_FIELD_INVITE_STATUS]: "Abgelaufen",
+        });
+      } catch (error) {
+        console.error("Einladungs-Ablauf konnte nicht gespeichert werden:", error);
+      }
+    }
+
+    return jsonResponse(
+      {
+        ok: true,
+        status: check.expired ? "Abgelaufen" : check.inviteStatus,
+        validUntil: check.validUntil,
+      },
+      200,
+      corsHeaders
+    );
+  } catch (error) {
+    console.error("Einladungsstatus Fehler:", error);
+    return jsonResponse({ ok: false, error: "Die Einladung konnte momentan nicht geprüft werden." }, 500, corsHeaders);
+  }
+}
+
+async function handleInvitationResponse(request, env, corsHeaders) {
+  if (!env.AIRTABLE_TOKEN) {
+    return jsonResponse({ ok: false, error: "Airtable-Zugang ist nicht eingerichtet." }, 500, corsHeaders);
+  }
+
+  try {
+    const data = await request.json();
+    const memberId = String(data.memberId || "").trim();
+    const token = String(data.token || "").trim();
+    const decision = String(data.decision || "").trim();
+
+    if (!/^rec[A-Za-z0-9]{14}$/.test(memberId) || !token || !["accept", "decline"].includes(decision)) {
+      return jsonResponse({ ok: false, error: "Ungültige Antwortdaten." }, 400, corsHeaders);
+    }
+
+    const record = await airtableGetRecord(env, AIRTABLE_MEMBERS_TABLE_ID, memberId);
+    const check = validateInvitationRecord(record, token);
+
+    if (!check.ok) {
+      return jsonResponse({ ok: false, error: check.error }, check.status, corsHeaders);
+    }
+
+    if (check.expired) {
+      try {
+        await airtablePatchRecord(env, AIRTABLE_MEMBERS_TABLE_ID, memberId, {
+          [MEMBER_FIELD_INVITE_STATUS]: "Abgelaufen",
+        });
+      } catch (_) {}
+      return jsonResponse({ ok: false, error: "Diese Einladung ist bereits abgelaufen." }, 410, corsHeaders);
+    }
+
+    if (check.inviteStatus !== "Gesendet") {
+      if (check.inviteStatus === "Angenommen" || check.inviteStatus === "Abgelehnt") {
+        return jsonResponse({ ok: true, status: check.inviteStatus, alreadyAnswered: true }, 200, corsHeaders);
+      }
+      return jsonResponse({ ok: false, error: "Diese Einladung ist noch nicht für eine Antwort freigegeben." }, 409, corsHeaders);
+    }
+
+    const now = new Date().toISOString();
+    const fields = {
+      [MEMBER_FIELD_INVITE_STATUS]: decision === "accept" ? "Angenommen" : "Abgelehnt",
+      [MEMBER_FIELD_INVITE_ANSWERED_AT]: now,
+      [MEMBER_FIELD_CONTACT_SHARED]: false,
+    };
+
+    if (decision === "accept") {
+      fields[MEMBER_FIELD_STATUS] = "Aktiv";
+    }
+
+    await airtablePatchRecord(env, AIRTABLE_MEMBERS_TABLE_ID, memberId, fields);
+
+    return jsonResponse(
+      {
+        ok: true,
+        status: decision === "accept" ? "Angenommen" : "Abgelehnt",
+        contactShared: false,
+      },
+      200,
+      corsHeaders
+    );
+  } catch (error) {
+    console.error("Einladungsantwort Fehler:", error);
+    return jsonResponse({ ok: false, error: "Deine Antwort konnte momentan nicht gespeichert werden." }, 500, corsHeaders);
+  }
+}
 
 async function sendConfirmationEmail(env, { email, vorname, bewerberId }) {
   if (!env.BREVO_API_KEY) {
@@ -56,29 +249,15 @@ async function sendConfirmationEmail(env, { email, vorname, bewerberId }) {
 async function markConfirmationSent(env, recordId) {
   if (!recordId) return false;
 
-  const response = await fetch(
-    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${recordId}`,
-    {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${env.AIRTABLE_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ fields: { [FIELD_CONFIRMATION_SENT]: true } }),
-    }
-  );
-
-  if (!response.ok) {
-    let detail = "";
-    try {
-      const body = await response.json();
-      detail = body?.error?.type || body?.error?.message || "";
-    } catch (_) {}
-    console.error("Airtable Bestätigungsstatus Fehler:", response.status, detail);
+  try {
+    await airtablePatchRecord(env, AIRTABLE_TABLE_ID, recordId, {
+      [FIELD_CONFIRMATION_SENT]: true,
+    });
+    return true;
+  } catch (error) {
+    console.error("Airtable Bestätigungsstatus Fehler:", error);
     return false;
   }
-
-  return true;
 }
 
 export default {
@@ -91,20 +270,31 @@ export default {
       "Access-Control-Allow-Headers": "Content-Type",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
+      "Vary": "Origin",
     };
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
+    const url = new URL(request.url);
+
+    if (url.pathname === "/invitation-status" && request.method === "GET") {
+      return handleInvitationStatus(request, env, corsHeaders);
+    }
+
+    if (url.pathname === "/invitation-response" && request.method === "POST") {
+      return handleInvitationResponse(request, env, corsHeaders);
+    }
+
     if (request.method === "GET") {
       if (!env.AIRTABLE_TOKEN) {
-        return new Response(JSON.stringify({
+        return jsonResponse({
           ok: false,
           service: "LAVUQ Bewerbung",
           airtable: "secret-fehlt",
           error: "AIRTABLE_TOKEN ist im Worker nicht vorhanden."
-        }), { status: 500, headers: corsHeaders });
+        }, 500, corsHeaders);
       }
 
       try {
@@ -125,43 +315,37 @@ export default {
             details = body?.error?.type || body?.error?.message || "Airtable-Fehler";
           } catch (_) {}
 
-          return new Response(JSON.stringify({
+          return jsonResponse({
             ok: false,
             service: "LAVUQ Bewerbung",
             airtable: "nicht-verbunden",
             status: check.status,
             error: details || `Airtable HTTP ${check.status}`
-          }), { status: 500, headers: corsHeaders });
+          }, 500, corsHeaders);
         }
 
-        return new Response(JSON.stringify({
+        return jsonResponse({
           ok: true,
           service: "LAVUQ Bewerbung",
           airtable: "verbunden",
           emailConfirmation: env.BREVO_API_KEY ? "konfiguriert" : "nicht-konfiguriert"
-        }), { status: 200, headers: corsHeaders });
+        }, 200, corsHeaders);
       } catch (error) {
-        return new Response(JSON.stringify({
+        return jsonResponse({
           ok: false,
           service: "LAVUQ Bewerbung",
           airtable: "verbindungsfehler",
           error: String(error?.message || error)
-        }), { status: 500, headers: corsHeaders });
+        }, 500, corsHeaders);
       }
     }
 
     if (request.method !== "POST") {
-      return new Response(JSON.stringify({ ok: false, error: "Methode nicht erlaubt" }), {
-        status: 405,
-        headers: corsHeaders,
-      });
+      return jsonResponse({ ok: false, error: "Methode nicht erlaubt" }, 405, corsHeaders);
     }
 
     if (!env.AIRTABLE_TOKEN) {
-      return new Response(JSON.stringify({ ok: false, error: "Airtable-Zugang ist noch nicht eingerichtet." }), {
-        status: 500,
-        headers: corsHeaders,
-      });
+      return jsonResponse({ ok: false, error: "Airtable-Zugang ist noch nicht eingerichtet." }, 500, corsHeaders);
     }
 
     try {
@@ -185,7 +369,7 @@ export default {
       }
 
       if (data["bot-field"]) {
-        return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
+        return jsonResponse({ ok: true }, 200, corsHeaders);
       }
 
       const vorname = String(data.Vorname || "").trim();
@@ -194,10 +378,7 @@ export default {
       const email = String(data.Email || "").trim();
 
       if (!vorname || !/^[0-9]{5}$/.test(plz) || !Number.isFinite(alter) || alter < 18 || !email) {
-        return new Response(JSON.stringify({ ok: false, error: "Pflichtangaben sind unvollständig." }), {
-          status: 400,
-          headers: corsHeaders,
-        });
+        return jsonResponse({ ok: false, error: "Pflichtangaben sind unvollständig." }, 400, corsHeaders);
       }
 
       const radiusMatch = String(data.Maximaler_Umkreis || "").match(/\d+/);
@@ -254,10 +435,10 @@ export default {
           detail = body?.error?.type || body?.error?.message || "";
         } catch (_) {}
         console.error("Airtable Fehler:", airtableResponse.status, detail);
-        return new Response(JSON.stringify({
+        return jsonResponse({
           ok: false,
           error: detail ? `Airtable: ${detail}` : `Airtable HTTP ${airtableResponse.status}`
-        }), { status: 500, headers: corsHeaders });
+        }, 500, corsHeaders);
       }
 
       const result = await airtableResponse.json();
@@ -273,15 +454,13 @@ export default {
         console.error("Eingangsbestätigung Fehler:", emailError);
       }
 
-      return new Response(
-        JSON.stringify({ ok: true, bewerberId, recordId, emailSent }),
-        { status: 200, headers: corsHeaders }
-      );
+      return jsonResponse({ ok: true, bewerberId, recordId, emailSent }, 200, corsHeaders);
     } catch (error) {
       console.error(error);
-      return new Response(
-        JSON.stringify({ ok: false, error: "Die Bewerbung konnte momentan nicht gespeichert werden." }),
-        { status: 500, headers: corsHeaders }
+      return jsonResponse(
+        { ok: false, error: "Die Bewerbung konnte momentan nicht gespeichert werden." },
+        500,
+        corsHeaders
       );
     }
   },
