@@ -101,28 +101,50 @@ export function evaluateFourPersonGroup(pairScores) {
 }
 
 // Ersatzkandidaten werden gegen die drei verbleibenden Gruppenmitglieder geprüft.
+// Bewertet wird immer die komplette neue 4er-Gruppe:
+// 3 bereits bestehende Paar-Scores + 3 Paar-Scores des Ersatzkandidaten.
 // Die Funktion sortiert nur Vorschläge. Sie verändert keinerlei Daten.
-export function rankReplacementCandidates(candidates) {
+export function rankReplacementCandidates(candidates, existingPairScores) {
   if (!Array.isArray(candidates)) return [];
+
+  const existing = Array.isArray(existingPairScores)
+    ? existingPairScores.map(clampScore)
+    : [];
+
+  if (existing.length !== 3 || existing.some((score) => score === null)) {
+    throw new Error("Für eine Ersatzbewertung werden genau 3 bestehende Paar-Scores der verbleibenden Gruppe benötigt.");
+  }
 
   return candidates
     .map((candidate) => {
-      const scores = Array.isArray(candidate?.pairScores)
-        ? candidate.pairScores.map(clampScore).filter((score) => score !== null)
+      const candidateScores = Array.isArray(candidate?.pairScores)
+        ? candidate.pairScores.map(clampScore)
         : [];
 
-      if (scores.length !== 3) {
-        return { ...candidate, eligible: false, reason: "Es werden genau 3 Paar-Scores benötigt." };
+      if (candidateScores.length !== 3 || candidateScores.some((score) => score === null)) {
+        return {
+          ...candidate,
+          eligible: false,
+          reason: "Es werden genau 3 berechnete Paar-Scores zum Ersatzkandidaten benötigt.",
+        };
       }
 
-      const average = Math.round((scores.reduce((sum, score) => sum + score, 0) / 3) * 10) / 10;
-      const weakestPair = Math.min(...scores);
-      const eligible = average >= GROUP_THRESHOLDS.minimumAverage && weakestPair >= GROUP_THRESHOLDS.minimumWeakestPair;
+      const groupEvaluation = evaluateFourPersonGroup([
+        ...existing,
+        ...candidateScores,
+      ]);
 
-      return { ...candidate, average, weakestPair, eligible };
+      return {
+        ...candidate,
+        groupAverage: groupEvaluation.average,
+        weakestPair: groupEvaluation.weakestPair,
+        eligible: groupEvaluation.suitable,
+        recommendation: groupEvaluation.recommendation,
+      };
     })
     .sort((a, b) => {
       if (a.eligible !== b.eligible) return a.eligible ? -1 : 1;
-      return (b.average ?? -1) - (a.average ?? -1) || (b.weakestPair ?? -1) - (a.weakestPair ?? -1);
+      return (b.groupAverage ?? -1) - (a.groupAverage ?? -1)
+        || (b.weakestPair ?? -1) - (a.weakestPair ?? -1);
     });
 }
