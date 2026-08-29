@@ -2,6 +2,8 @@
 // Wandelt Bewerberantworten in reproduzierbare Einzel-Scores um.
 // Kalibriert gegen die bestätigte Testgruppe A–D.
 
+import { calculateDistanceCompatibility } from "./gruppenfinder-distance.js";
+
 function text(value) {
   if (value == null) return "";
   if (typeof value === "object" && value.name) return String(value.name).trim();
@@ -30,7 +32,6 @@ export function scoreInterests(aValue, bValue) {
 
   let score = common >= 5 ? 100 : common === 4 ? 90 : common === 3 ? 75 : common === 2 ? 55 : common === 1 ? 40 : 35;
 
-  // Sehr ähnliche Auswahl mit nur einem zusätzlichen Interesse wird leicht aufgewertet.
   if (common >= 4 && Math.abs(a.size - b.size) <= 1 && (isSubset(a, b) || isSubset(b, a))) {
     score = Math.min(100, score + 10);
   }
@@ -116,9 +117,6 @@ export function scoreLifeSituation(aSituation, bSituation, aImportance, bImporta
   let score = LIFE_BASE[lifeKey(a, b)] ?? 45;
   const importance = [text(aImportance), text(bImportance)];
 
-  // In den bestätigten Testdaten senkt „Teilweise wichtig“ bei abweichender
-  // Lebenssituation die Passung um 10 Punkte; „Eher unwichtig“ verursacht
-  // keinen zusätzlichen Abschlag.
   if (importance.includes("Teilweise wichtig")) score -= 10;
 
   return Math.max(0, Math.min(100, score));
@@ -140,33 +138,79 @@ export function hardFilterGroupComposition(a, b) {
   return accepts(prefA, genderB) && accepts(prefB, genderA);
 }
 
-export function scoreProfilePair(a, b) {
-  const hardFilterPassed = hardFilterGroupComposition(a, b);
-
+function baseScores(a, b) {
   return {
-    hardFilterPassed,
+    interessen: scoreInterests(a.interessen, b.interessen),
+    freundschaftswerte: scoreFriendshipValues(a.freundschaftswerte, b.freundschaftswerte),
+    kontaktfrequenz: scoreExactOrNear(a.kontaktfrequenz, b.kontaktfrequenz),
+    freundschaftsziel: scoreFriendshipGoal(a.freundschaftsziel, b.freundschaftsziel),
+    gemeinsameZeit: scoreSharedTime(a.gemeinsameZeit, b.gemeinsameZeit),
+    persoenlichkeit: scoreExactOrNear(a.persoenlichkeit, b.persoenlichkeit, [
+      ["Introvertiert", "Ausgeglichen", 80],
+      ["Extrovertiert", "Ausgeglichen", 80],
+    ]),
+    planung: scoreExactOrNear(a.planung, b.planung, [
+      ["Mischung aus geplant und spontan", "Gerne frühzeitig geplant", 80],
+      ["Mischung aus geplant und spontan", "Eher spontan", 80],
+    ]),
+    lebenssituation: scoreLifeSituation(a.lebenssituation, b.lebenssituation, a.lebenssituationWichtigkeit, b.lebenssituationWichtigkeit),
+    alter: scoreAge(a.alter, b.alter),
+  };
+}
+
+// Synchroner Modus bleibt für Regressionstests ohne externe PLZ-Auflösung erhalten.
+export function scoreProfilePair(a, b) {
+  return {
+    hardFilterPassed: hardFilterGroupComposition(a, b),
     scores: {
-      interessen: scoreInterests(a.interessen, b.interessen),
-      freundschaftswerte: scoreFriendshipValues(a.freundschaftswerte, b.freundschaftswerte),
-      kontaktfrequenz: scoreExactOrNear(a.kontaktfrequenz, b.kontaktfrequenz),
-      freundschaftsziel: scoreFriendshipGoal(a.freundschaftsziel, b.freundschaftsziel),
-      gemeinsameZeit: scoreSharedTime(a.gemeinsameZeit, b.gemeinsameZeit),
-      persoenlichkeit: scoreExactOrNear(a.persoenlichkeit, b.persoenlichkeit, [
-        ["Introvertiert", "Ausgeglichen", 80],
-        ["Extrovertiert", "Ausgeglichen", 80],
-      ]),
-      planung: scoreExactOrNear(a.planung, b.planung, [
-        ["Mischung aus geplant und spontan", "Gerne frühzeitig geplant", 80],
-        ["Mischung aus geplant und spontan", "Eher spontan", 80],
-      ]),
-      lebenssituation: scoreLifeSituation(a.lebenssituation, b.lebenssituation, a.lebenssituationWichtigkeit, b.lebenssituationWichtigkeit),
-      alter: scoreAge(a.alter, b.alter),
+      ...baseScores(a, b),
       entfernung: null,
     },
   };
 }
 
-// Mapping der aktuell verwendeten Airtable-Felder auf das interne Profilformat.
+// Vollständiger Produktionsmodus inklusive Entfernung und beidseitigem Radius-Hard-Filter.
+export async function scoreProfilePairWithDistance(a, b, fetchImpl = fetch) {
+  const groupCompositionPassed = hardFilterGroupComposition(a, b);
+
+  if (!groupCompositionPassed) {
+    return {
+      hardFilterPassed: false,
+      hardFilters: {
+        gruppenzusammensetzung: false,
+        entfernung: null,
+      },
+      distance: null,
+      scores: {
+        ...baseScores(a, b),
+        entfernung: null,
+      },
+      exclusionReason: "Gewünschte Gruppenzusammensetzung ist nicht kompatibel.",
+    };
+  }
+
+  const distance = await calculateDistanceCompatibility(a, b, fetchImpl);
+  const hardFilterPassed = groupCompositionPassed && distance.hardFilterPassed;
+
+  return {
+    hardFilterPassed,
+    hardFilters: {
+      gruppenzusammensetzung: groupCompositionPassed,
+      entfernung: distance.hardFilterPassed,
+    },
+    distance: {
+      resolved: distance.resolved,
+      km: distance.distanceKm,
+      reason: distance.reason,
+    },
+    scores: {
+      ...baseScores(a, b),
+      entfernung: distance.score,
+    },
+    exclusionReason: hardFilterPassed ? null : distance.reason,
+  };
+}
+
 export function profileFromAirtableFields(fields = {}) {
   return {
     alter: fields.fldEIDovX5FIgFdif,
