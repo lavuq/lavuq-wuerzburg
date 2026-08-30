@@ -1,0 +1,17 @@
+name: Test Gruppenfinder Ersatzkette
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replacement-chain-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run read-only decline-to-replacement regression
+        run: node worker/gruppenfinder-replacement-chain-regression.js
