@@ -94,6 +94,14 @@ function buildPairScoreMap(pairRecords) {
   return map;
 }
 
+function isCurrentMembership(member, declinedMemberId) {
+  if (!member || member.id === declinedMemberId) return false;
+  if (!applicantIdFromMember(member)) return false;
+
+  const invite = String(member?.fields?.[MEMBER_INVITE_STATUS] || "");
+  return invite !== "Abgelehnt" && invite !== "Abgelaufen";
+}
+
 function isCommittedMembership(member, declinedMemberId) {
   if (member.id === declinedMemberId) return false;
 
@@ -130,13 +138,32 @@ export async function buildReplacementPreview(env, declinedMemberId) {
     memberRecords.push(await getRecord(env, MEMBERS_TABLE, id));
   }
 
-  const remainingMemberships = memberRecords.filter((member) => {
-    if (!member || member.id === declinedMemberId) return false;
-    if (!applicantIdFromMember(member)) return false;
+  const remainingMemberships = memberRecords.filter((member) =>
+    isCurrentMembership(member, declinedMemberId),
+  );
 
-    const invite = String(member?.fields?.[MEMBER_INVITE_STATUS] || "");
-    return invite !== "Abgelehnt" && invite !== "Abgelaufen";
-  });
+  // Der Ersatzplatz ist bereits wieder besetzt. Das ist ein gültiger Zustand
+  // und darf KEINE weitere Ersatzsuche auslösen.
+  if (remainingMemberships.length === 4) {
+    return {
+      ok: true,
+      mode: "read-only",
+      state: "replacement-already-filled",
+      actionRequired: false,
+      evaluatedCandidates: 0,
+      suitableCandidates: 0,
+      best: null,
+    };
+  }
+
+  // Mehr als vier aktuelle Mitgliedschaften wären ein eigener Datenfehler.
+  if (remainingMemberships.length > 4) {
+    return {
+      ok: false,
+      code: "GROUP_OVERFILLED",
+      reason: "Die Gruppe enthält mehr als vier aktuelle Mitgliedschaften.",
+    };
+  }
 
   if (remainingMemberships.length !== 3) {
     return {
@@ -190,6 +217,8 @@ export async function buildReplacementPreview(env, declinedMemberId) {
   return {
     ok: true,
     mode: "read-only",
+    state: "replacement-needed",
+    actionRequired: true,
     groupId,
     declinedApplicantId,
     remainingApplicantIds,
