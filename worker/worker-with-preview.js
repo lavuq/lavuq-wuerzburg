@@ -1,10 +1,11 @@
 // LAVUQ Worker-Einstieg für sicheren Gruppenfinder-Testmodus.
 // Bestehende Produktivfunktionen werden an worker.js delegiert.
-// Zusätzlich gibt es einen geschützten READ-ONLY-Endpunkt für Ersatzvorschläge.
+// Zusätzlich gibt es geschützte READ-ONLY-Endpunkte für Ersatz- und Gruppenvorschläge.
 // Keine Airtable-Schreiboperationen, keine Einladungen, keine Tokens, keine Kontaktfreigabe.
 
 import baseWorker from "./worker.js";
 import { buildReplacementPreview } from "./replacement-preview.js";
+import { buildGroupProposalsPreview } from "./group-proposals-preview.js";
 
 function json(payload, status = 200) {
   return new Response(JSON.stringify(payload, null, 2), {
@@ -53,11 +54,28 @@ export default {
         const preview = await buildReplacementPreview(env, memberId);
         return json(preview, preview?.ok === false ? 422 : 200);
       } catch (error) {
-        console.error("Gruppenfinder Preview fehlgeschlagen:", error);
-        return json({
-          ok: false,
-          error: "Vorschau konnte nicht berechnet werden.",
-        }, 500);
+        console.error("Gruppenfinder Replacement Preview fehlgeschlagen:", error);
+        return json({ ok: false, error: "Vorschau konnte nicht berechnet werden." }, 500);
+      }
+    }
+
+    if (url.pathname === "/gruppenfinder/group-proposals-preview") {
+      if (request.method !== "GET") {
+        return json({ ok: false, error: "Nur GET ist erlaubt." }, 405);
+      }
+
+      if (!authorized(request, env)) {
+        return json({ ok: false, error: "Nicht autorisiert." }, 401);
+      }
+
+      const limit = Number(url.searchParams.get("limit") || 10);
+
+      try {
+        const preview = await buildGroupProposalsPreview(env, { limit });
+        return json(preview, preview?.ok === false ? 422 : 200);
+      } catch (error) {
+        console.error("Gruppenfinder Group Proposal Preview fehlgeschlagen:", error);
+        return json({ ok: false, error: "Gruppenvorschläge konnten nicht berechnet werden." }, 500);
       }
     }
 
