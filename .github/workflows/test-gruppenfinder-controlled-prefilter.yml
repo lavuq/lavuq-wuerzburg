@@ -1,0 +1,16 @@
+name: Test Gruppenfinder kontrollierter Vorfilter
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  controlled-prefilter-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run read-only controlled prefilter regression
+        run: node worker/gruppenfinder-controlled-prefilter-regression.js
