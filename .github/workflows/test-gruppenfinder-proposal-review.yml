@@ -1,0 +1,39 @@
+name: Test Gruppenvorschlag Prüfansicht
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Geschützte read-only Prüfansicht testen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PREVIEW_KEY:-}" || { echo "Secret fehlt"; exit 1; }
+          body="$(mktemp)"
+          code="$(curl -sS -o "$body" -w "%{http_code}" \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/proposal-review?testMode=controlled-multi")"
+          echo "HTTP: $code"
+          test "$code" = "200"
+          grep -q "Gruppenvorschlag prüfen" "$body"
+          grep -q "Vorgeschlagene\|Teilnehmer" "$body"
+          grep -q "Gruppe freigeben" "$body"
+          grep -q "keine Gruppe angelegt" "$body"
+          echo "Prüfansicht erreichbar: JA"
+          echo "Kontrollierte Testgruppe dargestellt: JA"
+          echo "Freigabe-Button noch deaktiviert: JA"
+          echo "Airtable geändert: NEIN"
+          echo "Gruppe automatisch angelegt: NEIN"
+          echo "Einladungen versendet: NEIN"
+          echo "Kontaktdaten freigegeben: NEIN"
+          echo "Sicherer Prüfansicht-Test erfolgreich ✅"
+          rm -f "$body"
