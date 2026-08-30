@@ -1,0 +1,16 @@
+name: Test Gruppenfinder kombinierte Grenzen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  combined-boundary-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run combined read-only threshold regression
+        run: node worker/gruppenfinder-combined-boundary-regression.js
