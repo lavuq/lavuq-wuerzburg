@@ -1,0 +1,16 @@
+name: Test Gruppenfinder Grenzwert 65
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  boundary-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run read-only 65-point boundary regression
+        run: node worker/gruppenfinder-boundary-regression.js
