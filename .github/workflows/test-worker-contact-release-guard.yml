@@ -1,0 +1,66 @@
+name: Test Worker Kontaktfreigabe Schutz
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contact-release-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify protected contact-release guard
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+          TEST_GROUP_ID: recF60hA6UloQFvSf
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PREVIEW_KEY:-}" ]; then
+            echo "Fehler: GitHub Secret GRUPPENFINDER_PREVIEW_KEY fehlt."
+            exit 1
+          fi
+
+          endpoint="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/contact-release"
+
+          # 1) Ohne Secret muss der Endpoint blockieren.
+          unauth_code="$(curl -sS -o /tmp/unauth.json -w "%{http_code}" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"${TEST_GROUP_ID}\",\"dryRun\":true}" \
+            "$endpoint")"
+
+          if [ "$unauth_code" != "401" ]; then
+            echo "Schutztest fehlgeschlagen: Ohne Autorisierung wurde HTTP ${unauth_code} statt 401 geliefert."
+            exit 1
+          fi
+          echo "Ohne Autorisierung korrekt blockiert: HTTP 401 ✅"
+
+          # 2) Autorisiert, aber nur dry-run. Die aktuelle Testgruppe ist noch nicht 4/4 angenommen.
+          auth_code="$(curl -sS -o /tmp/auth.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"${TEST_GROUP_ID}\",\"dryRun\":true}" \
+            "$endpoint")"
+
+          RESPONSE_FILE=/tmp/auth.json HTTP_CODE="$auth_code" python3 - <<'PY'
+          import json, os, sys
+          with open(os.environ['RESPONSE_FILE'], 'r', encoding='utf-8') as fh:
+              data = json.load(fh)
+          code = os.environ['HTTP_CODE']
+          if code != '409' or data.get('code') != 'NOT_ALL_4_ACCEPTED':
+              print(f"Erwartet HTTP 409 / NOT_ALL_4_ACCEPTED, erhalten HTTP {code} / {data.get('code')}")
+              sys.exit(1)
+          if data.get('changed') is not False:
+              print('Dry-run darf keine Daten veraendern.')
+              sys.exit(1)
+          print('Autorisierter Dry-run erfolgreich ✅')
+          print(f"Gruppen-Mitgliedschaften gesamt: {data.get('groupMembershipCount', '—')}")
+          print(f"Aktiv + angenommen: {data.get('acceptedActiveCount', '—')}")
+          print('Kontaktfreigabe korrekt blockiert: JA')
+          print('Airtable geaendert: NEIN')
+          PY
