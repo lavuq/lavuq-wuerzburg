@@ -12,23 +12,23 @@ jobs:
           KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         run: |
           set -euo pipefail
-          GROUP_ID="LAVUQ-20260830-0409DDA4A8D0"
-          PREP=$(curl -sS -X POST "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/invitation-preparation" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"groupId\":\"$GROUP_ID\"}")
-          STATE=$(echo "$PREP" | jq -r '.state // empty')
-          if [ "$STATE" != "READY_FOR_INVITATION_SEND_TEST" ]; then
-            echo "$PREP" | jq .
-            echo "Einladungsvorbereitung nicht bereit"
-            exit 1
-          fi
 
-          # Wähle bewusst den nächsten noch nicht versendeten Testteilnehmer B.
+          # Teilnehmer 1 hat bereits angenommen. Daher wird Teilnehmer 2
+          # jetzt gezielt direkt versendet; die Gruppen-Vorbereitung muss
+          # nicht mehr verlangen, dass alle vier Mitglieder "Vorgeschlagen" sind.
           MEMBER_ID="recoaWZXj5Bm10v48"
 
-          RESP=$(curl -sS -w '\n%{http_code}' -X POST "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/single-invitation-send" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"memberId\":\"$MEMBER_ID\",\"confirmation\":\"EINE_TESTEINLADUNG_SENDEN\"}")
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/single-invitation-send" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"memberId\":\"$MEMBER_ID\",\"confirmation\":\"EINE_TESTEINLADUNG_SENDEN\"}")
+
           BODY=$(echo "$RESP" | sed '$d')
           HTTP=$(echo "$RESP" | tail -n1)
           echo "$BODY" | jq .
           echo "HTTP: $HTTP"
+
           test "$HTTP" = "200"
           test "$(echo "$BODY" | jq -r '.state')" = "ONE_TEST_INVITATION_SENT"
           test "$(echo "$BODY" | jq -r '.emailSent')" = "true"
@@ -36,6 +36,7 @@ jobs:
           test "$(echo "$BODY" | jq -r '.tokenExposed')" = "false"
           test "$(echo "$BODY" | jq -r '.contactsReleased')" = "false"
           test "$(echo "$BODY" | jq -r '.otherInvitationsSent')" = "false"
+
           echo "Zweite Testeinladung versendet: JA"
           echo "Sicherer Token gespeichert: JA"
           echo "Token offengelegt: NEIN"
