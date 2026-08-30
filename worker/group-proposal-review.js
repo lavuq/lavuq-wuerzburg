@@ -1,0 +1,12 @@
+import { buildGroupProposalsPreview } from "./group-proposals-preview.js";
+
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");}
+
+export async function buildGroupProposalReview(env,{controlledTest=false}={}){
+  const preview=await buildGroupProposalsPreview(env,{limit:1,controlledTest});
+  const best=preview?.proposals?.[0];
+  if(!best)return new Response(`<!doctype html><html><meta name="viewport" content="width=device-width"><body style="font-family:Arial;padding:28px;color:#0b1f3a"><h2>Kein aktueller Gruppenvorschlag</h2><p>Der Gruppenfinder hat derzeit keine freigabefähige 4er-Gruppe gefunden.</p></body></html>`,{status:200,headers:{"content-type":"text/html;charset=utf-8","cache-control":"no-store"}});
+  const people=(best.applicants||[]).map((p,i)=>`<div style="padding:14px 0;border-bottom:1px solid #e5e7eb"><strong>${i+1}. ${esc(p.firstName)}</strong><br><span style="color:#667085">Alter ${esc(p.age)} · PLZ ${esc(p.postcode)}</span></div>`).join("");
+  const html=`<!doctype html><html lang="de"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>LAVUQ Gruppenvorschlag prüfen</title></head><body style="margin:0;background:#f6f7f9;font-family:Arial,sans-serif;color:#0b1f3a"><main style="max-width:620px;margin:0 auto;padding:28px 18px"><div style="background:#fff;border-radius:18px;padding:26px;box-shadow:0 4px 18px rgba(0,0,0,.06)"><h1 style="margin-top:0">Gruppenvorschlag prüfen</h1><p>Der LAVUQ Gruppenfinder empfiehlt diese 4er-Gruppe.</p><p><strong>Gruppen-Durchschnitt:</strong> ${esc(best.groupAverage)}<br><strong>Schwächster Paar-Score:</strong> ${esc(best.weakestPair)}<br><strong>Empfehlung:</strong> ${esc(best.recommendation)}</p><h2>Teilnehmer</h2>${people}<div style="margin-top:26px;padding:16px;background:#fff8e7;border-radius:12px"><strong>Sicherheitsstufe:</strong><br>Diese Ansicht ist ausschließlich zur Prüfung. Es wird hier noch keine Gruppe angelegt, keine Einladung verschickt und kein Kontakt freigegeben.</div><button disabled style="margin-top:24px;width:100%;padding:15px;border:0;border-radius:12px;background:#c9a227;color:white;font-weight:700;font-size:16px;opacity:.55">Gruppe freigeben – folgt im nächsten sicheren Schritt</button></div></main></body></html>`;
+  return new Response(html,{status:200,headers:{"content-type":"text/html;charset=utf-8","cache-control":"no-store","x-robots-tag":"noindex, nofollow"}});
+}
