@@ -1,0 +1,75 @@
+name: Test Gruppenfinder Produktiv-Vorschau
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call protected production read-only group preview
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PREVIEW_KEY:-}" ]; then
+            echo "Fehler: GitHub Secret GRUPPENFINDER_PREVIEW_KEY fehlt."
+            exit 1
+          fi
+
+          tmp_body="$(mktemp)"
+          http_code="$(curl -sS \
+            -o "$tmp_body" \
+            -w "%{http_code}" \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            --get \
+            --data-urlencode "limit=10" \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/group-proposals-preview")"
+
+          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" python3 - <<'PY'
+          import json, os, sys
+
+          with open(os.environ["RESPONSE_FILE"], "r", encoding="utf-8") as fh:
+              data = json.load(fh)
+
+          http_code = os.environ["HTTP_CODE"]
+          if http_code != "200" or data.get("ok") is not True:
+              print(f"Produktiv-Vorschau fehlgeschlagen: HTTP {http_code}, Code: {data.get('code', '—')}")
+              sys.exit(1)
+
+          if data.get("mode") != "read-only":
+              print(f"Unerwarteter Modus: {data.get('mode')}")
+              sys.exit(1)
+
+          print("Gruppenfinder Produktiv-Vorschau erfolgreich ✅")
+          print("Modus: read-only")
+          print(f"Freigegebene, ungebundene Bewerber: {data.get('eligibleApplicants', 0)}")
+          print(f"Bewertete 4er-Gruppen: {data.get('evaluatedGroups', 0)}")
+          print(f"Geeignete Gruppen: {data.get('suitableGroups', 0)}")
+
+          state = data.get("state")
+          if state:
+              print(f"Status: {state}")
+
+          proposals = data.get("proposals") or []
+          if proposals:
+              best = proposals[0]
+              print(f"Bester Gruppen-Durchschnitt: {best.get('groupAverage', '—')}")
+              print(f"Schwächster Paar-Score: {best.get('weakestPair', '—')}")
+              print(f"Empfehlung: {best.get('recommendation', '—')}")
+              print(f"Ausgegebene Vorschläge: {len(proposals)}")
+          else:
+              print("Aktuell kein produktiver Gruppenvorschlag vorhanden.")
+
+          print("Airtable geändert: NEIN")
+          print("Einladungen versendet: NEIN")
+          print("Kontaktdaten freigegeben: NEIN")
+          PY
+
+          rm -f "$tmp_body"
