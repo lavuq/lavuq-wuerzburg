@@ -17,9 +17,9 @@ jobs:
           MEMBER=$(echo "$PREP" | jq -r '.prepared[0].applicantId')
           # Map the selected applicant to its membership without exposing any invitation token.
           case "$MEMBER" in
-            recnO4MtDO0cJlgcL) MEMBER_ID="rec5rgzUTWxMYEJPX" ;;
+            recnO4MtDO0cJlgcL) MEMBER_ID="rec5rqzUTWxMYEJPX" ;;
             recLH985oQTy0uh2q) MEMBER_ID="reclHjUOOY7rNUPjJ" ;;
-            recD0pbzMvStrQmCs) MEMBER_ID="recoawZXj5Bm10v48" ;;
+            recD0pbzMvStrQmCs) MEMBER_ID="recoaWZXj5Bm10v48" ;;
             recDJTxYsYc3KCoX6) MEMBER_ID="recxfTYNclqtgeANu" ;;
             *) echo "Unerwarteter Testbewerber"; exit 1 ;;
           esac
