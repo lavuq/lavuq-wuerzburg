@@ -36,7 +36,7 @@ jobs:
             "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/group-proposals-preview")"
 
           RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" GITHUB_OUTPUT="$GITHUB_OUTPUT" python3 - <<'PY'
-          import json, os, sys
+          import hashlib, json, os, sys
 
           with open(os.environ["RESPONSE_FILE"], "r", encoding="utf-8") as fh:
               data = json.load(fh)
@@ -59,8 +59,14 @@ jobs:
 
           proposals = data.get("proposals") or []
           proposal_found = bool(proposals)
+          fingerprint = "none"
+          if proposal_found:
+              ids = sorted(str(x) for x in (proposals[0].get("applicantIds") or []))
+              fingerprint = hashlib.sha256("|".join(ids).encode("utf-8")).hexdigest()[:20]
+
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
               out.write(f"proposal_found={'true' if proposal_found else 'false'}\n")
+              out.write(f"proposal_fingerprint={fingerprint}\n")
 
           if proposal_found:
               best = proposals[0]
@@ -69,6 +75,7 @@ jobs:
               print(f"Schwächster Paar-Score: {best.get('weakestPair', '—')}")
               print(f"Empfehlung: {best.get('recommendation', '—')}")
               print(f"Ausgegebene Vorschläge: {len(proposals)}")
+              print(f"Vorschlags-Fingerabdruck: {fingerprint}")
           else:
               print(f"Noch kein Gruppenvorschlag. Status: {data.get('state', '—')}")
 
@@ -80,8 +87,17 @@ jobs:
 
           rm -f "$tmp_body"
 
-      - name: Interne Benachrichtigung bei Gruppenvorschlag
+      - name: Prüfen ob dieser Vorschlag bereits gemeldet wurde
+        id: notification-cache
         if: steps.preview.outputs.proposal_found == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: .gruppenfinder-notified
+          key: gruppenfinder-notified-${{ steps.preview.outputs.proposal_fingerprint }}
+          lookup-only: true
+
+      - name: Interne Benachrichtigung bei neuem Gruppenvorschlag
+        if: steps.preview.outputs.proposal_found == 'true' && steps.notification-cache.outputs.cache-hit != 'true'
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         shell: bash
@@ -119,3 +135,15 @@ jobs:
           PY
 
           rm -f "$tmp_body"
+          printf '%s\n' "${{ steps.preview.outputs.proposal_fingerprint }}" > .gruppenfinder-notified
+
+      - name: Benachrichtigungsstatus speichern
+        if: steps.preview.outputs.proposal_found == 'true' && steps.notification-cache.outputs.cache-hit != 'true' && success()
+        uses: actions/cache/save@v4
+        with:
+          path: .gruppenfinder-notified
+          key: gruppenfinder-notified-${{ steps.preview.outputs.proposal_fingerprint }}
+
+      - name: Bereits gemeldeten Vorschlag nicht erneut senden
+        if: steps.preview.outputs.proposal_found == 'true' && steps.notification-cache.outputs.cache-hit == 'true'
+        run: echo "Dieser Gruppenvorschlag wurde bereits intern gemeldet. Keine weitere E-Mail."
