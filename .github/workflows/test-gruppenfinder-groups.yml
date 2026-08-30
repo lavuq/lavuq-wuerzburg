@@ -1,0 +1,83 @@
+name: Test Gruppenfinder 4er-Gruppen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call protected read-only group proposals preview
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PREVIEW_KEY:-}" ]; then
+            echo "Fehler: GitHub Secret GRUPPENFINDER_PREVIEW_KEY fehlt."
+            exit 1
+          fi
+
+          tmp_body="$(mktemp)"
+          http_code="$(curl -sS \
+            -o "$tmp_body" \
+            -w "%{http_code}" \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            --get \
+            --data-urlencode "limit=5" \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/group-proposals-preview")"
+
+          echo "HTTP-Status: ${http_code}"
+
+          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          path = os.environ["RESPONSE_FILE"]
+          http_code = os.environ["HTTP_CODE"]
+
+          try:
+              with open(path, "r", encoding="utf-8") as fh:
+                  data = json.load(fh)
+          except Exception:
+              print("Gruppenfinder-Test fehlgeschlagen: ungültige JSON-Antwort.")
+              sys.exit(1)
+
+          if http_code != "200" or data.get("ok") is not True:
+              safe_codes = {"TOO_MANY_ELIGIBLE_APPLICANTS"}
+              code = data.get("code")
+              if code in safe_codes:
+                  print(f"Diagnosecode: {code}")
+                  print(f"Freigegebene Bewerber: {data.get('eligibleApplicants', '—')}")
+                  print(f"Technisches Maximum: {data.get('maximumSupported', '—')}")
+              else:
+                  print("Diagnosecode: UNKNOWN_GROUP_PREVIEW_ERROR")
+              sys.exit(1)
+
+          print("4er-Gruppenfinder Preview erfolgreich ✅")
+          print(f"Modus: {data.get('mode', 'unbekannt')}")
+          print(f"Freigegebene Bewerber: {data.get('eligibleApplicants', 0)}")
+          print(f"Bewertete 4er-Gruppen: {data.get('evaluatedGroups', 0)}")
+          print(f"Geeignete 4er-Gruppen: {data.get('suitableGroups', 0)}")
+
+          state = data.get("state")
+          if state:
+              print(f"Status: {state}")
+
+          proposals = data.get("proposals") or []
+          if proposals:
+              best = proposals[0]
+              print(f"Bester Gruppen-Durchschnitt: {best.get('groupAverage', '—')}")
+              print(f"Schwächster Paar-Score: {best.get('weakestPair', '—')}")
+              print(f"Empfehlung: {best.get('recommendation', '—')}")
+          else:
+              print("Aktuell kein freigegebener Gruppenvorschlag vorhanden.")
+          PY
+
+          rm -f "$tmp_body"
