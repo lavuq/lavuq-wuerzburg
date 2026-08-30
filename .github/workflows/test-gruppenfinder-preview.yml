@@ -41,22 +41,32 @@ jobs:
 
           echo "HTTP-Status: ${http_code}"
 
-          if [ "$http_code" != "200" ]; then
-            echo "Preview-Test fehlgeschlagen. Antwortinhalt wird aus Datenschutzgründen nicht ausgegeben."
-            exit 1
-          fi
-
-          RESPONSE_FILE="$tmp_body" python3 - <<'PY'
+          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" python3 - <<'PY'
           import json
           import os
           import sys
 
           path = os.environ["RESPONSE_FILE"]
-          with open(path, "r", encoding="utf-8") as fh:
-              data = json.load(fh)
+          http_code = os.environ["HTTP_CODE"]
 
-          if data.get("ok") is not True:
-              print("Preview meldet ok=false. Details werden nicht ausgegeben.")
+          try:
+              with open(path, "r", encoding="utf-8") as fh:
+                  data = json.load(fh)
+          except Exception:
+              print("Preview-Test fehlgeschlagen: ungültige JSON-Antwort.")
+              sys.exit(1)
+
+          if http_code != "200" or data.get("ok") is not True:
+              safe_codes = {
+                  "MEMBER_LINK_MISSING",
+                  "REMAINING_MEMBER_COUNT",
+                  "MISSING_PAIR_SCORES",
+              }
+              code = data.get("code")
+              if code in safe_codes:
+                  print(f"Diagnosecode: {code}")
+              else:
+                  print("Diagnosecode: UNKNOWN_PREVIEW_ERROR")
               sys.exit(1)
 
           best = data.get("best") or {}
