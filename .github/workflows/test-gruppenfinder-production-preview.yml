@@ -50,7 +50,11 @@ jobs:
           print("Gruppenfinder Produktiv-Vorschau erfolgreich ✅")
           print("Modus: read-only")
           print(f"Freigegebene, ungebundene Bewerber: {data.get('eligibleApplicants', 0)}")
-          print(f"Bewertete 4er-Gruppen: {data.get('evaluatedGroups', 0)}")
+          print(f"Berechnete Paar-Scores: {data.get('pairScoresComputed', 0)}")
+          print(f"Davon sichere Paar-Kanten >=65: {data.get('allowedPairs', 0)}")
+          print(f"Durch Vorfilterung übersprungene Gruppen: {data.get('prefilteredGroupsSkipped', 0)}")
+          print(f"Vorfilter-Grenzwert: {data.get('prefilterMinimumPairScore', '—')}")
+          print(f"Vollständig bewertete 4er-Gruppen: {data.get('evaluatedGroups', 0)}")
           print(f"Geeignete Gruppen: {data.get('suitableGroups', 0)}")
 
           state = data.get("state")
