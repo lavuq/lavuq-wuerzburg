@@ -1,0 +1,17 @@
+name: Test Gruppenfinder Einladungs-Versand
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  invitation-send-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run read-only invitation send regression
+        run: node worker/gruppenfinder-invitation-send-regression.js
