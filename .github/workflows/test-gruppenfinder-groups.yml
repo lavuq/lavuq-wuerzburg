@@ -29,8 +29,8 @@ jobs:
             -w "%{http_code}" \
             -H "Authorization: Bearer ${PREVIEW_KEY}" \
             --get \
-            --data-urlencode "limit=5" \
-            --data-urlencode "testMode=controlled-a-d" \
+            --data-urlencode "limit=10" \
+            --data-urlencode "testMode=controlled-multi" \
             "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/group-proposals-preview")"
 
           echo "HTTP-Status: ${http_code}"
@@ -77,6 +77,11 @@ jobs:
               print(f"Bester Gruppen-Durchschnitt: {best.get('groupAverage', '—')}")
               print(f"Schwächster Paar-Score: {best.get('weakestPair', '—')}")
               print(f"Empfehlung: {best.get('recommendation', '—')}")
+              print(f"Ausgegebene Vorschläge: {len(proposals)}")
+              if len(proposals) > 1:
+                  second = proposals[1]
+                  print(f"Zweitbester Gruppen-Durchschnitt: {second.get('groupAverage', '—')}")
+                  print(f"Zweitbester schwächster Paar-Score: {second.get('weakestPair', '—')}")
           else:
               print("Aktuell kein freigegebener Gruppenvorschlag vorhanden.")
           PY
