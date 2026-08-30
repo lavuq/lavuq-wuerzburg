@@ -1,0 +1,17 @@
+name: Test Gruppenfinder Ersatzpersonen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replacement-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run read-only replacement regression
+        run: node worker/gruppenfinder-replacement-regression.js
