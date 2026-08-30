@@ -1,0 +1,18 @@
+name: Test Gruppenfinder Historie und Ersatz
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  membership-history-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run read-only membership history regression
+        run: node worker/gruppenfinder-membership-history-regression.js
