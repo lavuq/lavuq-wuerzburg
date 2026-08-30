@@ -1,0 +1,38 @@
+name: Test Ersatzkandidat Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  replacement-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ersatzkandidaten für abgelehnten Platz read-only prüfen
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          DECLINED_MEMBER_ID="recoaWZXj5Bm10v48"
+          RESP=$(curl -sS -w '\n%{http_code}' \
+            -H "Authorization: Bearer $KEY" \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/replacement-preview?member=${DECLINED_MEMBER_ID}")
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.mode')" = "read-only"
+          STATE=$(echo "$BODY" | jq -r '.state')
+          test "$STATE" = "replacement-needed"
+          test "$(echo "$BODY" | jq -r '.actionRequired')" = "true"
+          BEST=$(echo "$BODY" | jq -r '.best.applicantId // empty')
+          test -n "$BEST"
+          echo "Ersatzsuche erforderlich: JA"
+          echo "Bestgeeigneter Ersatzkandidat gefunden: JA"
+          echo "Bewerber-ID: $BEST"
+          echo "Bewertete Kandidaten: $(echo "$BODY" | jq -r '.evaluatedCandidates')"
+          echo "Geeignete Kandidaten: $(echo "$BODY" | jq -r '.suitableCandidates')"
+          echo "Airtable geändert: NEIN"
+          echo "Einladung versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Ersatzkandidaten Dry-Run erfolgreich ✅"
