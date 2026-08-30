@@ -1,0 +1,42 @@
+name: Test Einladungsfreigabe Dry-Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Einladungsfreigabe ohne Versand prüfen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PREVIEW_KEY:-}" || { echo "Secret fehlt"; exit 1; }
+          body="$(mktemp)"
+          code="$(curl -sS -o "$body" -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"dryRun":true,"groupRecordId":"rec1qr2gZqRVxaCGk"}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/invitation-release")"
+          cat "$body"
+          echo
+          echo "HTTP: $code"
+          test "$code" = "200"
+          grep -q 'READY_FOR_MANUAL_INVITATION_RELEASE' "$body"
+          grep -q '"wouldReleaseInvitations": 4' "$body"
+          grep -q '"emailsSent": false' "$body"
+          grep -q '"contactsReleased": false' "$body"
+          grep -q '"airtableChanged": false' "$body"
+          echo "Vier Einladungen freigabefähig: JA"
+          echo "E-Mails versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Airtable geändert: NEIN"
+          echo "Einladungsfreigabe Dry-Run erfolgreich ✅"
+          rm -f "$body"
