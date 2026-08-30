@@ -8,7 +8,6 @@ const GROUP_ID = "fldCb3rBz4kTWzQLx";
 const GROUP_SCORE = "fldZrDowPCJ6PmyTf";
 const GROUP_WEAKEST = "fldT2Y4bGs5n86S78";
 const GROUP_RELEASED = "fldgALGaOoeJGd6yg";
-const GROUP_RECOMMENDATION = "fldo8pdS7LhryHJKf";
 const GROUP_NOTE = "fldfWghWAWGl9zQRD";
 
 const MEMBER_ID = "fldM9T8hoUTJAH8v1";
@@ -128,6 +127,8 @@ export async function handleGroupProposalRelease(env, input = {}) {
     };
   }
 
+  // Matching-Empfehlung ist in Airtable ein Formel-Feld und darf nicht beschrieben werden.
+  // Die Formel berechnet die Empfehlung selbst aus Gruppen- und Schwächstem-Paar-Score.
   const group = await airtable(env, GROUPS_TABLE, {
     method: "POST",
     body: {
@@ -136,7 +137,6 @@ export async function handleGroupProposalRelease(env, input = {}) {
         [GROUP_SCORE]: best.groupAverage,
         [GROUP_WEAKEST]: best.weakestPair,
         [GROUP_RELEASED]: true,
-        [GROUP_RECOMMENDATION]: best.recommendation || "Vorschlag geeignet",
         [GROUP_NOTE]: `Manuell freigegebener Gruppenfinder-Vorschlag. Fingerprint: ${fingerprint}. Einladungen und Kontakte weiterhin gesperrt.`,
       },
     },
