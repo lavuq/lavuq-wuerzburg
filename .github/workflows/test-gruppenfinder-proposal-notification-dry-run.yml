@@ -1,0 +1,87 @@
+name: Test Gruppenvorschlag Benachrichtigung Dry-Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Geschützten Benachrichtigungs-Endpunkt ohne Mail testen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PREVIEW_KEY:-}" ]; then
+            echo "Fehler: GitHub Secret GRUPPENFINDER_PREVIEW_KEY fehlt."
+            exit 1
+          fi
+
+          tmp_body="$(mktemp)"
+          http_code="$(curl -sS \
+            -o "$tmp_body" \
+            -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"dryRun":true,"testMode":"controlled-multi"}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/proposal-notification")"
+
+          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" python3 - <<'PY'
+          import json, os, sys
+
+          with open(os.environ["RESPONSE_FILE"], "r", encoding="utf-8") as fh:
+              data = json.load(fh)
+
+          print(f"HTTP: {os.environ['HTTP_CODE']}")
+          print(f"Status: {data.get('state', '—')}")
+          print(f"Dry-Run: {data.get('dryRun')}")
+          print(f"Controlled Test: {data.get('controlledTest')}")
+          print(f"Benachrichtigung versendet: {data.get('notificationSent')}")
+
+          if os.environ["HTTP_CODE"] != "200" or data.get("ok") is not True:
+              print("Dry-Run fehlgeschlagen.")
+              sys.exit(1)
+
+          if data.get("dryRun") is not True:
+              print("Sicherheitsstopp: dryRun wurde nicht bestätigt.")
+              sys.exit(1)
+
+          if data.get("notificationSent") is not False:
+              print("Sicherheitsstopp: Im Dry-Run darf keine Mail versendet werden.")
+              sys.exit(1)
+
+          if data.get("state") != "GROUP_PROPOSAL_FOUND":
+              print("Sicherheitsstopp: Kontrollierter Test hat keinen Gruppenvorschlag gefunden.")
+              sys.exit(1)
+
+          proposal = data.get("proposal") or {}
+          print(f"Gruppen-Durchschnitt: {proposal.get('groupAverage', '—')}")
+          print(f"Schwächster Paar-Score: {proposal.get('weakestPair', '—')}")
+          print(f"Empfehlung: {proposal.get('recommendation', '—')}")
+
+          safety = data.get("safety") or {}
+          if any([
+              safety.get("airtableChanged"),
+              safety.get("groupCreated"),
+              safety.get("invitationsSent"),
+              safety.get("contactsReleased"),
+          ]):
+              print("Sicherheitsstopp: Eine unerlaubte Änderung wurde gemeldet.")
+              sys.exit(1)
+
+          print("Dry-Run erfolgreich ✅")
+          print("E-Mail versendet: NEIN")
+          print("Airtable geändert: NEIN")
+          print("Gruppe automatisch angelegt: NEIN")
+          print("Einladungen versendet: NEIN")
+          print("Kontaktdaten freigegeben: NEIN")
+          PY
+
+          rm -f "$tmp_body"
