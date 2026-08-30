@@ -30,6 +30,7 @@ jobs:
             -H "Authorization: Bearer ${PREVIEW_KEY}" \
             --get \
             --data-urlencode "limit=5" \
+            --data-urlencode "testMode=controlled-a-d" \
             "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/group-proposals-preview")"
 
           echo "HTTP-Status: ${http_code}"
