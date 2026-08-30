@@ -1,0 +1,43 @@
+name: Test eine Einladung senden
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine freigegebene Testeinladung senden
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          GROUP_ID="LAVUQ-20260830-0409DDA4A8D0"
+          PREP=$(curl -sS -X POST "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/invitation-preparation" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"groupId\":\"$GROUP_ID\"}")
+          MEMBER=$(echo "$PREP" | jq -r '.prepared[0].applicantId')
+          # Map the selected applicant to its membership without exposing any invitation token.
+          case "$MEMBER" in
+            recnO4MtDO0cJlgcL) MEMBER_ID="rec5rgzUTWxMYEJPX" ;;
+            recLH985oQTy0uh2q) MEMBER_ID="reclHjUOOY7rNUPjJ" ;;
+            recD0pbzMvStrQmCs) MEMBER_ID="recoawZXj5Bm10v48" ;;
+            recDJTxYsYc3KCoX6) MEMBER_ID="recxfTYNclqtgeANu" ;;
+            *) echo "Unerwarteter Testbewerber"; exit 1 ;;
+          esac
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/single-invitation-send" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"memberId\":\"$MEMBER_ID\",\"confirmation\":\"EINE_TESTEINLADUNG_SENDEN\"}")
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.state')" = "ONE_TEST_INVITATION_SENT"
+          test "$(echo "$BODY" | jq -r '.emailSent')" = "true"
+          test "$(echo "$BODY" | jq -r '.tokenPersisted')" = "true"
+          test "$(echo "$BODY" | jq -r '.tokenExposed')" = "false"
+          test "$(echo "$BODY" | jq -r '.contactsReleased')" = "false"
+          test "$(echo "$BODY" | jq -r '.otherInvitationsSent')" = "false"
+          echo "Genau eine Testeinladung versendet: JA"
+          echo "Sicherer Token gespeichert: JA"
+          echo "Token offengelegt: NEIN"
+          echo "Andere Einladungen versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Kontrollierter Einzelversand erfolgreich ✅"
