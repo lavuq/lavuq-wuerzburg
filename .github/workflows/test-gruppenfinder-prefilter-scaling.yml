@@ -1,0 +1,17 @@
+name: Test Gruppenfinder sichere Vorfilterung
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prefilter-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run safe prefilter scaling regression
+        run: node worker/gruppenfinder-prefilter-scaling-regression.js
