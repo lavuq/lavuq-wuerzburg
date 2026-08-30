@@ -1,0 +1,50 @@
+name: Test Gruppenfreigabe Controlled Write
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  controlled-write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Kontrollierte Testgruppe bewusst in Airtable freigeben
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PREVIEW_KEY:-}" || { echo "Secret fehlt"; exit 1; }
+          result="$(mktemp)"
+          code="$(curl -sS -o "$result" -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"dryRun":false,"confirmation":"GRUPPE_FREIGEBEN","testMode":"controlled-multi","allowControlledWrite":true}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/proposal-release")"
+          cat "$result"
+          echo
+          echo "HTTP: $code"
+          test "$code" = "200"
+          if grep -q '"state": "GROUP_MANUALLY_RELEASED"' "$result"; then
+            grep -q '"membershipsCreated": 4' "$result"
+            grep -q '"invitationsSent": false' "$result"
+            grep -q '"contactsReleased": false' "$result"
+            grep -q '"inviteReleaseSet": false' "$result"
+            echo "Kontrollierte Testgruppe angelegt: JA"
+            echo "Vier Mitgliedschaften angelegt: JA"
+          elif grep -q '"state": "GROUP_ALREADY_RELEASED"' "$result"; then
+            grep -q '"duplicatePrevented": true' "$result"
+            echo "Testgruppe war bereits freigegeben; Duplikat verhindert: JA"
+          else
+            echo "Unerwarteter Status"
+            exit 1
+          fi
+          echo "Einladungen versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Einladungsfreigabe gesetzt: NEIN"
+          echo "Kontrollierter echter Gruppenfreigabe-Test erfolgreich ✅"
+          rm -f "$result"
