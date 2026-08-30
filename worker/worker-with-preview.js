@@ -69,7 +69,8 @@ export default {
       }
 
       const limit = Number(url.searchParams.get("limit") || 10);
-      const controlledTest = String(url.searchParams.get("testMode") || "") === "controlled-a-d";
+      const testMode = String(url.searchParams.get("testMode") || "");
+      const controlledTest = testMode === "controlled-multi" || testMode === "controlled-a-d";
 
       try {
         const preview = await buildGroupProposalsPreview(env, { limit, controlledTest });
