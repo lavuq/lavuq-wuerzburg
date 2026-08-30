@@ -19,6 +19,7 @@ const MEMBER_STATUS = "fldBS2hoKQX0Rr1aX";
 const MEMBER_INVITE_STATUS = "fldUmjMa2j7MLG5RA";
 
 const MAX_ELIGIBLE_APPLICANTS = 40;
+const MIN_PAIR_SCORE = 65;
 
 // Ausschließlich kontrollierte Testprofile A-F. Diese IDs dürfen nur im expliziten
 // geschützten Testmodus ihre bestehende Gruppenbindung für die Berechnung ignorieren.
@@ -102,20 +103,6 @@ function groupCompositionSatisfied(records) {
   return true;
 }
 
-function combinationsOfFour(items) {
-  const result = [];
-  for (let a = 0; a < items.length - 3; a += 1) {
-    for (let b = a + 1; b < items.length - 2; b += 1) {
-      for (let c = b + 1; c < items.length - 1; c += 1) {
-        for (let d = c + 1; d < items.length; d += 1) {
-          result.push([items[a], items[b], items[c], items[d]]);
-        }
-      }
-    }
-  }
-  return result;
-}
-
 function pairKey(a, b) {
   return [a, b].sort().join("|");
 }
@@ -133,6 +120,33 @@ async function scorePairCached(a, b, cache, fetchImpl = fetch) {
   };
   cache.set(key, result);
   return result;
+}
+
+function pairAllowed(a, b, cache) {
+  const pair = cache.get(pairKey(a.id, b.id));
+  return Boolean(
+    pair
+    && pair.hardFilterPassed
+    && Number.isFinite(pair.score)
+    && pair.score >= MIN_PAIR_SCORE
+  );
+}
+
+async function buildSafePairPrefilter(eligible, pairCache, fetchImpl = fetch) {
+  let scoredPairs = 0;
+  let allowedPairs = 0;
+
+  for (let i = 0; i < eligible.length - 1; i += 1) {
+    for (let j = i + 1; j < eligible.length; j += 1) {
+      const pair = await scorePairCached(eligible[i], eligible[j], pairCache, fetchImpl);
+      scoredPairs += 1;
+      if (pair.hardFilterPassed && Number.isFinite(pair.score) && pair.score >= MIN_PAIR_SCORE) {
+        allowedPairs += 1;
+      }
+    }
+  }
+
+  return { scoredPairs, allowedPairs };
 }
 
 export async function buildGroupProposalsPreview(env, { limit = 10, controlledTest = false } = {}) {
@@ -155,11 +169,8 @@ export async function buildGroupProposalsPreview(env, { limit = 10, controlledTe
     .filter((record) => record?.fields?.[APPLICANT_READY] === true);
 
   if (controlledTest) {
-    // Im kontrollierten Testmodus werden ausschließlich A-F betrachtet.
-    // Nur für diese IDs wird die bestehende Gruppenbindung ignoriert.
     applicantPool = applicantPool.filter((record) => CONTROLLED_TEST_APPLICANT_IDS.has(record.id));
   } else {
-    // Produktionsnahe Vorschau: gebundene Personen bleiben ausgeschlossen.
     applicantPool = applicantPool.filter((record) => !committedApplicantIds.has(record.id));
   }
 
@@ -187,43 +198,66 @@ export async function buildGroupProposalsPreview(env, { limit = 10, controlledTe
       suitableGroups: 0,
       proposals: [],
       state: "NOT_ENOUGH_ELIGIBLE_APPLICANTS",
+      pairScoresComputed: 0,
+      allowedPairs: 0,
+      prefilteredGroupsSkipped: 0,
     };
   }
 
   const pairCache = new Map();
+  const { scoredPairs, allowedPairs } = await buildSafePairPrefilter(eligible, pairCache, fetch);
   const proposals = [];
   let evaluatedGroups = 0;
+  let prefilteredGroupsSkipped = 0;
 
-  for (const group of combinationsOfFour(eligible)) {
-    const rawRecords = group.map((item) => item.record);
-    if (!groupCompositionSatisfied(rawRecords)) continue;
+  // Streaming-Auswertung statt vorheriger Materialisierung aller 4er-Kombinationen.
+  for (let a = 0; a < eligible.length - 3; a += 1) {
+    for (let b = a + 1; b < eligible.length - 2; b += 1) {
+      if (!pairAllowed(eligible[a], eligible[b], pairCache)) continue;
 
-    const pairScores = [];
-    let excluded = false;
+      for (let c = b + 1; c < eligible.length - 1; c += 1) {
+        if (!pairAllowed(eligible[a], eligible[c], pairCache)
+          || !pairAllowed(eligible[b], eligible[c], pairCache)) continue;
 
-    for (let i = 0; i < group.length - 1 && !excluded; i += 1) {
-      for (let j = i + 1; j < group.length; j += 1) {
-        const pair = await scorePairCached(group[i], group[j], pairCache, fetch);
-        if (!pair.hardFilterPassed || !Number.isFinite(pair.score)) {
-          excluded = true;
-          break;
+        for (let d = c + 1; d < eligible.length; d += 1) {
+          const group = [eligible[a], eligible[b], eligible[c], eligible[d]];
+
+          // Sichere Vorfilterung: Eine zulässige Gruppe benötigt alle sechs Paar-Scores >= 65.
+          if (!pairAllowed(eligible[a], eligible[d], pairCache)
+            || !pairAllowed(eligible[b], eligible[d], pairCache)
+            || !pairAllowed(eligible[c], eligible[d], pairCache)) {
+            prefilteredGroupsSkipped += 1;
+            continue;
+          }
+
+          const rawRecords = group.map((item) => item.record);
+          if (!groupCompositionSatisfied(rawRecords)) {
+            prefilteredGroupsSkipped += 1;
+            continue;
+          }
+
+          const pairScores = [
+            pairCache.get(pairKey(group[0].id, group[1].id)).score,
+            pairCache.get(pairKey(group[0].id, group[2].id)).score,
+            pairCache.get(pairKey(group[0].id, group[3].id)).score,
+            pairCache.get(pairKey(group[1].id, group[2].id)).score,
+            pairCache.get(pairKey(group[1].id, group[3].id)).score,
+            pairCache.get(pairKey(group[2].id, group[3].id)).score,
+          ];
+
+          evaluatedGroups += 1;
+          const evaluation = evaluateFourPersonGroup(pairScores);
+          if (!evaluation.suitable) continue;
+
+          proposals.push({
+            applicantIds: group.map((item) => item.id),
+            groupAverage: evaluation.average,
+            weakestPair: evaluation.weakestPair,
+            recommendation: evaluation.recommendation,
+          });
         }
-        pairScores.push(pair.score);
       }
     }
-
-    if (excluded) continue;
-    evaluatedGroups += 1;
-
-    const evaluation = evaluateFourPersonGroup(pairScores);
-    if (!evaluation.suitable) continue;
-
-    proposals.push({
-      applicantIds: group.map((item) => item.id),
-      groupAverage: evaluation.average,
-      weakestPair: evaluation.weakestPair,
-      recommendation: evaluation.recommendation,
-    });
   }
 
   proposals.sort((a, b) =>
@@ -240,5 +274,9 @@ export async function buildGroupProposalsPreview(env, { limit = 10, controlledTe
     evaluatedGroups,
     suitableGroups: proposals.length,
     proposals: proposals.slice(0, safeLimit),
+    pairScoresComputed: scoredPairs,
+    allowedPairs,
+    prefilteredGroupsSkipped,
+    prefilterMinimumPairScore: MIN_PAIR_SCORE,
   };
 }
