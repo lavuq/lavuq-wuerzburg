@@ -1,0 +1,16 @@
+name: Test Gruppenfinder Durchschnitt 75
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  average-boundary-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run read-only 75-point average boundary regression
+        run: node worker/gruppenfinder-average-boundary-regression.js
