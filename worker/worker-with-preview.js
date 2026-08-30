@@ -1,12 +1,14 @@
 // LAVUQ Worker-Einstieg fuer sicheren Gruppenfinder-Testmodus.
 // Bestehende Produktivfunktionen werden an worker.js delegiert.
-// Zusaetzlich gibt es geschuetzte READ-ONLY-Endpunkte fuer Ersatz- und Gruppenvorschlaege
-// sowie eine bewusst bestaetigte Kontaktfreigabe mit harter 4/4-Sicherheitspruefung.
+// Zusaetzlich gibt es geschuetzte READ-ONLY-Endpunkte fuer Ersatz- und Gruppenvorschlaege,
+// eine interne Gruppenvorschlags-Benachrichtigung sowie eine bewusst bestaetigte
+// Kontaktfreigabe mit harter 4/4-Sicherheitspruefung.
 
 import baseWorker from "./worker.js";
 import { buildReplacementPreview } from "./replacement-preview.js";
 import { buildGroupProposalsPreview } from "./group-proposals-preview.js";
 import { handleControlledContactRelease } from "./contact-release.js";
+import { handleProposalNotification } from "./proposal-notification.js";
 
 function json(payload, status = 200) {
   return new Response(JSON.stringify(payload, null, 2), {
@@ -90,6 +92,25 @@ export default {
       } catch (error) {
         console.error("Gruppenfinder Group Proposal Preview fehlgeschlagen:", error);
         return json({ ok: false, error: "Gruppenvorschlaege konnten nicht berechnet werden." }, 500);
+      }
+    }
+
+    if (url.pathname === "/gruppenfinder/proposal-notification") {
+      if (request.method !== "POST") {
+        return json({ ok: false, error: "Nur POST ist erlaubt." }, 405);
+      }
+
+      if (!authorized(request, env)) {
+        return json({ ok: false, error: "Nicht autorisiert." }, 401);
+      }
+
+      try {
+        const input = await request.json().catch(() => ({}));
+        const result = await handleProposalNotification(env, input);
+        return json(result, Number(result?.status || (result?.ok ? 200 : 500)));
+      } catch (error) {
+        console.error("Gruppenvorschlags-Benachrichtigung fehlgeschlagen:", error);
+        return json({ ok: false, error: "Benachrichtigung konnte nicht verarbeitet werden." }, 500);
       }
     }
 
