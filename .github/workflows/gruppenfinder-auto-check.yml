@@ -14,6 +14,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Geschützte read-only Gruppenprüfung
+        id: preview
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         shell: bash
@@ -34,7 +35,7 @@ jobs:
             --data-urlencode "limit=10" \
             "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/group-proposals-preview")"
 
-          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" python3 - <<'PY'
+          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" GITHUB_OUTPUT="$GITHUB_OUTPUT" python3 - <<'PY'
           import json, os, sys
 
           with open(os.environ["RESPONSE_FILE"], "r", encoding="utf-8") as fh:
@@ -57,7 +58,11 @@ jobs:
           print(f"Geeignete Gruppen: {data.get('suitableGroups', 0)}")
 
           proposals = data.get("proposals") or []
-          if proposals:
+          proposal_found = bool(proposals)
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"proposal_found={'true' if proposal_found else 'false'}\n")
+
+          if proposal_found:
               best = proposals[0]
               print("GRUPPENVORSCHLAG GEFUNDEN ✅")
               print(f"Gruppen-Durchschnitt: {best.get('groupAverage', '—')}")
@@ -68,6 +73,46 @@ jobs:
               print(f"Noch kein Gruppenvorschlag. Status: {data.get('state', '—')}")
 
           print("Airtable geändert: NEIN")
+          print("Gruppe automatisch angelegt: NEIN")
+          print("Einladungen versendet: NEIN")
+          print("Kontaktdaten freigegeben: NEIN")
+          PY
+
+          rm -f "$tmp_body"
+
+      - name: Interne Benachrichtigung bei Gruppenvorschlag
+        if: steps.preview.outputs.proposal_found == 'true'
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tmp_body="$(mktemp)"
+          http_code="$(curl -sS \
+            -o "$tmp_body" \
+            -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/proposal-notification")"
+
+          RESPONSE_FILE="$tmp_body" HTTP_CODE="$http_code" python3 - <<'PY'
+          import json, os, sys
+
+          with open(os.environ["RESPONSE_FILE"], "r", encoding="utf-8") as fh:
+              data = json.load(fh)
+
+          if os.environ["HTTP_CODE"] != "200" or data.get("ok") is not True:
+              print(f"Interne Benachrichtigung fehlgeschlagen: HTTP {os.environ['HTTP_CODE']}")
+              sys.exit(1)
+
+          if data.get("notificationSent") is not True:
+              print("Sicherheitsstopp: Es wurde trotz Gruppenvorschlag keine Benachrichtigung bestätigt.")
+              sys.exit(1)
+
+          print("Interne LAVUQ-Benachrichtigung versendet ✅")
           print("Gruppe automatisch angelegt: NEIN")
           print("Einladungen versendet: NEIN")
           print("Kontaktdaten freigegeben: NEIN")
