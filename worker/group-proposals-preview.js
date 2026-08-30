@@ -20,6 +20,15 @@ const MEMBER_INVITE_STATUS = "fldUmjMa2j7MLG5RA";
 
 const MAX_ELIGIBLE_APPLICANTS = 40;
 
+// Ausschließlich kontrollierte Testprofile A-D. Diese IDs dürfen nur im expliziten
+// geschützten Testmodus ihre bestehende Gruppenbindung für die Berechnung ignorieren.
+const CONTROLLED_TEST_APPLICANT_IDS = new Set([
+  "recD0pbzMvStrQmCs", // A
+  "recHH6a21SFbu2Y2C", // B
+  "recLH985oQTy0uh2q", // C
+  "rec2qyfv3hvpOGexa", // D
+]);
+
 function firstLink(value) {
   return Array.isArray(value) && value.length ? value[0] : null;
 }
@@ -124,7 +133,7 @@ async function scorePairCached(a, b, cache, fetchImpl = fetch) {
   return result;
 }
 
-export async function buildGroupProposalsPreview(env, { limit = 10 } = {}) {
+export async function buildGroupProposalsPreview(env, { limit = 10, controlledTest = false } = {}) {
   if (!env?.AIRTABLE_TOKEN) throw new Error("AIRTABLE_TOKEN fehlt.");
 
   const [allApplicants, allMemberships] = await Promise.all([
@@ -139,15 +148,24 @@ export async function buildGroupProposalsPreview(env, { limit = 10 } = {}) {
       .filter(Boolean),
   );
 
-  const eligible = allApplicants
+  let applicantPool = allApplicants
     .filter((record) => record?.fields?.[APPLICANT_ACTIVE] === true)
-    .filter((record) => record?.fields?.[APPLICANT_READY] === true)
-    .filter((record) => !committedApplicantIds.has(record.id))
-    .map((record) => ({
-      id: record.id,
-      record,
-      profile: profileFromAirtableFields(record.fields || {}),
-    }));
+    .filter((record) => record?.fields?.[APPLICANT_READY] === true);
+
+  if (controlledTest) {
+    // Im kontrollierten Testmodus werden ausschließlich A-D betrachtet.
+    // Nur für diese vier IDs wird die bestehende Gruppenbindung ignoriert.
+    applicantPool = applicantPool.filter((record) => CONTROLLED_TEST_APPLICANT_IDS.has(record.id));
+  } else {
+    // Produktionsnahe Vorschau: gebundene Personen bleiben ausgeschlossen.
+    applicantPool = applicantPool.filter((record) => !committedApplicantIds.has(record.id));
+  }
+
+  const eligible = applicantPool.map((record) => ({
+    id: record.id,
+    record,
+    profile: profileFromAirtableFields(record.fields || {}),
+  }));
 
   if (eligible.length > MAX_ELIGIBLE_APPLICANTS) {
     return {
@@ -161,7 +179,7 @@ export async function buildGroupProposalsPreview(env, { limit = 10 } = {}) {
   if (eligible.length < 4) {
     return {
       ok: true,
-      mode: "read-only",
+      mode: controlledTest ? "read-only-controlled-test" : "read-only",
       eligibleApplicants: eligible.length,
       evaluatedGroups: 0,
       suitableGroups: 0,
@@ -215,7 +233,7 @@ export async function buildGroupProposalsPreview(env, { limit = 10 } = {}) {
 
   return {
     ok: true,
-    mode: "read-only",
+    mode: controlledTest ? "read-only-controlled-test" : "read-only",
     eligibleApplicants: eligible.length,
     evaluatedGroups,
     suitableGroups: proposals.length,
