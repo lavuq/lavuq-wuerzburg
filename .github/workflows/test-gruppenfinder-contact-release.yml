@@ -1,0 +1,17 @@
+name: Test Gruppenfinder Kontaktfreigabe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contact-release-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run read-only contact release regression
+        run: node worker/gruppenfinder-contact-release-regression.js
