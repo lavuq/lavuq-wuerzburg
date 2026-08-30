@@ -115,6 +115,7 @@ export async function buildReplacementPreview(env, declinedMemberId) {
   if (!groupId || !declinedApplicantId) {
     return {
       ok: false,
+      code: "MEMBER_LINK_MISSING",
       reason: "Abgelehntes Mitglied ist nicht vollständig mit Gruppe/Bewerber verknüpft.",
     };
   }
@@ -140,8 +141,8 @@ export async function buildReplacementPreview(env, declinedMemberId) {
   if (remainingMemberships.length !== 3) {
     return {
       ok: false,
-      groupId,
-      reason: `Ersatzsuche erwartet 3 verbleibende Mitglieder, gefunden: ${remainingMemberships.length}.`,
+      code: "REMAINING_MEMBER_COUNT",
+      reason: "Ersatzsuche erwartet genau 3 verbleibende Mitglieder.",
     };
   }
 
@@ -172,7 +173,7 @@ export async function buildReplacementPreview(env, declinedMemberId) {
   if (existingPairScores.some((score) => !Number.isFinite(score))) {
     return {
       ok: false,
-      groupId,
+      code: "MISSING_PAIR_SCORES",
       reason: "Bestehende Paar-Scores der verbleibenden Gruppe sind unvollständig.",
     };
   }
