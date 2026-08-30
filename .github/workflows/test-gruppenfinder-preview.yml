@@ -60,6 +60,7 @@ jobs:
               safe_codes = {
                   "MEMBER_LINK_MISSING",
                   "REMAINING_MEMBER_COUNT",
+                  "GROUP_OVERFILLED",
                   "MISSING_PAIR_SCORES",
               }
               code = data.get("code")
@@ -69,9 +70,17 @@ jobs:
                   print("Diagnosecode: UNKNOWN_PREVIEW_ERROR")
               sys.exit(1)
 
-          best = data.get("best") or {}
+          state = data.get("state", "replacement-needed")
           print("Gruppenfinder Preview erfolgreich ✅")
           print(f"Modus: {data.get('mode', 'unbekannt')}")
+          print(f"Status: {state}")
+          print(f"Aktion erforderlich: {data.get('actionRequired', False)}")
+
+          if state == "replacement-already-filled":
+              print("Ersatzplatz ist bereits besetzt. Keine weitere Ersatzsuche wird ausgelöst.")
+              sys.exit(0)
+
+          best = data.get("best") or {}
           print(f"Bewertete Kandidaten: {data.get('evaluatedCandidates', 0)}")
           print(f"Geeignete Kandidaten: {data.get('suitableCandidates', 0)}")
           print(f"Bester Gruppen-Durchschnitt: {best.get('groupAverage', '—')}")
