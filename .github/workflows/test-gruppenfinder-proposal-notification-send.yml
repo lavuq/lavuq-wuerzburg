@@ -1,0 +1,53 @@
+name: Test Gruppenvorschlag Benachrichtigung E-Mail
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Kontrollierte interne Test-E-Mail senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PREVIEW_KEY:-}" || { echo "Secret fehlt"; exit 1; }
+
+          body="$(mktemp)"
+          code="$(curl -sS -o "$body" -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"dryRun":false,"testMode":"controlled-multi"}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/proposal-notification")"
+
+          RESPONSE_FILE="$body" HTTP_CODE="$code" python3 - <<'PY'
+          import json, os, sys
+          with open(os.environ["RESPONSE_FILE"], encoding="utf-8") as f:
+              d=json.load(f)
+          print("HTTP:", os.environ["HTTP_CODE"])
+          print("Status:", d.get("state"))
+          print("Controlled Test:", d.get("controlledTest"))
+          print("Benachrichtigung versendet:", d.get("notificationSent"))
+          p=d.get("proposal") or {}
+          print("Gruppen-Durchschnitt:", p.get("groupAverage"))
+          print("Schwächster Paar-Score:", p.get("weakestPair"))
+          s=d.get("safety") or {}
+          print("Airtable geändert:", s.get("airtableChanged"))
+          print("Gruppe automatisch angelegt:", s.get("groupCreated"))
+          print("Einladungen versendet:", s.get("invitationsSent"))
+          print("Kontaktdaten freigegeben:", s.get("contactsReleased"))
+          if os.environ["HTTP_CODE"] != "200" or not d.get("ok") or not d.get("notificationSent"):
+              sys.exit(1)
+          if any(s.get(k) for k in ("airtableChanged","groupCreated","invitationsSent","contactsReleased")):
+              print("Sicherheitsstopp: unerwartete Änderung")
+              sys.exit(1)
+          print("Interner Testversand erfolgreich ✅")
+          PY
+          rm -f "$body"
