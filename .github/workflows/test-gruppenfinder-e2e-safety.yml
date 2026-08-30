@@ -1,0 +1,18 @@
+name: Test Gruppenfinder End-to-End Sicherheit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e-safety-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run read-only end-to-end safety regression
+        run: node worker/gruppenfinder-e2e-safety-regression.js
