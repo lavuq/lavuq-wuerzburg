@@ -69,9 +69,10 @@ export default {
       }
 
       const limit = Number(url.searchParams.get("limit") || 10);
+      const controlledTest = String(url.searchParams.get("testMode") || "") === "controlled-a-d";
 
       try {
-        const preview = await buildGroupProposalsPreview(env, { limit });
+        const preview = await buildGroupProposalsPreview(env, { limit, controlledTest });
         return json(preview, preview?.ok === false ? 422 : 200);
       } catch (error) {
         console.error("Gruppenfinder Group Proposal Preview fehlgeschlagen:", error);
