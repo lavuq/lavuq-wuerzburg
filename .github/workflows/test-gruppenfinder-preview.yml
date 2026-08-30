@@ -1,0 +1,72 @@
+name: Test Gruppenfinder Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call protected read-only preview
+        id: call
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+          MEMBER_ID: ${{ secrets.GRUPPENFINDER_TEST_MEMBER_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PREVIEW_KEY:-}" ]; then
+            echo "Fehler: GitHub Secret GRUPPENFINDER_PREVIEW_KEY fehlt."
+            exit 1
+          fi
+
+          if [ -z "${MEMBER_ID:-}" ]; then
+            echo "Fehler: GitHub Secret GRUPPENFINDER_TEST_MEMBER_ID fehlt."
+            exit 1
+          fi
+
+          tmp_body="$(mktemp)"
+          http_code="$(curl -sS \
+            -o "$tmp_body" \
+            -w "%{http_code}" \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            --get \
+            --data-urlencode "member=${MEMBER_ID}" \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/replacement-preview")"
+
+          echo "HTTP-Status: ${http_code}"
+
+          if [ "$http_code" != "200" ]; then
+            echo "Preview-Test fehlgeschlagen. Antwortinhalt wird aus Datenschutzgründen nicht ausgegeben."
+            exit 1
+          fi
+
+          RESPONSE_FILE="$tmp_body" python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          path = os.environ["RESPONSE_FILE"]
+          with open(path, "r", encoding="utf-8") as fh:
+              data = json.load(fh)
+
+          if data.get("ok") is not True:
+              print("Preview meldet ok=false. Details werden nicht ausgegeben.")
+              sys.exit(1)
+
+          best = data.get("best") or {}
+          print("Gruppenfinder Preview erfolgreich ✅")
+          print(f"Modus: {data.get('mode', 'unbekannt')}")
+          print(f"Bewertete Kandidaten: {data.get('evaluatedCandidates', 0)}")
+          print(f"Geeignete Kandidaten: {data.get('suitableCandidates', 0)}")
+          print(f"Bester Gruppen-Durchschnitt: {best.get('groupAverage', '—')}")
+          print(f"Schwächster Paar-Score: {best.get('weakestPair', '—')}")
+          print(f"Empfehlung: {best.get('recommendation', '—')}")
+          PY
+
+          rm -f "$tmp_body"
