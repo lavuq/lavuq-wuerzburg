@@ -1,0 +1,47 @@
+name: Test Gruppenfreigabe Dry-Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Manuelle Gruppenfreigabe sicher simulieren
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PREVIEW_KEY:-}" || { echo "Secret fehlt"; exit 1; }
+          body="$(mktemp)"
+          code="$(curl -sS -o "$body" -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"dryRun":true,"testMode":"controlled-multi"}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/proposal-release")"
+          RESPONSE_FILE="$body" HTTP_CODE="$code" python3 - <<'PY'
+          import json, os, sys
+          with open(os.environ["RESPONSE_FILE"], encoding="utf-8") as f:
+              d=json.load(f)
+          print("HTTP:", os.environ["HTTP_CODE"])
+          print("Status:", d.get("state"))
+          print("Dry-Run:", d.get("dryRun"))
+          print("Gruppen-ID:", d.get("groupId"))
+          print("Würde Gruppe anlegen:", d.get("wouldCreateGroup"))
+          print("Würde Mitgliedschaften anlegen:", d.get("wouldCreateMemberships"))
+          print("Airtable geändert:", d.get("airtableChanged"))
+          s=d.get("safety") or {}
+          print("Einladungen versendet:", s.get("invitationsSent"))
+          print("Kontakte freigegeben:", s.get("contactsReleased"))
+          print("Einladungsfreigabe gesetzt:", s.get("inviteReleaseSet"))
+          ok=(os.environ["HTTP_CODE"]=="200" and d.get("ok") is True and d.get("dryRun") is True and d.get("airtableChanged") is False and d.get("wouldCreateMemberships")==4 and not any(s.get(k) for k in ("invitationsSent","contactsReleased","inviteReleaseSet")))
+          if not ok: sys.exit(1)
+          print("Sicherer Gruppenfreigabe-Dry-Run erfolgreich ✅")
+          PY
+          rm -f "$body"
