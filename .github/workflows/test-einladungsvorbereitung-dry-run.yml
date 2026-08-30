@@ -1,0 +1,49 @@
+name: Test Einladungsvorbereitung Dry-Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Vier freigegebene Einladungen sicher vorbereiten
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PREVIEW_KEY:-}" || { echo "Secret fehlt"; exit 1; }
+          result="$(mktemp)"
+          code="$(curl -sS -o "$result" -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"groupId":"LAVUQ-20260830-0409DDA4A8D0"}' \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/invitation-preparation")"
+          cat "$result"
+          echo
+          echo "HTTP: $code"
+          test "$code" = "200"
+          grep -q '"state": "READY_FOR_INVITATION_SEND_TEST"' "$result"
+          grep -q '"preparedInvitations": 4' "$result"
+          count="$(grep -c '"secureTokenPrepared": true' "$result")"
+          test "$count" = "4"
+          grep -q '"emailsSent": false' "$result"
+          grep -q '"airtableChanged": false' "$result"
+          grep -q '"contactsReleased": false' "$result"
+          grep -q '"tokensPersisted": false' "$result"
+          echo "Vier Empfänger geprüft: JA"
+          echo "Vier sichere Token vorbereitet: JA"
+          echo "Token offengelegt: NEIN"
+          echo "E-Mails vorbereitet: JA"
+          echo "E-Mails versendet: NEIN"
+          echo "Token gespeichert: NEIN"
+          echo "Airtable geändert: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Einladungsvorbereitung Dry-Run erfolgreich ✅"
+          rm -f "$result"
