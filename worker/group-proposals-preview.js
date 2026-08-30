@@ -20,13 +20,15 @@ const MEMBER_INVITE_STATUS = "fldUmjMa2j7MLG5RA";
 
 const MAX_ELIGIBLE_APPLICANTS = 40;
 
-// Ausschließlich kontrollierte Testprofile A-D. Diese IDs dürfen nur im expliziten
+// Ausschließlich kontrollierte Testprofile A-F. Diese IDs dürfen nur im expliziten
 // geschützten Testmodus ihre bestehende Gruppenbindung für die Berechnung ignorieren.
 const CONTROLLED_TEST_APPLICANT_IDS = new Set([
   "recD0pbzMvStrQmCs", // A
   "recHH6a21SFbu2Y2C", // B
   "recLH985oQTy0uh2q", // C
   "rec2qyfv3hvpOGexa", // D
+  "recDJTxYsYc3KCoX6", // E
+  "recnO4MtDO0cJlgcL", // F
 ]);
 
 function firstLink(value) {
@@ -153,8 +155,8 @@ export async function buildGroupProposalsPreview(env, { limit = 10, controlledTe
     .filter((record) => record?.fields?.[APPLICANT_READY] === true);
 
   if (controlledTest) {
-    // Im kontrollierten Testmodus werden ausschließlich A-D betrachtet.
-    // Nur für diese vier IDs wird die bestehende Gruppenbindung ignoriert.
+    // Im kontrollierten Testmodus werden ausschließlich A-F betrachtet.
+    // Nur für diese IDs wird die bestehende Gruppenbindung ignoriert.
     applicantPool = applicantPool.filter((record) => CONTROLLED_TEST_APPLICANT_IDS.has(record.id));
   } else {
     // Produktionsnahe Vorschau: gebundene Personen bleiben ausgeschlossen.
@@ -179,7 +181,7 @@ export async function buildGroupProposalsPreview(env, { limit = 10, controlledTe
   if (eligible.length < 4) {
     return {
       ok: true,
-      mode: controlledTest ? "read-only-controlled-test" : "read-only",
+      mode: controlledTest ? "read-only-controlled-multi-test" : "read-only",
       eligibleApplicants: eligible.length,
       evaluatedGroups: 0,
       suitableGroups: 0,
@@ -233,7 +235,7 @@ export async function buildGroupProposalsPreview(env, { limit = 10, controlledTe
 
   return {
     ok: true,
-    mode: controlledTest ? "read-only-controlled-test" : "read-only",
+    mode: controlledTest ? "read-only-controlled-multi-test" : "read-only",
     eligibleApplicants: eligible.length,
     evaluatedGroups,
     suitableGroups: proposals.length,
