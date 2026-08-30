@@ -1,0 +1,17 @@
+name: Test Gruppenfinder Manuelle Freigabe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manual-release-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run read-only manual release regression
+        run: node worker/gruppenfinder-manual-release-regression.js
