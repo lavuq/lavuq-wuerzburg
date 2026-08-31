@@ -23,9 +23,11 @@ jobs:
           HTTP=$(echo "$RESP" | tail -n1)
           echo "$JSON" | jq .
           test "$HTTP" = "200"
-          echo "$JSON" | jq -e '.ok == true and .state == "ONE_FIRST_MEETING_FOLLOWUP_TEST_SENT" and .dryRun == false and .controlledOne == true and .meetingAttempt == 1 and .eligibleRecipientCount == 4 and .emailsSent == 1 and .otherEmailsSent == 0 and .feedbackRequestsCreated == 0 and .secondMeetingPrepared == false and .followupMarkedComplete == false and .airtableChanged == false and .piiExposedInResponse == false' >/dev/null
+          echo "$JSON" | jq -e '.ok == true and .state == "ONE_FIRST_MEETING_FOLLOWUP_TEST_SENT" and .dryRun == false and .controlledOne == true and .meetingAttempt == 1 and .eligibleRecipientCount == 4 and .emailsSent == 1 and .otherEmailsSent == 0 and .feedbackRequestsCreated == 0 and .secondMeetingPrepared == false and .followupMarkedComplete == false and .airtableChanged == false and .providerAccepted == true and (.providerStatus >= 200 and .providerStatus < 300) and .providerMessageIdPresent == true and .piiExposedInResponse == false' >/dev/null
           echo "HTTP: $HTTP"
           echo "Genau eine Nachbereitungs-Testmail versendet: JA"
+          echo "Brevo hat die Nachricht angenommen: JA"
+          echo "Brevo Message-ID vorhanden: JA"
           echo "Weitere Nachbereitungs-Mails versendet: NEIN"
           echo "Feedback-Datensaetze angelegt: NEIN"
           echo "Treffen 2 vorbereitet: NEIN"
