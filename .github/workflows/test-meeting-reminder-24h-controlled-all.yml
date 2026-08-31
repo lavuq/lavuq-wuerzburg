@@ -1,0 +1,34 @@
+name: Test 24h Treffen-Erinnerung Controlled All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  meeting-reminder-24h-controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 24h-Erinnerung kontrolliert an alle senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/meeting-reminder-24h"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-09T18:00:00+02:00","controlledAll":true,"confirmation":"ALLE_24H_ERINNERUNGEN_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and (.state == "24H_REMINDER_SENT_TO_ALL" or .state == "24H_REMINDER_ALREADY_COMPLETED") and .controlledAll == true and .duplicateSendPrevented == true and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "24h-Erinnerung kontrolliert verarbeitet: JA"
+          echo "$JSON" | jq -r '"E-Mails jetzt versendet: \(.emailsSent // 0)"'
+          echo "$JSON" | jq -r '"Bereits versendet: \(.alreadySentCount // 0)"'
+          echo "$JSON" | jq -r '"Termin als 24h-erinnert markiert: \(.meetingReminderMarkedComplete // (.state == "24H_REMINDER_ALREADY_COMPLETED"))"'
+          echo "Doppelversand-Schutz aktiv: JA"
+          echo "Personenbezogene Kontaktdaten im Log: NEIN"
+          echo "Controlled-All 24h-Erinnerung erfolgreich ✅"
