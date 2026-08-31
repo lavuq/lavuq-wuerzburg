@@ -1,0 +1,35 @@
+name: Test Treffen 1 Nachbereitung Zustell-Diagnose
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-followup-delivery-diagnosis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Brevo Zustellstatus nur auslesen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-followup"
+          MESSAGE_ID='<202608311535.34450526395@smtp-relay.mailin.fr>'
+          BODY=$(jq -nc --arg id "$MESSAGE_ID" '{deliveryDiagnosis:true,messageId:$id}')
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .diagnosisOnly == true and .emailsSent == 0 and .airtableChanged == false and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Diagnose-only: JA"
+          echo "Neue E-Mails versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Message-ID bei Brevo gefunden: $(echo "$JSON" | jq -r '.messageIdMatched')"
+          echo "Brevo Events: $(echo "$JSON" | jq -c '.eventTypes')"
+          echo "Als zugestellt erkannt: $(echo "$JSON" | jq -r '.delivered')"
+          echo "Zustellproblem erkannt: $(echo "$JSON" | jq -r '.deliveryProblem')"
+          echo "Zustell-Diagnose erfolgreich ✅"
