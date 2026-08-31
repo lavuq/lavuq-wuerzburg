@@ -1,0 +1,34 @@
+name: Test 2h Treffen-Erinnerung Controlled All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  meeting-reminder-2h-controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 2h-Erinnerung kontrolliert an alle senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/meeting-reminder-2h"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-10T16:00:00+02:00","controlledAll":true,"confirmation":"ALLE_2H_ERINNERUNGEN_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '(.ok == true) and (.controlledAll == true) and (.piiExposedInResponse == false) and ((.state == "2H_REMINDER_SENT_TO_ALL" and .totalMarkedSent == 4 and .meetingReminderMarkedComplete == true and .duplicateSendPrevented == true) or (.state == "2H_REMINDER_ALREADY_COMPLETED" and .emailsSent == 0 and .alreadySentCount == 4 and .duplicateSendPrevented == true and .airtableChanged == false))' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "2h-Erinnerung kontrolliert verarbeitet: JA"
+          echo "E-Mails jetzt versendet: $(echo "$JSON" | jq -r '.emailsSent // 0')"
+          echo "Bereits versendet: $(echo "$JSON" | jq -r '.alreadySentCount // 0')"
+          echo "Termin als 2h-erinnert markiert: $(echo "$JSON" | jq -r '.meetingReminderMarkedComplete // true')"
+          echo "Doppelversand-Schutz aktiv: JA"
+          echo "Personenbezogene Kontaktdaten im Log: NEIN"
+          echo "Controlled-All 2h-Erinnerung erfolgreich ✅"
