@@ -1,0 +1,45 @@
+name: Test Kontaktfreigabe Controlled Write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  contact-release-controlled-write:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kontakte bewusst freigeben
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/contact-release"
+
+          echo "Zuerst Sicherheits-Dry-Run ..."
+          DRY=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dryRun\":true}")
+          DRY_BODY=$(echo "$DRY" | sed '$d')
+          DRY_HTTP=$(echo "$DRY" | tail -n1)
+          echo "$DRY_BODY" | jq .
+          test "$DRY_HTTP" = "200"
+          echo "$DRY_BODY" | jq -e '.ok == true and .acceptedActiveCount == 4 and .contactReleaseAllowed == true and .changed == false' >/dev/null
+
+          echo "Bewusste manuelle Kontaktfreigabe ..."
+          COMMIT=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dryRun\":false,\"confirm\":\"KONTAKTE_FREIGEBEN\"}")
+          BODY=$(echo "$COMMIT" | sed '$d')
+          HTTP=$(echo "$COMMIT" | tail -n1)
+          echo "$BODY" | jq .
+          test "$HTTP" = "200"
+          echo "$BODY" | jq -e '.ok == true and .acceptedActiveCount == 4 and .contactShared == true' >/dev/null
+
+          echo "HTTP: $HTTP"
+          echo "4 aktive + angenommene Mitglieder: JA"
+          echo "Bewusste Kontaktfreigabe ausgeführt: JA"
+          echo "Kontakte freigegeben: JA"
+          echo "Controlled Write erfolgreich ✅"
