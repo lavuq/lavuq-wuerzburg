@@ -1,0 +1,37 @@
+name: Test erstes Treffen anlegen Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-create-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 1 kontrolliert pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-create"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","dryRun":true,"dateTime":"2026-09-10T18:00:00+02:00","place":"Wuerzburg Marktplatz - oeffentlicher Treffpunkt","publicPlaceConfirmed":true,"groupAgreed":true}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "READY_TO_CREATE_FIRST_MEETING" and .dryRun == true and .acceptedActiveCount == 4 and .contactsReleasedForAll == true and .finalNotificationSentForAll == true and .publicPlaceConfirmed == true and .groupAgreed == true and .wouldCreateMeeting == true and .wouldSendEmails == false and .airtableChanged == false and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "4 aktive + angenommene Mitglieder: JA"
+          echo "Kontakte fuer alle freigegeben: JA"
+          echo "Abschlussnachricht fuer alle versendet: JA"
+          echo "Oeffentlicher Treffpunkt bestaetigt: JA"
+          echo "Mit Gruppe abgestimmt: JA"
+          echo "Wuerde Treffen 1 anlegen: JA"
+          echo "Treffen tatsaechlich angelegt: NEIN"
+          echo "E-Mails versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Erstes-Treffen-Anlage-Dry-Run erfolgreich ✅"
