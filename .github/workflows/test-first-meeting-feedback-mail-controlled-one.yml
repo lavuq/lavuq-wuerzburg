@@ -1,0 +1,36 @@
+name: Test Treffen 1 Feedback-Mail Controlled One
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-feedback-mail-controlled-one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine persoenliche Feedback-Testmail senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-feedback-mail"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","controlledOne":true,"confirmation":"EINE_FEEDBACK_MAIL_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "ONE_FIRST_MEETING_FEEDBACK_MAIL_SENT" and .controlledOne == true and .feedbackRequestCount == 4 and .emailsSent == 1 and .otherEmailsSent == 0 and .providerAccepted == true and .providerMessageIdPresent == true and .feedbackMailMarkedSent == true and .duplicateSendPrevented == true and .airtableChanged == true and .secondMeetingPrepared == false and .piiExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Genau eine Feedback-Testmail versendet: JA"
+          echo "Weitere Feedback-Mails versendet: NEIN"
+          echo "Brevo hat die Nachricht angenommen: JA"
+          echo "Brevo Message-ID vorhanden: JA"
+          echo "Feedback-Mail als versendet markiert: JA"
+          echo "Doppelversand-Schutz aktiv: JA"
+          echo "Treffen 2 vorbereitet: NEIN"
+          echo "Personenbezogene Daten, Token oder Link im Log: NEIN"
+          echo "Controlled-One Feedback-Mail erfolgreich ✅"
