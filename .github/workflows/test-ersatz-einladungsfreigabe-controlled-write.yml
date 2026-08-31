@@ -1,0 +1,43 @@
+name: Test Ersatz Einladungsfreigabe Controlled Write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  controlled-write:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ersatz-Einladung bewusst freigeben ohne Versand
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          REPLACEMENT_APPLICANT_ID="recHH6a21SFbu2Y2C"
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/replacement-invitation-release"
+
+          DRY=$(curl -sS -w '\n%{http_code}' -X POST -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"replacementApplicantId\":\"$REPLACEMENT_APPLICANT_ID\",\"dryRun\":true}" "$URL")
+          DRY_BODY=$(echo "$DRY" | sed '$d'); DRY_HTTP=$(echo "$DRY" | tail -n1)
+          echo "$DRY_BODY" | jq .
+          test "$DRY_HTTP" = "200"
+          STATE=$(echo "$DRY_BODY" | jq -r '.state')
+          test "$STATE" = "READY_FOR_MANUAL_REPLACEMENT_INVITATION_RELEASE" -o "$STATE" = "REPLACEMENT_INVITATION_ALREADY_RELEASED"
+
+          if [ "$STATE" = "REPLACEMENT_INVITATION_ALREADY_RELEASED" ]; then
+            echo "Ersatz-Einladung war bereits manuell freigegeben."
+            exit 0
+          fi
+
+          MEMBER_ID=$(echo "$DRY_BODY" | jq -r '.memberId')
+          WRITE=$(curl -sS -w '\n%{http_code}' -X POST -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"memberId\":\"$MEMBER_ID\",\"dryRun\":false,\"confirmation\":\"ERSATZ_EINLADUNG_FREIGEBEN\"}" "$URL")
+          BODY=$(echo "$WRITE" | sed '$d'); HTTP=$(echo "$WRITE" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.state')" = "REPLACEMENT_INVITATION_MANUALLY_RELEASED"
+          test "$(echo "$BODY" | jq -r '.emailsSent')" = "false"
+          test "$(echo "$BODY" | jq -r '.contactsReleased')" = "false"
+          test "$(echo "$BODY" | jq -r '.airtableChanged')" = "true"
+          echo "Ersatz-Einladung manuell freigegeben: JA"
+          echo "E-Mail versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Controlled Write erfolgreich ✅"
