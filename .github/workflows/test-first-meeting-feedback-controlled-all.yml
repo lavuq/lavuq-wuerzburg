@@ -1,0 +1,49 @@
+name: Test Treffen 1 Feedback-Vorbereitung Controlled All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-feedback-controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restliche Feedback-Datensaetze kontrolliert anlegen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-followup"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+
+          for i in 1 2 3; do
+            BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-10T20:00:00+02:00","feedbackPreparationControlledOne":true,"confirmation":"EIN_FEEDBACK_ANLEGEN"}'
+            RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+              -H "Authorization: Bearer $PREVIEW_KEY" \
+              -H "Content-Type: application/json" \
+              --data "$BODY")
+            JSON=$(echo "$RESP" | sed '$d')
+            HTTP=$(echo "$RESP" | tail -n1)
+            echo "$JSON" | jq .
+            test "$HTTP" = "200"
+            echo "$JSON" | jq -e '.ok == true and (.state == "ONE_FIRST_MEETING_FEEDBACK_PREPARED" or .state == "FIRST_MEETING_FEEDBACK_ALREADY_PREPARED") and .emailsSent == 0 and .secondMeetingPrepared == false and .piiExposedInResponse == false and .tokenExposedInResponse == false' >/dev/null
+          done
+
+          CHECK_BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-10T20:00:00+02:00","feedbackPreparationDryRun":true}'
+          CHECK_RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$CHECK_BODY")
+          CHECK_JSON=$(echo "$CHECK_RESP" | sed '$d')
+          CHECK_HTTP=$(echo "$CHECK_RESP" | tail -n1)
+          echo "$CHECK_JSON" | jq .
+          test "$CHECK_HTTP" = "200"
+          echo "$CHECK_JSON" | jq -e '.ok == true and .feedbackPreparationDryRun == true and .existingFeedbackRequestCount == 4 and .missingFeedbackRequestCount == 0 and .wouldCreateFeedbackRequests == 0 and .wouldCreatePersonalFeedbackLinks == 0 and .wouldSendEmails == 0 and .wouldPrepareSecondMeeting == false and .airtableChanged == false and .piiExposedInResponse == false' >/dev/null
+
+          echo "HTTP Abschlusspruefung: $CHECK_HTTP"
+          echo "Feedback-Datensaetze insgesamt: 4"
+          echo "Fehlende Feedback-Datensaetze: 0"
+          echo "Persoenliche Feedback-Links insgesamt: 4"
+          echo "E-Mails versendet: NEIN"
+          echo "Treffen 2 vorbereitet: NEIN"
+          echo "Doppelanlage verhindert: JA"
+          echo "Controlled-All Feedback-Vorbereitung erfolgreich ✅"
