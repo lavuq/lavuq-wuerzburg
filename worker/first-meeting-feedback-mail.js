@@ -13,6 +13,7 @@ const FEEDBACK_LINK="fldwHXctCJcj9eHYE";
 const FEEDBACK_VALID_UNTIL="fldszL9Bjcsk5UDFD";
 const FEEDBACK_MAIL_SENT="fldLGoT1elNEZKGUa";
 const FEEDBACK_MAIL_MESSAGE_ID="fldPjLbgH0zCeyXnq";
+const FEEDBACK_SUBMITTED_AT="fld5uezt0LJJdtd29";
 
 const APPLICANT_NAME="fldPPnyiAKpIXnawY";
 const APPLICANT_EMAIL="flduioUSJQ7BlM85W";
@@ -81,7 +82,12 @@ async function getFeedbackContext(env,groupId){
  const meeting=meetingCandidates[0];
  const feedbackRows=(await listTable(env,FEEDBACK_TABLE)).filter(f=>linked(f?.fields?.[FEEDBACK_MEETING],meeting.id));
  if(feedbackRows.length!==4)return{error:{ok:false,status:409,code:"NOT_EXACTLY_4_FEEDBACK_REQUESTS",feedbackRequestCount:feedbackRows.length}};
- const complete=feedbackRows.filter(f=>firstLink(f?.fields?.[FEEDBACK_APPLICANT])&&text(f?.fields?.[FEEDBACK_TOKEN])&&text(f?.fields?.[FEEDBACK_LINK])&&text(f?.fields?.[FEEDBACK_VALID_UNTIL]));
+ const complete=feedbackRows.filter(f=>{
+  const hasApplicant=Boolean(firstLink(f?.fields?.[FEEDBACK_APPLICANT]));
+  const alreadySubmitted=Boolean(text(f?.fields?.[FEEDBACK_SUBMITTED_AT]));
+  const hasActiveFeedbackLink=Boolean(text(f?.fields?.[FEEDBACK_TOKEN])&&text(f?.fields?.[FEEDBACK_LINK])&&text(f?.fields?.[FEEDBACK_VALID_UNTIL]));
+  return hasApplicant&&(alreadySubmitted||hasActiveFeedbackLink);
+ });
  if(complete.length!==4)return{error:{ok:false,status:409,code:"FEEDBACK_REQUESTS_INCOMPLETE",completeFeedbackRequestCount:complete.length}};
  return{meeting,feedbackRows};
 }
