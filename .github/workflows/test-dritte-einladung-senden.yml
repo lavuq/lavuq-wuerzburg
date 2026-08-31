@@ -1,0 +1,40 @@
+name: Test dritte Einladung senden
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-third:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine weitere offene Einladung senden
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          MEMBER_ID="recxfTYNclqtgeANu"
+
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/single-invitation-send" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"memberId\":\"$MEMBER_ID\",\"confirmation\":\"EINE_TESTEINLADUNG_SENDEN\"}")
+
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.state')" = "ONE_TEST_INVITATION_SENT"
+          test "$(echo "$BODY" | jq -r '.emailSent')" = "true"
+          test "$(echo "$BODY" | jq -r '.tokenPersisted')" = "true"
+          test "$(echo "$BODY" | jq -r '.tokenExposed')" = "false"
+          test "$(echo "$BODY" | jq -r '.contactsReleased')" = "false"
+          test "$(echo "$BODY" | jq -r '.otherInvitationsSent')" = "false"
+
+          echo "Dritte Einladung versendet: JA"
+          echo "Andere Einladungen versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Kontrollierter dritter Einzelversand erfolgreich ✅"
