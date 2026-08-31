@@ -28,7 +28,7 @@
     .choice:hover{border-color:#b18a3f}
     .choice.selected,.choice[aria-pressed="true"]{background:#0b1f3a;color:#fff;border-color:#0b1f3a;box-shadow:0 0 0 2px rgba(216,180,106,.35)}
     textarea{width:100%;min-height:120px;border:1px solid #d8d4ca;border-radius:12px;padding:14px;font:inherit;box-sizing:border-box}
-    .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;padding:15px 18px;background:#0b1f3a;color:#fff;font-weight:750;font-size:1rem;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;padding:15px 18px;background:#0b1f3a;color:#fff;font-weight:750;font-size:1rem;margin-top:10px;cursor:pointer}
     .btn[disabled]{opacity:.55;cursor:not-allowed}
     .small{font-size:.88rem;color:#647084}
     @media(max-width:540px){.feedback-main{margin-top:24px}.feedback-card{padding:22px 18px;border-radius:18px}.choices{grid-template-columns:1fr}}
@@ -60,8 +60,8 @@
           <strong>Möchtest du uns noch etwas mitteilen?</strong>
           <textarea placeholder="Optional"></textarea>
         </div>
-        <button class="btn" type="button" disabled>Feedback absenden – nächster Testschritt</button>
-        <p class="small">Die Seite ist jetzt erreichbar. Das tatsächliche Speichern und Absenden aktivieren wir erst nach dem nächsten kontrollierten Test.</p>
+        <button id="submitFeedback" class="btn" type="button" disabled>Feedback absenden</button>
+        <p class="small">Für diesen Test wird der Button erst aktiv, wenn beide Pflichtfragen beantwortet sind. Es werden dabei noch keine Daten gespeichert oder übertragen.</p>
       </div>
     </section>
   </main>
@@ -72,11 +72,18 @@
   const token=(params.get('token')||'').trim();
   const status=document.getElementById('tokenStatus');
   const form=document.getElementById('feedbackForm');
+  const submitButton=document.getElementById('submitFeedback');
   if(!token){
     status.textContent='Dieser Feedback-Link ist unvollständig.';
     status.classList.add('error');
     form.style.display='none';
     return;
+  }
+
+  function updateSubmitState(){
+    const feelingSelected=!!form.querySelector('[data-question="feeling"] .choice.selected');
+    const continueSelected=!!form.querySelector('[data-question="continue"] .choice.selected');
+    submitButton.disabled=!(feelingSelected&&continueSelected);
   }
 
   form.querySelectorAll('.choices').forEach(group=>{
@@ -88,9 +95,17 @@
         });
         button.classList.add('selected');
         button.setAttribute('aria-pressed','true');
+        updateSubmitState();
       });
     });
   });
+
+  submitButton.addEventListener('click',()=>{
+    if(submitButton.disabled) return;
+    status.textContent='Auswahl vollständig. Speichern und Absenden ist im nächsten kontrollierten Testschritt vorgesehen.';
+  });
+
+  updateSubmitState();
 })();
 </script>
 </body>
