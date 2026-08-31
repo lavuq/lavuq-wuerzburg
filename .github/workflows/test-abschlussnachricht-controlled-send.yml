@@ -1,0 +1,44 @@
+name: Test Abschlussnachricht Controlled Send
+
+on:
+  workflow_dispatch:
+
+jobs:
+  final-message-controlled-send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Abschlussnachrichten kontrolliert senden
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/final-group-notification"
+
+          echo "Sicherheits-Dry-Run ohne personenbezogene Logdaten ..."
+          DRY=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dryRun\":true}")
+          DRY_BODY=$(echo "$DRY" | sed '$d')
+          DRY_HTTP=$(echo "$DRY" | tail -n1)
+          echo "$DRY_BODY" | jq '{ok,status,state,dryRun,acceptedActiveCount,contactsReleasedForAll,wouldSendEmails,alreadySentCount,recipientCount,sharedContactsPerRecipient,piiExposedInResponse,emailsSent,airtableChanged}'
+          test "$DRY_HTTP" = "200"
+          echo "$DRY_BODY" | jq -e '.ok == true and .acceptedActiveCount == 4 and .contactsReleasedForAll == true and .piiExposedInResponse == false' >/dev/null
+
+          echo "Bewussten Abschlussversand ausführen ..."
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dryRun\":false,\"confirmation\":\"ABSCHLUSSNACHRICHT_SENDEN\"}")
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq '{ok,status,state,dryRun,emailsSent,alreadySentCount,duplicateSendPrevented,contactsReleasedForAll,piiExposedInResponse,airtableChanged}'
+          echo "HTTP: $HTTP"
+          test "$HTTP" = "200"
+          echo "$BODY" | jq -e '.ok == true and .contactsReleasedForAll == true and .duplicateSendPrevented == true' >/dev/null
+
+          echo "Personenbezogene Kontaktdaten im Log: NEIN"
+          echo "Doppelversand-Schutz aktiv: JA"
+          echo "Kontrollierter Abschlussversand erfolgreich ✅"
