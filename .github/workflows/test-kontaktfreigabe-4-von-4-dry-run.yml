@@ -1,0 +1,41 @@
+name: Test Kontaktfreigabe 4 von 4 Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  contact-release-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 4-von-4 Zustand prüfen ohne Kontakte freizugeben
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/contact-release"
+
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST \
+            "$URL" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dryRun\":true}")
+
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.mode')" = "dry-run"
+          test "$(echo "$BODY" | jq -r '.acceptedActiveCount')" = "4"
+          test "$(echo "$BODY" | jq -r '.contactReleaseAllowed')" = "true"
+          test "$(echo "$BODY" | jq -r '.changed')" = "false"
+
+          echo "4 aktive + angenommene Mitglieder: JA"
+          echo "Kontaktfreigabe technisch erlaubt: JA"
+          echo "Kontakte tatsächlich freigegeben: NEIN"
+          echo "Airtable geändert: NEIN"
+          echo "4-von-4 Sicherheits-Dry-Run erfolgreich ✅"
