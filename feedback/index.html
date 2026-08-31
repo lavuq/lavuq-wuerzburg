@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Feedback zu deinem LAVUQ-Treffen</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body{background:#f6f3ec;color:#0b1f3a;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .feedback-shell{min-height:100vh;display:flex;flex-direction:column}
+    .feedback-head{background:#041529;color:#fff;border-bottom:1px solid #d8b46a;padding:28px 20px;text-align:center}
+    .feedback-brand{font-family:Georgia,"Times New Roman",serif;font-size:2rem;letter-spacing:.14em;margin:0}
+    .feedback-city{display:block;color:#d8b46a;font-family:Georgia,"Times New Roman",serif;font-size:1rem;letter-spacing:.03em;margin-top:6px}
+    .feedback-main{width:min(720px,calc(100% - 32px));margin:42px auto;padding-bottom:56px}
+    .feedback-card{background:#fff;border:1px solid #e1ded5;border-radius:24px;padding:28px;box-shadow:0 16px 40px rgba(4,21,41,.08)}
+    .eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#b18a3f;margin-bottom:10px}
+    h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,7vw,3rem);line-height:1.1;margin:0 0 16px;color:#0b1f3a}
+    p{line-height:1.65}
+    .notice{margin:24px 0;padding:16px 18px;border-radius:14px;background:#f8f3e7;border-left:4px solid #d8b46a}
+    .status{margin-top:20px;padding:16px 18px;border-radius:14px;background:#eef6ef;color:#2e6b3a;font-weight:650}
+    .status.error{background:#fff0f0;color:#8a2e2e}
+    .questions{margin-top:26px;border-top:1px solid #ece8df;padding-top:24px}
+    .question{margin-bottom:24px}
+    .question strong{display:block;margin-bottom:10px}
+    .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .choice{border:1px solid #d8d4ca;background:#fff;border-radius:12px;padding:12px 10px;text-align:center;color:#0b1f3a;font-weight:650}
+    textarea{width:100%;min-height:120px;border:1px solid #d8d4ca;border-radius:12px;padding:14px;font:inherit;box-sizing:border-box}
+    .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;padding:15px 18px;background:#0b1f3a;color:#fff;font-weight:750;font-size:1rem;margin-top:10px}
+    .btn[disabled]{opacity:.55;cursor:not-allowed}
+    .small{font-size:.88rem;color:#647084}
+    @media(max-width:540px){.feedback-main{margin-top:24px}.feedback-card{padding:22px 18px;border-radius:18px}.choices{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="feedback-shell">
+  <header class="feedback-head">
+    <div class="feedback-brand">LAVUQ<span class="feedback-city">Würzburg</span></div>
+  </header>
+  <main class="feedback-main">
+    <section class="feedback-card">
+      <div class="eyebrow">Dein persönliches Feedback</div>
+      <h1>Wie war euer erstes Treffen?</h1>
+      <p>Danke, dass du dir kurz Zeit nimmst. Dein Feedback hilft uns dabei, die nächsten Schritte für eure Gruppe passend und sicher vorzubereiten.</p>
+      <div id="tokenStatus" class="status">Persönlicher Feedback-Link erkannt.</div>
+      <div class="notice"><strong>Wichtig:</strong> Dieser Link ist persönlich und zeitlich begrenzt. Bitte leite ihn nicht weiter.</div>
+
+      <div class="questions" id="feedbackForm">
+        <div class="question">
+          <strong>Wie hast du dich beim Treffen gefühlt?</strong>
+          <div class="choices"><button class="choice" type="button">Sehr wohl</button><button class="choice" type="button">Okay</button><button class="choice" type="button">Unwohl</button></div>
+        </div>
+        <div class="question">
+          <strong>Möchtest du die Gruppe weiter kennenlernen?</strong>
+          <div class="choices"><button class="choice" type="button">Ja</button><button class="choice" type="button">Unsicher</button><button class="choice" type="button">Nein</button></div>
+        </div>
+        <div class="question">
+          <strong>Möchtest du uns noch etwas mitteilen?</strong>
+          <textarea placeholder="Optional"></textarea>
+        </div>
+        <button class="btn" type="button" disabled>Feedback absenden – nächster Testschritt</button>
+        <p class="small">Die Seite ist jetzt erreichbar. Das tatsächliche Speichern und Absenden aktivieren wir erst nach dem nächsten kontrollierten Test.</p>
+      </div>
+    </section>
+  </main>
+</div>
+<script>
+(function(){
+  const params=new URLSearchParams(location.search);
+  const token=(params.get('token')||'').trim();
+  const status=document.getElementById('tokenStatus');
+  const form=document.getElementById('feedbackForm');
+  if(!token){
+    status.textContent='Dieser Feedback-Link ist unvollständig.';
+    status.classList.add('error');
+    form.style.display='none';
+  }
+})();
+</script>
+</body>
+</html>
