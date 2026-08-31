@@ -1,0 +1,36 @@
+name: Test 2h Treffen-Erinnerung Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  meeting-reminder-2h-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 2h-Erinnerung nur pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/meeting-reminder-2h"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-10T16:00:00+02:00"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "READY_FOR_2H_REMINDER" and .dryRun == true and .readOnly == true and .meetingAttempt == 1 and .meetingConfirmed == true and .reminderWindowMatched == true and .reminder24hCompleted == true and .reminder2hAlreadySent == false and .eligibleRecipientCount == 4 and .exactlyFourEligibleRecipients == true and .wouldSendEmails == 4 and .wouldMarkReminderSent == false and .airtableChanged == false and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Treffen 1 bestaetigt: JA"
+          echo "2h-Zeitfenster getroffen: JA"
+          echo "24h-Erinnerung abgeschlossen: JA"
+          echo "2h-Erinnerung bereits versendet: NEIN"
+          echo "Vier berechtigte Empfaenger: JA"
+          echo "Wuerde Erinnerungs-E-Mails senden: 4"
+          echo "E-Mails tatsaechlich versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "2h-Erinnerungs-Dry-Run erfolgreich ✅"
