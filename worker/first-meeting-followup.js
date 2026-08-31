@@ -1,5 +1,5 @@
 // LAVUQ – sichere Nachbereitung von Treffen 1.
-// Standard: Dry-Run. Controlled-One sendet genau eine Testmail ohne Airtable-Aenderung.
+// Standard: Dry-Run. Controlled-One/All senden Testmails ohne Airtable-Aenderung.
 const BASE_ID="apphnIBhuAbmMTUtY";
 const MEMBERS_TABLE="tbl4QX0NIB3tUKtF4";
 const APPLICANTS_TABLE="tblzLtbR5Yh4nR5aQ";
@@ -26,12 +26,12 @@ function linked(v,recordId){return Array.isArray(v)&&v.some(x=>(typeof x==="stri
 function acceptedActive(m){return text(m?.fields?.[MEMBER_STATUS])==="Aktiv"&&text(m?.fields?.[MEMBER_INVITE_STATUS])==="Angenommen";}
 function validDate(v){const d=new Date(v);return Number.isFinite(d.getTime())?d:null;}
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
-async function sendFollowupMail(env,to,name){
+async function sendFollowupMail(env,to,name,mode="one"){
  if(!env.BREVO_API_KEY)throw new Error("BREVO_API_KEY fehlt");
  const senderEmail=env.BREVO_SENDER_EMAIL||"kontakt@lavuq-wue.de";
  const senderName=env.BREVO_SENDER_NAME||"LAVUQ Würzburg";
- const subject="TEST Nachbereitung: Wie war euer erstes LAVUQ-Treffen?";
- const html=`<div style="font-family:Arial,sans-serif;line-height:1.6;color:#0b1f3a;max-width:620px;margin:0 auto"><h2>Hallo ${esc(name)},</h2><p>wir hoffen, dass euer erstes LAVUQ-Treffen gut verlaufen ist.</p><p>Als nächsten Schritt möchten wir kurz erfahren, wie du das Treffen erlebt hast. Diese Testnachricht prüft zunächst nur den sicheren Einzelversand der Nachbereitung; es werden dadurch noch keine Feedbackdaten gespeichert und Treffen 2 wird noch nicht vorbereitet.</p><p><strong>TESTHINWEIS:</strong> Dies ist die kontrollierte Nachbereitungs-Testmail.</p><p>Viele Grüße<br><strong>LAVUQ Würzburg</strong></p></div>`;
+ const subject=mode==="all"?"TEST Nachbereitung: Wie war euer erstes LAVUQ-Treffen?":"TEST Nachbereitung: Wie war euer erstes LAVUQ-Treffen?";
+ const html=`<div style="font-family:Arial,sans-serif;line-height:1.6;color:#0b1f3a;max-width:620px;margin:0 auto"><h2>Hallo ${esc(name)},</h2><p>wir hoffen, dass euer erstes LAVUQ-Treffen gut verlaufen ist.</p><p>Als nächsten Schritt möchten wir kurz erfahren, wie du das Treffen erlebt hast. Diese Testnachricht prüft zunächst nur den sicheren Versand der Nachbereitung; es werden dadurch noch keine Feedbackdaten gespeichert und Treffen 2 wird noch nicht vorbereitet.</p><p><strong>TESTHINWEIS:</strong> Dies ist eine kontrollierte Nachbereitungs-Testmail.</p><p>Viele Grüße<br><strong>LAVUQ Würzburg</strong></p></div>`;
  const r=await fetch("https://api.brevo.com/v3/smtp/email",{method:"POST",headers:{"api-key":env.BREVO_API_KEY,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({sender:{email:senderEmail,name:senderName},to:[{email:to,name}],subject,htmlContent:html})});
  const raw=await r.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{}
  if(!r.ok)throw new Error(`Brevo HTTP ${r.status}`);
@@ -50,6 +50,15 @@ async function diagnoseBrevoDelivery(env,messageId){
  const blocked=eventTypes.some(e=>["blocked","hardBounces","hard_bounce","softBounces","soft_bounce","deferred","invalid"].includes(e));
  return{ok:true,status:200,state:terminalDelivered?"BREVO_DELIVERED":blocked?"BREVO_DELIVERY_PROBLEM":"BREVO_STATUS_PENDING_OR_UNKNOWN",diagnosisOnly:true,messageIdMatched:events.length>0,eventCount:events.length,eventTypes,delivered:terminalDelivered,deliveryProblem:blocked,emailsSent:0,airtableChanged:false,piiExposedInResponse:false};
 }
+async function applicantForMember(env,member){
+ const applicantId=firstLink(member?.fields?.[MEMBER_APPLICANT]);
+ if(!applicantId)throw new Error("APPLICANT_MISSING");
+ const a=await getApplicant(env,applicantId);
+ const name=text(a?.fields?.[APPLICANT_NAME])||"LAVUQ Teilnehmer";
+ const email=text(a?.fields?.[APPLICANT_EMAIL]);
+ if(!email||!email.includes("@"))throw new Error("EMAIL_MISSING");
+ return{name,email};
+}
 export async function buildFirstMeetingFollowupDryRun(env,input={}){
  if(input.deliveryDiagnosis===true)return diagnoseBrevoDelivery(env,input.messageId);
  if(!env?.AIRTABLE_TOKEN)return{ok:false,status:500,code:"AIRTABLE_TOKEN_MISSING"};
@@ -67,14 +76,24 @@ export async function buildFirstMeetingFollowupDryRun(env,input={}){
  const recipients=members.filter(m=>linked(m?.fields?.[MEMBER_GROUP],groupId)&&acceptedActive(m)&&m?.fields?.[MEMBER_CONTACT_SHARED]===true);
  const exactlyFourEligibleRecipients=recipients.length===4;
  const ready=meetingPassed&&reminder24hCompleted&&reminder2hCompleted&&exactlyFourEligibleRecipients;
+ if(input.controlledAll===true){
+   if(String(input.confirmation||"")!=="VIER_NACHBEREITUNGEN_SENDEN")return{ok:false,status:409,code:"EXPLICIT_CONFIRMATION_REQUIRED"};
+   if(!meetingPassed)return{ok:false,status:409,code:"MEETING_NOT_PASSED"};
+   if(!reminder24hCompleted||!reminder2hCompleted)return{ok:false,status:409,code:"REMINDERS_NOT_COMPLETED"};
+   if(!exactlyFourEligibleRecipients)return{ok:false,status:409,code:"NOT_EXACTLY_4_ELIGIBLE_RECIPIENTS",eligibleRecipientCount:recipients.length};
+   const deliveries=[];
+   for(const member of recipients){const a=await applicantForMember(env,member);deliveries.push(await sendFollowupMail(env,a.email,a.name,"all"));}
+   const providerAcceptedCount=deliveries.filter(d=>d.providerAccepted).length;
+   const providerMessageIdCount=deliveries.filter(d=>d.providerMessageIdPresent).length;
+   return{ok:true,status:200,state:"ALL_FIRST_MEETING_FOLLOWUP_TESTS_SENT",dryRun:false,controlledAll:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,hoursSinceMeeting,eligibleRecipientCount:4,emailsSent:4,providerAcceptedCount,providerMessageIdCount,allProviderAccepted:providerAcceptedCount===4,allProviderMessageIdsPresent:providerMessageIdCount===4,feedbackRequestsCreated:0,secondMeetingPrepared:false,followupMarkedComplete:false,airtableChanged:false,piiExposedInResponse:false};
+ }
  if(input.controlledOne===true){
    if(String(input.confirmation||"")!=="EINE_NACHBEREITUNG_SENDEN")return{ok:false,status:409,code:"EXPLICIT_CONFIRMATION_REQUIRED"};
    if(!meetingPassed)return{ok:false,status:409,code:"MEETING_NOT_PASSED"};
    if(!reminder24hCompleted||!reminder2hCompleted)return{ok:false,status:409,code:"REMINDERS_NOT_COMPLETED"};
    if(!exactlyFourEligibleRecipients)return{ok:false,status:409,code:"NOT_EXACTLY_4_ELIGIBLE_RECIPIENTS",eligibleRecipientCount:recipients.length};
-   const chosen=recipients[0];const applicantId=firstLink(chosen?.fields?.[MEMBER_APPLICANT]);if(!applicantId)return{ok:false,status:409,code:"APPLICANT_MISSING"};
-   const a=await getApplicant(env,applicantId);const name=text(a?.fields?.[APPLICANT_NAME])||"LAVUQ Teilnehmer";const email=text(a?.fields?.[APPLICANT_EMAIL]);if(!email||!email.includes("@"))return{ok:false,status:409,code:"EMAIL_MISSING"};
-   const delivery=await sendFollowupMail(env,email,name);
+   const a=await applicantForMember(env,recipients[0]);
+   const delivery=await sendFollowupMail(env,a.email,a.name,"one");
    return{ok:true,status:200,state:"ONE_FIRST_MEETING_FOLLOWUP_TEST_SENT",dryRun:false,controlledOne:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,hoursSinceMeeting,eligibleRecipientCount:4,emailsSent:1,otherEmailsSent:0,feedbackRequestsCreated:0,secondMeetingPrepared:false,followupMarkedComplete:false,airtableChanged:false,providerAccepted:delivery.providerAccepted,providerStatus:delivery.providerStatus,providerMessageIdPresent:delivery.providerMessageIdPresent,providerMessageId:delivery.providerMessageId,piiExposedInResponse:false};
  }
  return{ok:true,status:200,state:ready?"READY_FOR_FIRST_MEETING_FOLLOWUP":"NOT_READY_FOR_FIRST_MEETING_FOLLOWUP",dryRun:true,readOnly:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,meetingConfirmed:true,meetingPassed,hoursSinceMeeting,reminder24hCompleted,reminder2hCompleted,eligibleRecipientCount:recipients.length,exactlyFourEligibleRecipients,wouldSendFollowupEmails:ready?4:0,wouldCreateFeedbackRequests:ready?4:0,wouldPrepareSecondMeeting:false,emailsSent:0,airtableChanged:false,piiExposedInResponse:false};
