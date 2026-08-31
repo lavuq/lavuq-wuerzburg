@@ -37,7 +37,21 @@ async function sendFollowupMail(env,to,name){
  if(!r.ok)throw new Error(`Brevo HTTP ${r.status}`);
  return{providerAccepted:true,providerStatus:r.status,providerMessageIdPresent:Boolean(data?.messageId),providerMessageId:String(data?.messageId||"")};
 }
+async function diagnoseBrevoDelivery(env,messageId){
+ if(!env.BREVO_API_KEY)return{ok:false,status:500,code:"BREVO_API_KEY_MISSING"};
+ const id=String(messageId||"").trim();if(!id)return{ok:false,status:400,code:"MESSAGE_ID_REQUIRED"};
+ const params=new URLSearchParams({messageId:id,limit:"50",sort:"desc"});
+ const r=await fetch(`https://api.brevo.com/v3/smtp/statistics/events?${params}`,{headers:{"api-key":env.BREVO_API_KEY,Accept:"application/json"}});
+ const raw=await r.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{}
+ if(!r.ok)return{ok:false,status:r.status,code:"BREVO_EVENTS_LOOKUP_FAILED",providerStatus:r.status};
+ const events=Array.isArray(data?.events)?data.events:[];
+ const eventTypes=[...new Set(events.map(e=>String(e?.event||"").trim()).filter(Boolean))];
+ const terminalDelivered=eventTypes.includes("delivered");
+ const blocked=eventTypes.some(e=>["blocked","hardBounces","hard_bounce","softBounces","soft_bounce","deferred","invalid"].includes(e));
+ return{ok:true,status:200,state:terminalDelivered?"BREVO_DELIVERED":blocked?"BREVO_DELIVERY_PROBLEM":"BREVO_STATUS_PENDING_OR_UNKNOWN",diagnosisOnly:true,messageIdMatched:events.length>0,eventCount:events.length,eventTypes,delivered:terminalDelivered,deliveryProblem:blocked,emailsSent:0,airtableChanged:false,piiExposedInResponse:false};
+}
 export async function buildFirstMeetingFollowupDryRun(env,input={}){
+ if(input.deliveryDiagnosis===true)return diagnoseBrevoDelivery(env,input.messageId);
  if(!env?.AIRTABLE_TOKEN)return{ok:false,status:500,code:"AIRTABLE_TOKEN_MISSING"};
  const groupId=String(input.groupId||"").trim();if(!/^rec[A-Za-z0-9]{14}$/.test(groupId))return{ok:false,status:400,code:"INVALID_GROUP_ID"};
  const now=validDate(input.asOf||new Date().toISOString());if(!now)return{ok:false,status:400,code:"INVALID_AS_OF"};
