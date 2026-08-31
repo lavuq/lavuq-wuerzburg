@@ -36,9 +36,7 @@
 </head>
 <body>
 <div class="feedback-shell">
-  <header class="feedback-head">
-    <div class="feedback-brand">LAVUQ<span class="feedback-city">Würzburg</span></div>
-  </header>
+  <header class="feedback-head"><div class="feedback-brand">LAVUQ<span class="feedback-city">Würzburg</span></div></header>
   <main class="feedback-main">
     <section class="feedback-card">
       <div class="eyebrow">Dein persönliches Feedback</div>
@@ -46,7 +44,6 @@
       <p>Danke, dass du dir kurz Zeit nimmst. Dein Feedback hilft uns dabei, die nächsten Schritte für eure Gruppe passend und sicher vorzubereiten.</p>
       <div id="tokenStatus" class="status">Persönlicher Feedback-Link erkannt.</div>
       <div class="notice"><strong>Wichtig:</strong> Dieser Link ist persönlich und zeitlich begrenzt. Bitte leite ihn nicht weiter.</div>
-
       <div class="questions" id="feedbackForm">
         <div class="question" data-question="feeling">
           <strong>Wie hast du dich beim Treffen gefühlt?</strong>
@@ -56,12 +53,9 @@
           <strong>Möchtest du die Gruppe weiter kennenlernen?</strong>
           <div class="choices"><button class="choice" type="button" aria-pressed="false">Ja</button><button class="choice" type="button" aria-pressed="false">Unsicher</button><button class="choice" type="button" aria-pressed="false">Nein</button></div>
         </div>
-        <div class="question">
-          <strong>Möchtest du uns noch etwas mitteilen?</strong>
-          <textarea placeholder="Optional"></textarea>
-        </div>
+        <div class="question"><strong>Möchtest du uns noch etwas mitteilen?</strong><textarea id="feedbackComment" maxlength="2000" placeholder="Optional"></textarea></div>
         <button id="submitFeedback" class="btn" type="button" disabled>Feedback absenden</button>
-        <p class="small">Für diesen Test wird der Button erst aktiv, wenn beide Pflichtfragen beantwortet sind. Es werden dabei noch keine Daten gespeichert oder übertragen.</p>
+        <p id="feedbackHint" class="small">Der Button wird aktiv, sobald beide Pflichtfragen beantwortet sind.</p>
       </div>
     </section>
   </main>
@@ -73,6 +67,11 @@
   const status=document.getElementById('tokenStatus');
   const form=document.getElementById('feedbackForm');
   const submitButton=document.getElementById('submitFeedback');
+  const hint=document.getElementById('feedbackHint');
+  const comment=document.getElementById('feedbackComment');
+  const endpoint='https://lavuq-bewerbung.lavuq.workers.dev/feedback/submit';
+  let sending=false;
+
   if(!token){
     status.textContent='Dieser Feedback-Link ist unvollständig.';
     status.classList.add('error');
@@ -80,19 +79,13 @@
     return;
   }
 
-  function updateSubmitState(){
-    const feelingSelected=!!form.querySelector('[data-question="feeling"] .choice.selected');
-    const continueSelected=!!form.querySelector('[data-question="continue"] .choice.selected');
-    submitButton.disabled=!(feelingSelected&&continueSelected);
-  }
+  function selected(question){return form.querySelector(`[data-question="${question}"] .choice.selected`)?.textContent.trim()||'';}
+  function updateSubmitState(){submitButton.disabled=sending||!(selected('feeling')&&selected('continue'));}
 
   form.querySelectorAll('.choices').forEach(group=>{
     group.querySelectorAll('.choice').forEach(button=>{
       button.addEventListener('click',()=>{
-        group.querySelectorAll('.choice').forEach(other=>{
-          other.classList.remove('selected');
-          other.setAttribute('aria-pressed','false');
-        });
+        group.querySelectorAll('.choice').forEach(other=>{other.classList.remove('selected');other.setAttribute('aria-pressed','false');});
         button.classList.add('selected');
         button.setAttribute('aria-pressed','true');
         updateSubmitState();
@@ -100,9 +93,25 @@
     });
   });
 
-  submitButton.addEventListener('click',()=>{
-    if(submitButton.disabled) return;
-    status.textContent='Auswahl vollständig. Speichern und Absenden ist im nächsten kontrollierten Testschritt vorgesehen.';
+  submitButton.addEventListener('click',async()=>{
+    if(submitButton.disabled||sending)return;
+    sending=true;updateSubmitState();submitButton.textContent='Wird gespeichert …';
+    status.classList.remove('error');status.textContent='Dein Feedback wird sicher gespeichert …';
+    try{
+      const res=await fetch(endpoint,{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,feeling:selected('feeling'),continueChoice:selected('continue'),comment:comment.value.trim()})});
+      const raw=await res.text();let result={};try{result=raw?JSON.parse(raw):{};}catch{}
+      if(!res.ok||result.ok!==true)throw new Error(result.state||`HTTP ${res.status}`);
+      form.querySelectorAll('button,textarea').forEach(el=>el.disabled=true);
+      status.textContent='Danke! Dein Feedback wurde erfolgreich gespeichert.';
+      hint.textContent='Dein persönlicher Feedback-Link wurde nach der Abgabe deaktiviert.';
+      submitButton.textContent='Feedback gespeichert ✓';
+      history.replaceState(null,'',location.pathname);
+    }catch(err){
+      sending=false;updateSubmitState();submitButton.textContent='Feedback absenden';
+      status.classList.add('error');
+      const code=String(err?.message||'');
+      status.textContent=code==='FEEDBACK_LINK_EXPIRED'?'Dieser Feedback-Link ist leider abgelaufen.':code==='FEEDBACK_LINK_INVALID_OR_USED'||code==='FEEDBACK_ALREADY_SUBMITTED'?'Dieser Feedback-Link wurde bereits verwendet oder ist nicht mehr gültig.':'Das Feedback konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.';
+    }
   });
 
   updateSubmitState();
