@@ -1,0 +1,30 @@
+name: Test erstes Treffen Readiness Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Erstes Treffen nur pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-readiness?group=$GROUP_ID"
+          RESP=$(curl -sS -w '\n%{http_code}' "$URL" -H "Authorization: Bearer $PREVIEW_KEY")
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          test "$HTTP" = "200"
+          echo "$BODY" | jq -e '.ok == true and .state == "READY_FOR_FIRST_MEETING" and .dryRun == true and .readOnly == true and .acceptedActiveCount == 4 and .contactsReleasedCount == 4 and .finalNotificationSentCount == 4 and .wouldCreateMeeting == false and .wouldSendEmails == false and .airtableChanged == false and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "4 aktive + angenommene Mitglieder: JA"
+          echo "Kontakte fuer alle freigegeben: JA"
+          echo "Abschlussnachricht fuer alle versendet: JA"
+          echo "Treffen angelegt: NEIN"
+          echo "E-Mails versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Erstes-Treffen-Readiness-Dry-Run erfolgreich ✅"
