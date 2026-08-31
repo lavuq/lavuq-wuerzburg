@@ -12,9 +12,9 @@ jobs:
           KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         run: |
           set -euo pipefail
-          MEMBER_ID="rec0HKqQ08APJCJ7g"
+          REPLACEMENT_APPLICANT_ID="recHH6a21SFbu2Y2C"
           URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/replacement-invitation-release"
-          RES=$(curl -sS -w '\n%{http_code}' -X POST -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"memberId\":\"$MEMBER_ID\",\"dryRun\":true}" "$URL")
+          RES=$(curl -sS -w '\n%{http_code}' -X POST -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" --data "{\"replacementApplicantId\":\"$REPLACEMENT_APPLICANT_ID\",\"dryRun\":true}" "$URL")
           BODY=$(echo "$RES" | sed '$d'); HTTP=$(echo "$RES" | tail -n1)
           echo "$BODY" | jq .
           echo "HTTP: $HTTP"
@@ -24,6 +24,7 @@ jobs:
           test "$(echo "$BODY" | jq -r '.emailsSent')" = "false"
           test "$(echo "$BODY" | jq -r '.contactsReleased')" = "false"
           test "$(echo "$BODY" | jq -r '.airtableChanged')" = "false"
+          echo "Ersatz-Mitglied automatisch aufgelöst: JA"
           echo "Ersatz-Einladung freigabefähig: JA"
           echo "E-Mail versendet: NEIN"
           echo "Kontakte freigegeben: NEIN"
