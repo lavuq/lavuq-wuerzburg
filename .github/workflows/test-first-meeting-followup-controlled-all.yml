@@ -1,0 +1,37 @@
+name: Test Treffen 1 Nachbereitung Controlled All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-followup-controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Nachbereitung Treffen 1 kontrolliert an alle senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-followup"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-10T20:00:00+02:00","controlledAll":true,"confirmation":"VIER_NACHBEREITUNGEN_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .controlledAll == true and .eligibleRecipientCount == 4 and .duplicateSendPrevented == true and .feedbackRequestsCreated == 0 and .secondMeetingPrepared == false and .piiExposedInResponse == false and ((.state == "FIRST_MEETING_FOLLOWUP_SENT_TO_ALL" and .totalMarkedSent == 4 and .followupMarkedComplete == true) or (.state == "FIRST_MEETING_FOLLOWUP_ALREADY_COMPLETED" and .emailsSent == 0 and .alreadySentCount == 4 and .airtableChanged == false))' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Nachbereitung kontrolliert verarbeitet: JA"
+          echo "E-Mails jetzt versendet: $(echo "$JSON" | jq -r '.emailsSent')"
+          echo "Bereits versendet: $(echo "$JSON" | jq -r '.alreadySentCount')"
+          echo "Gesamt als versendet markiert: $(echo "$JSON" | jq -r '.totalMarkedSent')"
+          echo "Nachtreffen-Check als erledigt markiert: $(echo "$JSON" | jq -r '.followupMarkedComplete')"
+          echo "Doppelversand-Schutz aktiv: JA"
+          echo "Feedback-Datensaetze angelegt: NEIN"
+          echo "Treffen 2 vorbereitet: NEIN"
+          echo "Personenbezogene Kontaktdaten im Log: NEIN"
+          echo "Controlled-All Treffen-1-Nachbereitung erfolgreich ✅"
