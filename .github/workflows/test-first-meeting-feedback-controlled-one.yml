@@ -1,0 +1,36 @@
+name: Test Treffen 1 Feedback-Vorbereitung Controlled One
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-feedback-controlled-one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau einen Feedback-Datensatz anlegen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-followup"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","asOf":"2026-09-10T20:00:00+02:00","feedbackPreparationControlledOne":true,"confirmation":"EIN_FEEDBACK_ANLEGEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "ONE_FIRST_MEETING_FEEDBACK_PREPARED" and .feedbackPreparationControlledOne == true and .meetingAttempt == 1 and .eligibleRecipientCount == 4 and .feedbackRequestsCreated == 1 and .personalFeedbackLinksCreated == 1 and .remainingFeedbackRequestCount == 3 and .feedbackLinkStored == true and .feedbackTokenStored == true and .feedbackValidUntilStored == true and .emailsSent == 0 and .secondMeetingPrepared == false and .airtableChanged == true and .piiExposedInResponse == false and .tokenExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Genau ein Feedback-Datensatz angelegt: JA"
+          echo "Persoenlicher Feedback-Link gespeichert: JA"
+          echo "Token sicher gespeichert und nicht im Log: JA"
+          echo "Feedback-Link mit Ablaufzeit versehen: JA"
+          echo "Weitere fehlende Feedback-Datensaetze: 3"
+          echo "E-Mails versendet: NEIN"
+          echo "Treffen 2 vorbereitet: NEIN"
+          echo "Airtable geaendert: JA"
+          echo "Controlled-One Feedback-Vorbereitung erfolgreich ✅"
