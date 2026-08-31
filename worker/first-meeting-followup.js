@@ -5,6 +5,7 @@ const BASE_ID="apphnIBhuAbmMTUtY";
 const MEMBERS_TABLE="tbl4QX0NIB3tUKtF4";
 const APPLICANTS_TABLE="tblzLtbR5Yh4nR5aQ";
 const MEETINGS_TABLE="tblHoWMR2fkeLDkec";
+const FEEDBACK_TABLE="tblLyjFTdr1MziUgj";
 const MEMBER_GROUP="fldMUYzXykTpV0j2x";
 const MEMBER_APPLICANT="fldcV8kd6KF7zdScE";
 const MEMBER_STATUS="fldBS2hoKQX0Rr1aX";
@@ -20,6 +21,8 @@ const MEETING_REMINDER_2H="fldY246Gg4hYuOIZO";
 const MEETING_FOLLOWUP_DONE="fld1iy06nx9r3nJmx";
 const MEETING_FOLLOWUP_RECIPIENT_IDS="fld8kfMdVMJLdjRSI";
 const MEETING_GROUP_LINK="fld0Zpt6q0OO9RmTt";
+const FEEDBACK_MEETING="fldaykTvzKmCqn9MO";
+const FEEDBACK_APPLICANT="fldkOnMXpqlnNjs1b";
 function text(v){if(v==null)return"";if(typeof v==="object"&&!Array.isArray(v)&&v.name)return String(v.name).trim();return String(v).trim();}
 function firstLink(v){if(!Array.isArray(v)||!v.length)return null;const x=v[0];return typeof x==="string"?x:x?.id||null;}
 function headers(env){return{Authorization:`Bearer ${env.AIRTABLE_TOKEN}`,"Content-Type":"application/json"};}
@@ -63,7 +66,7 @@ async function applicantForMember(env,member){
  const name=text(a?.fields?.[APPLICANT_NAME])||"LAVUQ Teilnehmer";
  const email=text(a?.fields?.[APPLICANT_EMAIL]);
  if(!email||!email.includes("@"))throw new Error("EMAIL_MISSING");
- return{name,email};
+ return{name,email,applicantId};
 }
 export async function buildFirstMeetingFollowupDryRun(env,input={}){
  if(input.deliveryDiagnosis===true)return diagnoseBrevoDelivery(env,input.messageId);
@@ -83,6 +86,16 @@ export async function buildFirstMeetingFollowupDryRun(env,input={}){
  const recipients=members.filter(m=>linked(m?.fields?.[MEMBER_GROUP],groupId)&&acceptedActive(m)&&m?.fields?.[MEMBER_CONTACT_SHARED]===true);
  const exactlyFourEligibleRecipients=recipients.length===4;
  const ready=meetingPassed&&reminder24hCompleted&&reminder2hCompleted&&exactlyFourEligibleRecipients;
+ if(input.feedbackPreparationDryRun===true){
+   const applicantIds=recipients.map(m=>firstLink(m?.fields?.[MEMBER_APPLICANT])).filter(Boolean);
+   const feedbackRows=await listTable(env,FEEDBACK_TABLE);
+   const existingForMeeting=feedbackRows.filter(f=>linked(f?.fields?.[FEEDBACK_MEETING],meeting.id));
+   const existingApplicantIds=new Set(existingForMeeting.map(f=>firstLink(f?.fields?.[FEEDBACK_APPLICANT])).filter(Boolean));
+   const existingForEligible=applicantIds.filter(id=>existingApplicantIds.has(id)).length;
+   const missingFeedbackRequests=Math.max(0,applicantIds.length-existingForEligible);
+   const feedbackReady=meetingPassed&&followupCompleted&&exactlyFourEligibleRecipients;
+   return{ok:true,status:200,state:feedbackReady?"READY_TO_PREPARE_FIRST_MEETING_FEEDBACK":"NOT_READY_TO_PREPARE_FIRST_MEETING_FEEDBACK",dryRun:true,readOnly:true,feedbackPreparationDryRun:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,meetingPassed,followupCompleted,eligibleRecipientCount:recipients.length,exactlyFourEligibleRecipients,existingFeedbackRequestCount:existingForEligible,missingFeedbackRequestCount:feedbackReady?missingFeedbackRequests:0,wouldCreateFeedbackRequests:feedbackReady?missingFeedbackRequests:0,wouldCreatePersonalFeedbackLinks:feedbackReady?missingFeedbackRequests:0,wouldSendEmails:0,wouldPrepareSecondMeeting:false,airtableChanged:false,piiExposedInResponse:false};
+ }
  if(input.controlledAll===true){
    if(String(input.confirmation||"")!=="VIER_NACHBEREITUNGEN_SENDEN")return{ok:false,status:409,code:"EXPLICIT_CONFIRMATION_REQUIRED"};
    if(!meetingPassed)return{ok:false,status:409,code:"MEETING_NOT_PASSED"};
