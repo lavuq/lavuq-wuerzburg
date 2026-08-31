@@ -24,7 +24,9 @@
     .question{margin-bottom:24px}
     .question strong{display:block;margin-bottom:10px}
     .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .choice{border:1px solid #d8d4ca;background:#fff;border-radius:12px;padding:12px 10px;text-align:center;color:#0b1f3a;font-weight:650}
+    .choice{appearance:none;-webkit-appearance:none;border:1px solid #d8d4ca;background:#fff;border-radius:12px;padding:12px 10px;text-align:center;color:#0b1f3a;font-weight:650;cursor:pointer;transition:.15s ease}
+    .choice:hover{border-color:#b18a3f}
+    .choice.selected,.choice[aria-pressed="true"]{background:#0b1f3a;color:#fff;border-color:#0b1f3a;box-shadow:0 0 0 2px rgba(216,180,106,.35)}
     textarea{width:100%;min-height:120px;border:1px solid #d8d4ca;border-radius:12px;padding:14px;font:inherit;box-sizing:border-box}
     .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;padding:15px 18px;background:#0b1f3a;color:#fff;font-weight:750;font-size:1rem;margin-top:10px}
     .btn[disabled]{opacity:.55;cursor:not-allowed}
@@ -46,13 +48,13 @@
       <div class="notice"><strong>Wichtig:</strong> Dieser Link ist persönlich und zeitlich begrenzt. Bitte leite ihn nicht weiter.</div>
 
       <div class="questions" id="feedbackForm">
-        <div class="question">
+        <div class="question" data-question="feeling">
           <strong>Wie hast du dich beim Treffen gefühlt?</strong>
-          <div class="choices"><button class="choice" type="button">Sehr wohl</button><button class="choice" type="button">Okay</button><button class="choice" type="button">Unwohl</button></div>
+          <div class="choices"><button class="choice" type="button" aria-pressed="false">Sehr wohl</button><button class="choice" type="button" aria-pressed="false">Okay</button><button class="choice" type="button" aria-pressed="false">Unwohl</button></div>
         </div>
-        <div class="question">
+        <div class="question" data-question="continue">
           <strong>Möchtest du die Gruppe weiter kennenlernen?</strong>
-          <div class="choices"><button class="choice" type="button">Ja</button><button class="choice" type="button">Unsicher</button><button class="choice" type="button">Nein</button></div>
+          <div class="choices"><button class="choice" type="button" aria-pressed="false">Ja</button><button class="choice" type="button" aria-pressed="false">Unsicher</button><button class="choice" type="button" aria-pressed="false">Nein</button></div>
         </div>
         <div class="question">
           <strong>Möchtest du uns noch etwas mitteilen?</strong>
@@ -74,7 +76,21 @@
     status.textContent='Dieser Feedback-Link ist unvollständig.';
     status.classList.add('error');
     form.style.display='none';
+    return;
   }
+
+  form.querySelectorAll('.choices').forEach(group=>{
+    group.querySelectorAll('.choice').forEach(button=>{
+      button.addEventListener('click',()=>{
+        group.querySelectorAll('.choice').forEach(other=>{
+          other.classList.remove('selected');
+          other.setAttribute('aria-pressed','false');
+        });
+        button.classList.add('selected');
+        button.setAttribute('aria-pressed','true');
+      });
+    });
+  });
 })();
 </script>
 </body>
