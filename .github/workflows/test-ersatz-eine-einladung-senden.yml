@@ -1,0 +1,44 @@
+name: Test Ersatz eine Einladung senden
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-replacement-one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine freigegebene Ersatz-Testeinladung senden
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          # Dieses Ersatzmitglied wurde im vorherigen Controlled-Write
+          # bewusst für die Einladung freigegeben.
+          MEMBER_ID="recOHKgQ08APJCJ7q"
+
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/single-invitation-send" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"memberId\":\"$MEMBER_ID\",\"confirmation\":\"EINE_TESTEINLADUNG_SENDEN\"}")
+
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.state')" = "ONE_TEST_INVITATION_SENT"
+          test "$(echo "$BODY" | jq -r '.emailSent')" = "true"
+          test "$(echo "$BODY" | jq -r '.tokenPersisted')" = "true"
+          test "$(echo "$BODY" | jq -r '.tokenExposed')" = "false"
+          test "$(echo "$BODY" | jq -r '.contactsReleased')" = "false"
+          test "$(echo "$BODY" | jq -r '.otherInvitationsSent')" = "false"
+
+          echo "Genau eine Ersatz-Testeinladung versendet: JA"
+          echo "Sicherer Token gespeichert: JA"
+          echo "Token offengelegt: NEIN"
+          echo "Andere Einladungen versendet: NEIN"
+          echo "Kontakte freigegeben: NEIN"
+          echo "Kontrollierter Ersatz-Einzelversand erfolgreich ✅"
