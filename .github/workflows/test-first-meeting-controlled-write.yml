@@ -1,0 +1,48 @@
+name: Test erstes Treffen Controlled Write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-controlled-write:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 1 kontrolliert anlegen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-create"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          DATE_TIME="2026-09-10T16:00:00.000Z"
+          PLACE="Würzburg Marktplatz"
+
+          echo "Zuerst Sicherheits-Dry-Run ..."
+          DRY=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dateTime\":\"$DATE_TIME\",\"place\":\"$PLACE\",\"publicPlaceConfirmed\":true,\"groupAgreed\":true,\"dryRun\":true}")
+          DRY_BODY=$(echo "$DRY" | sed '$d')
+          DRY_HTTP=$(echo "$DRY" | tail -n1)
+          echo "$DRY_BODY" | jq .
+          test "$DRY_HTTP" = "200"
+          echo "$DRY_BODY" | jq -e '.ok == true and .state == "READY_TO_CREATE_FIRST_MEETING" and .wouldCreateMeeting == true and .wouldSendEmails == false and .airtableChanged == false' >/dev/null
+
+          echo "Bewusste Anlage von Treffen 1 ..."
+          COMMIT=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dateTime\":\"$DATE_TIME\",\"place\":\"$PLACE\",\"publicPlaceConfirmed\":true,\"groupAgreed\":true,\"dryRun\":false,\"confirmation\":\"ERSTES_TREFFEN_ANLEGEN\"}")
+          BODY=$(echo "$COMMIT" | sed '$d')
+          HTTP=$(echo "$COMMIT" | tail -n1)
+          echo "$BODY" | jq .
+          test "$HTTP" = "200"
+          echo "$BODY" | jq -e '.ok == true and .state == "FIRST_MEETING_CREATED" and .meetingAttempt == 1 and .emailsSent == 0 and .airtableChanged == true and .piiExposedInResponse == false' >/dev/null
+
+          echo "HTTP: $HTTP"
+          echo "Treffen 1 angelegt: JA"
+          echo "Status: Bestätigt"
+          echo "E-Mails versendet: NEIN"
+          echo "Airtable geändert: JA"
+          echo "Controlled Write Treffen 1 erfolgreich ✅"
