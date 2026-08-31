@@ -1,13 +1,36 @@
 import previewWorker from "./worker-with-preview.js";
 import { handleFirstMeetingFeedbackMailControlledOne } from "./first-meeting-feedback-mail.js";
+import { handleFeedbackSubmit } from "./feedback-submit.js";
 
-function json(payload,status=200){return new Response(JSON.stringify(payload,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}});}
+function json(payload,status=200,extraHeaders={}){return new Response(JSON.stringify(payload,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store",...extraHeaders}});}
 function bearerToken(request){const header=String(request.headers.get("Authorization")||"");return header.startsWith("Bearer ")?header.slice(7):"";}
 function authorized(request,env){const configured=String(env?.GRUPPENFINDER_PREVIEW_KEY||"");const supplied=bearerToken(request);return Boolean(configured&&supplied&&supplied===configured);}
+function corsHeaders(request){
+ const origin=String(request.headers.get("Origin")||"");
+ const allowed=new Set(["https://lavuq-wue.de","https://www.lavuq-wue.de"]);
+ return allowed.has(origin)?{"Access-Control-Allow-Origin":origin,"Vary":"Origin","Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Methods":"POST, OPTIONS"}:{};
+}
 
 export default{
  async fetch(request,env,ctx){
   const url=new URL(request.url);
+
+  if(url.pathname==="/feedback/submit"){
+   const cors=corsHeaders(request);
+   if(request.method==="OPTIONS")return new Response(null,{status:204,headers:cors});
+   if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405,cors);
+   const origin=String(request.headers.get("Origin")||"");
+   if(origin&&!cors["Access-Control-Allow-Origin"])return json({ok:false,error:"Origin nicht erlaubt."},403);
+   try{
+    const input=await request.json().catch(()=>({}));
+    const result=await handleFeedbackSubmit(env,input);
+    return json(result,Number(result?.status||(result?.ok?200:500)),cors);
+   }catch(e){
+    console.error("Feedback submit failed",e?.message||e);
+    return json({ok:false,status:500,state:"FEEDBACK_SAVE_FAILED",piiExposedInResponse:false,tokenExposedInResponse:false},500,cors);
+   }
+  }
+
   if(url.pathname==="/gruppenfinder/first-meeting-feedback-mail"){
    if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
    if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
