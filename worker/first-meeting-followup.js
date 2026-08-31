@@ -21,20 +21,27 @@ const MEETING_REMINDER_2H="fldY246Gg4hYuOIZO";
 const MEETING_FOLLOWUP_DONE="fld1iy06nx9r3nJmx";
 const MEETING_FOLLOWUP_RECIPIENT_IDS="fld8kfMdVMJLdjRSI";
 const MEETING_GROUP_LINK="fld0Zpt6q0OO9RmTt";
+const FEEDBACK_ID="fldL4khxQkwJBvWS2";
 const FEEDBACK_MEETING="fldaykTvzKmCqn9MO";
 const FEEDBACK_APPLICANT="fldkOnMXpqlnNjs1b";
+const FEEDBACK_TOKEN="fldvZizwPZiCE7co3";
+const FEEDBACK_LINK="fldwHXctCJcj9eHYE";
+const FEEDBACK_VALID_UNTIL="fldszL9Bjcsk5UDFD";
 function text(v){if(v==null)return"";if(typeof v==="object"&&!Array.isArray(v)&&v.name)return String(v.name).trim();return String(v).trim();}
 function firstLink(v){if(!Array.isArray(v)||!v.length)return null;const x=v[0];return typeof x==="string"?x:x?.id||null;}
 function headers(env){return{Authorization:`Bearer ${env.AIRTABLE_TOKEN}`,"Content-Type":"application/json"};}
 async function listTable(env,table){let out=[],offset="";do{const p=new URLSearchParams({pageSize:"100",returnFieldsByFieldId:"true"});if(offset)p.set("offset",offset);const r=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${table}?${p}`,{headers:headers(env)});if(!r.ok)throw new Error(`Airtable ${table} HTTP ${r.status}`);const j=await r.json();out.push(...(j.records||[]));offset=String(j.offset||"");}while(offset);return out;}
 async function getApplicant(env,id){const r=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${APPLICANTS_TABLE}/${id}?returnFieldsByFieldId=true`,{headers:headers(env)});if(!r.ok)throw new Error(`Airtable Bewerber HTTP ${r.status}`);return r.json();}
 async function patchMeeting(env,id,fields){const r=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${MEETINGS_TABLE}/${id}`,{method:"PATCH",headers:headers(env),body:JSON.stringify({fields})});if(!r.ok)throw new Error(`Airtable Termin PATCH HTTP ${r.status}`);return r.json();}
+async function createFeedback(env,fields){const r=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${FEEDBACK_TABLE}`,{method:"POST",headers:headers(env),body:JSON.stringify({fields})});const raw=await r.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{}if(!r.ok)throw new Error(`Airtable Feedback POST HTTP ${r.status}`);return data;}
 function linked(v,recordId){return Array.isArray(v)&&v.some(x=>(typeof x==="string"?x:x?.id)===recordId);}
 function acceptedActive(m){return text(m?.fields?.[MEMBER_STATUS])==="Aktiv"&&text(m?.fields?.[MEMBER_INVITE_STATUS])==="Angenommen";}
 function validDate(v){const d=new Date(v);return Number.isFinite(d.getTime())?d:null;}
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 function parseRecipientIds(v){return new Set(String(v||"").split(/[\s,;]+/).map(x=>x.trim()).filter(x=>/^rec[A-Za-z0-9]{14}$/.test(x)));}
 function serializeRecipientIds(set){return [...set].sort().join("\n");}
+function randomToken(){const b=new Uint8Array(24);crypto.getRandomValues(b);return [...b].map(x=>x.toString(16).padStart(2,"0")).join("");}
+function feedbackId(){const b=new Uint8Array(6);crypto.getRandomValues(b);return `FB1-${Date.now().toString(36)}-${[...b].map(x=>x.toString(16).padStart(2,"0")).join("")}`;}
 async function sendFollowupMail(env,to,name){
  if(!env.BREVO_API_KEY)throw new Error("BREVO_API_KEY fehlt");
  const senderEmail=env.BREVO_SENDER_EMAIL||"kontakt@lavuq-wue.de";
@@ -86,14 +93,26 @@ export async function buildFirstMeetingFollowupDryRun(env,input={}){
  const recipients=members.filter(m=>linked(m?.fields?.[MEMBER_GROUP],groupId)&&acceptedActive(m)&&m?.fields?.[MEMBER_CONTACT_SHARED]===true);
  const exactlyFourEligibleRecipients=recipients.length===4;
  const ready=meetingPassed&&reminder24hCompleted&&reminder2hCompleted&&exactlyFourEligibleRecipients;
- if(input.feedbackPreparationDryRun===true){
+ if(input.feedbackPreparationDryRun===true||input.feedbackPreparationControlledOne===true){
    const applicantIds=recipients.map(m=>firstLink(m?.fields?.[MEMBER_APPLICANT])).filter(Boolean);
    const feedbackRows=await listTable(env,FEEDBACK_TABLE);
    const existingForMeeting=feedbackRows.filter(f=>linked(f?.fields?.[FEEDBACK_MEETING],meeting.id));
    const existingApplicantIds=new Set(existingForMeeting.map(f=>firstLink(f?.fields?.[FEEDBACK_APPLICANT])).filter(Boolean));
    const existingForEligible=applicantIds.filter(id=>existingApplicantIds.has(id)).length;
-   const missingFeedbackRequests=Math.max(0,applicantIds.length-existingForEligible);
+   const missingApplicantIds=applicantIds.filter(id=>!existingApplicantIds.has(id));
+   const missingFeedbackRequests=Math.max(0,missingApplicantIds.length);
    const feedbackReady=meetingPassed&&followupCompleted&&exactlyFourEligibleRecipients;
+   if(input.feedbackPreparationControlledOne===true){
+     if(String(input.confirmation||"")!=="EIN_FEEDBACK_ANLEGEN")return{ok:false,status:409,code:"EXPLICIT_CONFIRMATION_REQUIRED"};
+     if(!feedbackReady)return{ok:false,status:409,code:"FEEDBACK_NOT_READY",meetingPassed,followupCompleted,eligibleRecipientCount:recipients.length};
+     if(missingApplicantIds.length===0)return{ok:true,status:200,state:"FIRST_MEETING_FEEDBACK_ALREADY_PREPARED",dryRun:false,feedbackPreparationControlledOne:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,existingFeedbackRequestCount:existingForEligible,feedbackRequestsCreated:0,personalFeedbackLinksCreated:0,emailsSent:0,secondMeetingPrepared:false,airtableChanged:false,piiExposedInResponse:false,tokenExposedInResponse:false};
+     const applicantId=missingApplicantIds[0];
+     const token=randomToken();
+     const validUntil=new Date(now.getTime()+7*24*3600000).toISOString();
+     const link=`https://lavuq-wue.de/feedback?token=${encodeURIComponent(token)}`;
+     const created=await createFeedback(env,{[FEEDBACK_ID]:feedbackId(),[FEEDBACK_MEETING]:[meeting.id],[FEEDBACK_APPLICANT]:[applicantId],[FEEDBACK_TOKEN]:token,[FEEDBACK_LINK]:link,[FEEDBACK_VALID_UNTIL]:validUntil});
+     return{ok:true,status:200,state:"ONE_FIRST_MEETING_FEEDBACK_PREPARED",dryRun:false,feedbackPreparationControlledOne:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,eligibleRecipientCount:recipients.length,existingFeedbackRequestCount:existingForEligible,remainingFeedbackRequestCount:Math.max(0,missingFeedbackRequests-1),feedbackRequestsCreated:1,personalFeedbackLinksCreated:1,feedbackRecordId:String(created?.id||""),feedbackLinkStored:true,feedbackTokenStored:true,feedbackValidUntilStored:true,emailsSent:0,secondMeetingPrepared:false,airtableChanged:true,piiExposedInResponse:false,tokenExposedInResponse:false};
+   }
    return{ok:true,status:200,state:feedbackReady?"READY_TO_PREPARE_FIRST_MEETING_FEEDBACK":"NOT_READY_TO_PREPARE_FIRST_MEETING_FEEDBACK",dryRun:true,readOnly:true,feedbackPreparationDryRun:true,groupId,meetingRecordId:meeting.id,meetingAttempt:1,meetingPassed,followupCompleted,eligibleRecipientCount:recipients.length,exactlyFourEligibleRecipients,existingFeedbackRequestCount:existingForEligible,missingFeedbackRequestCount:feedbackReady?missingFeedbackRequests:0,wouldCreateFeedbackRequests:feedbackReady?missingFeedbackRequests:0,wouldCreatePersonalFeedbackLinks:feedbackReady?missingFeedbackRequests:0,wouldSendEmails:0,wouldPrepareSecondMeeting:false,airtableChanged:false,piiExposedInResponse:false};
  }
  if(input.controlledAll===true){
