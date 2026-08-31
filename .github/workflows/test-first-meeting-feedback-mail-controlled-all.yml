@@ -1,0 +1,30 @@
+name: Test Treffen 1 Feedback-Mail Controlled All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-feedback-mail-controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restliche persoenliche Feedback-Testmails kontrolliert senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-feedback-mail"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","controlledAll":true,"confirmation":"RESTLICHE_FEEDBACK_MAILS_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .piiExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Controlled-All Antwort erfolgreich: JA"
+          echo "Personenbezogene Daten, Token oder Link im Log: NEIN"
+          echo "Bitte JSON oben pruefen: erwartet 3 neu versendete Feedback-Mails und insgesamt 4 versendete Feedback-Anfragen."
