@@ -23,13 +23,48 @@ jobs:
           HTTP=$(echo "$RESP" | tail -n1)
           echo "$JSON" | jq .
           test "$HTTP" = "200"
-          echo "$JSON" | jq -e '.ok == true and .state == "REMAINING_FIRST_MEETING_FEEDBACK_MAILS_SENT" and .controlledAll == true and .feedbackRequestCount == 4 and .emailsSent == 3 and .alreadySentCount == 1 and .totalMarkedSent == 4 and .remainingUnsentCount == 0 and .duplicateSendPrevented == true and .allProviderAccepted == true and .providerMessageIdCount == 3 and .airtableChanged == true and .secondMeetingPrepared == false and .piiExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
-          echo "HTTP: $HTTP"
-          echo "Neue Feedback-Mails versendet: 3"
-          echo "Bereits vorher versendet: 1"
+
+          echo "$JSON" | jq -e '
+            .ok == true and
+            .controlledAll == true and
+            .feedbackRequestCount == 4 and
+            .totalMarkedSent == 4 and
+            .remainingUnsentCount == 0 and
+            .duplicateSendPrevented == true and
+            .allProviderAccepted == true and
+            .secondMeetingPrepared == false and
+            .piiExposedInResponse == false and
+            .tokenExposedInResponse == false and
+            .linkExposedInResponse == false and
+            (
+              (
+                .state == "REMAINING_FIRST_MEETING_FEEDBACK_MAILS_SENT" and
+                .emailsSent == 3 and
+                .alreadySentCount == 1 and
+                .providerMessageIdCount == 3 and
+                .airtableChanged == true
+              )
+              or
+              (
+                .state == "ALL_FIRST_MEETING_FEEDBACK_MAILS_ALREADY_SENT" and
+                .emailsSent == 0 and
+                .alreadySentCount == 4 and
+                .providerMessageIdCount == 4 and
+                .airtableChanged == false
+              )
+            )
+          ' >/dev/null
+
+          STATE=$(echo "$JSON" | jq -r '.state')
+          if [ "$STATE" = "ALL_FIRST_MEETING_FEEDBACK_MAILS_ALREADY_SENT" ]; then
+            echo "Keine neue Feedback-Mail versendet: JA"
+            echo "Bereits versendet: 4"
+            echo "Doppelversand erfolgreich verhindert: JA"
+          else
+            echo "Neue Feedback-Mails versendet: 3"
+            echo "Bereits vorher versendet: 1"
+          fi
           echo "Insgesamt als versendet markiert: 4"
-          echo "Doppelversand-Schutz aktiv: JA"
-          echo "Alle drei Nachrichten von Brevo angenommen: JA"
           echo "Treffen 2 vorbereitet: NEIN"
           echo "Personenbezogene Daten, Token oder Link im Log: NEIN"
           echo "Controlled-All Feedback-Mail erfolgreich ✅"
