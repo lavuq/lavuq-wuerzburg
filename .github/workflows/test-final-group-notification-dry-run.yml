@@ -1,0 +1,42 @@
+name: Test Abschlussnachricht Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  final-message-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Abschlussnachricht fuer 4er-Gruppe nur pruefen
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/final-group-notification"
+
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "{\"groupId\":\"$GROUP_ID\",\"dryRun\":true}")
+
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.state')" = "READY_FOR_FINAL_GROUP_NOTIFICATION"
+          test "$(echo "$BODY" | jq -r '.acceptedActiveCount')" = "4"
+          test "$(echo "$BODY" | jq -r '.contactsReleasedForAll')" = "true"
+          test "$(echo "$BODY" | jq -r '.wouldSendEmails')" = "4"
+          test "$(echo "$BODY" | jq -r '.emailsSent')" = "0"
+          test "$(echo "$BODY" | jq -r '.airtableChanged')" = "false"
+
+          echo "4 aktive + angenommene Mitglieder: JA"
+          echo "Kontakte bereits freigegeben: JA"
+          echo "Abschlussnachrichten vorbereitet: 4"
+          echo "E-Mails tatsaechlich versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Abschlussnachricht Dry-Run erfolgreich ✅"
