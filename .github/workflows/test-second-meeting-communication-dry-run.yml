@@ -1,0 +1,34 @@
+name: Test Treffen 2 Kommunikation Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-communication-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 2 Empfaenger fuer Termin und Erinnerungen nur pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-communication-dry-run"
+          MEETING_ID="rec3iPEAAW6prt6A2"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"'"$MEETING_ID"'"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "SECOND_MEETING_COMMUNICATION_READY" and .dryRun == true and .readOnly == true and .meetingAttempt == 2 and .recipientFilterCount == 3 and .validRecipientCount == 3 and .excludedCurrentAcceptedCount == 1 and .invalidRecipientCount == 0 and .wouldSendMeetingAnnouncementTo == 3 and .wouldSend24hReminderTo == 3 and .wouldSend2hReminderTo == 3 and .excludedMembersWouldReceiveMeetingCommunication == false and .emailsSent == 0 and .airtableChanged == false and .piiExposedInResponse == false and .recipientIdsExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Treffen-2-Empfaengerfilter gueltig: JA"
+          echo "Termin-Nachricht wuerde erhalten: $(echo "$JSON" | jq -r '.wouldSendMeetingAnnouncementTo')"
+          echo "24h-Erinnerung wuerde erhalten: $(echo "$JSON" | jq -r '.wouldSend24hReminderTo')"
+          echo "2h-Erinnerung wuerde erhalten: $(echo "$JSON" | jq -r '.wouldSend2hReminderTo')"
+          echo "Ausgeschlossene Person erhaelt Treffen-2-Kommunikation: NEIN"
+          echo "E-Mails tatsaechlich versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Treffen-2-Kommunikations-Dry-Run erfolgreich ✅"
