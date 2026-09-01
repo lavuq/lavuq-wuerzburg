@@ -2,9 +2,19 @@ name: Deploy LAVUQ Worker
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'worker/**'
+      - '.github/workflows/deploy-lavuq-worker.yml'
 
 permissions:
   contents: read
+
+concurrency:
+  group: deploy-lavuq-worker
+  cancel-in-progress: true
 
 jobs:
   deploy:
