@@ -1,0 +1,49 @@
+name: Test Treffen 2 Vorbereitung Controlled Write
+
+on:
+  workflow_dispatch:
+    inputs:
+      date_time:
+        description: 'Datum und Uhrzeit ISO, z. B. 2026-09-15T18:00:00+02:00'
+        required: true
+        type: string
+      place:
+        description: 'Öffentlicher Treffpunkt'
+        required: true
+        type: string
+
+jobs:
+  second-meeting-preparation-controlled-write:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 2 kontrolliert anlegen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+          DATE_TIME: ${{ inputs.date_time }}
+          PLACE: ${{ inputs.place }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-prepare"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          FIRST_MEETING_ID="recc0eNzfz6qUcPxV"
+          BODY=$(jq -n \
+            --arg groupId "$GROUP_ID" \
+            --arg firstMeetingRecordId "$FIRST_MEETING_ID" \
+            --arg dateTime "$DATE_TIME" \
+            --arg place "$PLACE" \
+            '{groupId:$groupId,firstMeetingRecordId:$firstMeetingRecordId,dryRun:false,confirmation:"ZWEITES_TREFFEN_ANLEGEN",dateTime:$dateTime,place:$place,publicPlaceConfirmed:true,groupAgreed:true}')
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and ((.state == "SECOND_MEETING_CREATED" and .airtableChanged == true and .participantFilterStored == true and .continuingParticipantCount == (4 - .noCount)) or (.state == "SECOND_MEETING_ALREADY_EXISTS" and .airtableChanged == false)) and .emailsSent == 0 and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Status: $(echo "$JSON" | jq -r '.state')"
+          echo "Teilnehmer fuer Treffen 2: $(echo "$JSON" | jq -r '.continuingParticipantCount // "bereits vorhanden"')"
+          echo "Ausgeschlossen wegen Nein: $(echo "$JSON" | jq -r '.excludedParticipantCount // "-"')"
+          echo "E-Mails versendet: NEIN"
+          echo "Controlled Write Treffen 2 erfolgreich ✅"
