@@ -1,0 +1,34 @@
+name: Test Treffen 1 Feedback-Recovery Offen
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-feedback-recovery-open:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Nur offene persoenliche Feedback-Mails erneut senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-feedback-recovery"
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          BODY='{"groupId":"'"$GROUP_ID"'","recoveryOpenOnly":true,"confirmation":"NUR_OFFENE_FEEDBACKS_ERNEUT_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "OPEN_FIRST_MEETING_FEEDBACKS_RECOVERY_SENT" and .submittedCount == 1 and .openCount == 3 and .emailsSent == 3 and .existingLinksReused == true and .feedbackStatusReset == false and .airtableChanged == false and .secondMeetingPrepared == false and .piiExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Offene Feedbacks: 3"
+          echo "Recovery-Mails versendet: 3"
+          echo "Bestehende Links wiederverwendet: JA"
+          echo "Feedback-Status zurueckgesetzt: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Personenbezogene Daten, Token oder Link im Log: NEIN"
+          echo "Controlled Feedback-Recovery erfolgreich ✅"
