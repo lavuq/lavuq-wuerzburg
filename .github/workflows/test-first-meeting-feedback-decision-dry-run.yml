@@ -1,0 +1,33 @@
+name: Test Treffen 1 Feedback-Entscheidung Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first-meeting-feedback-decision-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Feedback-Entscheidung fuer Treffen 2 nur pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/first-meeting-feedback-decision"
+          MEETING_ID="recc0eNzfz6qUcPxV"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"'"$MEETING_ID"'"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .dryRun == true and .readOnly == true and .feedbackRequestCount == 4 and .submittedCount == 4 and .allFourSubmitted == true and .emailsSent == 0 and .airtableChanged == false and .secondMeetingPrepared == false and .piiExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Alle 4 Feedbacks abgegeben: JA"
+          echo "Treffen 2 tatsächlich vorbereitet: NEIN"
+          echo "Airtable geändert: NEIN"
+          echo "E-Mails versendet: NEIN"
+          echo "Entscheidung: $(echo "$JSON" | jq -r '.decision')"
+          echo "Manuelle Prüfung nötig: $(echo "$JSON" | jq -r '.manualReviewRequired')"
+          echo "Feedback-Entscheidung Dry-Run erfolgreich ✅"
