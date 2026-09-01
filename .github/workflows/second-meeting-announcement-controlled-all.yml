@@ -1,0 +1,28 @@
+name: Treffen 2 Terminankündigung Controlled All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-announcement-controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ausstehende Terminankündigungen senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-announcement"
+          MEETING_ID="rec3iPEAAW6prt6A2"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"'"$MEETING_ID"'","mode":"controlledAll","confirmation":"ALLE_TREFFEN_2_TERMINMAILS_SENDEN"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "SECOND_MEETING_ANNOUNCEMENT_SENT_TO_ALL" and .controlledAll == true and .meetingAttempt == 2 and .eligibleRecipientCount == 3 and .totalMarkedSent == 3 and .pendingRecipientCount == 0 and .excludedMembersReceivedEmail == false and .duplicateSendPrevented == true and .piiExposedInResponse == false' >/dev/null
+          echo "Alle ausstehenden Treffen-2-Terminankuendigungen versendet ✅"
+          echo "Gesamt als gesendet markiert: 3"
+          echo "Ausgeschlossene Person angeschrieben: NEIN"
