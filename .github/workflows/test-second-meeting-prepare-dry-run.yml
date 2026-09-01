@@ -1,0 +1,33 @@
+name: Test Treffen 2 Vorbereitung Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-prepare-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 2 Vorbereitung nur pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-prepare"
+          BODY='{"groupId":"rec1qr2gZqRVxaCGk","firstMeetingRecordId":"recc0eNzfz6qUcPxV","dryRun":true}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "READY_TO_PREPARE_SECOND_MEETING" and .submittedCount == 4 and .noCount <= 1 and .groupContinues == true and .wouldPrepareSecondMeeting == true and .wouldCreateSecondMeeting == false and .airtableChanged == false and .emailsSent == 0 and .piiExposedInResponse == false' >/dev/null
+          echo "HTTP: $HTTP"
+          echo "Alle 4 Feedbacks ausgewertet: JA"
+          echo "Gruppe bleibt bestehen: JA"
+          echo "Treffen 2 darf vorbereitet werden: JA"
+          echo "Treffen 2 tatsaechlich angelegt: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "E-Mails versendet: NEIN"
+          echo "Treffen-2-Vorbereitung Dry-Run erfolgreich ✅"
