@@ -1,0 +1,28 @@
+name: Test Treffen 2 Terminankündigung Controlled One
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-announcement-controlled-one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine Terminankündigung senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-announcement"
+          MEETING_ID="rec3iPEAAW6prt6A2"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"'"$MEETING_ID"'","mode":"controlledOne","confirmation":"EINE_TREFFEN_2_TERMINMAIL_SENDEN"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "ONE_SECOND_MEETING_ANNOUNCEMENT_SENT" and .controlledOne == true and .meetingAttempt == 2 and .eligibleRecipientCount == 3 and .emailsSent == 1 and .totalMarkedSent == 1 and .pendingRecipientCount == 2 and .excludedMembersReceivedEmail == false and .airtableChanged == true and .duplicateSendPrevented == true and .piiExposedInResponse == false' >/dev/null
+          echo "Genau eine Treffen-2-Terminankuendigung versendet ✅"
+          echo "Weitere E-Mails versendet: NEIN"
+          echo "Ausgeschlossene Person angeschrieben: NEIN"
