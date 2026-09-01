@@ -1,5 +1,6 @@
 import previewWorker from "./worker-with-preview.js";
 import { handleFirstMeetingFeedbackMailControlledOne, handleFirstMeetingFeedbackMailControlledAll } from "./first-meeting-feedback-mail.js";
+import { handleFirstMeetingFeedbackRecoveryOpen } from "./first-meeting-feedback-recovery.js";
 import { handleFeedbackSubmit } from "./feedback-submit.js";
 
 function json(payload,status=200,extraHeaders={}){return new Response(JSON.stringify(payload,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store",...extraHeaders}});}
@@ -43,6 +44,19 @@ export default{
    }catch(e){
     console.error(e);
     return json({ok:false,error:"Feedback-Testmail konnte nicht verarbeitet werden."},500);
+   }
+  }
+
+  if(url.pathname==="/gruppenfinder/first-meeting-feedback-recovery"){
+   if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
+   if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
+   try{
+    const input=await request.json().catch(()=>({}));
+    const result=await handleFirstMeetingFeedbackRecoveryOpen(env,input);
+    return json(result,Number(result?.status||(result?.ok?200:500)));
+   }catch(e){
+    console.error(e);
+    return json({ok:false,error:"Feedback-Recovery konnte nicht verarbeitet werden.",piiExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false},500);
    }
   }
   return previewWorker.fetch(request,env,ctx);
