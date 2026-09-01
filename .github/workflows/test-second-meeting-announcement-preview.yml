@@ -1,0 +1,31 @@
+name: Test Treffen 2 Terminankündigung Preview
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-announcement-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Terminankündigung nur prüfen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-announcement"
+          MEETING_ID="rec3iPEAAW6prt6A2"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"'"$MEETING_ID"'","mode":"preview"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "SECOND_MEETING_ANNOUNCEMENT_READY" and .dryRun == true and .readOnly == true and .meetingAttempt == 2 and .validRecipientCount == 3 and .alreadySentCount == 0 and .pendingRecipientCount == 3 and .wouldSendEmails == 3 and .excludedCurrentAcceptedCount == 1 and .excludedMembersWouldReceiveEmail == false and .emailsSent == 0 and .airtableChanged == false and .duplicateSendPrevented == true and .piiExposedInResponse == false' >/dev/null
+          echo "Treffen-2-Terminankuendigung bereit: JA"
+          echo "Berechtigte Empfaenger: 3"
+          echo "Ausgeschlossene Person erhaelt keine E-Mail: JA"
+          echo "E-Mails tatsaechlich versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Treffen-2-Terminankuendigungs-Preview erfolgreich ✅"
