@@ -61,15 +61,14 @@ export async function handleSecondMeetingFeedbackMailControlledOne(env,input={})
  const row=targetRows[0];
  const alreadySent=rows.filter(r=>r?.fields?.[FEEDBACK_MAIL_SENT]===true).length;
  if(row?.fields?.[FEEDBACK_MAIL_SENT]===true)return{ok:true,status:200,state:"TARGET_SECOND_MEETING_FEEDBACK_MAIL_ALREADY_SENT",controlledOne:true,feedbackRequestCount:3,emailsSent:0,alreadySentCount:alreadySent,remainingUnsentCount:3-alreadySent,duplicateSendPrevented:true,airtableChanged:false,piiExposedInResponse:false,recipientIdsExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
- if(alreadySent!==0)return{ok:false,status:409,code:"CONTROLLED_ONE_REQUIRES_NO_PREVIOUS_SEND",alreadySentCount:alreadySent};
  if(text(row?.fields?.[FEEDBACK_SUBMITTED_AT]))return{ok:false,status:409,code:"FEEDBACK_ALREADY_SUBMITTED"};
  const link=text(row?.fields?.[FEEDBACK_LINK]);const token=text(row?.fields?.[FEEDBACK_TOKEN]);const validUntil=new Date(text(row?.fields?.[FEEDBACK_VALID_UNTIL]));
  if(!link||!token||!Number.isFinite(validUntil.getTime())||validUntil.getTime()<=Date.now())return{ok:false,status:409,code:"FEEDBACK_LINK_NOT_ACTIVE"};
  const applicant=await getRecord(env,APPLICANTS_TABLE,targetApplicantId);
  const name=text(applicant?.fields?.[APPLICANT_NAME])||"LAVUQ Teilnehmer";
  const email=text(applicant?.fields?.[APPLICANT_EMAIL]);
- if(name!=="Simon Weinrich"||!email||!email.includes("@"))return{ok:false,status:409,code:"TARGET_RECIPIENT_MISMATCH"};
+ if(!email||!email.includes("@"))return{ok:false,status:409,code:"TARGET_RECIPIENT_EMAIL_INVALID"};
  const delivery=await sendMail(env,email,name,link);
  await patchFeedback(env,row.id,{[FEEDBACK_MAIL_SENT]:true,[FEEDBACK_MAIL_MESSAGE_ID]:delivery.messageId});
- return{ok:true,status:200,state:"ONE_SECOND_MEETING_FEEDBACK_MAIL_SENT",controlledOne:true,feedbackRequestCount:3,emailsSent:1,otherEmailsSent:0,alreadySentCount:0,remainingUnsentCount:2,providerAccepted:true,providerStatus:delivery.providerStatus,providerMessageIdPresent:true,feedbackMailMarkedSent:true,duplicateSendPrevented:true,airtableChanged:true,thirdMeetingPrepared:false,piiExposedInResponse:false,recipientIdsExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
+ return{ok:true,status:200,state:"ONE_SECOND_MEETING_FEEDBACK_MAIL_SENT",controlledOne:true,feedbackRequestCount:3,emailsSent:1,otherEmailsSent:0,alreadySentCount:alreadySent,remainingUnsentCount:2-alreadySent,providerAccepted:true,providerStatus:delivery.providerStatus,providerMessageIdPresent:true,feedbackMailMarkedSent:true,duplicateSendPrevented:true,airtableChanged:true,thirdMeetingPrepared:false,piiExposedInResponse:false,recipientIdsExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
 }
