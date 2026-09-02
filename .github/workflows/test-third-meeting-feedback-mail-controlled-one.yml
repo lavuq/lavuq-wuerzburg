@@ -7,7 +7,7 @@ jobs:
   controlled-one:
     runs-on: ubuntu-latest
     steps:
-      - name: Genau eine Treffen-3-Feedback-Testmail senden
+      - name: Genau eine Treffen-3-Feedbackmail kontrolliert senden
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         run: |
@@ -24,12 +24,12 @@ jobs:
           import json, os
           data=json.loads(os.environ["RESPONSE_JSON"])
           assert data.get("ok") is True, data
-          assert data.get("state") in ["ONE_THIRD_MEETING_FEEDBACK_MAIL_SENT","THIRD_MEETING_FEEDBACK_MAIL_TEST_ALREADY_COMPLETED"], data
+          assert data.get("state") in ["ONE_THIRD_MEETING_FEEDBACK_MAIL_SENT","THIRD_MEETING_FEEDBACK_MAIL_ALREADY_COMPLETED"], data
           assert data.get("feedbackRequestCount") == 3, data
           assert data.get("emailsSent") in [0,1], data
           assert data.get("duplicateSendPrevented") is True, data
           assert data.get("piiExposedInResponse") is False, data
           assert data.get("tokenExposedInResponse") is False, data
           assert data.get("linkExposedInResponse") is False, data
-          print("Treffen-3-Feedback-Testmail kontrolliert verarbeitet ✅")
+          print("Treffen-3-Feedbackmail kontrolliert verarbeitet ✅")
           PY
