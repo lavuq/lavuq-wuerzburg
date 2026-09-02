@@ -1,4 +1,4 @@
 name = "lavuq-bewerbung"
-main = "worker-with-third-feedback-resend.js"
+main = "worker-with-third-closeout.js"
 compatibility_date = "2026-08-26"
 keep_vars = true
