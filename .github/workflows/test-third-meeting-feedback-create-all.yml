@@ -2,9 +2,6 @@ name: Test Treffen 3 Feedback Anfragen kontrolliert anlegen
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-feedback-create-all.yml'
 
 jobs:
   create-all:
