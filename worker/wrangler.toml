@@ -1,4 +1,4 @@
 name = "lavuq-bewerbung"
-main = "worker-with-third-announcement.js"
+main = "worker-with-third-reminder-24h.js"
 compatibility_date = "2026-08-26"
 keep_vars = true
