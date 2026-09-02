@@ -1,0 +1,40 @@
+name: Test Treffen 3 Feedback Anfragen kontrolliert anlegen
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/test-third-meeting-feedback-create-all.yml'
+
+jobs:
+  create-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Drei Treffen-3-Feedback-Anfragen kontrolliert anlegen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","controlledCreateAll":true,"confirmation":"DREI_TREFFEN_3_FEEDBACK_ANFRAGEN_ANLEGEN","prepareAheadForScheduledMeeting":true,"asOf":"2026-09-23T17:30:00.000Z","simulateRemindersCompleted":true}' \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-feedback-checkin)
+
+          echo "$RESPONSE"
+
+          RESPONSE_JSON="$RESPONSE" python - <<'PY'
+          import json, os
+          data=json.loads(os.environ["RESPONSE_JSON"])
+          assert data.get("ok") is True, data
+          assert data.get("state") in ["THIRD_MEETING_FEEDBACK_PREPARED_FOR_ALL","THIRD_MEETING_FEEDBACK_ALREADY_PREPARED"], data
+          assert data.get("meetingAttempt") == 3, data
+          assert data.get("eligibleRecipientCount") == 3, data
+          assert data.get("totalPreparedCount") == 3, data
+          assert data.get("emailsSent") == 0, data
+          assert data.get("duplicateCreationPrevented") is True, data
+          assert data.get("piiExposedInResponse") is False, data
+          assert data.get("tokenExposedInResponse") is False, data
+          assert data.get("linkExposedInResponse") is False, data
+          print("Treffen-3-Feedback-Anfragen sind kontrolliert vorbereitet ✅")
+          PY
