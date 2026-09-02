@@ -7,11 +7,16 @@ import { handleThirdMeetingCloseout } from "./third-meeting-closeout.js";
 
 const BASE_ID="apphnIBhuAbmMTUtY";
 const MEETINGS_TABLE="tblHoWMR2fkeLDkec";
+const GROUPS_TABLE="tblF8peAAJGjwfKab";
 const MEETING_ATTEMPT="fld1Wu66kB9akZVje";
 const MEETING_STATUS="fldAZyz79cEpcGweE";
+const MEETING_GROUP="fld0Zpt6q0OO9RmTt";
+const GROUP_STATUS="fldpizdbKv9LGxMDa";
 
 function headers(env){return{Authorization:`Bearer ${env.AIRTABLE_TOKEN}`,"Content-Type":"application/json"};}
 function text(v){if(v==null)return"";if(typeof v==="object"&&!Array.isArray(v)&&v.name)return String(v.name).trim();return String(v).trim();}
+function firstLink(v){if(!Array.isArray(v)||!v.length)return null;const x=v[0];return typeof x==="string"?x:x?.id||null;}
+async function getRecord(env,table,id){const r=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${table}/${id}?returnFieldsByFieldId=true`,{headers:headers(env)});if(!r.ok)throw new Error(`Airtable ${table} HTTP ${r.status}`);return r.json();}
 async function listMeetings(env){let out=[],offset="";do{const p=new URLSearchParams({pageSize:"100",returnFieldsByFieldId:"true"});if(offset)p.set("offset",offset);const r=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${MEETINGS_TABLE}?${p}`,{headers:headers(env)});if(!r.ok)throw new Error(`Airtable Termine HTTP ${r.status}`);const j=await r.json();out.push(...(j.records||[]));offset=String(j.offset||"");}while(offset);return out;}
 function safeResult(step,result){return{step,ok:result?.ok===true,state:result?.state||null,code:result?.code||null,emailsSent:Number(result?.emailsSent||0),airtableChanged:result?.airtableChanged===true};}
 
@@ -19,7 +24,9 @@ export async function handleProductionOrchestrator(env,input={}){
  if(!env?.AIRTABLE_TOKEN)return{ok:false,status:500,code:"AIRTABLE_TOKEN_MISSING"};
  if(String(input.confirmation||"")!=="RUN_LAVUQ_PRODUCTION_ORCHESTRATOR")return{ok:false,status:409,code:"EXPLICIT_CONFIRMATION_REQUIRED"};
  const now=new Date();
- const meetings=(await listMeetings(env)).filter(m=>Number(m?.fields?.[MEETING_ATTEMPT]||0)===3&&text(m?.fields?.[MEETING_STATUS])==="Bestätigt");
+ const candidates=(await listMeetings(env)).filter(m=>Number(m?.fields?.[MEETING_ATTEMPT]||0)===3&&text(m?.fields?.[MEETING_STATUS])==="Bestätigt");
+ const meetings=[];let completedGroupsSkipped=0;
+ for(const m of candidates){const gid=firstLink(m?.fields?.[MEETING_GROUP]);if(!gid)continue;const g=await getRecord(env,GROUPS_TABLE,gid);if(text(g?.fields?.[GROUP_STATUS])==="Abgeschlossen"){completedGroupsSkipped++;continue;}meetings.push(m);}
  const processed=[];let emailsSent=0;let mutations=0;let hardErrors=0;
  for(const meeting of meetings){
    const steps=[];
@@ -36,7 +43,6 @@ export async function handleProductionOrchestrator(env,input={}){
      steps.push(safeResult("feedbackPrepare",check));if(check?.airtableChanged)mutations++;
      const benignCheckCodes=new Set(["THIRD_MEETING_FEEDBACK_NOT_READY"]);if(check?.ok===false&&!benignCheckCodes.has(check?.code))hardErrors++;
 
-     // Bis zu drei noch offene persönliche Feedback-Mails; Idempotenz liegt im Feedback-Datensatz.
      for(let i=0;i<3;i++){
        const fm=await handleThirdMeetingFeedbackMailControlledOne(env,{meetingRecordId:meeting.id,controlledOne:true,confirmation:"EINE_TREFFEN_3_FEEDBACK_MAIL_SENDEN"});
        steps.push(safeResult(`feedbackMail${i+1}`,fm));emailsSent+=Number(fm?.emailsSent||0);if(fm?.airtableChanged)mutations++;
@@ -50,5 +56,5 @@ export async function handleProductionOrchestrator(env,input={}){
    }catch(e){hardErrors++;steps.push({step:"exception",ok:false,state:null,code:"UNEXPECTED_PROCESSING_ERROR",emailsSent:0,airtableChanged:false});}
    processed.push({meetingRecordId:meeting.id,steps});
  }
- return{ok:hardErrors===0,status:hardErrors===0?200:207,state:hardErrors===0?"PRODUCTION_ORCHESTRATOR_COMPLETED":"PRODUCTION_ORCHESTRATOR_COMPLETED_WITH_REVIEW",active:true,runAt:now.toISOString(),thirdMeetingsFound:meetings.length,processedCount:processed.length,emailsSent,mutationSteps:mutations,hardErrors,processed,piiExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
+ return{ok:hardErrors===0,status:hardErrors===0?200:207,state:hardErrors===0?"PRODUCTION_ORCHESTRATOR_COMPLETED":"PRODUCTION_ORCHESTRATOR_COMPLETED_WITH_REVIEW",active:true,runAt:now.toISOString(),thirdMeetingsFound:candidates.length,completedGroupsSkipped,eligibleMeetings:meetings.length,processedCount:processed.length,emailsSent,mutationSteps:mutations,hardErrors,processed,piiExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
 }
