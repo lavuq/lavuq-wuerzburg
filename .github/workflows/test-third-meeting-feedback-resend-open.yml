@@ -1,0 +1,26 @@
+name: Test Treffen 3 offenes Feedback einmal erneut senden
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/test-third-meeting-feedback-resend-open.yml'
+
+jobs:
+  resend-once:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kurz auf Worker-Deployment warten
+        run: sleep 25
+      - name: Offene Treffen-3-Feedbackmail einmal erneut senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","confirmation":"OFFENES_TREFFEN_3_FEEDBACK_EINMAL_ERNEUT_SENDEN"}' \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-feedback-resend-open)
+          echo "$RESPONSE"
+          RESPONSE_JSON="$RESPONSE" python -c "import json,os; x=json.loads(os.environ['RESPONSE_JSON']); assert x.get('ok') is True, x; assert x.get('state')=='OPEN_THIRD_MEETING_FEEDBACK_RESENT_ONCE', x; assert x.get('emailsSent')==1, x; assert x.get('providerAccepted') is True, x; assert x.get('airtableChanged') is False, x; assert x.get('piiExposedInResponse') is False, x; print('Offene Treffen-3-Feedbackmail wurde einmal erneut versendet ✅')"
