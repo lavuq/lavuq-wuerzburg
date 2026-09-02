@@ -1,0 +1,38 @@
+name: Test Treffen 3 Terminankündigung Vorschau
+
+on:
+  workflow_dispatch:
+
+jobs:
+  preview-third-meeting-announcement:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 3 Terminankündigung nur prüfen
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-announcement" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","mode":"preview"}')
+
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+
+          test "$HTTP" = "200"
+          test "$(echo "$BODY" | jq -r '.state')" = "THIRD_MEETING_ANNOUNCEMENT_READY"
+          test "$(echo "$BODY" | jq -r '.validRecipientCount')" = "3"
+          test "$(echo "$BODY" | jq -r '.pendingRecipientCount')" = "3"
+          test "$(echo "$BODY" | jq -r '.wouldSendEmails')" = "3"
+          test "$(echo "$BODY" | jq -r '.emailsSent')" = "0"
+          test "$(echo "$BODY" | jq -r '.airtableChanged')" = "false"
+          test "$(echo "$BODY" | jq -r '.duplicateSendPrevented')" = "true"
+
+          echo "Treffen 3 Terminankündigung ist versandbereit ✅"
+          echo "E-Mails versendet: NEIN"
+          echo "Airtable verändert: NEIN"
