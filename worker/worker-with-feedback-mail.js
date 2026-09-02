@@ -10,6 +10,7 @@ import { handleSecondMeetingReminder2hDryRun } from "./second-meeting-reminder-2
 import { handleFeedbackSubmit } from "./feedback-submit.js";
 import { handleSecondMeetingFeedbackCheckinDryRun } from "./second-meeting-feedback-checkin.js";
 import { handleSecondMeetingFeedbackMailControlledOne } from "./second-meeting-feedback-mail.js";
+import { handleThirdMeetingPrepare } from "./third-meeting-prepare.js";
 
 function json(payload,status=200,extraHeaders={}){return new Response(JSON.stringify(payload,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store",...extraHeaders}});}
 function bearerToken(request){const header=String(request.headers.get("Authorization")||"");return header.startsWith("Bearer ")?header.slice(7):"";}
@@ -106,6 +107,7 @@ export default{
     return json({ok:false,error:"Treffen-2-Kommunikation konnte nicht geprueft werden.",piiExposedInResponse:false},500);
    }
   }
+
   if(url.pathname==="/gruppenfinder/second-meeting-announcement"){
    if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
    if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
@@ -118,6 +120,7 @@ export default{
     return json({ok:false,error:"Treffen-2-Terminankuendigung konnte nicht verarbeitet werden.",piiExposedInResponse:false},500);
    }
   }
+
   if(url.pathname==="/gruppenfinder/second-meeting-reminder-24h"){
    if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
    if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
@@ -130,6 +133,7 @@ export default{
     return json({ok:false,error:"Treffen-2-24h-Erinnerung konnte nicht geprueft werden.",piiExposedInResponse:false},500);
    }
   }
+
   if(url.pathname==="/gruppenfinder/second-meeting-reminder-2h"){
    if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
    if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
@@ -142,6 +146,7 @@ export default{
     return json({ok:false,error:"Treffen-2-2h-Erinnerung konnte nicht geprueft werden.",piiExposedInResponse:false},500);
    }
   }
+
   if(url.pathname==="/gruppenfinder/second-meeting-feedback-checkin"){
    if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
    if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
@@ -154,6 +159,7 @@ export default{
     return json({ok:false,error:"Treffen-2-Feedback-Check-in konnte nicht geprueft werden.",piiExposedInResponse:false},500);
    }
   }
+
   if(url.pathname==="/gruppenfinder/second-meeting-feedback-mail"){
    if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
    if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
@@ -166,6 +172,20 @@ export default{
     return json({ok:false,error:"Treffen-2-Feedback-Testmail konnte nicht verarbeitet werden.",piiExposedInResponse:false},500);
    }
   }
+
+  if(url.pathname==="/gruppenfinder/third-meeting-prepare"){
+   if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
+   if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
+   try{
+    const input=await request.json().catch(()=>({}));
+    const result=await handleThirdMeetingPrepare(env,input);
+    return json(result,Number(result?.status||(result?.ok?200:500)));
+   }catch(e){
+    console.error(e);
+    return json({ok:false,error:"Treffen 3 konnte nicht vorbereitet werden.",piiExposedInResponse:false},500);
+   }
+  }
+
   return previewWorker.fetch(request,env,ctx);
  }
 };
