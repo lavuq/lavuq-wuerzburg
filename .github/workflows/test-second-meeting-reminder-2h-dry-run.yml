@@ -1,0 +1,34 @@
+name: Test Treffen 2 2h Erinnerung Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-reminder-2h-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 2h Erinnerung fuer Treffen 2 nur pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-reminder-2h"
+          MEETING_ID="rec3iPEAAW6prt6A2"
+          AS_OF="2026-09-15T14:00:00.000Z"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"'"$MEETING_ID"'","asOf":"'"$AS_OF"'","simulate24hCompleted":true}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "READY_FOR_SECOND_MEETING_2H_REMINDER" and .dryRun == true and .readOnly == true and .meetingAttempt == 2 and .hoursUntilMeeting == 2 and .reminderWindowMatched == true and .reminder24hActuallyCompleted == false and .reminder24hSimulated == true and .reminder24hEffectiveCompleted == true and .reminder2hAlreadyCompleted == false and .recipientFilterCount == 3 and .validRecipientCount == 3 and .excludedCurrentAcceptedCount == 1 and .alreadySentCount == 0 and .pendingRecipientCount == 3 and .ambiguousRecipientCount == 0 and .wouldSendEmails == 3 and .excludedMembersWouldReceiveReminder == false and .emailsSent == 0 and .airtableChanged == false and .duplicateSendPrevented == true and .piiExposedInResponse == false and .recipientIdsExposedInResponse == false' >/dev/null
+          echo "Treffen-2-2h-Erinnerung bereit: JA"
+          echo "Simulierter Abstand: 2 Stunden"
+          echo "Vorherige 24h-Erinnerung fuer Test simuliert: JA"
+          echo "Berechtigte Empfaenger: 3"
+          echo "Ausgeschlossene Person erhaelt keine Erinnerung: JA"
+          echo "E-Mails tatsaechlich versendet: NEIN"
+          echo "Airtable geaendert: NEIN"
+          echo "Treffen-2-2h-Dry-Run erfolgreich ✅"
