@@ -1,6 +1,7 @@
 (() => {
   const WORKER_URL = 'https://lavuq-bewerbung.lavuq.workers.dev';
   const params = new URLSearchParams(window.location.search);
+  const demo = params.get('demo') === '1';
   const memberId = params.get('member');
   const token = params.get('token');
 
@@ -16,7 +17,7 @@
   const resultSchedule = document.getElementById('resultSchedule');
   const resultScheduleAnchor = document.getElementById('resultScheduleAnchor');
 
-  const memberAreaUrl = () => `mitglied.html?member=${encodeURIComponent(memberId || '')}&token=${encodeURIComponent(token || '')}`;
+  const memberAreaUrl = () => demo ? 'mitglied.html?demo=1' : `mitglied.html?member=${encodeURIComponent(memberId || '')}&token=${encodeURIComponent(token || '')}`;
   if (scheduleAnchor) { scheduleAnchor.href = memberAreaUrl(); scheduleAnchor.textContent = 'Mein LAVUQ öffnen'; }
   if (resultScheduleAnchor) { resultScheduleAnchor.href = memberAreaUrl(); resultScheduleAnchor.textContent = 'Mein LAVUQ öffnen'; }
 
@@ -38,6 +39,14 @@
   };
 
   async function loadInvitation() {
+    if (demo) {
+      loading.classList.add('invite-hidden');
+      inviteContent.classList.remove('invite-hidden');
+      statusBox.textContent = 'Teilnehmer-Vorschau: Deine persönliche Einladung ist aktuell gültig.';
+      actions.classList.remove('invite-hidden');
+      if (scheduleLink) scheduleLink.classList.add('invite-hidden');
+      return;
+    }
     if (!memberId || !token) {
       showResult('Dieser Einladungslink ist unvollständig oder ungültig.', 'error');
       return;
@@ -86,6 +95,11 @@
     declineBtn.disabled = true;
     acceptBtn.textContent = decision === 'accept' ? 'Wird angenommen …' : 'Gruppe annehmen';
     declineBtn.textContent = decision === 'decline' ? 'Wird abgelehnt …' : 'Ablehnen';
+    if (demo) {
+      if (decision === 'accept') showResult('Danke! Deine Zusage wurde gespeichert. In „Mein LAVUQ“ findet ihr euren Gruppenchat und könnt eure Treffen gemeinsam organisieren – ohne private Telefonnummern oder WhatsApp. Dies ist eine Vorschau; es wurden keine echten Daten gespeichert.', 'success', true);
+      else showResult('Deine Absage würde an dieser Stelle gespeichert. Dies ist eine Vorschau; es wurden keine echten Daten verändert.', 'success');
+      return;
+    }
     try {
       const response = await fetch(`${WORKER_URL}/invitation-response`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ memberId, token, decision })
