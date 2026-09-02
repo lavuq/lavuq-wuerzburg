@@ -15,6 +15,7 @@ jobs:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         run: |
           set -euo pipefail
+
           send_one() {
             RESPONSE=$(curl -sS -X POST \
               -H "Authorization: Bearer ${PREVIEW_KEY}" \
@@ -22,16 +23,9 @@ jobs:
               --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","controlledOne":true,"confirmation":"EINE_TREFFEN_3_FEEDBACK_MAIL_SENDEN"}' \
               https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-feedback-mail)
             echo "$RESPONSE"
-            RESPONSE_JSON="$RESPONSE" python - <<'PY'
-import json, os
-x=json.loads(os.environ['RESPONSE_JSON'])
-assert x.get('ok') is True, x
-assert x.get('state') == 'ONE_THIRD_MEETING_FEEDBACK_MAIL_SENT', x
-assert x.get('emailsSent') == 1, x
-assert x.get('duplicateSendPrevented') is True, x
-assert x.get('piiExposedInResponse') is False, x
-PY
+            RESPONSE_JSON="$RESPONSE" python -c "import json,os; x=json.loads(os.environ['RESPONSE_JSON']); assert x.get('ok') is True, x; assert x.get('state')=='ONE_THIRD_MEETING_FEEDBACK_MAIL_SENT', x; assert x.get('emailsSent')==1, x; assert x.get('duplicateSendPrevented') is True, x; assert x.get('piiExposedInResponse') is False, x"
           }
+
           send_one
           send_one
 
@@ -41,14 +35,4 @@ PY
             --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","controlledOne":true,"confirmation":"EINE_TREFFEN_3_FEEDBACK_MAIL_SENDEN"}' \
             https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-feedback-mail)
           echo "$FINAL"
-          RESPONSE_JSON="$FINAL" python - <<'PY'
-import json, os
-x=json.loads(os.environ['RESPONSE_JSON'])
-assert x.get('ok') is True, x
-assert x.get('state') == 'THIRD_MEETING_FEEDBACK_MAIL_TEST_ALREADY_COMPLETED', x
-assert x.get('emailsSent') == 0, x
-assert x.get('alreadySentCount') == 3, x
-assert x.get('remainingUnsentCount') == 0, x
-assert x.get('duplicateSendPrevented') is True, x
-print('Alle drei Treffen-3-Feedback-Mails sind versendet und Doppelversand ist blockiert ✅')
-PY
+          RESPONSE_JSON="$FINAL" python -c "import json,os; x=json.loads(os.environ['RESPONSE_JSON']); assert x.get('ok') is True, x; assert x.get('state')=='THIRD_MEETING_FEEDBACK_MAIL_TEST_ALREADY_COMPLETED', x; assert x.get('emailsSent')==0, x; assert x.get('alreadySentCount')==3, x; assert x.get('remainingUnsentCount')==0, x; assert x.get('duplicateSendPrevented') is True, x; print('Alle drei Treffen-3-Feedback-Mails sind versendet und Doppelversand ist blockiert ✅')"
