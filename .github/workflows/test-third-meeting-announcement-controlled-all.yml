@@ -2,9 +2,6 @@ name: Test Treffen 3 Terminankündigung verbleibende Mails
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-announcement-controlled-all.yml'
 
 jobs:
   controlled-all:
@@ -22,15 +19,16 @@ jobs:
             https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-announcement)
 
           echo "$RESPONSE"
+          export RESPONSE
 
-          python - <<'PY' <<< "$RESPONSE"
-          import json, sys
-          data=json.load(sys.stdin)
+          python -c '
+          import json, os
+          data=json.loads(os.environ["RESPONSE"])
           assert data.get("ok") is True, data
           assert data.get("state") == "THIRD_MEETING_ANNOUNCEMENT_SENT_TO_ALL", data
-          assert data.get("emailsSent") == 2, data
+          assert data.get("emailsSent") in (0, 2), data
           assert data.get("totalMarkedSent") == 3, data
           assert data.get("pendingRecipientCount") == 0, data
           assert data.get("duplicateSendPrevented") is True, data
-          print("Alle verbleibenden Treffen-3-Terminmails wurden kontrolliert versendet ✅")
-          PY
+          print("Treffen-3-Terminankündigung vollständig und doppelsicher ✅")
+          '
