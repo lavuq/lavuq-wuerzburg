@@ -18,8 +18,8 @@
   const resultScheduleAnchor = document.getElementById('resultScheduleAnchor');
 
   const memberAreaUrl = () => demo ? 'mitglied.html?demo=1' : `mitglied.html?member=${encodeURIComponent(memberId || '')}&token=${encodeURIComponent(token || '')}`;
-  if (scheduleAnchor) { scheduleAnchor.href = memberAreaUrl(); scheduleAnchor.textContent = 'Mein LAVUQ öffnen'; }
-  if (resultScheduleAnchor) { resultScheduleAnchor.href = memberAreaUrl(); resultScheduleAnchor.textContent = 'Mein LAVUQ öffnen'; }
+  if (scheduleAnchor) { scheduleAnchor.href = memberAreaUrl(); scheduleAnchor.textContent = 'Mein Q öffnen'; }
+  if (resultScheduleAnchor) { resultScheduleAnchor.href = memberAreaUrl(); resultScheduleAnchor.textContent = 'Mein Q öffnen'; }
 
   const showResult = (message, type = 'info', showSchedule = false) => {
     loading.classList.add('invite-hidden');
@@ -72,7 +72,7 @@
       }
       actions.classList.add('invite-hidden');
       if (data.status === 'Angenommen') {
-        statusBox.textContent = 'Du hast diese Gruppe bereits angenommen. Dein geschützter Mitgliederbereich ist dein zentraler Treffpunkt für Gruppenchat und Termine.';
+        statusBox.textContent = 'Du hast diese Gruppe bereits angenommen. Mein Q ist dein geschützter persönlicher Bereich für Gruppenchat, Treffen, Feedback und Sicherheit.';
         statusBox.classList.add('invite-success');
         if (scheduleLink) scheduleLink.classList.remove('invite-hidden');
       } else if (data.status === 'Abgelehnt') {
@@ -96,7 +96,7 @@
     acceptBtn.textContent = decision === 'accept' ? 'Wird angenommen …' : 'Gruppe annehmen';
     declineBtn.textContent = decision === 'decline' ? 'Wird abgelehnt …' : 'Ablehnen';
     if (demo) {
-      if (decision === 'accept') showResult('Danke! Deine Zusage wurde gespeichert. In „Mein LAVUQ“ findet ihr euren Gruppenchat und könnt eure Treffen gemeinsam organisieren – ohne private Telefonnummern oder WhatsApp. Dies ist eine Vorschau; es wurden keine echten Daten gespeichert.', 'success', true);
+      if (decision === 'accept') showResult('Danke! Deine Zusage wurde gespeichert. In „Mein Q“ findet ihr euren Gruppenchat und könnt eure Treffen gemeinsam organisieren – ohne private Telefonnummern oder WhatsApp. Dies ist eine Vorschau; es wurden keine echten Daten gespeichert.', 'success', true);
       else showResult('Deine Absage würde an dieser Stelle gespeichert. Dies ist eine Vorschau; es wurden keine echten Daten verändert.', 'success');
       return;
     }
@@ -110,7 +110,7 @@
         return;
       }
       if (decision === 'accept') {
-        showResult('Danke! Deine Zusage wurde gespeichert. In „Mein LAVUQ“ findet ihr euren Gruppenchat und könnt eure Treffen gemeinsam organisieren – ohne private Telefonnummern oder WhatsApp.', 'success', true);
+        showResult('Danke! Deine Zusage wurde gespeichert. In „Mein Q“ findet ihr euren Gruppenchat und könnt eure Treffen gemeinsam organisieren – ohne private Telefonnummern oder WhatsApp.', 'success', true);
       } else {
         showResult('Deine Absage wurde gespeichert. Es wurden keine privaten Kontaktdaten geteilt. LAVUQ kann den frei gewordenen Platz nun neu besetzen.', 'success');
       }
