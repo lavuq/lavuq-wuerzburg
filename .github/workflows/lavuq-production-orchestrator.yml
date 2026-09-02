@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: '12 * * * *'
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/lavuq-production-orchestrator.yml'
 
 permissions:
   contents: read
@@ -16,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Kurz auf Worker-Deployment warten
-        if: github.event_name == 'push'
-        run: sleep 30
       - name: Produktiven LAVUQ-Ablauf ausführen
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
@@ -35,7 +29,7 @@ jobs:
             https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/production-orchestrator)
           echo "$RESPONSE"
           RESPONSE_JSON="$RESPONSE" python3 - <<'PY'
-          import json, os, sys
+          import json, os
           data=json.loads(os.environ['RESPONSE_JSON'])
           if data.get('status') not in (200,207):
               raise SystemExit(f"Orchestrator HTTP/Status unerwartet: {data}")
