@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LAVUQ Schnelllauf</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{--navy:#041529;--gold:#d8b46a;--ink:#132033;--bg:#f5f7fa;--line:#dfe5ec;--ok:#eaf7ef;--warn:#fff6df}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:24px 18px;text-align:center;border-bottom:2px solid var(--gold)}
+.brand{font-family:Georgia,serif;font-size:30px;letter-spacing:5px}.city{color:var(--gold);font-family:Georgia,serif;margin-top:6px}
+main{max-width:760px;margin:0 auto;padding:18px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 6px 22px rgba(4,21,41,.06)}
+.demo{background:var(--warn);border-color:#edd49a}.tag{display:inline-block;background:var(--gold);color:var(--navy);font-weight:700;border-radius:999px;padding:6px 10px;font-size:12px}.muted{color:#667085;font-size:14px;line-height:1.45}.title{font-size:22px;margin:8px 0}.progress{height:8px;background:#edf0f4;border-radius:99px;overflow:hidden;margin:14px 0}.bar{height:100%;background:var(--gold);width:0;transition:.25s}
+.stage{display:none}.stage.active{display:block}.people{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.person{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fafbfc}.btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer}.primary{background:var(--gold);color:var(--navy)}.dark{background:var(--navy);color:white}.light{background:#eef2f6;color:var(--ink)}
+.chat{background:#f7f9fb;border:1px solid var(--line);border-radius:12px;padding:12px}.bubble{background:#fff;border:1px solid var(--line);padding:9px 11px;border-radius:12px;margin:8px 0;max-width:82%}.me{margin-left:auto;background:#f8efd9}.ok{background:var(--ok);border:1px solid #b9e0c5;padding:10px;border-radius:10px}.meeting{border-left:4px solid var(--gold);padding:10px 12px;background:#fafbfc;border-radius:8px;margin:10px 0}.fake-mail{border:1px solid var(--line);border-radius:12px;overflow:hidden}.fake-mail .head{background:var(--navy);color:#fff;padding:14px}.fake-mail .body{padding:14px;line-height:1.5}.choice{display:flex;gap:8px;flex-wrap:wrap}.choice button{flex:1;min-width:140px}.foot{font-size:12px;color:#7a8492;text-align:center;padding:20px}
+@media(max-width:560px){.people{grid-template-columns:1fr}.btn{width:100%}.choice button{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="brand">LAVUQ</div><div class="city">Würzburg</div></header>
+<main>
+<div class="card demo"><span class="tag">SICHERER DEMO-MODUS</span><h1 class="title">LAVUQ Schnelllauf</h1><p class="muted">Hier kannst du den kompletten Teilnehmerweg ab „Bewerbung gesendet“ selbst durchklicken. Diese Seite nutzt nur Demo-Daten, verschickt keine E-Mails und verändert keine Airtable-Daten.</p><div class="progress"><div id="bar" class="bar"></div></div><div id="counter" class="muted"></div></div>
+
+<section class="card stage active" data-stage="0"><span class="tag">1</span><h2>Bewerbung gesendet</h2><div class="ok">✓ Deine Bewerbung ist bei LAVUQ eingegangen.</div><p class="muted">Im echten Ablauf wird dein Profil anschließend für das Matching berücksichtigt. Noch gibt es keine Gruppe und keinen Mitgliederbereich.</p><div class="btns"><button class="btn primary" onclick="next()">Matching simulieren</button></div></section>
+
+<section class="card stage" data-stage="1"><span class="tag">2</span><h2>Passende Gruppe gefunden</h2><p>Für dich wurde eine passende 4er-Gruppe vorbereitet.</p><div class="people"><div class="person"><strong>Du</strong><br><span class="muted">Würzburg</span></div><div class="person"><strong>Anna</strong><br><span class="muted">Würzburg</span></div><div class="person"><strong>Jonas</strong><br><span class="muted">Umgebung</span></div><div class="person"><strong>Miriam</strong><br><span class="muted">Würzburg</span></div></div><p class="muted">Private Telefonnummern werden nicht innerhalb der Gruppe geteilt.</p><div class="btns"><button class="btn primary" onclick="next()">Einladung ansehen</button></div></section>
+
+<section class="card stage" data-stage="2"><span class="tag">3</span><h2>Einladung per E-Mail</h2><div class="fake-mail"><div class="head"><strong>LAVUQ Würzburg</strong><br><small>Es gibt etwas Neues für dich</small></div><div class="body"><p>Hallo Demo-Teilnehmer,</p><p>wir haben eine passende LAVUQ-Gruppe für dich gefunden.</p><button class="btn primary" onclick="next()">Einladung öffnen</button></div></div></section>
+
+<section class="card stage" data-stage="3"><span class="tag">4</span><h2>Einladung annehmen</h2><p>Du entscheidest selbst, ob du der vorgeschlagenen Gruppe beitreten möchtest.</p><div class="choice"><button class="btn primary" onclick="next()">✓ Einladung annehmen</button><button class="btn light" onclick="alert('Im echten Ablauf würde die Einladung abgelehnt und du würdest dieser Gruppe nicht beitreten.')">Ablehnen testen</button></div></section>
+
+<section class="card stage" data-stage="4"><span class="tag">5</span><h2>Alle vier haben angenommen</h2><div class="ok">✓ Die Gruppe ist vollständig. Dein persönlicher Bereich „Mein LAVUQ“ ist aktiv.</div><p class="muted">Ab jetzt findet die Gruppenorganisation zentral im Mitgliederbereich statt.</p><div class="btns"><button class="btn primary" onclick="next()">Mein LAVUQ öffnen</button></div></section>
+
+<section class="card stage" data-stage="5"><span class="tag">6</span><h2>Mein LAVUQ</h2><p><strong>Gruppe:</strong> LAVUQ Demo · 4 Teilnehmer · Aktiv</p><div class="people"><div class="person"><strong>Demo-Teilnehmer</strong><br><span class="muted">Du</span></div><div class="person"><strong>Anna</strong></div><div class="person"><strong>Jonas</strong></div><div class="person"><strong>Miriam</strong></div></div><div class="btns"><button class="btn dark" onclick="next()">Zum Gruppenchat</button></div></section>
+
+<section class="card stage" data-stage="6"><span class="tag">7</span><h2>Privater Gruppenchat</h2><div class="chat"><div class="bubble"><strong>Anna</strong><br>Wie wäre es mit einem Kaffee in der Innenstadt?</div><div class="bubble"><strong>Jonas</strong><br>Passt für mich 👍</div><div class="bubble me"><strong>Du</strong><br>Gerne. Ich könnte Samstag.</div></div><p class="muted">Der Chat bleibt innerhalb der LAVUQ-Gruppe. Es ist kein WhatsApp-Austausch nötig.</p><div class="btns"><button class="btn primary" onclick="next()">Treffen 1 planen</button></div></section>
+
+<section class="card stage" data-stage="7"><span class="tag">8</span><h2>Treffen 1 abstimmen</h2><div class="meeting"><strong>Vorschlag:</strong><br>Samstag, 15:00 Uhr<br>Café am Marktplatz · öffentlicher Treffpunkt</div><p>Zustimmungen: <strong>3 von 4</strong></p><div class="btns"><button class="btn primary" onclick="next()">Als vierte Person zustimmen</button></div></section>
+
+<section class="card stage" data-stage="8"><span class="tag">9</span><h2>Treffen 1 bestätigt</h2><div class="ok">✓ Alle haben zugestimmt. Der Termin ist verbindlich gespeichert.</div><p class="muted">Im echten Ablauf folgen die vorgesehenen Erinnerungen. Für den Schnelllauf springen wir direkt zum Feedback nach dem Treffen.</p><div class="btns"><button class="btn primary" onclick="next()">Treffen als durchgeführt simulieren</button></div></section>
+
+<section class="card stage" data-stage="9"><span class="tag">10</span><h2>Feedback nach Treffen 1</h2><p>Wie möchtest du den Test weiterführen?</p><div class="choice"><button class="btn primary" onclick="setPath(4);next()">Alle 4 machen weiter</button><button class="btn dark" onclick="setPath(3);next()">1 Person steigt aus</button></div><p class="muted">Beide Varianten sind im aktuellen Prozess vorgesehen.</p></section>
+
+<section class="card stage" data-stage="10"><span class="tag">11</span><h2>Treffen 2</h2><div id="path2" class="ok"></div><div class="meeting"><strong>Demo-Termin:</strong><br>Donnerstag, 18:30 Uhr<br>Hofgarten Würzburg</div><p class="muted">Terminabstimmung, Erinnerungen und Feedback funktionieren mit 3 oder 4 Teilnehmern.</p><div class="btns"><button class="btn primary" onclick="next()">Treffen 2 + Feedback überspringen</button></div></section>
+
+<section class="card stage" data-stage="11"><span class="tag">12</span><h2>Treffen 3</h2><div id="path3" class="ok"></div><div class="meeting"><strong>Demo-Termin:</strong><br>Sonntag, 16:00 Uhr<br>Alter Hafen Würzburg</div><p class="muted">Auch das dritte Treffen wird erst nach den erforderlichen Feedbacks und ohne offene Sicherheitsprüfung freigegeben.</p><div class="btns"><button class="btn primary" onclick="next()">Treffen 3 + Feedback abschließen</button></div></section>
+
+<section class="card stage" data-stage="12"><span class="tag">13</span><h2>Begleitete Phase abgeschlossen 🎉</h2><div class="ok">✓ Drei LAVUQ-Treffen wurden abgeschlossen. Die Gruppe kann sich anschließend selbstständig weiter verabreden.</div><p class="muted">Der Sicherheitsweg zu LAVUQ bleibt bestehen. Bei akuter Gefahr gilt weiterhin 110/112.</p><div class="btns"><button class="btn dark" onclick="restart()">Schnelllauf nochmal starten</button></div></section>
+</main>
+<div class="foot">Demo – keine echten Teilnehmerdaten · keine API-Schreibzugriffe</div>
+<script>
+let stage=0,participantPath=4;const stages=[...document.querySelectorAll('.stage')],bar=document.getElementById('bar'),counter=document.getElementById('counter');
+function render(){stages.forEach((s,i)=>s.classList.toggle('active',i===stage));bar.style.width=((stage+1)/stages.length*100)+'%';counter.textContent=`Schritt ${stage+1} von ${stages.length}`;if(stage===10)document.getElementById('path2').textContent=participantPath===4?'✓ Alle vier möchten weitermachen – Treffen 2 läuft mit 4 Personen.':'✓ Eine Person steigt aus – Treffen 2 läuft mit den verbleibenden 3 Personen.';if(stage===11)document.getElementById('path3').textContent=participantPath===4?'✓ Treffen 3 läuft weiterhin mit allen 4 Personen.':'✓ Treffen 3 läuft mit den 3 verbleibenden Personen.';scrollTo({top:0,behavior:'smooth'});}
+function next(){if(stage<stages.length-1){stage++;render();}}function setPath(n){participantPath=n;}function restart(){stage=0;participantPath=4;render();}render();
+</script>
+</body>
+</html>
