@@ -1,4 +1,4 @@
-// LAVUQ – Abschlussnachricht nach manueller Kontaktfreigabe.
+// LAVUQ – Abschlussnachricht nach Kontaktfreigabe.
 // Standard ist Dry-Run. Versand erfolgt nur mit dryRun=false + expliziter Bestaetigung.
 // Personenbezogene Kontaktdaten werden nie in API-/GitHub-Logs zurueckgegeben.
 const BASE_ID="apphnIBhuAbmMTUtY";
@@ -8,6 +8,7 @@ const MEMBER_GROUP="fldMUYzXykTpV0j2x";
 const MEMBER_APPLICANT="fldcV8kd6KF7zdScE";
 const MEMBER_STATUS="fldBS2hoKQX0Rr1aX";
 const MEMBER_INVITE_STATUS="fldUmjMa2j7MLG5RA";
+const MEMBER_INVITE_TOKEN="fldbbkqZ7VRvtbzB0";
 const MEMBER_CONTACT_SHARED="fld3LCPTEbAl46bF1";
 const MEMBER_FINAL_SENT="fldxnDtu0NRJRHaUp";
 const APPLICANT_NAME="fldPPnyiAKpIXnawY";
@@ -22,7 +23,14 @@ async function patchMember(env,id,fields){const r=await fetch(`https://api.airta
 function groupLinked(m,groupId){const g=m?.fields?.[MEMBER_GROUP];return Array.isArray(g)&&g.some(x=>(typeof x==="string"?x:x?.id)===groupId);}
 function currentAccepted(m){return text(m?.fields?.[MEMBER_STATUS])==="Aktiv"&&text(m?.fields?.[MEMBER_INVITE_STATUS])==="Angenommen";}
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
-async function sendMail(env,to,name,others){if(!env.BREVO_API_KEY)throw new Error("BREVO_API_KEY fehlt");const senderEmail=env.BREVO_SENDER_EMAIL||"kontakt@lavuq-wue.de";const senderName=env.BREVO_SENDER_NAME||"LAVUQ Würzburg";const contacts=others.map(p=>`<li><strong>${esc(p.name)}</strong><br>E-Mail: ${esc(p.email)}${p.phone?`<br>Mobil/WhatsApp: ${esc(p.phone)}`:""}</li>`).join("");const html=`<div style="font-family:Arial,sans-serif;line-height:1.6;color:#0b1f3a;max-width:620px;margin:0 auto"><h2>Hallo ${esc(name)},</h2><p>eure LAVUQ-Gruppe ist vollständig. Alle vier Mitglieder haben zugesagt und die Kontaktfreigabe wurde durch LAVUQ durchgeführt.</p><p><strong>Deine drei Gruppenmitglieder:</strong></p><ul>${contacts}</ul><p>Bitte stimmt euer erstes Treffen an einem öffentlichen Ort ab. Zu jedem Treffen darf eine Begleitperson mitgebracht werden.</p><p>Geht respektvoll mit den Kontaktdaten um und gebt sie nicht außerhalb eurer Gruppe weiter.</p><p>Viele Grüße<br><strong>LAVUQ Würzburg</strong></p></div>`;const r=await fetch("https://api.brevo.com/v3/smtp/email",{method:"POST",headers:{"api-key":env.BREVO_API_KEY,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({sender:{email:senderEmail,name:senderName},to:[{email:to,name}],subject:"Deine LAVUQ-Gruppe ist vollständig",htmlContent:html})});if(!r.ok)throw new Error(`Brevo HTTP ${r.status}`);}
+async function sendMail(env,to,name,others,memberId,token){
+ if(!env.BREVO_API_KEY)throw new Error("BREVO_API_KEY fehlt");
+ const senderEmail=env.BREVO_SENDER_EMAIL||"kontakt@lavuq-wue.de";const senderName=env.BREVO_SENDER_NAME||"LAVUQ Würzburg";
+ const contacts=others.map(p=>`<li><strong>${esc(p.name)}</strong><br>E-Mail: ${esc(p.email)}${p.phone?`<br>Mobil/WhatsApp: ${esc(p.phone)}`:""}</li>`).join("");
+ const terminLink=`https://lavuq-wue.de/termin.html?member=${encodeURIComponent(memberId)}&token=${encodeURIComponent(token)}`;
+ const html=`<div style="font-family:Arial,sans-serif;line-height:1.6;color:#0b1f3a;max-width:620px;margin:0 auto"><h2>Hallo ${esc(name)},</h2><p>eure LAVUQ-Gruppe ist vollständig. Alle vier Mitglieder haben zugesagt und die Kontaktfreigabe wurde durch LAVUQ durchgeführt.</p><p><strong>Deine drei Gruppenmitglieder:</strong></p><ul>${contacts}</ul><p>Bitte stimmt euer erstes Treffen an einem öffentlichen Ort ab. Zu jedem Treffen darf eine Begleitperson mitgebracht werden.</p><p><strong>Terminfinder:</strong> Über deinen persönlichen Link kannst du den aktuellen Stand jederzeit wieder öffnen, einen Vorschlag einreichen oder über einen Vorschlag abstimmen. Pro Treffen sind maximal fünf Vorschlagsrunden möglich.</p><p><a href="${terminLink}" style="display:inline-block;padding:12px 18px;background:#0b1f3a;color:#fff;text-decoration:none;border-radius:8px">Termin & Treffpunkt abstimmen</a></p><p style="font-size:.92em">Der Link ist persönlich. Bitte nicht weitergeben.</p><p>Geht respektvoll mit den Kontaktdaten um und gebt sie nicht außerhalb eurer Gruppe weiter.</p><p>Viele Grüße<br><strong>LAVUQ Würzburg</strong></p></div>`;
+ const r=await fetch("https://api.brevo.com/v3/smtp/email",{method:"POST",headers:{"api-key":env.BREVO_API_KEY,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({sender:{email:senderEmail,name:senderName},to:[{email:to,name}],subject:"Deine LAVUQ-Gruppe ist vollständig",htmlContent:html})});if(!r.ok)throw new Error(`Brevo HTTP ${r.status}`);
+}
 export async function handleFinalGroupNotification(env,input={}){
  if(!env?.AIRTABLE_TOKEN)return{ok:false,status:500,code:"AIRTABLE_TOKEN_MISSING"};
  const groupId=String(input.groupId||"").trim();const dryRun=input.dryRun!==false;
@@ -31,13 +39,13 @@ export async function handleFinalGroupNotification(env,input={}){
  if(accepted.length!==4)return{ok:false,status:409,code:"NOT_ALL_4_ACCEPTED",acceptedActiveCount:accepted.length};
  if(accepted.some(m=>m?.fields?.[MEMBER_CONTACT_SHARED]!==true))return{ok:false,status:409,code:"CONTACTS_NOT_RELEASED_FOR_ALL",contactReleaseReady:false};
  const people=[];
- for(const m of accepted){const applicantId=firstLink(m?.fields?.[MEMBER_APPLICANT]);if(!applicantId)return{ok:false,status:409,code:"APPLICANT_MISSING"};const a=await getApplicant(env,applicantId);const p={memberId:m.id,applicantId,name:text(a?.fields?.[APPLICANT_NAME])||"LAVUQ Teilnehmer",email:text(a?.fields?.[APPLICANT_EMAIL]),phone:text(a?.fields?.[APPLICANT_PHONE]),alreadySent:m?.fields?.[MEMBER_FINAL_SENT]===true};if(!p.email||!p.email.includes("@"))return{ok:false,status:409,code:"EMAIL_MISSING"};people.push(p);}
+ for(const m of accepted){const applicantId=firstLink(m?.fields?.[MEMBER_APPLICANT]);if(!applicantId)return{ok:false,status:409,code:"APPLICANT_MISSING"};const a=await getApplicant(env,applicantId);const p={memberId:m.id,applicantId,name:text(a?.fields?.[APPLICANT_NAME])||"LAVUQ Teilnehmer",email:text(a?.fields?.[APPLICANT_EMAIL]),phone:text(a?.fields?.[APPLICANT_PHONE]),token:text(m?.fields?.[MEMBER_INVITE_TOKEN]),alreadySent:m?.fields?.[MEMBER_FINAL_SENT]===true};if(!p.email||!p.email.includes("@"))return{ok:false,status:409,code:"EMAIL_MISSING"};if(!p.token)return{ok:false,status:409,code:"INVITATION_TOKEN_MISSING"};people.push(p);}
  const pending=people.filter(p=>!p.alreadySent);
  const alreadySentCount=people.length-pending.length;
- if(dryRun)return{ok:true,status:200,state:"READY_FOR_FINAL_GROUP_NOTIFICATION",dryRun:true,groupId,acceptedActiveCount:4,contactsReleasedForAll:true,wouldSendEmails:pending.length,alreadySentCount,recipientCount:4,sharedContactsPerRecipient:3,piiExposedInResponse:false,emailsSent:0,airtableChanged:false};
+ if(dryRun)return{ok:true,status:200,state:"READY_FOR_FINAL_GROUP_NOTIFICATION",dryRun:true,groupId,acceptedActiveCount:4,contactsReleasedForAll:true,wouldSendEmails:pending.length,alreadySentCount,recipientCount:4,sharedContactsPerRecipient:3,terminfinderLinkIncluded:true,piiExposedInResponse:false,emailsSent:0,airtableChanged:false};
  if(String(input.confirmation||"")!=="ABSCHLUSSNACHRICHT_SENDEN")return{ok:false,status:409,code:"EXPLICIT_CONFIRMATION_REQUIRED"};
  if(pending.length===0)return{ok:true,status:200,state:"FINAL_GROUP_NOTIFICATION_ALREADY_SENT",dryRun:false,groupId,emailsSent:0,alreadySentCount:4,duplicateSendPrevented:true,contactsReleasedForAll:true,airtableChanged:false};
  let sent=0;
- for(const p of pending){await sendMail(env,p.email,p.name,people.filter(x=>x.memberId!==p.memberId));await patchMember(env,p.memberId,{[MEMBER_FINAL_SENT]:true});sent++;}
- return{ok:true,status:200,state:"FINAL_GROUP_NOTIFICATION_SENT",dryRun:false,groupId,emailsSent:sent,alreadySentCount,duplicateSendPrevented:true,contactsReleasedForAll:true,piiExposedInResponse:false,airtableChanged:true};
+ for(const p of pending){await sendMail(env,p.email,p.name,people.filter(x=>x.memberId!==p.memberId),p.memberId,p.token);await patchMember(env,p.memberId,{[MEMBER_FINAL_SENT]:true});sent++;}
+ return{ok:true,status:200,state:"FINAL_GROUP_NOTIFICATION_SENT",dryRun:false,groupId,emailsSent:sent,alreadySentCount,duplicateSendPrevented:true,contactsReleasedForAll:true,terminfinderLinkIncluded:true,piiExposedInResponse:false,airtableChanged:true};
 }
