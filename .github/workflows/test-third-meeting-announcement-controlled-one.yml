@@ -1,0 +1,28 @@
+name: Test Treffen 3 Terminankündigung kontrolliert eine Mail
+
+on:
+  workflow_dispatch:
+
+jobs:
+  controlled-one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine Treffen-3-Terminmail senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS -w '\n%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","mode":"controlledOne","confirmation":"EINE_TREFFEN_3_TERMINMAIL_SENDEN"}' \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-announcement)
+          BODY=$(printf '%s\n' "$RESPONSE" | sed '$d')
+          CODE=$(printf '%s\n' "$RESPONSE" | tail -n1)
+          printf '%s\n' "$BODY"
+          echo "HTTP: $CODE"
+          test "$CODE" = "200"
+          printf '%s' "$BODY" | grep -q '"state": "ONE_THIRD_MEETING_ANNOUNCEMENT_SENT"'
+          printf '%s' "$BODY" | grep -q '"emailsSent": 1'
+          echo "Genau eine Treffen-3-Terminankündigung wurde versendet ✅"
