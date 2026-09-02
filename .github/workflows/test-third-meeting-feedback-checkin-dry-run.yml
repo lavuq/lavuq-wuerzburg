@@ -1,0 +1,49 @@
+name: Test Treffen 3 Feedback Check-in Dry Run
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/test-third-meeting-feedback-checkin-dry-run.yml'
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kurz auf Worker-Deployment warten
+        run: sleep 20
+
+      - name: Treffen-3-Feedback-Check-in nur prüfen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","dryRun":true,"asOf":"2026-09-23T17:30:00.000Z","simulateRemindersCompleted":true}' \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-feedback-checkin)
+
+          echo "$RESPONSE"
+
+          RESPONSE_JSON="$RESPONSE" python - <<'PY'
+          import json, os
+          data=json.loads(os.environ["RESPONSE_JSON"])
+          assert data.get("ok") is True, data
+          assert data.get("state") == "READY_FOR_THIRD_MEETING_FEEDBACK_CHECKIN", data
+          assert data.get("meetingAttempt") == 3, data
+          assert data.get("hoursSinceMeeting") == 24, data
+          assert data.get("nextDayWindowMatched") is True, data
+          assert data.get("remindersSimulated") is True, data
+          assert data.get("remindersEffectivelyCompleted") is True, data
+          assert data.get("validRecipientCount") == 3, data
+          assert data.get("wouldCreateFeedbackRequests") == 3, data
+          assert data.get("wouldCreatePersonalFeedbackLinks") == 3, data
+          assert data.get("wouldSendFeedbackEmails") == 3, data
+          assert data.get("emailsSent") == 0, data
+          assert data.get("airtableChanged") is False, data
+          assert data.get("piiExposedInResponse") is False, data
+          assert data.get("tokenExposedInResponse") is False, data
+          assert data.get("linkExposedInResponse") is False, data
+          print("Treffen-3-Feedback-Check-in ist korrekt bereit ✅")
+          PY
