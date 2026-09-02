@@ -1,0 +1,33 @@
+name: Test Treffen 3 Terminankündigung verbleibende Mails
+
+on:
+  workflow_dispatch:
+
+jobs:
+  controlled-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verbleibende Treffen-3-Terminmails senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"recoW2GmA9HQpCYxQ","mode":"controlledAll","confirmation":"ALLE_TREFFEN_3_TERMINMAILS_SENDEN"}' \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-announcement)
+
+          echo "$RESPONSE"
+
+          python - <<'PY' <<< "$RESPONSE"
+          import json, sys
+          data=json.load(sys.stdin)
+          assert data.get("ok") is True, data
+          assert data.get("state") == "THIRD_MEETING_ANNOUNCEMENT_SENT_TO_ALL", data
+          assert data.get("emailsSent") == 2, data
+          assert data.get("totalMarkedSent") == 3, data
+          assert data.get("pendingRecipientCount") == 0, data
+          assert data.get("duplicateSendPrevented") is True, data
+          print("Alle verbleibenden Treffen-3-Terminmails wurden kontrolliert versendet ✅")
+          PY
