@@ -1,25 +1,38 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
-<title>LAVUQ Terminabstimmung</title><link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Weiterleitung zu Mein LAVUQ</title>
 <style>
-.page{min-height:75vh;padding:48px 0}.card{max-width:760px;margin:auto;background:#fff;border:1px solid rgba(11,31,58,.12);border-radius:22px;padding:clamp(24px,5vw,42px);box-shadow:0 18px 50px rgba(11,31,58,.08)}.grid{display:grid;gap:14px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.state{padding:16px;border-radius:14px;background:#f6f7f9;margin:18px 0}.success{background:#edf7ef}.error{background:#fff1f1}.hidden{display:none!important}label{font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.actions .btn{flex:1;min-width:160px}input,select{width:100%;padding:12px;border:1px solid #ccd2da;border-radius:10px;background:#fff}.small{font-size:.92rem}.location-picker{border:1px solid #e0e4ea;border-radius:14px;padding:16px;background:#fafbfc}.location-picker h3{margin:0 0 6px;font-size:1.05rem}.location-help{margin:0 0 14px}.site-header .nav-wrap{display:flex;justify-content:center!important}.brand-original-wrap{display:inline-flex;flex-direction:column;align-items:center;text-decoration:none}.brand-wordmark{display:flex;align-items:center}.brand-lavu{font-family:Georgia,"Times New Roman",serif;font-size:50px;letter-spacing:.1em;color:#fff}.brand-q-original{width:60px;height:60px;object-fit:contain;margin-left:4px}.brand-city-original{font-family:Georgia,"Times New Roman",serif;color:#d9b96e;font-size:22px}@media(max-width:620px){.row{grid-template-columns:1fr}}
+:root{--navy:#041529;--gold:#d8b46a;--cream:#f7f3ea;--ink:#132033}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.card{width:min(calc(100% - 32px),560px);background:#fff;border:1px solid rgba(216,180,106,.45);border-radius:22px;padding:30px;text-align:center;box-shadow:0 18px 50px rgba(4,21,41,.08)}
+.logo{background:var(--navy);border-radius:16px;padding:20px;margin-bottom:24px;color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:28px;letter-spacing:.12em}.logo span{display:block;color:var(--gold);font-size:15px;letter-spacing:0;margin-top:7px}
+a{display:inline-block;margin-top:16px;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:800;padding:13px 18px;border-radius:12px}
 </style>
 </head>
 <body>
-<div class="topbar"><div class="container">LAVUQ Würzburg · Terminabstimmung</div></div>
-<header class="site-header"><div class="container nav-wrap"><a class="brand-original-wrap" href="index.html"><span class="brand-wordmark"><span class="brand-lavu">LAVU</span><img class="brand-q-original" src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt=""></span><span class="brand-city-original">Würzburg</span></a></div></header>
-<main class="page"><div class="container"><section class="card" aria-live="polite">
-<div class="eyebrow">Deine LAVUQ-Gruppe</div><h1>Termin & Treffpunkt abstimmen</h1>
-<p>Für jedes Treffen kann eure Gruppe bis zu <strong>5 Vorschläge</strong> machen. Ein Vorschlag wird erst verbindlich, wenn alle vorgesehenen Teilnehmer zustimmen.</p>
-<div class="row"><div><label for="attempt">Treffen</label><select id="attempt"><option value="1">Treffen 1</option><option value="2">Treffen 2</option><option value="3">Treffen 3</option></select></div><div id="roundInfo" class="state small">Wird geladen …</div></div>
-<div id="message" class="state hidden"></div>
-<div id="current" class="state hidden"></div>
-<div id="voteBox" class="hidden"><h2>Aktueller Vorschlag</h2><div id="proposal" class="state"></div><div class="actions"><button id="yesBtn" class="btn btn-primary">Zustimmen</button><button id="noBtn" class="btn btn-outline">Ablehnen</button></div></div>
-<div id="proposeBox"><h2>Neuen Vorschlag machen</h2><div class="grid"><div><label for="dateTime">Datum & Uhrzeit</label><input id="dateTime" type="datetime-local"></div>
-<div class="location-picker"><h3>Passenden Ort finden</h3><p class="muted small location-help">Wähle eine Kategorie und anschließend einen Ort aus der Würzburger Liste. Du kannst darunter jederzeit auch einen eigenen Treffpunkt eintragen.</p><div class="row"><div><label for="placeCategory">Kategorie</label><select id="placeCategory"><option value="all">Alle Orte</option><option value="cafe">Cafés & Eisdielen</option><option value="restaurant">Restaurants & Essen</option><option value="museum">Museen & Kultur</option><option value="leisure">Freizeit & Aktivitäten</option></select></div><div><label for="placeSuggestion">Ort auswählen</label><select id="placeSuggestion"><option value="">Orte werden geladen …</option></select></div></div><p id="locationStatus" class="muted small">Die Liste wird automatisch aus öffentlichen Ortsdaten für Würzburg geladen.</p></div>
-<div><label for="place">Treffpunkt / eigener Vorschlag</label><input id="place" type="text" placeholder="Ort aus Liste wählen oder selbst etwas eingeben"></div><label><input id="publicPlace" type="checkbox"> Ich bestätige, dass der Treffpunkt öffentlich ist.</label></div><div class="actions"><button id="proposeBtn" class="btn btn-primary">Vorschlag senden</button></div></div>
-<p class="muted small">Dein persönlicher Link dient gleichzeitig als Zugang zur Terminabstimmung. Bitte nicht weitergeben.</p>
-</section></div></main><script src="termin.js"></script>
-</body></html>
+<main class="card">
+<div class="logo">LAVUQ<span>Würzburg</span></div>
+<h1>Terminplanung ist jetzt in „Mein LAVUQ“</h1>
+<p>Du wirst automatisch in deinen persönlichen Mitgliederbereich zum Bereich „Treffen“ weitergeleitet.</p>
+<a id="continueLink" href="mitglied.html#treffen">Mein LAVUQ öffnen</a>
+</main>
+<script>
+(()=>{
+ const q=new URLSearchParams(location.search);
+ const member=q.get('member')||'';
+ const token=q.get('token')||'';
+ const target=new URL('mitglied.html',location.href);
+ if(member)target.searchParams.set('member',member);
+ if(token)target.searchParams.set('token',token);
+ target.hash='treffen';
+ document.getElementById('continueLink').href=target.toString();
+ if(member&&token)location.replace(target.toString());
+})();
+</script>
+</body>
+</html>
