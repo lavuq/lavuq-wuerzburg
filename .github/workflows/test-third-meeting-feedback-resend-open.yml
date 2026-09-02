@@ -2,16 +2,11 @@ name: Test Treffen 3 offenes Feedback einmal erneut senden
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-feedback-resend-open.yml'
 
 jobs:
   resend-once:
     runs-on: ubuntu-latest
     steps:
-      - name: Kurz auf Worker-Deployment warten
-        run: sleep 25
       - name: Offene Treffen-3-Feedbackmail einmal erneut senden
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
