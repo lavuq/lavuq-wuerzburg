@@ -2,17 +2,11 @@ name: Test Treffen 3 Feedback Check-in Dry Run
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-feedback-checkin-dry-run.yml'
 
 jobs:
   dry-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Kurz auf Worker-Deployment warten
-        run: sleep 20
-
       - name: Treffen-3-Feedback-Check-in nur prüfen
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
