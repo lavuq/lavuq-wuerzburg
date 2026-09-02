@@ -10,9 +10,6 @@ jobs:
   dry-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Kurz auf Worker-Deployment warten
-        run: sleep 20
-
       - name: Treffen-3-2h-Erinnerung nur prüfen
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
