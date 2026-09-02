@@ -1,0 +1,33 @@
+name: Test Treffen 2 Feedback-Check-in Dry-Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  second-meeting-feedback-checkin-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check-in am Folgetag sicher pruefen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-feedback-checkin"
+          BODY='{"meetingRecordId":"rec3iPEAAW6prt6A2","asOf":"2026-09-16T16:00:00.000Z","dryRun":true,"simulateRemindersCompleted":true}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "READY_FOR_SECOND_MEETING_FEEDBACK_CHECKIN" and .dryRun == true and .readOnly == true and .meetingAttempt == 2 and .nextDayWindowMatched == true and .remindersEffectivelyCompleted == true and .recipientFilterCount == 3 and .validRecipientCount == 3 and .excludedCurrentAcceptedCount == 1 and .wouldCreateFeedbackRequests == 3 and .wouldCreatePersonalFeedbackLinks == 3 and .wouldSendFeedbackEmails == 3 and .excludedMembersWouldReceiveCheckin == false and .emailsSent == 0 and .airtableChanged == false and .thirdMeetingPrepared == false and .piiExposedInResponse == false and .recipientIdsExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "Check-in-Zeitfenster am Folgetag: JA"
+          echo "Berechtigte Teilnehmer: 3"
+          echo "Ausgeschlossene Person erhaelt Check-in: NEIN"
+          echo "Wuerde Feedback-Anfragen erzeugen: $(echo "$JSON" | jq -r '.wouldCreateFeedbackRequests')"
+          echo "Wuerde Feedback-E-Mails senden: $(echo "$JSON" | jq -r '.wouldSendFeedbackEmails')"
+          echo "E-Mails jetzt versendet: 0"
+          echo "Airtable geaendert: NEIN"
+          echo "Treffen 2 Feedback-Check-in Dry-Run erfolgreich ✅"
