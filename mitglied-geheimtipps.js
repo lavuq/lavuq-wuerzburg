@@ -1,61 +1,75 @@
 (()=>{
   const OVERPASS='https://overpass-api.de/api/interpreter';
-  const CACHE_KEY='lavuq_wue_tipps_v1';
   const CACHE_TTL=24*60*60*1000;
-  const FALLBACK=[
-    'Lusamgärtchen',
-    'Ringpark',
-    'Bromberg-Rosengarten',
-    'Frankenwarte',
-    'terroir f am Würzburger Stein',
-    'Lügensteinmuseum',
-    'Mainufer',
-    'Hofgarten der Residenz'
-  ];
-  let tips=null;
+  const CATEGORIES={
+    cafes:{label:'☕ Beste Cafés in Würzburg',query:'["amenity"="cafe"]'},
+    restaurants:{label:'🍽️ Beste Restaurants in Würzburg',query:'["amenity"="restaurant"]'},
+    bars:{label:'🍸 Beste Bars in Würzburg',query:'["amenity"~"bar|pub"]'},
+    museen:{label:'🏛️ Museen in Würzburg',query:'["tourism"~"museum|gallery"]'},
+    freizeit:{label:'🎯 Freizeitaktivitäten in Würzburg',query:'["leisure"~"bowling_alley|miniature_golf|park|garden|sports_centre"];nwr(area.a)["amenity"~"cinema|theatre"];nwr(area.a)["tourism"~"attraction|viewpoint"]'}
+  };
+  const FALLBACK={
+    cafes:['Café Fred','Café Schönborn','Wunschlos Glücklich'],
+    restaurants:['Backöfele','Bürgerspital Weinstuben','Alte Mainmühle'],
+    bars:['Standard','Wohnzimmer Bar','Tscharlies Musikkneipe'],
+    museen:['Museum im Kulturspeicher','Museum am Dom','Martin von Wagner Museum'],
+    freizeit:['Festung Marienberg','Hofgarten der Residenz','Alte Mainbrücke','Ringpark','Minigolf','Kino']
+  };
 
-  function cleanName(v){return String(v||'').replace(/\s+/g,' ').trim();}
-  function uniqueSorted(items){return [...new Set(items.map(cleanName).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'de'));}
-  function readCache(){try{const x=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');if(x&&Array.isArray(x.items)&&Date.now()-Number(x.savedAt||0)<CACHE_TTL)return x.items;}catch{}return null;}
-  function writeCache(items){try{localStorage.setItem(CACHE_KEY,JSON.stringify({savedAt:Date.now(),items}));}catch{}}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
+  function uniq(items){return [...new Set(items.map(clean).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'de'));}
+  function key(cat){return `lavuq_wue_${cat}_v2`;}
+  function readCache(cat){try{const x=JSON.parse(localStorage.getItem(key(cat))||'null');if(x&&Array.isArray(x.items)&&Date.now()-Number(x.savedAt||0)<CACHE_TTL)return x.items;}catch{}return null;}
+  function writeCache(cat,items){try{localStorage.setItem(key(cat),JSON.stringify({savedAt:Date.now(),items}));}catch{}}
 
-  async function loadTips(){
-    if(tips)return tips;
-    const cached=readCache();
-    if(cached?.length){tips=cached;return tips;}
-    const query=`[out:json][timeout:20];area["name"="Würzburg"]["boundary"="administrative"]->.a;(nwr(area.a)["name"]["tourism"~"attraction|viewpoint|museum|gallery"];nwr(area.a)["name"]["historic"];nwr(area.a)["name"]["leisure"~"park|garden|nature_reserve|miniature_golf"];nwr(area.a)["name"]["amenity"~"cafe|biergarten|bar|pub|restaurant|cinema|theatre"];nwr(area.a)["name"]["natural"~"wood|peak|spring"];);out tags center;`;
+  async function loadCategory(cat){
+    const cached=readCache(cat);if(cached?.length)return cached;
+    const cfg=CATEGORIES[cat];if(!cfg)return [];
+    const part=cat==='freizeit'?
+      `(nwr(area.a)["name"]${cfg.query};);`:
+      `(nwr(area.a)["name"]${cfg.query};);`;
+    const query=`[out:json][timeout:20];area["name"="Würzburg"]["boundary"="administrative"]->.a;${part}out tags center;`;
     try{
       const r=await fetch(OVERPASS,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query)});
       if(!r.ok)throw new Error('OVERPASS_'+r.status);
       const data=await r.json();
       const live=(data.elements||[]).map(e=>e?.tags?.name).filter(Boolean);
-      tips=uniqueSorted([...FALLBACK,...live]);
-      writeCache(tips);
-      return tips;
-    }catch(_){tips=uniqueSorted(FALLBACK);return tips;}
+      const items=uniq([...(FALLBACK[cat]||[]),...live]);writeCache(cat,items);return items;
+    }catch(_){return uniq(FALLBACK[cat]||[]);}
   }
 
   function enhance(select){
-    if(!select||select.dataset.wueTips==='1')return;
-    select.dataset.wueTips='1';
-    const place=document.getElementById(select.id.replace('suggestion-','place-'));
-    select.innerHTML='<option value="">Geheimtipp / besonderen Ort auswählen …</option><option value="__loading" disabled>Aktuelle Würzburg-Tipps werden geladen …</option>';
-    loadTips().then(items=>{
-      const current=select.value;
-      select.innerHTML='<option value="">Geheimtipp / besonderen Ort auswählen …</option>'+items.map(name=>`<option value="${name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}">${name.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</option>`).join('')+'<option value="__own">Eigene Idee / eigener Treffpunkt …</option>';
-      if(current&&current!=='__loading')select.value=current;
-      select.addEventListener('change',()=>{
-        if(!place)return;
-        if(select.value==='__own'){place.value='';place.focus();return;}
-        if(select.value)place.value=select.value;
-      });
+    if(!select||select.dataset.wueCategoryMenu==='1')return;
+    select.dataset.wueCategoryMenu='1';
+    const attempt=(select.id.match(/(\d+)$/)||[])[1]||'1';
+    const place=document.getElementById(`place-${attempt}`);
+    select.innerHTML='<option value="">Kategorie auswählen …</option>'+Object.entries(CATEGORIES).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')+'<option value="__own">✏️ Eigene Idee / eigener Treffpunkt</option>';
+
+    const venue=document.createElement('select');
+    venue.id=`venue-${attempt}`;
+    venue.style.marginTop='10px';
+    venue.innerHTML='<option value="">Erst Kategorie auswählen …</option>';
+    select.insertAdjacentElement('afterend',venue);
+
+    select.addEventListener('change',async()=>{
+      const cat=select.value;
+      if(cat==='__own'){
+        venue.innerHTML='<option value="">Keine Vorgabe – eigene Idee eintragen</option>';
+        if(place){place.value='';place.focus();}
+        return;
+      }
+      if(!cat){venue.innerHTML='<option value="">Erst Kategorie auswählen …</option>';return;}
+      venue.innerHTML='<option value="">Aktuelle Würzburg-Tipps werden geladen …</option>';
+      const items=await loadCategory(cat);
+      venue.innerHTML='<option value="">Ort auswählen …</option>'+items.map(name=>`<option value="${esc(name)}">${esc(name)}</option>`).join('');
     });
+
+    venue.addEventListener('change',()=>{if(place&&venue.value)place.value=venue.value;});
+
     const label=document.querySelector(`label[for="${select.id}"]`);
-    if(label)label.innerHTML='Würzburg entdecken <span class="muted" style="font-weight:400">(optional · aktuell geladen)</span>';
-    if(place){
-      const meta=place.parentElement?.querySelector('.schedule-meta');
-      if(meta)meta.textContent='Die Würzburg-Tipps sind nur Inspiration. Du kannst jederzeit komplett frei einen eigenen Treffpunkt oder eine eigene Aktivität eintragen.';
-    }
+    if(label)label.innerHTML='Würzburg-Empfehlungen <span class="muted" style="font-weight:400">(optional)</span>';
+    if(place){const meta=place.parentElement?.querySelector('.schedule-meta');if(meta)meta.textContent='Die Empfehlungen sind nur Inspiration. Du kannst jederzeit komplett frei einen eigenen Treffpunkt oder eine eigene Aktivität eintragen.';}
   }
 
   function scan(){document.querySelectorAll('select[id^="suggestion-"]').forEach(enhance);}
