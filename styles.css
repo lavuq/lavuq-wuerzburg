@@ -50,3 +50,20 @@ footer{background:#041124;color:#c7d0dc;padding:52px 0 24px}.footer-grid{display
   body:has(.mobile-hero-photo) main>section:nth-of-type(2) .compact-checks>div{font-size:.95rem!important;line-height:1.45!important;padding:11px 12px!important;border-radius:12px!important;background:#f7f3ea!important}
   body:has(.mobile-hero-photo) main>section:nth-of-type(2) .btn{width:100%!important}
 }
+
+/* Mobile fix for the safety feature on the homepage. */
+@media(max-width:860px){
+  .safety-feature .visual-split{grid-template-columns:1fr!important;gap:22px!important}
+}
+@media(max-width:520px){
+  .safety-feature{padding:48px 0!important}
+  .safety-feature .visual-frame{width:100%!important;max-width:none!important;border-radius:20px!important}
+  .safety-feature .city-photo img{width:100%!important;height:auto!important;aspect-ratio:16/10!important;object-fit:cover!important}
+  .safety-feature .visual-caption{padding:14px 16px!important;font-size:.9rem!important;line-height:1.45!important}
+  .safety-feature .visual-copy{width:100%!important;min-width:0!important}
+  .safety-feature .visual-copy h2{font-size:2.15rem!important;line-height:1.06!important;letter-spacing:-.04em!important;margin-bottom:18px!important}
+  .safety-feature .compact-checks{display:grid!important;gap:10px!important;margin:0 0 20px!important}
+  .safety-feature .compact-checks>div{display:grid!important;grid-template-columns:24px 1fr!important;gap:8px!important;align-items:start!important;font-size:1rem!important;line-height:1.45!important}
+  .safety-feature .visual-copy>div[style*="display:flex"]{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;width:100%!important}
+  .safety-feature .visual-copy .btn{width:100%!important;white-space:normal!important;text-align:center!important;padding:14px 16px!important}
+}
