@@ -1,18 +1,17 @@
-// LAVUQ – kontrollierte Kontaktfreigabe
-// Dieser Code gibt Kontaktdaten NICHT automatisch frei.
-// Voraussetzung fuer einen Schreibvorgang:
-// 1) geschuetzter Admin-Endpunkt,
-// 2) exakt vier aktive + angenommene Gruppenmitglieder,
-// 3) dryRun=false,
-// 4) explizite Bestaetigung "KONTAKTE_FREIGEBEN".
+// LAVUQ – Kontaktfreigabe mit expliziter Teilnehmer-Einwilligung.
+// Automatische Freigabe ist nur erlaubt, wenn exakt vier aktive + angenommene
+// Gruppenmitglieder vorhanden sind UND alle vier der Kontaktweitergabe zugestimmt haben.
 
 const AIRTABLE_BASE_ID = "apphnIBhuAbmMTUtY";
 const MEMBERS_TABLE_ID = "tbl4QX0NIB3tUKtF4";
+const APPLICANTS_TABLE_ID = "tblzLtbR5Yh4nR5aQ";
 
 const FIELD_GROUP = "fldMUYzXykTpV0j2x";
+const FIELD_APPLICANT = "fldcV8kd6KF7zdScE";
 const FIELD_STATUS = "fldBS2hoKQX0Rr1aX";
 const FIELD_INVITE_STATUS = "fldUmjMa2j7MLG5RA";
 const FIELD_CONTACT_SHARED = "fld3LCPTEbAl46bF1";
+const FIELD_APPLICANT_CONTACT_CONSENT = "fldHkZAWmcVO5DGQc";
 
 function airtableHeaders(env) {
   return {
@@ -21,39 +20,32 @@ function airtableHeaders(env) {
   };
 }
 
-async function listMemberRecords(env) {
+async function listRecords(env, tableId) {
   const records = [];
   let offset = "";
-
   do {
-    const params = new URLSearchParams({
-      pageSize: "100",
-      returnFieldsByFieldId: "true",
-    });
+    const params = new URLSearchParams({ pageSize: "100", returnFieldsByFieldId: "true" });
     if (offset) params.set("offset", offset);
-
     const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${MEMBERS_TABLE_ID}?${params.toString()}`,
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}?${params.toString()}`,
       { headers: airtableHeaders(env) },
     );
-
-    if (!response.ok) {
-      throw new Error(`Airtable Mitgliederliste HTTP ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Airtable ${tableId} HTTP ${response.status}`);
     const payload = await response.json();
     records.push(...(Array.isArray(payload.records) ? payload.records : []));
     offset = String(payload.offset || "");
   } while (offset);
-
   return records;
 }
 
-function linkedToGroup(record, groupId) {
-  const links = record?.fields?.[FIELD_GROUP];
-  return Array.isArray(links) && links.includes(groupId);
+function linkedIds(value) {
+  return Array.isArray(value)
+    ? value.map((x) => (typeof x === "string" ? x : x?.id)).filter(Boolean)
+    : [];
 }
-
+function linkedToGroup(record, groupId) {
+  return linkedIds(record?.fields?.[FIELD_GROUP]).includes(groupId);
+}
 function isAcceptedActive(record) {
   return (
     String(record?.fields?.[FIELD_STATUS] || "") === "Aktiv" &&
@@ -75,7 +67,6 @@ async function batchMarkContactsShared(env, records) {
       }),
     },
   );
-
   if (!response.ok) {
     let detail = "";
     try {
@@ -84,45 +75,57 @@ async function batchMarkContactsShared(env, records) {
     } catch (_) {}
     throw new Error(detail || `Airtable Kontaktfreigabe HTTP ${response.status}`);
   }
-
   return response.json();
 }
 
 export async function handleControlledContactRelease(env, input = {}) {
   if (!env?.AIRTABLE_TOKEN) {
-    return {
-      ok: false,
-      status: 500,
-      code: "AIRTABLE_NOT_CONFIGURED",
-      error: "Airtable-Zugang ist nicht eingerichtet.",
-    };
+    return { ok: false, status: 500, code: "AIRTABLE_NOT_CONFIGURED" };
   }
 
   const groupId = String(input.groupId || "").trim();
   const dryRun = input.dryRun !== false;
   const confirmation = String(input.confirm || "").trim();
+  const automatic = input.automatic === true;
 
   if (!/^rec[A-Za-z0-9]{14}$/.test(groupId)) {
-    return { ok: false, status: 400, code: "INVALID_GROUP_ID", error: "Ungueltige Gruppen-ID." };
+    return { ok: false, status: 400, code: "INVALID_GROUP_ID" };
   }
 
-  const allMembers = await listMemberRecords(env);
+  const [allMembers, applicants] = await Promise.all([
+    listRecords(env, MEMBERS_TABLE_ID),
+    listRecords(env, APPLICANTS_TABLE_ID),
+  ]);
+  const applicantById = new Map(applicants.map((r) => [r.id, r]));
   const groupMemberships = allMembers.filter((record) => linkedToGroup(record, groupId));
   const acceptedActive = groupMemberships.filter(isAcceptedActive);
 
-  // Historische/abgelehnte Mitgliedschaften duerfen in der Gruppe erhalten bleiben.
-  // Entscheidend sind exakt vier aktuell aktive + angenommene Mitgliedschaften.
   if (acceptedActive.length !== 4) {
     return {
       ok: false,
       status: 409,
       code: "NOT_ALL_4_ACCEPTED",
       groupId,
-      groupMembershipCount: groupMemberships.length,
       acceptedActiveCount: acceptedActive.length,
       contactReleaseAllowed: false,
       changed: false,
-      error: "Kontaktfreigabe ist erst bei exakt 4 aktiven und angenommenen Mitgliedern erlaubt.",
+    };
+  }
+
+  const consented = acceptedActive.filter((member) => {
+    const applicantId = linkedIds(member?.fields?.[FIELD_APPLICANT])[0];
+    return applicantId && applicantById.get(applicantId)?.fields?.[FIELD_APPLICANT_CONTACT_CONSENT] === true;
+  });
+  if (consented.length !== 4) {
+    return {
+      ok: false,
+      status: 409,
+      code: "CONTACT_SHARING_CONSENT_MISSING",
+      groupId,
+      acceptedActiveCount: 4,
+      consentedCount: consented.length,
+      contactReleaseAllowed: false,
+      changed: false,
     };
   }
 
@@ -137,22 +140,29 @@ export async function handleControlledContactRelease(env, input = {}) {
       mode: "dry-run",
       groupId,
       acceptedActiveCount: 4,
+      consentedCount: 4,
       alreadySharedCount,
       contactReleaseAllowed: true,
       changed: false,
     };
   }
 
-  if (confirmation !== "KONTAKTE_FREIGEBEN") {
+  if (!automatic && confirmation !== "KONTAKTE_FREIGEBEN") {
     return {
       ok: false,
       status: 400,
       code: "EXPLICIT_CONFIRMATION_REQUIRED",
       groupId,
-      acceptedActiveCount: 4,
-      contactReleaseAllowed: true,
       changed: false,
-      error: "Explizite Bestaetigung fehlt.",
+    };
+  }
+  if (automatic && confirmation !== "AUTOMATIC_CONTACT_RELEASE_WITH_CONSENT") {
+    return {
+      ok: false,
+      status: 400,
+      code: "AUTOMATIC_CONFIRMATION_REQUIRED",
+      groupId,
+      changed: false,
     };
   }
 
@@ -160,11 +170,9 @@ export async function handleControlledContactRelease(env, input = {}) {
     return {
       ok: true,
       status: 200,
-      mode: "commit",
+      state: "CONTACTS_ALREADY_RELEASED",
+      mode: automatic ? "automatic" : "commit",
       groupId,
-      acceptedActiveCount: 4,
-      alreadySharedCount: 4,
-      contactReleaseAllowed: true,
       contactShared: true,
       changed: false,
       alreadyReleased: true,
@@ -172,14 +180,14 @@ export async function handleControlledContactRelease(env, input = {}) {
   }
 
   await batchMarkContactsShared(env, acceptedActive);
-
   return {
     ok: true,
     status: 200,
-    mode: "commit",
+    state: "CONTACTS_RELEASED_WITH_PARTICIPANT_CONSENT",
+    mode: automatic ? "automatic" : "commit",
     groupId,
     acceptedActiveCount: 4,
-    contactReleaseAllowed: true,
+    consentedCount: 4,
     contactShared: true,
     changed: true,
     updatedMemberships: 4,
