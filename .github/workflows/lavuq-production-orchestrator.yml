@@ -14,6 +14,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Produktiven LAVUQ-Ablauf ausführen
+        id: orchestrator
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
         run: |
@@ -28,8 +29,8 @@ jobs:
             --data '{"confirmation":"RUN_LAVUQ_PRODUCTION_ORCHESTRATOR"}' \
             https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/production-orchestrator)
           echo "$RESPONSE"
-          RESPONSE_JSON="$RESPONSE" python3 - <<'PY'
-          import json, os
+          RESPONSE_JSON="$RESPONSE" GITHUB_OUTPUT="$GITHUB_OUTPUT" python3 - <<'PY'
+          import hashlib, json, os
           data=json.loads(os.environ['RESPONSE_JSON'])
           if data.get('status') not in (200,207):
               raise SystemExit(f"Orchestrator HTTP/Status unerwartet: {data}")
@@ -37,7 +38,68 @@ jobs:
               raise SystemExit(f"Orchestrator nicht aktiv: {data}")
           if data.get('automaticGroupReleaseAndInvitations') is not True:
               raise SystemExit(f"Automatische Gruppen-/Einladungsfunktion nicht aktiv: {data}")
-          print(f"Aktiv ✅ | verarbeitet={data.get('processedCount',0)} | Mails={data.get('emailsSent',0)} | Prüfhinweise={data.get('hardErrors',0)}")
-          if data.get('hardErrors',0) > 0:
-              raise SystemExit("Produktions-Orchestrator meldet einen prüfpflichtigen Fehler.")
+
+          hard_errors=int(data.get('hardErrors',0) or 0)
+          codes=[]
+          for item in data.get('processed') or []:
+              for step in item.get('steps') or []:
+                  if step.get('ok') is False and step.get('code'):
+                      codes.append(str(step['code']))
+          codes=sorted(set(codes))
+          fingerprint=hashlib.sha256(("|".join(codes) or f"hardErrors:{hard_errors}").encode()).hexdigest()[:20]
+          payload={
+              "confirmation":"SEND_ADMIN_EXCEPTION_NOTIFICATION",
+              "hardErrors":hard_errors,
+              "codes":codes,
+              "runAt":data.get('runAt'),
+          }
+          with open('admin-exception-payload.json','w',encoding='utf-8') as f:
+              json.dump(payload,f,ensure_ascii=False)
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as out:
+              out.write(f"has_exception={'true' if hard_errors > 0 else 'false'}\n")
+              out.write(f"exception_key={fingerprint}\n")
+          print(f"Aktiv ✅ | verarbeitet={data.get('processedCount',0)} | Mails={data.get('emailsSent',0)} | Prüfhinweise={hard_errors}")
           PY
+
+      - name: Bereits gemeldeten Ausnahmefall prüfen
+        id: exception-cache
+        if: steps.orchestrator.outputs.has_exception == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: .lavuq-exception-notified
+          key: lavuq-production-exception-${{ steps.orchestrator.outputs.exception_key }}
+          lookup-only: true
+
+      - name: Neuen Ausnahmefall intern melden
+        if: steps.orchestrator.outputs.has_exception == 'true' && steps.exception-cache.outputs.cache-hit != 'true'
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data @admin-exception-payload.json \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/admin-exception-notification)
+          echo "$RESPONSE"
+          RESPONSE_JSON="$RESPONSE" python3 - <<'PY'
+          import json, os
+          data=json.loads(os.environ['RESPONSE_JSON'])
+          if data.get('notificationSent') is not True:
+              raise SystemExit(f"Admin-Ausnahmebenachrichtigung fehlgeschlagen: {data}")
+          print("Neue Ausnahme wurde intern gemeldet ✅")
+          PY
+          printf '%s\n' "${{ steps.orchestrator.outputs.exception_key }}" > .lavuq-exception-notified
+
+      - name: Ausnahme-Benachrichtigungsstatus speichern
+        if: steps.orchestrator.outputs.has_exception == 'true' && steps.exception-cache.outputs.cache-hit != 'true' && success()
+        uses: actions/cache/save@v4
+        with:
+          path: .lavuq-exception-notified
+          key: lavuq-production-exception-${{ steps.orchestrator.outputs.exception_key }}
+
+      - name: Ausnahmefall als prüfpflichtig markieren
+        if: steps.orchestrator.outputs.has_exception == 'true'
+        run: |
+          echo "Der Normalbetrieb wurde für den betroffenen Ausnahmefall nicht blind fortgesetzt."
+          exit 1
