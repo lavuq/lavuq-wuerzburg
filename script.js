@@ -1,3 +1,14 @@
+// Keep the public navigation consistent across all pages.
+const publicNav=document.querySelector('.nav');
+if(publicNav && !publicNav.querySelector('a[href="mein-q.html"]')){
+  const meinQ=document.createElement('a');
+  meinQ.href='mein-q.html';
+  meinQ.textContent='Mein Q';
+  const firstLink=publicNav.querySelector('a');
+  if(firstLink) firstLink.insertAdjacentElement('afterend',meinQ);
+  else publicNav.prepend(meinQ);
+}
+
 document.querySelectorAll('.brand-mark').forEach(img=>{
   img.src='lavuq-q-square.png?v=full-logo-20260826-2';
   img.style.setProperty('display','block','important');
