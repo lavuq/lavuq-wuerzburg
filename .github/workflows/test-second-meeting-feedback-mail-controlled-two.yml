@@ -1,0 +1,29 @@
+name: Test Treffen 2 Feedbackmail Controlled Two
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-one-second-meeting-feedback-mail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau eine Feedback-Testmail an Teilnehmer 2 senden
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-feedback-mail"
+          BODY='{"meetingRecordId":"rec3iPEAAW6prt6A2","targetApplicantId":"recLH985oQTy0uh2q","controlledOne":true,"confirmation":"EINE_TREFFEN_2_FEEDBACK_MAIL_SENDEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .controlledOne == true and .emailsSent == 1 and .otherEmailsSent == 0 and .providerAccepted == true and .providerMessageIdPresent == true and .feedbackMailMarkedSent == true and .duplicateSendPrevented == true and .thirdMeetingPrepared == false and .piiExposedInResponse == false and .recipientIdsExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "Feedback-Testmails versendet: 1"
+          echo "Weitere Empfaenger angeschrieben: NEIN"
+          echo "Doppelversandschutz: AKTIV"
+          echo "Controlled-One Versand Teilnehmer 2 erfolgreich ✅"
