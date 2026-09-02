@@ -1,4 +1,4 @@
-// LAVUQ Treffen 3 – kontrollierter Versand genau einer persoenlichen Feedback-Testmail.
+// LAVUQ Treffen 3 – kontrollierter Versand genau einer persoenlichen Feedbackmail.
 const BASE_ID="apphnIBhuAbmMTUtY";
 const FEEDBACK_TABLE="tblLyjFTdr1MziUgj";
 const APPLICANTS_TABLE="tblzLtbR5Yh4nR5aQ";
@@ -32,14 +32,13 @@ async function sendMail(env,to,name,feedbackLink){
  const html=`<div style="font-family:Arial,sans-serif;line-height:1.6;color:#0b1f3a;max-width:620px;margin:0 auto">
   <h2>Hallo ${esc(name)},</h2>
   <p>wir möchten gern kurz wissen, wie du euer drittes LAVUQ-Treffen erlebt hast.</p>
-  <p>Über deinen persönlichen Link kannst du anschließend angeben, ob das Treffen stattgefunden hat, wie du dich gefühlt hast und ob du die Gruppe weiter kennenlernen möchtest.</p>
+  <p>Über deinen persönlichen Link kannst du angeben, ob das Treffen stattgefunden hat, wie du dich gefühlt hast und ob du die Gruppe weiter kennenlernen möchtest.</p>
   <p style="margin:28px 0"><a href="${esc(feedbackLink)}" style="background:#0b1f3a;color:#fff;text-decoration:none;padding:13px 20px;border-radius:8px;display:inline-block">Feedback geben</a></p>
   <p>Der Link ist persönlich und zeitlich begrenzt. Bitte leite ihn nicht weiter.</p>
-  <p><strong>TESTHINWEIS:</strong> Dies ist eine kontrollierte Testmail. Bitte das Feedbackformular noch nicht verbindlich absenden.</p>
   <p>Falls es eine unangenehme oder grenzüberschreitende Situation gab, kannst du LAVUQ darüber im Feedback informieren. Bei akuter Gefahr wende dich bitte direkt an 110 oder 112.</p>
   <p>Viele Grüße<br><strong>LAVUQ Würzburg</strong></p>
  </div>`;
- const r=await fetch("https://api.brevo.com/v3/smtp/email",{method:"POST",headers:{"api-key":env.BREVO_API_KEY,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({sender:{email:senderEmail,name:senderName},to:[{email:to,name}],subject:"TEST Feedback: Wie war euer drittes LAVUQ-Treffen?",htmlContent:html})});
+ const r=await fetch("https://api.brevo.com/v3/smtp/email",{method:"POST",headers:{"api-key":env.BREVO_API_KEY,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({sender:{email:senderEmail,name:senderName},to:[{email:to,name}],subject:"Feedback: Wie war euer drittes LAVUQ-Treffen?",htmlContent:html})});
  const raw=await r.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{}
  if(!r.ok)throw new Error(`BREVO_HTTP_${r.status}`);
  const messageId=String(data?.messageId||"").trim();if(!messageId)throw new Error("BREVO_MESSAGE_ID_MISSING");
@@ -57,7 +56,7 @@ export async function handleThirdMeetingFeedbackMailControlledOne(env,input={}){
  if(rows.length!==3)return{ok:false,status:409,code:"NOT_EXACTLY_3_THIRD_MEETING_FEEDBACK_REQUESTS",feedbackRequestCount:rows.length};
  const alreadySent=rows.filter(r=>r?.fields?.[FEEDBACK_MAIL_SENT]===true).length;
  const candidates=rows.filter(r=>r?.fields?.[FEEDBACK_MAIL_SENT]!==true&&!text(r?.fields?.[FEEDBACK_SUBMITTED_AT]));
- if(candidates.length===0)return{ok:true,status:200,state:"THIRD_MEETING_FEEDBACK_MAIL_TEST_ALREADY_COMPLETED",controlledOne:true,feedbackRequestCount:3,emailsSent:0,alreadySentCount:alreadySent,remainingUnsentCount:3-alreadySent,duplicateSendPrevented:true,airtableChanged:false,piiExposedInResponse:false,recipientIdsExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
+ if(candidates.length===0)return{ok:true,status:200,state:"THIRD_MEETING_FEEDBACK_MAIL_ALREADY_COMPLETED",controlledOne:true,feedbackRequestCount:3,emailsSent:0,alreadySentCount:alreadySent,remainingUnsentCount:3-alreadySent,duplicateSendPrevented:true,airtableChanged:false,piiExposedInResponse:false,recipientIdsExposedInResponse:false,tokenExposedInResponse:false,linkExposedInResponse:false};
  const row=candidates[0];
  const targetApplicantId=firstLink(row?.fields?.[FEEDBACK_APPLICANT]);
  if(!validRecordId(targetApplicantId))return{ok:false,status:409,code:"TARGET_APPLICANT_LINK_INVALID"};
