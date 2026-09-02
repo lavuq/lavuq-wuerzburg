@@ -8,6 +8,7 @@ import { handleSecondMeetingAnnouncement } from "./second-meeting-announcement.j
 import { handleSecondMeetingReminder24hDryRun } from "./second-meeting-reminder-24h.js";
 import { handleSecondMeetingReminder2hDryRun } from "./second-meeting-reminder-2h.js";
 import { handleFeedbackSubmit } from "./feedback-submit.js";
+import { handleSecondMeetingFeedbackCheckinDryRun } from "./second-meeting-feedback-checkin.js";
 
 function json(payload,status=200,extraHeaders={}){return new Response(JSON.stringify(payload,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store",...extraHeaders}});}
 function bearerToken(request){const header=String(request.headers.get("Authorization")||"");return header.startsWith("Bearer ")?header.slice(7):"";}
@@ -138,6 +139,18 @@ export default{
    }catch(e){
     console.error(e);
     return json({ok:false,error:"Treffen-2-2h-Erinnerung konnte nicht geprueft werden.",piiExposedInResponse:false},500);
+   }
+  }
+  if(url.pathname==="/gruppenfinder/second-meeting-feedback-checkin"){
+   if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
+   if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
+   try{
+    const input=await request.json().catch(()=>({}));
+    const result=await handleSecondMeetingFeedbackCheckinDryRun(env,input);
+    return json(result,Number(result?.status||(result?.ok?200:500)));
+   }catch(e){
+    console.error(e);
+    return json({ok:false,error:"Treffen-2-Feedback-Check-in konnte nicht geprueft werden.",piiExposedInResponse:false},500);
    }
   }
   return previewWorker.fetch(request,env,ctx);
