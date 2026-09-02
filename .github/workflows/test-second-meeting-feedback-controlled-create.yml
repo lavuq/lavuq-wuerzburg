@@ -1,0 +1,30 @@
+name: Test Treffen 2 Feedback kontrolliert vorbereiten
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prepare-second-meeting-feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Genau drei Feedbackanfragen ohne Mailversand anlegen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-feedback-checkin"
+          BODY='{"meetingRecordId":"rec3iPEAAW6prt6A2","asOf":"2026-09-16T16:00:00.000Z","dryRun":false,"controlledCreateAll":true,"prepareAheadForScheduledMeeting":true,"simulateRemindersCompleted":true,"confirmation":"DREI_FEEDBACK_ANFRAGEN_ANLEGEN"}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "SECOND_MEETING_FEEDBACK_PREPARED_FOR_ALL" and .controlledCreateAll == true and .meetingAttempt == 2 and .eligibleRecipientCount == 3 and .feedbackRequestsCreated == 3 and .personalFeedbackLinksCreated == 3 and .totalPreparedCount == 3 and .emailsSent == 0 and .airtableChanged == true and .thirdMeetingPrepared == false and .duplicateCreationPrevented == true and .excludedMembersReceivedFeedbackRequest == false and .piiExposedInResponse == false and .recipientIdsExposedInResponse == false and .tokenExposedInResponse == false and .linkExposedInResponse == false' >/dev/null
+          echo "Feedbackanfragen angelegt: $(echo "$JSON" | jq -r '.feedbackRequestsCreated')"
+          echo "Persoenliche Links gespeichert: $(echo "$JSON" | jq -r '.personalFeedbackLinksCreated')"
+          echo "E-Mails versendet: 0"
+          echo "Drittes Treffen vorbereitet: NEIN"
+          echo "Kontrollierte Vorbereitung erfolgreich ✅"
