@@ -2,17 +2,11 @@ name: Test Treffen 3 Feedback kontrolliert eine Mail
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-feedback-mail-controlled-one.yml'
 
 jobs:
   controlled-one:
     runs-on: ubuntu-latest
     steps:
-      - name: Kurz auf Worker-Deployment warten
-        run: sleep 25
-
       - name: Genau eine Treffen-3-Feedback-Testmail senden
         env:
           PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
