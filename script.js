@@ -6,6 +6,13 @@ document.querySelectorAll('.brand-mark').forEach(img=>{
   img.style.setProperty('width','48px','important');
   img.style.setProperty('height','48px','important');
   img.style.setProperty('object-fit','cover','important');
+  img.style.setProperty('cursor','pointer','important');
+  img.setAttribute('role','link');
+  img.setAttribute('tabindex','0');
+  img.setAttribute('aria-label','Zur LAVUQ Startseite');
+  const goHome=()=>{window.location.href='index.html';};
+  img.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();goHome();});
+  img.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goHome();}});
 });
 
 const toggle=document.querySelector('.nav-toggle');
@@ -52,7 +59,6 @@ if(form){
     }
   }
 
-  // Klare 4-Schritt-Struktur: Basisdaten → Situation & Gruppe → Über dich & Freundschaft → Wünsche & Abschluss.
   const originalSteps=[...form.querySelectorAll('.form-step')];
   if(originalSteps.length===4){
     const [basisStep,situationStep,aboutStep,finishStep]=originalSteps;
@@ -98,7 +104,6 @@ if(form){
     });
   }
 
-  // Moderne Schritt-Navigation und hochwertiger Formular-Look.
   const progressHead=document.querySelector('.progress-head');
   if(progressHead && !document.querySelector('.application-step-nav')){
     const stepNav=document.createElement('div');
@@ -269,7 +274,6 @@ if(location.pathname.includes('unsere-regeln')){
   });
 }
 
-// Globaler mobiler Header: LAVU/Würzburg links, Marken-Q exakt mittig, Menü rechts.
 if(window.matchMedia('(max-width: 520px)').matches){
   const mobileHeader=document.querySelector('.site-header');
   const mobileWrap=mobileHeader?.querySelector('.nav-wrap');
@@ -284,6 +288,13 @@ if(window.matchMedia('(max-width: 520px)').matches){
     mobileQ.className='mobile-brand-q';
     mobileQ.src='lavuq-q-square.png?v=mobile-centered-q-global-20260828';
     mobileQ.alt='LAVUQ Q Logo';
+    mobileQ.setAttribute('role','link');
+    mobileQ.setAttribute('tabindex','0');
+    mobileQ.setAttribute('aria-label','Zur LAVUQ Startseite');
+    mobileQ.style.cursor='pointer';
+    const mobileGoHome=()=>{window.location.href='index.html';};
+    mobileQ.addEventListener('click',mobileGoHome);
+    mobileQ.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mobileGoHome();}});
     mobileWrap.appendChild(mobileQ);
 
     document.querySelector('#lavuq-mobile-header-fix')?.remove();
@@ -366,6 +377,7 @@ if(window.matchMedia('(max-width: 520px)').matches){
           box-shadow:none!important;
           margin:0!important;
           z-index:42!important;
+          cursor:pointer!important;
         }
         .site-header .nav-toggle{
           position:absolute!important;
@@ -409,7 +421,6 @@ if(window.matchMedia('(max-width: 520px)').matches){
   }
 }
 
-// Startseite mobil: Hero kompakter und Sicherheitsbox etwas weiter unten.
 if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' || location.pathname.endsWith('/index.html'))){
   const heroCompactStyle=document.createElement('style');
   heroCompactStyle.id='lavuq-hero-compact-20260828';
@@ -427,7 +438,6 @@ if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' |
   document.head.appendChild(heroCompactStyle);
 }
 
-// Startseite: "Mehr über Sicherheit" als weißer Sekundär-Button.
 if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
   const safetyButton=document.querySelector('#so-gehts a[href="sicherheit.html"]');
   if(safetyButton){
@@ -437,7 +447,6 @@ if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
   }
 }
 
-// Startseite mobil: Goldene 4-Personen-Silhouette in der Box "ECHTE MENSCHEN".
 if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' || location.pathname.endsWith('/index.html'))){
   const peopleLabel=document.querySelector('.mobile-photo-label');
   if(peopleLabel){
@@ -449,7 +458,6 @@ if(window.matchMedia('(max-width: 520px)').matches && (location.pathname==='/' |
   }
 }
 
-// Startseite: Terminversuche-Karte sprachlich präzisieren.
 if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
   document.querySelectorAll('.compact-card').forEach(card=>{
     const heading=card.querySelector('h3');
