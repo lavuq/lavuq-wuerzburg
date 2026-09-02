@@ -1,0 +1,28 @@
+name: Test Treffen 3 Vorbereitung Dry Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-third-meeting-prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 3 Vorbereitung nur pruefen
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-prepare"
+          BODY='{"groupId":"rec1qr2gZqRVxaCGk","secondMeetingRecordId":"rec3iPEAAW6prt6A2","dryRun":true}'
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "$BODY")
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and .state == "READY_TO_PREPARE_THIRD_MEETING" and .dryRun == true and .readOnly == true and .feedbackRequestCount == 3 and .submittedCount == 3 and .yesCount == 3 and .continuingParticipantCount == 3 and .wouldPrepareThirdMeeting == true and .wouldCreateThirdMeeting == false and .duplicateCreationPrevented == true and .airtableChanged == false and .emailsSent == 0 and .piiExposedInResponse == false' >/dev/null
+          echo "Treffen 3 ist bereit zur Vorbereitung ✅"
+          echo "Airtable veraendert: NEIN"
+          echo "Treffen angelegt: NEIN"
