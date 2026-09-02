@@ -2,9 +2,6 @@ name: Treffen 3 Feedback verbleibende Mails kontrolliert senden
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-feedback-mail-remaining.yml'
 
 jobs:
   remaining-two:
