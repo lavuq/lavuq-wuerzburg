@@ -2,9 +2,6 @@ name: Test Treffen 3 2h-Erinnerung Dry Run
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/test-third-meeting-reminder-2h-dry-run.yml'
 
 jobs:
   dry-run:
