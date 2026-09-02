@@ -2,6 +2,9 @@ name: Test Treffen 3 Terminankündigung verbleibende Mails
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/test-third-meeting-announcement-controlled-all.yml'
 
 jobs:
   controlled-all:
