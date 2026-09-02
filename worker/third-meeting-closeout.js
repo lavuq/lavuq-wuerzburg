@@ -66,7 +66,7 @@ export async function handleThirdMeetingCloseout(env,input={}){
  const meetingDate=new Date(text(meeting?.fields?.[MEETING_DATE]));
  if(!Number.isFinite(meetingDate.getTime()))return{ok:false,status:409,code:"MEETING_DATE_INVALID"};
  const beforeMeeting=Date.now()<meetingDate.getTime();
- if(execute&&beforeMeeting&&input.allowBeforeMeetingForTest!==true)return{ok:false,status:409,code:"MEETING_NOT_YET_OCCURRED"};
+ if(execute&&beforeMeeting)return{ok:false,status:409,code:"MEETING_NOT_YET_OCCURRED"};
  const groupId=firstLink(meeting?.fields?.[MEETING_GROUP]);
  if(!validRecordId(groupId))return{ok:false,status:409,code:"GROUP_LINK_INVALID"};
  const memberIds=parseMemberIds(meeting?.fields?.[MEETING_PARTICIPANTS]);
@@ -89,5 +89,5 @@ export async function handleThirdMeetingCloseout(env,input={}){
  }
  const endDate=meetingDate.toISOString().slice(0,10);
  await patch(env,GROUPS_TABLE,groupId,{[GROUP_STATUS]:"Abgeschlossen",[GROUP_END_DATE]:endDate});
- return{ok:true,status:200,state:"THIRD_MEETING_GROUP_CLOSED_SUCCESSFULLY",controlledExecute:true,meetingAttempt:3,participantCount:3,emailsSent,alreadySentCount:alreadySent,groupStatusChanged:true,membersMarkedCompleted:true,airtableChanged:true,beforeMeetingTestOverride:beforeMeeting&&input.allowBeforeMeetingForTest===true,duplicateSendPrevented:true,piiExposedInResponse:false};
+ return{ok:true,status:200,state:"THIRD_MEETING_GROUP_CLOSED_SUCCESSFULLY",controlledExecute:true,meetingAttempt:3,participantCount:3,emailsSent,alreadySentCount:alreadySent,groupStatusChanged:true,membersMarkedCompleted:true,airtableChanged:true,duplicateSendPrevented:true,piiExposedInResponse:false};
 }
