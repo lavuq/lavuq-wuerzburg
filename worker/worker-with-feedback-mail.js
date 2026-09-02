@@ -5,6 +5,7 @@ import { handleFirstMeetingFeedbackDecisionDryRun } from "./first-meeting-feedba
 import { handleSecondMeetingPrepare } from "./second-meeting-prepare.js";
 import { handleSecondMeetingCommunicationDryRun } from "./second-meeting-communication-dry-run.js";
 import { handleSecondMeetingAnnouncement } from "./second-meeting-announcement.js";
+import { handleSecondMeetingReminder24hDryRun } from "./second-meeting-reminder-24h.js";
 import { handleFeedbackSubmit } from "./feedback-submit.js";
 
 function json(payload,status=200,extraHeaders={}){return new Response(JSON.stringify(payload,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store",...extraHeaders}});}
@@ -112,6 +113,18 @@ export default{
    }catch(e){
     console.error(e);
     return json({ok:false,error:"Treffen-2-Terminankuendigung konnte nicht verarbeitet werden.",piiExposedInResponse:false},500);
+   }
+  }
+  if(url.pathname==="/gruppenfinder/second-meeting-reminder-24h"){
+   if(request.method!=="POST")return json({ok:false,error:"Nur POST ist erlaubt."},405);
+   if(!authorized(request,env))return json({ok:false,error:"Nicht autorisiert."},401);
+   try{
+    const input=await request.json().catch(()=>({}));
+    const result=await handleSecondMeetingReminder24hDryRun(env,input);
+    return json(result,Number(result?.status||(result?.ok?200:500)));
+   }catch(e){
+    console.error(e);
+    return json({ok:false,error:"Treffen-2-24h-Erinnerung konnte nicht geprueft werden.",piiExposedInResponse:false},500);
    }
   }
   return previewWorker.fetch(request,env,ctx);
