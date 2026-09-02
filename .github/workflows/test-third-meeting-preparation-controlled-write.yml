@@ -1,0 +1,76 @@
+name: Test Treffen 3 kontrolliert anlegen
+
+on:
+  workflow_dispatch:
+    inputs:
+      date_time:
+        description: 'Datum und Uhrzeit für Treffen 3, ISO-Format, z. B. 2026-09-29T18:00:00+02:00'
+        required: true
+        type: string
+      place:
+        description: 'Öffentlicher Treffpunkt für Treffen 3'
+        required: true
+        type: string
+      group_agreed:
+        description: 'Termin und Treffpunkt wurden mit der Gruppe abgestimmt'
+        required: true
+        default: false
+        type: boolean
+      public_place_confirmed:
+        description: 'Treffpunkt ist öffentlich'
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  create-third-meeting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Treffen 3 kontrolliert anlegen
+        env:
+          KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+          DATE_TIME: ${{ inputs.date_time }}
+          PLACE: ${{ inputs.place }}
+          GROUP_AGREED: ${{ inputs.group_agreed }}
+          PUBLIC_PLACE_CONFIRMED: ${{ inputs.public_place_confirmed }}
+        run: |
+          set -euo pipefail
+
+          GROUP_ID="rec1qr2gZqRVxaCGk"
+          SECOND_MEETING_ID="rec3iPEAAW6prt6A2"
+
+          test "$GROUP_AGREED" = "true"
+          test "$PUBLIC_PLACE_CONFIRMED" = "true"
+
+          PAYLOAD=$(jq -n \
+            --arg groupId "$GROUP_ID" \
+            --arg secondMeetingRecordId "$SECOND_MEETING_ID" \
+            --arg dateTime "$DATE_TIME" \
+            --arg place "$PLACE" \
+            '{groupId:$groupId,secondMeetingRecordId:$secondMeetingRecordId,dryRun:false,dateTime:$dateTime,place:$place,groupAgreed:true,publicPlaceConfirmed:true,confirmation:"DRITTES_TREFFEN_ANLEGEN"}')
+
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST \
+            "https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/third-meeting-prepare" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            --data "$PAYLOAD")
+
+          BODY=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$BODY" | jq .
+          echo "HTTP: $HTTP"
+
+          test "$HTTP" = "200"
+          STATE=$(echo "$BODY" | jq -r '.state')
+          test "$STATE" = "THIRD_MEETING_CREATED" -o "$STATE" = "THIRD_MEETING_ALREADY_EXISTS"
+          test "$(echo "$BODY" | jq -r '.piiExposedInResponse // false')" = "false"
+
+          if [ "$STATE" = "THIRD_MEETING_CREATED" ]; then
+            test "$(echo "$BODY" | jq -r '.meetingAttempt')" = "3"
+            test "$(echo "$BODY" | jq -r '.airtableChanged')" = "true"
+            test "$(echo "$BODY" | jq -r '.emailsSent')" = "0"
+            echo "Treffen 3 wurde kontrolliert angelegt ✅"
+          else
+            test "$(echo "$BODY" | jq -r '.duplicateCreationPrevented')" = "true"
+            echo "Treffen 3 existiert bereits – Doppelanlage verhindert ✅"
+          fi
