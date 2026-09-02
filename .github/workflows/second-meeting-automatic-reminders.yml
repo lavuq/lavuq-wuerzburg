@@ -1,0 +1,70 @@
+name: Treffen 2 automatische Erinnerungen
+
+on:
+  schedule:
+    - cron: '0 16 14 9 *'
+    - cron: '0 14 15 9 *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: treffen-2-erinnerungen-rec3iPEAAW6prt6A2
+  cancel-in-progress: false
+
+jobs:
+  reminders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Nur im vorgesehenen Jahr ausführen
+        id: year
+        shell: bash
+        run: |
+          if [ "$(date -u +%Y)" = "2026" ]; then
+            echo "active=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "active=false" >> "$GITHUB_OUTPUT"
+            echo "Außerhalb des vorgesehenen Jahres – keine Aktion."
+          fi
+
+      - name: 24h-Erinnerung sicher prüfen und gegebenenfalls senden
+        if: steps.year.outputs.active == 'true'
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-reminder-24h"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"rec3iPEAAW6prt6A2","mode":"automatic","confirmation":"AUTOMATIC_SECOND_MEETING_24H"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and (.state == "SECOND_MEETING_24H_NOT_DUE" or .state == "SECOND_MEETING_24H_ALREADY_COMPLETED" or .state == "SECOND_MEETING_24H_SENT_TO_ALL") and .piiExposedInResponse == false' >/dev/null
+          echo "24h-Status: $(echo "$JSON" | jq -r '.state')"
+          echo "Jetzt versendete E-Mails: $(echo "$JSON" | jq -r '.emailsSent')"
+
+      - name: 2h-Erinnerung sicher prüfen und gegebenenfalls senden
+        if: steps.year.outputs.active == 'true'
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/second-meeting-reminder-2h"
+          RESP=$(curl -sS -w '\n%{http_code}' -X POST "$URL" \
+            -H "Authorization: Bearer $PREVIEW_KEY" \
+            -H "Content-Type: application/json" \
+            --data '{"meetingRecordId":"rec3iPEAAW6prt6A2","mode":"automatic","confirmation":"AUTOMATIC_SECOND_MEETING_2H"}')
+          JSON=$(echo "$RESP" | sed '$d')
+          HTTP=$(echo "$RESP" | tail -n1)
+          echo "$JSON" | jq .
+          test "$HTTP" = "200"
+          echo "$JSON" | jq -e '.ok == true and (.state == "SECOND_MEETING_2H_NOT_DUE" or .state == "SECOND_MEETING_2H_WAITING_FOR_24H" or .state == "SECOND_MEETING_2H_ALREADY_COMPLETED" or .state == "SECOND_MEETING_2H_SENT_TO_ALL") and .piiExposedInResponse == false' >/dev/null
+          echo "2h-Status: $(echo "$JSON" | jq -r '.state')"
+          echo "Jetzt versendete E-Mails: $(echo "$JSON" | jq -r '.emailsSent')"
