@@ -1,0 +1,47 @@
+name: LAVUQ Produktions-Orchestrator
+
+on:
+  schedule:
+    - cron: '12 * * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/lavuq-production-orchestrator.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Kurz auf Worker-Deployment warten
+        if: github.event_name == 'push'
+        run: sleep 30
+      - name: Produktiven LAVUQ-Ablauf ausführen
+        env:
+          PREVIEW_KEY: ${{ secrets.GRUPPENFINDER_PREVIEW_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PREVIEW_KEY:-}" ]; then
+            echo "Fehler: GRUPPENFINDER_PREVIEW_KEY fehlt."
+            exit 1
+          fi
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: Bearer ${PREVIEW_KEY}" \
+            -H "Content-Type: application/json" \
+            --data '{"confirmation":"RUN_LAVUQ_PRODUCTION_ORCHESTRATOR"}' \
+            https://lavuq-bewerbung.lavuq.workers.dev/gruppenfinder/production-orchestrator)
+          echo "$RESPONSE"
+          RESPONSE_JSON="$RESPONSE" python3 - <<'PY'
+          import json, os, sys
+          data=json.loads(os.environ['RESPONSE_JSON'])
+          if data.get('status') not in (200,207):
+              raise SystemExit(f"Orchestrator HTTP/Status unerwartet: {data}")
+          if data.get('active') is not True:
+              raise SystemExit(f"Orchestrator nicht aktiv: {data}")
+          print(f"Aktiv ✅ | verarbeitet={data.get('processedCount',0)} | Mails={data.get('emailsSent',0)} | Prüfhinweise={data.get('hardErrors',0)}")
+          if data.get('hardErrors',0) > 0:
+              raise SystemExit("Produktions-Orchestrator meldet einen prüfpflichtigen Fehler.")
+          PY
