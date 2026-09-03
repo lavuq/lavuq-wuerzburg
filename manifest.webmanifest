@@ -3,7 +3,7 @@
   "short_name": "LAVUQ",
   "description": "Neue Kontakte. Echte Freundschaften. LAVUQ Würzburg verbindet vier passende Menschen für echte Treffen und gemeinsame Unternehmungen.",
   "lang": "de-DE",
-  "start_url": "/index.html?source=pwa",
+  "start_url": "/app.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -28,7 +28,7 @@
     {
       "name": "Mein Q",
       "short_name": "Mein Q",
-      "url": "/mein-q.html",
+      "url": "/app.html",
       "icons": [{"src":"/lavuq-q-square.png","sizes":"any","type":"image/png"}]
     },
     {
