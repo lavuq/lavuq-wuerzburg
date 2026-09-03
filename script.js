@@ -479,3 +479,25 @@ if(location.pathname==='/' || location.pathname.endsWith('/index.html')){
     }
   });
 }
+
+// Mobile transition polish for the public subpages that looked visually cut off.
+if(window.matchMedia('(max-width: 520px)').matches && (
+  location.pathname.includes('unsere-regeln') ||
+  location.pathname.includes('so-finden-wir-deine-gruppe')
+)){
+  const transitionStyle=document.createElement('style');
+  transitionStyle.id='lavuq-mobile-subpage-transition-polish';
+  transitionStyle.textContent=`
+    @media(max-width:520px){
+      main>.hero{padding-bottom:58px!important;min-height:auto!important}
+      main>.hero .hero-actions{margin-bottom:24px!important}
+      main>.hero .pill-row{margin-top:18px!important;margin-bottom:0!important}
+      main>.section-visual-break{padding-top:26px!important;padding-bottom:28px!important;background:#f7f3ea!important}
+      main>.section-visual-break .container{width:min(calc(100% - 22px),var(--max))!important}
+      main>.section-visual-break .visual-frame{margin-top:0!important;border-radius:20px!important;overflow:hidden!important}
+      main>.section-visual-break .visual-frame img{width:100%!important;height:auto!important;aspect-ratio:16/10!important;object-fit:cover!important}
+      main>.section-visual-break .visual-caption{padding:16px 17px 18px!important;line-height:1.48!important}
+    }
+  `;
+  document.head.appendChild(transitionStyle);
+}
