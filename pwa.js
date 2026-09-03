@@ -42,6 +42,40 @@
   }
 
   const standalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+
+  if(standalone && location.pathname.includes('mitglied')){
+    document.documentElement.classList.add('lavuq-standalone');
+    const style=document.createElement('style');
+    style.id='lavuq-standalone-member-style';
+    style.textContent=`
+      html.lavuq-standalone body{padding-bottom:calc(78px + env(safe-area-inset-bottom));background:#f7f3ea}
+      html.lavuq-standalone header{padding-top:calc(16px + env(safe-area-inset-top));position:sticky;top:0;z-index:90}
+      html.lavuq-standalone .wrap{margin-top:18px;margin-bottom:22px}
+      html.lavuq-standalone .app-shell{border-radius:22px}
+      html.lavuq-standalone .app-tabs:not(.lavuq-app-bottom-nav){display:none!important}
+      .lavuq-app-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:9995;display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:rgba(4,21,41,.97);border-top:1px solid rgba(216,180,106,.58);box-shadow:0 -12px 32px rgba(4,21,41,.18);backdrop-filter:blur(16px)}
+      .lavuq-app-bottom-nav .app-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:54px;padding:6px 4px;border-radius:13px;color:#cdd5df;font-size:.72rem;font-weight:800}
+      .lavuq-app-bottom-nav .app-tab .nav-icon{font-size:1.2rem;line-height:1}
+      .lavuq-app-bottom-nav .app-tab.active{background:rgba(216,180,106,.16);color:#e5c577}
+      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}}
+    `;
+    head.appendChild(style);
+
+    const bottom=document.createElement('nav');
+    bottom.className='lavuq-app-bottom-nav';
+    bottom.setAttribute('aria-label','LAVUQ App Navigation');
+    bottom.innerHTML=`
+      <button class="app-tab active" data-tab="uebersicht" aria-selected="true"><span class="nav-icon">⌂</span><span>Mein Q</span></button>
+      <button class="app-tab" data-tab="chat" aria-selected="false"><span class="nav-icon">💬</span><span>Chat</span></button>
+      <button class="app-tab" data-tab="treffen" aria-selected="false"><span class="nav-icon">◷</span><span>Treffen</span></button>
+      <button class="app-tab" data-tab="sicherheit" aria-selected="false"><span class="nav-icon">🛡</span><span>Sicherheit</span></button>`;
+    bottom.querySelectorAll('.app-tab').forEach(btn=>btn.addEventListener('click',()=>{
+      const original=document.querySelector(`.app-tabs:not(.lavuq-app-bottom-nav) .app-tab[data-tab="${btn.dataset.tab}"]`);
+      if(original) original.click();
+    }));
+    document.body.appendChild(bottom);
+  }
+
   if(standalone) return;
 
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
