@@ -501,3 +501,12 @@ if(window.matchMedia('(max-width: 520px)').matches && (
   `;
   document.head.appendChild(transitionStyle);
 }
+
+// PWA bootstrap: loads the install experience on every public page using this script.
+if(!document.querySelector('script[data-lavuq-pwa]')){
+  const pwaScript=document.createElement('script');
+  pwaScript.src='/pwa.js?v=1';
+  pwaScript.defer=true;
+  pwaScript.dataset.lavuqPwa='1';
+  document.head.appendChild(pwaScript);
+}
