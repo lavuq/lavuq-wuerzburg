@@ -1,11 +1,13 @@
-const CACHE='lavuq-pwa-v1';
+const CACHE='lavuq-pwa-v2';
 const CORE=[
   '/',
   '/index.html',
+  '/app.html',
   '/styles.css',
   '/script.js',
   '/manifest.webmanifest',
-  '/lavuq-q-square.png'
+  '/lavuq-q-square.png',
+  '/CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png'
 ];
 
 self.addEventListener('install',event=>{
@@ -32,7 +34,7 @@ self.addEventListener('fetch',event=>{
           caches.open(CACHE).then(cache=>cache.put(request,copy));
           return response;
         })
-        .catch(()=>caches.match(request).then(hit=>hit || caches.match('/index.html')))
+        .catch(()=>caches.match(request).then(hit=>hit || caches.match('/app.html') || caches.match('/index.html')))
     );
     return;
   }
