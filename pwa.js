@@ -65,16 +65,26 @@
       .lavuq-app-splash .tagline{font-size:.82rem;letter-spacing:.08em;color:#cbd3dd;margin-top:28px;text-align:center}
       @keyframes lavuqSplashIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
       .lavuq-app-hero{display:none}
-      html.lavuq-standalone .lavuq-app-hero{display:block;background:linear-gradient(145deg,#041529,#102b49);color:#fff;border:1px solid rgba(216,180,106,.52);border-radius:22px;padding:22px;margin-bottom:16px;box-shadow:0 16px 38px rgba(4,21,41,.14);position:relative;overflow:hidden}
+      html.lavuq-standalone .lavuq-app-hero{display:block;background:linear-gradient(145deg,#041529,#102b49);color:#fff;border:1px solid rgba(216,180,106,.52);border-radius:22px;padding:22px;margin-bottom:14px;box-shadow:0 16px 38px rgba(4,21,41,.14);position:relative;overflow:hidden}
       html.lavuq-standalone .lavuq-app-hero:after{content:"Q";position:absolute;right:-12px;bottom:-36px;font-family:Georgia,'Times New Roman',serif;font-size:9rem;line-height:1;color:rgba(216,180,106,.08)}
       html.lavuq-standalone .lavuq-app-hero-top{display:flex;align-items:center;gap:13px;position:relative;z-index:1}
       html.lavuq-standalone .lavuq-app-hero-logo{width:52px;height:52px;object-fit:contain;flex:0 0 auto}
       html.lavuq-standalone .lavuq-app-hero-kicker{color:#d8b46a;font-size:.72rem;font-weight:850;letter-spacing:.15em;text-transform:uppercase}
       html.lavuq-standalone .lavuq-app-hero h2{font-family:Georgia,'Times New Roman',serif;font-size:1.75rem;margin:2px 0 0;color:#fff;font-weight:500}
       html.lavuq-standalone .lavuq-app-hero p{position:relative;z-index:1;color:#dce3eb;line-height:1.5;margin:15px 0 0;font-size:.94rem;max-width:570px}
+      html.lavuq-standalone .lavuq-dashboard-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 14px}
+      html.lavuq-standalone .lavuq-dashboard-action{appearance:none;border:1px solid #e3d7c1;background:#fff;border-radius:18px;padding:16px 12px;text-align:left;box-shadow:0 8px 22px rgba(4,21,41,.05);cursor:pointer;color:#132033}
+      html.lavuq-standalone .lavuq-dashboard-action .ico{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#041529;color:#d8b46a;font-size:1.05rem;margin-bottom:10px}
+      html.lavuq-standalone .lavuq-dashboard-action strong{display:block;font-size:.94rem;margin-bottom:4px}
+      html.lavuq-standalone .lavuq-dashboard-action small{display:block;color:#6d7684;line-height:1.35}
+      html.lavuq-standalone #uebersicht>.panel-grid>.card:first-child{border-color:rgba(216,180,106,.55);box-shadow:0 12px 30px rgba(4,21,41,.07)}
+      html.lavuq-standalone #uebersicht>.panel-grid>.card:first-child h2:before{content:"●";color:#61a77b;font-size:.65rem;vertical-align:middle;margin-right:8px}
+      html.lavuq-standalone #groupMeta{font-size:.88rem;line-height:1.45}
+      html.lavuq-standalone .member{background:#fff;border-color:#e8e1d5}
+      html.lavuq-standalone .member.me{background:#fff8e8;border-color:#d8b46a}
       html.lavuq-standalone .quick-grid{gap:10px}
       html.lavuq-standalone .quick{background:#fff;border-color:#e5dccb;box-shadow:0 9px 24px rgba(4,21,41,.05)}
-      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}}
+      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}html.lavuq-standalone .lavuq-dashboard-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}html.lavuq-standalone .lavuq-dashboard-action{padding:13px 9px;border-radius:16px}html.lavuq-standalone .lavuq-dashboard-action .ico{width:33px;height:33px;margin-bottom:8px}html.lavuq-standalone .lavuq-dashboard-action strong{font-size:.82rem}html.lavuq-standalone .lavuq-dashboard-action small{display:none}}
     `;
     head.appendChild(style);
 
@@ -95,6 +105,18 @@
       hero.className='lavuq-app-hero';
       hero.innerHTML=`<div class="lavuq-app-hero-top"><img class="lavuq-app-hero-logo" src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt="LAVUQ Q"><div><div class="lavuq-app-hero-kicker">Dein persönlicher Bereich</div><h2>Mein Q</h2></div></div><p>Hier findest du deine Freundesgruppe, euren privaten Chat, die Planung eurer Treffen und den direkten Sicherheitsbereich.</p>`;
       overview.prepend(hero);
+
+      const strip=document.createElement('div');
+      strip.className='lavuq-dashboard-strip';
+      strip.innerHTML=`
+        <button class="lavuq-dashboard-action" type="button" data-go-tab="chat"><span class="ico">💬</span><strong>Chat</strong><small>Mit deiner Gruppe schreiben</small></button>
+        <button class="lavuq-dashboard-action" type="button" data-go-tab="treffen"><span class="ico">◷</span><strong>Treffen</strong><small>Termin planen und abstimmen</small></button>
+        <button class="lavuq-dashboard-action" type="button" data-go-tab="sicherheit"><span class="ico">🛡</span><strong>Sicherheit</strong><small>Vertraulich LAVUQ erreichen</small></button>`;
+      hero.insertAdjacentElement('afterend',strip);
+      strip.querySelectorAll('[data-go-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+        const original=document.querySelector(`.app-tabs:not(.lavuq-app-bottom-nav) .app-tab[data-tab="${btn.dataset.goTab}"]`);
+        if(original) original.click();
+      }));
     }
 
     const bottom=document.createElement('nav');
