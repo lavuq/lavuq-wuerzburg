@@ -84,7 +84,26 @@
       html.lavuq-standalone .member.me{background:#fff8e8;border-color:#d8b46a}
       html.lavuq-standalone .quick-grid{gap:10px}
       html.lavuq-standalone .quick{background:#fff;border-color:#e5dccb;box-shadow:0 9px 24px rgba(4,21,41,.05)}
-      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}html.lavuq-standalone .lavuq-dashboard-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}html.lavuq-standalone .lavuq-dashboard-action{padding:13px 9px;border-radius:16px}html.lavuq-standalone .lavuq-dashboard-action .ico{width:33px;height:33px;margin-bottom:8px}html.lavuq-standalone .lavuq-dashboard-action strong{font-size:.82rem}html.lavuq-standalone .lavuq-dashboard-action small{display:none}}
+      html.lavuq-standalone #chat>.card{padding:0!important;overflow:hidden;border-color:#ddd4c4;box-shadow:0 12px 30px rgba(4,21,41,.08)}
+      html.lavuq-standalone .lavuq-chat-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#041529;color:#fff;border-bottom:1px solid rgba(216,180,106,.42)}
+      html.lavuq-standalone .lavuq-chat-head img{width:42px;height:42px;object-fit:contain;flex:0 0 auto}
+      html.lavuq-standalone .lavuq-chat-head strong{display:block;font-size:1rem}
+      html.lavuq-standalone .lavuq-chat-head span{display:block;color:#bfc9d5;font-size:.78rem;margin-top:2px}
+      html.lavuq-standalone #chat>.card>h2,html.lavuq-standalone #chat>.card>p{display:none}
+      html.lavuq-standalone .chat-log{height:min(58vh,560px);border:0;border-radius:0;background:linear-gradient(rgba(247,243,234,.94),rgba(247,243,234,.94)),radial-gradient(circle at 20% 20%,rgba(216,180,106,.18) 0 1px,transparent 1.5px);background-size:auto,24px 24px;padding:16px 12px 18px}
+      html.lavuq-standalone .bubble{position:relative;max-width:82%;border:0;border-radius:17px 17px 17px 5px;background:#fff;box-shadow:0 3px 10px rgba(4,21,41,.07);padding:10px 12px;margin-bottom:10px;font-size:.94rem;line-height:1.4}
+      html.lavuq-standalone .bubble.me{margin-left:auto;border-radius:17px 17px 5px 17px;background:#fff2cb;color:#172333}
+      html.lavuq-standalone .bubble.system{max-width:92%;margin:10px auto;border-radius:12px;background:rgba(4,21,41,.08);box-shadow:none;color:#526071;font-size:.82rem;padding:8px 11px}
+      html.lavuq-standalone .bubble>strong{display:block;color:#8c6b2b;font-size:.75rem;margin-bottom:3px}
+      html.lavuq-standalone .bubble.me>strong{color:#69501f}
+      html.lavuq-standalone .bubble.system>strong{display:none}
+      html.lavuq-standalone .bubble small{font-size:.67rem;text-align:right;color:#8a929d;margin-top:4px}
+      html.lavuq-standalone .composer{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin:0;padding:10px 10px calc(10px + env(safe-area-inset-bottom)*.15);background:#fff;border-top:1px solid #e5ded2}
+      html.lavuq-standalone .composer textarea{min-height:46px;max-height:112px;border-radius:22px;border:1px solid #ddd7cd;padding:12px 14px;background:#f8f7f4;resize:none;line-height:1.35}
+      html.lavuq-standalone .composer textarea:focus{outline:2px solid rgba(216,180,106,.28);border-color:#c8aa67;background:#fff}
+      html.lavuq-standalone .composer .btn{width:46px!important;height:46px;min-width:46px;padding:0;border-radius:50%;font-size:0;background:#d8b46a;position:relative}
+      html.lavuq-standalone .composer .btn:after{content:"➤";font-size:1rem;color:#041529;transform:translateX(1px)}
+      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}html.lavuq-standalone .lavuq-dashboard-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}html.lavuq-standalone .lavuq-dashboard-action{padding:13px 9px;border-radius:16px}html.lavuq-standalone .lavuq-dashboard-action .ico{width:33px;height:33px;margin-bottom:8px}html.lavuq-standalone .lavuq-dashboard-action strong{font-size:.82rem}html.lavuq-standalone .lavuq-dashboard-action small{display:none}html.lavuq-standalone #chat>.card{border-radius:18px!important}html.lavuq-standalone .chat-log{height:calc(100vh - 345px);min-height:340px}html.lavuq-standalone .composer{grid-template-columns:1fr auto!important}html.lavuq-standalone .composer .btn{width:46px!important}}
     `;
     head.appendChild(style);
 
@@ -117,6 +136,14 @@
         const original=document.querySelector(`.app-tabs:not(.lavuq-app-bottom-nav) .app-tab[data-tab="${btn.dataset.goTab}"]`);
         if(original) original.click();
       }));
+    }
+
+    const chatCard=document.querySelector('#chat>.card');
+    if(chatCard && !chatCard.querySelector('.lavuq-chat-head')){
+      const chatHead=document.createElement('div');
+      chatHead.className='lavuq-chat-head';
+      chatHead.innerHTML=`<img src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt="LAVUQ Q"><div><strong>Deine LAVUQ-Gruppe</strong><span>Privater Gruppenchat · nur für eure Gruppe</span></div>`;
+      chatCard.prepend(chatHead);
     }
 
     const bottom=document.createElement('nav');
