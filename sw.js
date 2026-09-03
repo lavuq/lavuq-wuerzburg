@@ -1,4 +1,4 @@
-const CACHE='lavuq-pwa-v3';
+const CACHE='lavuq-pwa-v4';
 const CORE=[
   '/',
   '/index.html',
@@ -28,13 +28,25 @@ self.addEventListener('fetch',event=>{
 
   if(request.mode==='navigate'){
     event.respondWith(
-      fetch(request)
+      fetch(request,{cache:'no-store'})
+        .then(response=>response)
+        .catch(()=>caches.match(request).then(hit=>hit || caches.match('/app.html') || caches.match('/index.html')))
+    );
+    return;
+  }
+
+  const freshAsset=/\.(?:html|css|js|webmanifest)$/i.test(url.pathname);
+  if(freshAsset){
+    event.respondWith(
+      fetch(request,{cache:'no-store'})
         .then(response=>{
-          const copy=response.clone();
-          caches.open(CACHE).then(cache=>cache.put(request,copy));
+          if(response && response.ok){
+            const copy=response.clone();
+            caches.open(CACHE).then(cache=>cache.put(request,copy));
+          }
           return response;
         })
-        .catch(()=>caches.match(request).then(hit=>hit || caches.match('/app.html') || caches.match('/index.html')))
+        .catch(()=>caches.match(request))
     );
     return;
   }
