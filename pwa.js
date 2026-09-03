@@ -57,9 +57,45 @@
       .lavuq-app-bottom-nav .app-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:54px;padding:6px 4px;border-radius:13px;color:#cdd5df;font-size:.72rem;font-weight:800}
       .lavuq-app-bottom-nav .app-tab .nav-icon{font-size:1.2rem;line-height:1}
       .lavuq-app-bottom-nav .app-tab.active{background:rgba(216,180,106,.16);color:#e5c577}
-      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}}
+      .lavuq-app-splash{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#041529;color:#fff;padding:28px;padding-top:calc(28px + env(safe-area-inset-top));padding-bottom:calc(28px + env(safe-area-inset-bottom));transition:opacity .38s ease,visibility .38s ease}
+      .lavuq-app-splash.hide{opacity:0;visibility:hidden}
+      .lavuq-app-splash img{width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 12px 32px rgba(0,0,0,.24));animation:lavuqSplashIn .55s ease both}
+      .lavuq-app-splash .word{font-family:Georgia,'Times New Roman',serif;font-size:2.35rem;letter-spacing:.18em;margin-top:18px}
+      .lavuq-app-splash .city{color:#d8b46a;font-family:Georgia,'Times New Roman',serif;font-size:1rem;margin-top:7px}
+      .lavuq-app-splash .tagline{font-size:.82rem;letter-spacing:.08em;color:#cbd3dd;margin-top:28px;text-align:center}
+      @keyframes lavuqSplashIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+      .lavuq-app-hero{display:none}
+      html.lavuq-standalone .lavuq-app-hero{display:block;background:linear-gradient(145deg,#041529,#102b49);color:#fff;border:1px solid rgba(216,180,106,.52);border-radius:22px;padding:22px;margin-bottom:16px;box-shadow:0 16px 38px rgba(4,21,41,.14);position:relative;overflow:hidden}
+      html.lavuq-standalone .lavuq-app-hero:after{content:"Q";position:absolute;right:-12px;bottom:-36px;font-family:Georgia,'Times New Roman',serif;font-size:9rem;line-height:1;color:rgba(216,180,106,.08)}
+      html.lavuq-standalone .lavuq-app-hero-top{display:flex;align-items:center;gap:13px;position:relative;z-index:1}
+      html.lavuq-standalone .lavuq-app-hero-logo{width:52px;height:52px;object-fit:contain;flex:0 0 auto}
+      html.lavuq-standalone .lavuq-app-hero-kicker{color:#d8b46a;font-size:.72rem;font-weight:850;letter-spacing:.15em;text-transform:uppercase}
+      html.lavuq-standalone .lavuq-app-hero h2{font-family:Georgia,'Times New Roman',serif;font-size:1.75rem;margin:2px 0 0;color:#fff;font-weight:500}
+      html.lavuq-standalone .lavuq-app-hero p{position:relative;z-index:1;color:#dce3eb;line-height:1.5;margin:15px 0 0;font-size:.94rem;max-width:570px}
+      html.lavuq-standalone .quick-grid{gap:10px}
+      html.lavuq-standalone .quick{background:#fff;border-color:#e5dccb;box-shadow:0 9px 24px rgba(4,21,41,.05)}
+      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}}
     `;
     head.appendChild(style);
+
+    if(!sessionStorage.getItem('lavuqSplashShown')){
+      const splash=document.createElement('div');
+      splash.className='lavuq-app-splash';
+      splash.setAttribute('aria-hidden','true');
+      splash.innerHTML=`<img src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt=""><div class="word">LAVUQ</div><div class="city">Würzburg</div><div class="tagline">NEUE KONTAKTE · ECHTE FREUNDSCHAFTEN</div>`;
+      document.body.appendChild(splash);
+      sessionStorage.setItem('lavuqSplashShown','1');
+      window.setTimeout(()=>splash.classList.add('hide'),1050);
+      window.setTimeout(()=>splash.remove(),1550);
+    }
+
+    const overview=document.querySelector('#uebersicht');
+    if(overview && !overview.querySelector('.lavuq-app-hero')){
+      const hero=document.createElement('div');
+      hero.className='lavuq-app-hero';
+      hero.innerHTML=`<div class="lavuq-app-hero-top"><img class="lavuq-app-hero-logo" src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt="LAVUQ Q"><div><div class="lavuq-app-hero-kicker">Dein persönlicher Bereich</div><h2>Mein Q</h2></div></div><p>Hier findest du deine Freundesgruppe, euren privaten Chat, die Planung eurer Treffen und den direkten Sicherheitsbereich.</p>`;
+      overview.prepend(hero);
+    }
 
     const bottom=document.createElement('nav');
     bottom.className='lavuq-app-bottom-nav';
