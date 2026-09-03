@@ -1,0 +1,41 @@
+{
+  "name": "LAVUQ Würzburg",
+  "short_name": "LAVUQ",
+  "description": "Neue Kontakte. Echte Freundschaften. LAVUQ Würzburg verbindet vier passende Menschen für echte Treffen und gemeinsame Unternehmungen.",
+  "lang": "de-DE",
+  "start_url": "/index.html?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#041529",
+  "theme_color": "#041529",
+  "categories": ["social", "lifestyle"],
+  "icons": [
+    {
+      "src": "/lavuq-q-square.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lavuq-q-square.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mein Q",
+      "short_name": "Mein Q",
+      "url": "/mein-q.html",
+      "icons": [{"src":"/lavuq-q-square.png","sizes":"any","type":"image/png"}]
+    },
+    {
+      "name": "Sicherheit",
+      "short_name": "Sicherheit",
+      "url": "/sicherheit.html",
+      "icons": [{"src":"/lavuq-q-square.png","sizes":"any","type":"image/png"}]
+    }
+  ]
+}
