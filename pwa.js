@@ -103,7 +103,22 @@
       html.lavuq-standalone .composer textarea:focus{outline:2px solid rgba(216,180,106,.28);border-color:#c8aa67;background:#fff}
       html.lavuq-standalone .composer .btn{width:46px!important;height:46px;min-width:46px;padding:0;border-radius:50%;font-size:0;background:#d8b46a;position:relative}
       html.lavuq-standalone .composer .btn:after{content:"➤";font-size:1rem;color:#041529;transform:translateX(1px)}
-      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}html.lavuq-standalone .lavuq-dashboard-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}html.lavuq-standalone .lavuq-dashboard-action{padding:13px 9px;border-radius:16px}html.lavuq-standalone .lavuq-dashboard-action .ico{width:33px;height:33px;margin-bottom:8px}html.lavuq-standalone .lavuq-dashboard-action strong{font-size:.82rem}html.lavuq-standalone .lavuq-dashboard-action small{display:none}html.lavuq-standalone #chat>.card{border-radius:18px!important}html.lavuq-standalone .chat-log{height:calc(100vh - 345px);min-height:340px}html.lavuq-standalone .composer{grid-template-columns:1fr auto!important}html.lavuq-standalone .composer .btn{width:46px!important}}
+      html.lavuq-standalone #sicherheit>.card{padding:0!important;overflow:hidden;border-color:#ddd4c4;box-shadow:0 12px 30px rgba(4,21,41,.08)}
+      html.lavuq-standalone .lavuq-safety-head{display:flex;align-items:center;gap:12px;padding:15px 16px;background:#041529;color:#fff;border-bottom:1px solid rgba(216,180,106,.42)}
+      html.lavuq-standalone .lavuq-safety-head .shield{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(216,180,106,.15);border:1px solid rgba(216,180,106,.45);font-size:1.2rem;color:#e7c97d}
+      html.lavuq-standalone .lavuq-safety-head strong{display:block;font-size:1rem}
+      html.lavuq-standalone .lavuq-safety-head span{display:block;color:#c4ced9;font-size:.78rem;margin-top:2px}
+      html.lavuq-standalone #sicherheit>.card>h2,html.lavuq-standalone #sicherheit>.card>p.muted{display:none}
+      html.lavuq-standalone #sicherheit .danger-note{margin:14px 14px 4px;border:0;border-left:4px solid #d85b48;border-radius:14px;background:#fff0ec;color:#5d2a23;padding:13px 14px;box-shadow:0 4px 14px rgba(90,31,23,.05)}
+      html.lavuq-standalone #sicherheit .danger-note strong{color:#9f3425}
+      html.lavuq-standalone #sicherheit .safety-box>label{margin:16px 14px 7px;color:#344054;font-size:.84rem}
+      html.lavuq-standalone #sicherheit select,html.lavuq-standalone #sicherheit textarea{width:calc(100% - 28px);margin:0 14px;border-radius:14px;border:1px solid #d9d1c4;background:#fbfaf7;min-height:50px;padding:13px 14px}
+      html.lavuq-standalone #sicherheit textarea{min-height:150px;resize:vertical;line-height:1.45}
+      html.lavuq-standalone #sicherheit select:focus,html.lavuq-standalone #sicherheit textarea:focus{outline:3px solid rgba(216,180,106,.18);border-color:#bea05d;background:#fff}
+      html.lavuq-standalone #sicherheit #safetyBtn{width:calc(100% - 28px)!important;margin:16px 14px 14px!important;min-height:50px;border-radius:15px;background:#d8b46a;color:#041529;font-size:.92rem;box-shadow:0 8px 20px rgba(190,157,84,.18)}
+      html.lavuq-standalone #sicherheit #safetyResult{margin:0 14px 14px}
+      html.lavuq-standalone .lavuq-safety-private{margin:0 14px 14px;padding:12px 13px;border-radius:13px;background:#eef3f7;color:#4f5d6d;font-size:.8rem;line-height:1.45;display:flex;gap:9px;align-items:flex-start}
+      @media(max-width:760px){html.lavuq-standalone .app-content{padding:12px}html.lavuq-standalone .card{border-radius:18px;padding:18px}html.lavuq-standalone .intro{margin-bottom:14px}html.lavuq-standalone .intro p{margin-bottom:0}html.lavuq-standalone .lavuq-app-hero{padding:18px;border-radius:19px}html.lavuq-standalone .lavuq-app-hero h2{font-size:1.55rem}html.lavuq-standalone .lavuq-dashboard-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}html.lavuq-standalone .lavuq-dashboard-action{padding:13px 9px;border-radius:16px}html.lavuq-standalone .lavuq-dashboard-action .ico{width:33px;height:33px;margin-bottom:8px}html.lavuq-standalone .lavuq-dashboard-action strong{font-size:.82rem}html.lavuq-standalone .lavuq-dashboard-action small{display:none}html.lavuq-standalone #chat>.card,html.lavuq-standalone #sicherheit>.card{border-radius:18px!important}html.lavuq-standalone .chat-log{height:calc(100vh - 345px);min-height:340px}html.lavuq-standalone .composer{grid-template-columns:1fr auto!important}html.lavuq-standalone .composer .btn{width:46px!important}}
     `;
     head.appendChild(style);
 
@@ -144,6 +159,18 @@
       chatHead.className='lavuq-chat-head';
       chatHead.innerHTML=`<img src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt="LAVUQ Q"><div><strong>Deine LAVUQ-Gruppe</strong><span>Privater Gruppenchat · nur für eure Gruppe</span></div>`;
       chatCard.prepend(chatHead);
+    }
+
+    const safetyCard=document.querySelector('#sicherheit>.card');
+    if(safetyCard && !safetyCard.querySelector('.lavuq-safety-head')){
+      const safetyHead=document.createElement('div');
+      safetyHead.className='lavuq-safety-head';
+      safetyHead.innerHTML=`<div class="shield">🛡</div><div><strong>Sicherheit & Hilfe</strong><span>Vertraulich direkt an LAVUQ</span></div>`;
+      safetyCard.prepend(safetyHead);
+      const privateNote=document.createElement('div');
+      privateNote.className='lavuq-safety-private';
+      privateNote.innerHTML='<span>🔒</span><span>Deine Meldung ist für die anderen Gruppenmitglieder nicht sichtbar und wird direkt an LAVUQ übermittelt.</span>';
+      safetyCard.querySelector('.danger-note')?.insertAdjacentElement('afterend',privateNote);
     }
 
     const bottom=document.createElement('nav');
