@@ -1,4 +1,11 @@
 (()=>{
+  const accessParams=new URLSearchParams(location.search);
+  const accessMember=accessParams.get('member');
+  const accessToken=accessParams.get('token');
+  if(accessMember&&accessToken){
+    try{localStorage.setItem('lavuq_member_access',JSON.stringify({member:accessMember,token:accessToken,savedAt:Date.now()}));}catch{}
+  }
+
   const OVERPASS='https://overpass-api.de/api/interpreter';
   const CACHE_TTL=24*60*60*1000;
   const CATEGORIES={
@@ -16,7 +23,7 @@
     freizeit:['Festung Marienberg','Hofgarten der Residenz','Alte Mainbrücke','Ringpark','Minigolf','Kino']
   };
 
-  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));}
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
   function uniq(items){return [...new Set(items.map(clean).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'de'));}
   function key(cat){return `lavuq_wue_${cat}_v2`;}
