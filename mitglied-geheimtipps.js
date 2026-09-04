@@ -9,10 +9,7 @@
   const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
 
-  function readVotes(){
-    try{return JSON.parse(localStorage.getItem(VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}
-    catch{return{leon:true,anna:false,sophie:false,daniel:false};}
-  }
+  function readVotes(){try{return JSON.parse(localStorage.getItem(VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}catch{return{leon:true,anna:false,sophie:false,daniel:false};}}
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
   function readFeedback(){try{return JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
 
@@ -25,7 +22,7 @@
       const mine=strong.textContent.trim().toLowerCase()===demoName.toLowerCase();
       card.classList.toggle('me',mine);
       card.querySelectorAll('.muted').forEach(x=>{if(x.textContent.trim()==='Du')x.remove();});
-      if(mine){const d=document.createElement('div');d.className='muted';d.textContent='Du';strong.parentElement.appendChild(d);}
+      if(mine&&!strong.parentElement.querySelector('.muted')){const d=document.createElement('div');d.className='muted';d.textContent='Du';strong.parentElement.appendChild(d);}
     });
   }
 
@@ -33,7 +30,7 @@
     if(document.getElementById('meeting-lock-style'))return;
     const style=document.createElement('style');
     style.id='meeting-lock-style';
-    style.textContent='.meeting-locked{opacity:.78}.meeting-lock-note{width:100%;min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#eef2f6;color:#687386;font-weight:800;border:1px solid #dde3ea}.demo-feedback-box{margin-top:12px;padding:16px;border-radius:14px;background:#f8f3e7;border:1px solid #dfc27f}.demo-feedback-box strong{display:block;margin-bottom:6px}.demo-feedback-count{margin-top:8px;color:#687386;font-weight:700}';
+    style.textContent='.meeting-locked{opacity:.78}.meeting-lock-note{width:100%;min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#eef2f6;color:#687386;font-weight:800;border:1px solid #dde3ea}.demo-feedback-count{margin-top:8px;color:#687386;font-weight:700}';
     document.head.appendChild(style);
   }
 
@@ -54,55 +51,35 @@
       const meta=card.querySelector('.schedule-meta');
       if(!meta||!meta.textContent.includes('Deine Stimme: Ja'))return;
       const actions=card.querySelector('.vote-actions');
-      if(actions&&!actions.dataset.done){
-        actions.dataset.done='1';
-        actions.innerHTML='<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>';
-      }
+      if(actions&&!actions.dataset.done){actions.dataset.done='1';actions.innerHTML='<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>';}
     });
   }
 
   function renderOtherDemoVote(){
     if(!isDemo||demoUser==='leon'||demoStage==='feedback')return;
     const box=document.getElementById('schedule-1');
-    if(!box||box.classList.contains('hidden'))return;
-    if(box.dataset.demoRendered==='1')return;
+    if(!box||box.classList.contains('hidden')||box.dataset.demoRendered==='1')return;
     if(!box.querySelector('.schedule-form')&&!box.querySelector('.vote-card'))return;
-
-    const votes=readVotes();
-    const yesCount=Object.values(votes).filter(Boolean).length;
-    const already=!!votes[demoUser];
-    box.dataset.demoRendered='1';
-
-    if(yesCount===4){
-      box.innerHTML=`<h3>Terminabstimmung · Treffen 1</h3><div class="status ok"><strong>Termin verbindlich bestätigt ✓</strong><br>${PROPOSAL.date} · ${PROPOSAL.place}<br>Alle 4 Teilnehmer haben zugestimmt.</div>`;
-      return;
-    }
-
+    const votes=readVotes();const yesCount=Object.values(votes).filter(Boolean).length;const already=!!votes[demoUser];box.dataset.demoRendered='1';
+    if(yesCount===4){box.innerHTML=`<h3>Terminabstimmung · Treffen 1</h3><div class="status ok"><strong>Termin verbindlich bestätigt ✓</strong><br>${PROPOSAL.date} · ${PROPOSAL.place}<br>Alle 4 Teilnehmer haben zugestimmt.</div>`;return;}
     box.innerHTML=`<h3>Terminabstimmung · Treffen 1</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">${PROPOSAL.date}<br>${PROPOSAL.place}</div><div class="schedule-meta">Zustimmungen: ${yesCount} · Ablehnungen: 0${already?' · Deine Stimme: Ja':''}</div><div class="vote-actions">${already?'<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>':'<button class="btn btn-primary" data-demo-yes>Zustimmen</button><button class="btn btn-light" data-demo-no>Ablehnen</button>'}</div></div>`;
-
-    box.querySelector('[data-demo-yes]')?.addEventListener('click',()=>{
-      const v=readVotes();v[demoUser]=true;writeVotes(v);
-      box.dataset.demoRendered='';
-      const state=document.getElementById('state');
-      const count=Object.values(v).filter(Boolean).length;
-      if(state){state.textContent=count===4?'Alle haben zugestimmt. Der Termin ist jetzt verbindlich gespeichert.':`Demo: ${demoName} hat zugestimmt. ${count} von 4 Zustimmungen.`;state.className='status ok';}
-      renderOtherDemoVote();
-    });
-    box.querySelector('[data-demo-no]')?.addEventListener('click',()=>{
-      const state=document.getElementById('state');
-      if(state){state.textContent=`Demo: ${demoName} hat den Vorschlag abgelehnt. Eine neue Vorschlagsrunde wäre nötig.`;state.className='status err';}
-    });
+    box.querySelector('[data-demo-yes]')?.addEventListener('click',()=>{const v=readVotes();v[demoUser]=true;writeVotes(v);box.dataset.demoRendered='';renderOtherDemoVote();});
   }
 
-  function bindMeeting2Open(){
-    if(!isDemo||demoStage!=='feedback')return;
-    const button=document.querySelector('#meeting-2 [data-schedule-open="2"]');
-    const panel=document.getElementById('schedule-2');
-    if(!button||!panel||button.dataset.demoBound==='1')return;
-    button.dataset.demoBound='1';
-    button.addEventListener('click',()=>{
-      panel.classList.remove('hidden');
-      panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  function openMeeting2(card){
+    let panel=card.querySelector('.schedule-panel');
+    if(!panel){panel=document.createElement('div');panel.className='schedule-panel';panel.id='schedule-2';card.appendChild(panel);}
+    panel.classList.toggle('hidden');
+    if(panel.classList.contains('hidden'))return;
+    if(panel.dataset.demoReady==='1')return;
+    panel.dataset.demoReady='1';
+    panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="schedule-form"><div class="full"><label>Datum & Uhrzeit</label><input type="datetime-local" data-m2-date></div><div class="full"><label>Würzburg-Empfehlungen <span class="muted">(optional)</span></label><select data-m2-cat><option value="">Kategorie auswählen</option><option>Café & Kaffee</option><option>Essen & Trinken</option><option>Spaziergang & draußen</option><option>Aktivität & Freizeit</option></select></div><div class="full"><label>Eigener Treffpunkt / genaue Idee</label><input type="text" data-m2-place placeholder="Du kannst frei entscheiden"></div><div class="full"><label style="display:flex;gap:10px;align-items:flex-start;font-weight:800"><input type="checkbox" data-m2-public style="width:auto;margin-top:3px"> Ich bestätige, dass der Treffpunkt öffentlich ist.</label></div><div class="full"><button class="btn btn-primary" type="button" data-m2-send>Vorschlag an die Gruppe senden</button></div></div>`;
+    panel.querySelector('[data-m2-send]')?.addEventListener('click',()=>{
+      const date=panel.querySelector('[data-m2-date]')?.value;
+      const place=(panel.querySelector('[data-m2-place]')?.value||panel.querySelector('[data-m2-cat]')?.value||'').trim();
+      const pub=panel.querySelector('[data-m2-public]')?.checked;
+      if(!date||!place||!pub){const state=document.getElementById('state');if(state){state.textContent='Bitte Datum, Treffpunkt und die Bestätigung „öffentlicher Treffpunkt“ ausfüllen.';state.className='status err';}return;}
+      panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">${new Date(date).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'})}<br>${place}</div><div class="schedule-meta">Zustimmungen: 1 · Ablehnungen: 0 · Deine Stimme: Ja</div><div class="status ok compact" style="margin-top:12px;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div></div>`;
     });
   }
 
@@ -118,54 +95,27 @@
       const head=card1.querySelector('.meeting-head');
       if(head)head.innerHTML=`<span class="meeting-number">1</span><div><strong>Treffen 1</strong><div>${PROPOSAL.date} · ${PROPOSAL.place}</div><div class="muted">Treffen abgeschlossen · Feedbackphase</div></div>`;
       const actions=card1.querySelector('.meeting-actions');
-      if(actions){
-        actions.innerHTML=mine
-          ?'<div class="status ok compact">Feedback abgegeben ✓</div>'
-          :`<a class="btn btn-primary" href="feedback/?demo=1&demoUser=${encodeURIComponent(demoUser)}">Feedback zu Treffen 1 abgeben</a>`;
-        actions.insertAdjacentHTML('beforeend',`<div class="demo-feedback-count">${count} von 4 Feedbacks eingegangen</div>`);
-      }
-      const schedule=card1.querySelector('.schedule-panel');
-      if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+      if(actions){actions.innerHTML=mine?'<div class="status ok compact">Feedback abgegeben ✓</div>':`<a class="btn btn-primary" href="feedback/?demo=1&demoUser=${encodeURIComponent(demoUser)}">Feedback zu Treffen 1 abgeben</a>`;actions.insertAdjacentHTML('beforeend',`<div class="demo-feedback-count">${count} von 4 Feedbacks eingegangen</div>`);}
+      const schedule=card1.querySelector('.schedule-panel');if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
     }
 
     const card2=document.getElementById('meeting-2');
     if(card2){
-      const actions=card2.querySelector('.meeting-actions');
-      const info=card2.querySelector('.meeting-head .muted');
-      if(count<4){
-        card2.classList.add('meeting-locked');
-        if(info)info.textContent='Wird freigeschaltet, sobald alle Feedbacks zu Treffen 1 vorliegen.';
-        if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';
-      }else{
-        card2.classList.remove('meeting-locked');
-        if(info)info.textContent='Feedback zu Treffen 1 abgeschlossen. Treffen 2 ist freigeschaltet.';
-        if(actions&&!actions.querySelector('[data-schedule-open="2"]'))actions.innerHTML='<button class="btn btn-dark" data-schedule-open="2">Termin festlegen</button>';
-        bindMeeting2Open();
+      const actions=card2.querySelector('.meeting-actions');const info=card2.querySelector('.meeting-head .muted');
+      if(count<4){card2.classList.add('meeting-locked');if(info)info.textContent='Wird freigeschaltet, sobald alle Feedbacks zu Treffen 1 vorliegen.';if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';}
+      else{
+        card2.classList.remove('meeting-locked');if(info)info.textContent='Feedback zu Treffen 1 abgeschlossen. Treffen 2 ist freigeschaltet.';
+        if(actions&&!actions.querySelector('[data-demo-open-m2]')){
+          actions.innerHTML='<button class="btn btn-dark" type="button" data-demo-open-m2>Termin festlegen</button>';
+          actions.querySelector('[data-demo-open-m2]').addEventListener('click',()=>openMeeting2(card2));
+        }
       }
     }
 
     const card3=document.getElementById('meeting-3');
-    if(card3){
-      card3.classList.add('meeting-locked');
-      const info=card3.querySelector('.meeting-head .muted');
-      const actions=card3.querySelector('.meeting-actions');
-      if(info)info.textContent='Wird nach dem Feedback zu Treffen 2 freigeschaltet.';
-      if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';
-    }
+    if(card3){card3.classList.add('meeting-locked');const info=card3.querySelector('.meeting-head .muted');const actions=card3.querySelector('.meeting-actions');if(info)info.textContent='Wird nach dem Feedback zu Treffen 2 freigeschaltet.';if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';}
   }
 
-  function scan(){
-    applyIdentity();
-    if(demoStage==='feedback')renderFeedbackStage();
-    else{
-      lockFutureMeetings();
-      markLeonVote();
-      renderOtherDemoVote();
-    }
-  }
-
-  window.addEventListener('load',()=>{
-    scan();
-    setInterval(scan,800);
-  });
+  function scan(){applyIdentity();if(demoStage==='feedback')renderFeedbackStage();else{lockFutureMeetings();markLeonVote();renderOtherDemoVote();}}
+  window.addEventListener('load',()=>{scan();setInterval(scan,800);});
 })();
