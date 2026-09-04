@@ -17,7 +17,7 @@
 
   if(isDemo&&demoStage==='round2'){
     const s=document.createElement('script');
-    s.src='mitglied-runde2.js?v=20260904-r2-1';
+    s.src='mitglied-runde2.js?v=20260904-r2-compact-2111';
     document.head.appendChild(s);
     return;
   }
