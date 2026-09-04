@@ -8,6 +8,12 @@
   const VOTES_KEY='lavuq_demo_meeting1_votes_stable_v1';
   const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
+  const M2_RECOMMENDATIONS={
+    'Café & Kaffee':['Café Wunschlos Glücklich','Café Fred','Café Schönborn'],
+    'Essen & Trinken':['Bürgerspital Weinstuben','Backöfele','Sternbäck'],
+    'Spaziergang & draußen':['Alte Mainbrücke','Hofgarten der Residenz','Mainufer'],
+    'Aktivität & Freizeit':['Minigolf am Main','Bowling Würzburg','Festung Marienberg']
+  };
 
   function readVotes(){try{return JSON.parse(localStorage.getItem(VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}catch{return{leon:true,anna:false,sophie:false,daniel:false};}}
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
@@ -73,10 +79,19 @@
     if(panel.classList.contains('hidden'))return;
     if(panel.dataset.demoReady==='1')return;
     panel.dataset.demoReady='1';
-    panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="schedule-form"><div class="full"><label>Datum & Uhrzeit</label><input type="datetime-local" data-m2-date></div><div class="full"><label>Würzburg-Empfehlungen <span class="muted">(optional)</span></label><select data-m2-cat><option value="">Kategorie auswählen</option><option>Café & Kaffee</option><option>Essen & Trinken</option><option>Spaziergang & draußen</option><option>Aktivität & Freizeit</option></select></div><div class="full"><label>Eigener Treffpunkt / genaue Idee</label><input type="text" data-m2-place placeholder="Du kannst frei entscheiden"></div><div class="full"><label style="display:flex;gap:10px;align-items:flex-start;font-weight:800"><input type="checkbox" data-m2-public style="width:auto;margin-top:3px"> Ich bestätige, dass der Treffpunkt öffentlich ist.</label></div><div class="full"><button class="btn btn-primary" type="button" data-m2-send>Vorschlag an die Gruppe senden</button></div></div>`;
+    panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="schedule-form"><div class="full"><label>Datum & Uhrzeit</label><input type="datetime-local" data-m2-date></div><div class="full"><label>Würzburg-Empfehlungen <span class="muted">(optional)</span></label><select data-m2-cat><option value="">Kategorie auswählen</option><option>Café & Kaffee</option><option>Essen & Trinken</option><option>Spaziergang & draußen</option><option>Aktivität & Freizeit</option></select></div><div class="full"><select data-m2-rec disabled><option value="">Erst Kategorie auswählen</option></select></div><div class="full"><label>Eigener Treffpunkt / genaue Idee</label><input type="text" data-m2-place placeholder="Du kannst frei entscheiden"></div><div class="full"><label style="display:flex;gap:10px;align-items:flex-start;font-weight:800"><input type="checkbox" data-m2-public style="width:auto;margin-top:3px"> Ich bestätige, dass der Treffpunkt öffentlich ist.</label></div><div class="full"><button class="btn btn-primary" type="button" data-m2-send>Vorschlag an die Gruppe senden</button></div></div>`;
+    const category=panel.querySelector('[data-m2-cat]');
+    const recommendation=panel.querySelector('[data-m2-rec]');
+    category?.addEventListener('change',()=>{
+      const options=M2_RECOMMENDATIONS[category.value]||[];
+      recommendation.innerHTML=options.length
+        ? '<option value="">Empfehlung auswählen</option>'+options.map(x=>`<option value="${x}">${x}</option>`).join('')
+        : '<option value="">Erst Kategorie auswählen</option>';
+      recommendation.disabled=!options.length;
+    });
     panel.querySelector('[data-m2-send]')?.addEventListener('click',()=>{
       const date=panel.querySelector('[data-m2-date]')?.value;
-      const place=(panel.querySelector('[data-m2-place]')?.value||panel.querySelector('[data-m2-cat]')?.value||'').trim();
+      const place=(panel.querySelector('[data-m2-place]')?.value||panel.querySelector('[data-m2-rec]')?.value||panel.querySelector('[data-m2-cat]')?.value||'').trim();
       const pub=panel.querySelector('[data-m2-public]')?.checked;
       if(!date||!place||!pub){const state=document.getElementById('state');if(state){state.textContent='Bitte Datum, Treffpunkt und die Bestätigung „öffentlicher Treffpunkt“ ausfüllen.';state.className='status err';}return;}
       panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">${new Date(date).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'})}<br>${place}</div><div class="schedule-meta">Zustimmungen: 1 · Ablehnungen: 0 · Deine Stimme: Ja</div><div class="status ok compact" style="margin-top:12px;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div></div>`;
