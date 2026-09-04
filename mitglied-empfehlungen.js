@@ -1,34 +1,70 @@
 (()=>{
   const CATEGORIES={
     '☕ Ruhig kennenlernen':[
-      {name:'Café Wunschlos Glücklich',meta:'Café · ruhig · gut zum Kennenlernen'},
-      {name:'Café Schönborn',meta:'Café · zentral · öffentlicher Treffpunkt'},
-      {name:'Mainfranken Theater / Theater-Café Umfeld',meta:'zentral · entspannt · gut erreichbar'}
+      {name:'Café am Dom',address:'Kürschnerhof 2, 97070 Würzburg'},
+      {name:'Marktcafé Brandstetter',address:'Marktgasse 3, 97070 Würzburg'},
+      {name:'Caféhaus Brückenbäck',address:'Zeller Straße 2, 97082 Würzburg'},
+      {name:'Café Fred',address:'Herzogenstraße 4, 97070 Würzburg'},
+      {name:'Café Kiess',address:'Kaiserstraße 6, 97070 Würzburg'},
+      {name:'Café Lenz',address:'Spiegelstraße 21, 97070 Würzburg'},
+      {name:'Café Mozart',address:'Theaterstraße 21, 97070 Würzburg'},
+      {name:'Mainfranken Theater – Foyer/Treffpunkt',address:'Theaterstraße 21, 97070 Würzburg'},
+      {name:'Central im Bürgerbräu',address:'Frankfurter Straße 87, 97082 Würzburg'}
     ],
     '🍽️ Gemeinsam essen':[
-      {name:'Bürgerspital Weinstuben',meta:'fränkisch · zentral · gemeinsames Essen'},
-      {name:'Backöfele',meta:'fränkisch · Innenstadt · gemütlich'},
-      {name:'Sternbäck',meta:'zentral · unkompliziert · Essen & Trinken'}
+      {name:'Bürgerspital Weinstuben',address:'Theaterstraße 19, 97070 Würzburg'},
+      {name:'Backöfele',address:'Ursulinergasse 2, 97070 Würzburg'},
+      {name:'Wirtshaus am Dom',address:'Paradeplatz 4, 97070 Würzburg'},
+      {name:'Schützenhof',address:'Mainleitenweg 48, 97082 Würzburg'},
+      {name:'Weinstube Maulaffenbäck',address:'Maulhardgasse 9, 97070 Würzburg'},
+      {name:'Sophienbäck',address:'Sophienstraße 6, 97072 Würzburg'},
+      {name:'Restaurant KUNO 1408',address:'Neubaustraße 7, 97070 Würzburg'},
+      {name:'Vier Jahreszeiten',address:'Haugerpfarrgasse 3, 97070 Würzburg'},
+      {name:'Sandwich Club Würzburg',address:'Johanniterplatz 3, 97070 Würzburg'},
+      {name:'Weinstube Halbleib',address:'Kolpingstraße 9, 97070 Würzburg'}
     ],
     '🎳 Gemeinsam etwas machen':[
-      {name:'Minigolf am Main',meta:'Aktivität · locker · Gespräch nebenbei'},
-      {name:'Bowling Würzburg',meta:'Indoor · aktiv · gruppengeeignet'},
-      {name:'Escape Room Würzburg',meta:'Indoor · gemeinsames Erlebnis · Teamaktivität'}
+      {name:'Bowling Würzburg',address:'Huberstraße 9, 97084 Würzburg'},
+      {name:'Schwarzlichtfabrik Würzburg',address:'Bahnhofplatz 2A, 97070 Würzburg'},
+      {name:'EscapeGames Würzburg',address:'Bahnhofplatz 2, 97070 Würzburg'},
+      {name:'Gamer Würzburg – Die Gameshow',address:'Bahnhofplatz 2A, 97070 Würzburg'},
+      {name:'DAV Kletterzentrum Würzburg',address:'Weißenburgstraße 55, 97082 Würzburg'},
+      {name:'Central im Bürgerbräu',address:'Frankfurter Straße 87, 97082 Würzburg'},
+      {name:'CinemaxX Würzburg',address:'Veitshöchheimer Straße 5A, 97080 Würzburg'},
+      {name:'Museum im Kulturspeicher',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
+      {name:'Martin von Wagner Museum',address:'Residenzplatz 2, Tor A, 97070 Würzburg'}
     ],
     '🌳 Draußen & spazieren':[
-      {name:'Mainufer',meta:'Spaziergang · kostenlos · viel Platz'},
-      {name:'Hofgarten der Residenz',meta:'Park · ruhig · zentral'},
-      {name:'Alter Kranen',meta:'Main · zentral · guter Startpunkt'}
+      {name:'Residenz & Hofgarten',address:'Residenzplatz 2, 97070 Würzburg'},
+      {name:'Botanischer Garten der Universität Würzburg',address:'Julius-von-Sachs-Platz 4, 97082 Würzburg'},
+      {name:'Alte Mainbrücke',address:'Alte Mainbrücke, 97070 Würzburg'},
+      {name:'Mainufer / Mainkai',address:'Mainkai, 97070 Würzburg'},
+      {name:'Alter Kranen',address:'Kranenkai, 97070 Würzburg'},
+      {name:'Ringpark',address:'Sanderring, 97070 Würzburg'},
+      {name:'Festung Marienberg',address:'Festung Marienberg, 97082 Würzburg'},
+      {name:'Hofgarten der Residenz',address:'Residenzplatz 2, 97070 Würzburg'}
     ],
     '🏛️ Würzburg entdecken':[
-      {name:'Residenz & Hofgarten',meta:'Sehenswürdigkeit · zentral · Kultur'},
-      {name:'Festung Marienberg',meta:'Würzburg-Blick · Spaziergang · Kultur'},
-      {name:'Museum im Kulturspeicher',meta:'Museum · öffentlich · wetterunabhängig'}
+      {name:'Würzburger Residenz',address:'Residenzplatz 2, 97070 Würzburg'},
+      {name:'Martin von Wagner Museum',address:'Residenzplatz 2, Tor A, 97070 Würzburg'},
+      {name:'Museum im Kulturspeicher',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
+      {name:'Festung Marienberg',address:'Festung Marienberg, 97082 Würzburg'},
+      {name:'Mainfranken Theater Würzburg',address:'Theaterstraße 21, 97070 Würzburg'},
+      {name:'Alte Mainbrücke',address:'Alte Mainbrücke, 97070 Würzburg'},
+      {name:'Botanischer Garten der Universität Würzburg',address:'Julius-von-Sachs-Platz 4, 97082 Würzburg'},
+      {name:'Central im Bürgerbräu',address:'Frankfurter Straße 87, 97082 Würzburg'}
     ],
     '🌧️ Schlechtwetter':[
-      {name:'Museum im Kulturspeicher',meta:'Indoor · Kultur · ruhig'},
-      {name:'Bowling Würzburg',meta:'Indoor · aktiv · gruppengeeignet'},
-      {name:'Café Schönborn',meta:'Indoor · zentral · entspannt'}
+      {name:'Museum im Kulturspeicher',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
+      {name:'Martin von Wagner Museum',address:'Residenzplatz 2, Tor A, 97070 Würzburg'},
+      {name:'Bowling Würzburg',address:'Huberstraße 9, 97084 Würzburg'},
+      {name:'Schwarzlichtfabrik Würzburg',address:'Bahnhofplatz 2A, 97070 Würzburg'},
+      {name:'EscapeGames Würzburg',address:'Bahnhofplatz 2, 97070 Würzburg'},
+      {name:'Gamer Würzburg – Die Gameshow',address:'Bahnhofplatz 2A, 97070 Würzburg'},
+      {name:'DAV Kletterzentrum Würzburg',address:'Weißenburgstraße 55, 97082 Würzburg'},
+      {name:'Central im Bürgerbräu',address:'Frankfurter Straße 87, 97082 Würzburg'},
+      {name:'CinemaxX Würzburg',address:'Veitshöchheimer Straße 5A, 97080 Würzburg'},
+      {name:'Mainfranken Theater Würzburg',address:'Theaterstraße 21, 97070 Würzburg'}
     ]
   };
 
@@ -39,18 +75,18 @@
     s.textContent=`
       .lavuq-rec-block{margin-top:2px}
       .lavuq-rec-block label{display:block;font-weight:800;font-size:.9rem;margin-bottom:7px;color:#344054}
-      .lavuq-rec-category{width:100%;min-height:48px;border:1px solid #d9d1c4;border-radius:13px;padding:12px 13px;background:#fff;font:inherit;color:#132033}
-      .lavuq-rec-category:focus{outline:3px solid rgba(216,180,106,.18);border-color:#bea05d}
-      .lavuq-rec-cards{display:grid;gap:9px;margin-top:10px}
-      .lavuq-rec-card{appearance:none;width:100%;border:1px solid #ddd5c8;border-radius:14px;background:#fff;padding:12px 13px;text-align:left;color:#132033;cursor:pointer;box-shadow:0 3px 10px rgba(4,21,41,.035)}
-      .lavuq-rec-card strong{display:block;font-size:.92rem;margin-bottom:3px}
-      .lavuq-rec-card span{display:block;color:#697386;font-size:.78rem;line-height:1.35}
-      .lavuq-rec-card.selected{border-color:#d8b46a;background:#fff8e7;box-shadow:0 0 0 2px rgba(216,180,106,.14)}
-      .lavuq-rec-card.selected strong:after{content:'  ✓ Ausgewählt';color:#2b6248;font-size:.72rem}
+      .lavuq-rec-select{width:100%;min-height:48px;border:1px solid #d9d1c4;border-radius:13px;padding:12px 13px;background:#fff;font:inherit;color:#132033;margin-bottom:10px}
+      .lavuq-rec-select:focus{outline:3px solid rgba(216,180,106,.18);border-color:#bea05d}
+      .lavuq-rec-select:disabled{background:#f3f5f7;color:#98a2b3}
+      .lavuq-rec-address{margin-top:1px;padding:11px 12px;border-radius:12px;background:#edf8f1;color:#20543b;font-size:.82rem;line-height:1.4;font-weight:700}
       .lavuq-rec-help{margin-top:8px;color:#697386;font-size:.78rem;line-height:1.4}
       .lavuq-old-rec-hidden{display:none!important}
     `;
     document.head.appendChild(s);
+  }
+
+  function esc(value){
+    return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function placeInputFor(form,attempt,kind){
@@ -68,28 +104,44 @@
     block.dataset.for=attempt;
     block.innerHTML=`
       <label>Würzburg-Empfehlungen <span class="muted" style="font-weight:400">(optional)</span></label>
-      <select class="lavuq-rec-category" aria-label="Kategorie für Würzburg-Empfehlungen">
-        <option value="">Kategorie auswählen</option>
-        ${Object.keys(CATEGORIES).map(c=>`<option value="${c}">${c}</option>`).join('')}
+      <select class="lavuq-rec-select lavuq-rec-category" aria-label="Kategorie für Würzburg-Empfehlungen">
+        <option value="">1. Kategorie auswählen</option>
+        ${Object.keys(CATEGORIES).map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}
       </select>
-      <div class="lavuq-rec-cards hidden"></div>
-      <div class="lavuq-rec-help">Wähle eine Kategorie und danach einen passenden öffentlichen Treffpunkt. Du kannst darunter weiterhin eine komplett eigene Idee eintragen.</div>`;
+      <select class="lavuq-rec-select lavuq-rec-place" aria-label="Treffpunkt auswählen" disabled>
+        <option value="">2. Erst Kategorie auswählen</option>
+      </select>
+      <div class="lavuq-rec-address hidden"></div>
+      <div class="lavuq-rec-help">Erstes Dropdown: Art des Treffens. Zweites Dropdown: konkreter Treffpunkt inklusive Adresse. Eine eigene Idee kannst du darunter weiterhin frei eintragen.</div>`;
 
     anchor.insertAdjacentElement('beforebegin',block);
     const category=block.querySelector('.lavuq-rec-category');
-    const cards=block.querySelector('.lavuq-rec-cards');
+    const rec=block.querySelector('.lavuq-rec-place');
+    const address=block.querySelector('.lavuq-rec-address');
+
     category.addEventListener('change',()=>{
       const items=CATEGORIES[category.value]||[];
-      if(!items.length){cards.innerHTML='';cards.classList.add('hidden');return;}
-      cards.innerHTML=items.map(item=>`<button type="button" class="lavuq-rec-card" data-place="${item.name.replace(/"/g,'&quot;')}"><strong>${item.name}</strong><span>${item.meta}</span></button>`).join('');
-      cards.classList.remove('hidden');
-      cards.querySelectorAll('.lavuq-rec-card').forEach(btn=>btn.addEventListener('click',()=>{
-        cards.querySelectorAll('.lavuq-rec-card').forEach(x=>x.classList.remove('selected'));
-        btn.classList.add('selected');
-        place.value=btn.dataset.place||'';
-        place.dispatchEvent(new Event('input',{bubbles:true}));
-        place.dispatchEvent(new Event('change',{bubbles:true}));
-      }));
+      rec.innerHTML='<option value="">Treffpunkt auswählen</option>'+items.map((item,i)=>`<option value="${i}">${esc(item.name)} — ${esc(item.address)}</option>`).join('');
+      rec.disabled=!items.length;
+      address.textContent='';
+      address.classList.add('hidden');
+      if(!items.length){place.value='';place.dispatchEvent(new Event('input',{bubbles:true}));}
+    });
+
+    rec.addEventListener('change',()=>{
+      const items=CATEGORIES[category.value]||[];
+      const item=items[Number(rec.value)];
+      if(!item){
+        place.value='';
+        address.textContent='';
+        address.classList.add('hidden');
+      }else{
+        place.value=`${item.name} · ${item.address}`;
+        address.textContent=`📍 ${item.address}`;
+        address.classList.remove('hidden');
+      }
+      place.dispatchEvent(new Event('input',{bubbles:true}));
+      place.dispatchEvent(new Event('change',{bubbles:true}));
     });
   }
 
