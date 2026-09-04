@@ -6,7 +6,7 @@
   const CHOICE_KEY='lavuq_demo_after_round_choice_v1';
 
   const ideasScript=document.createElement('script');
-  ideasScript.src='mitglied-ideen-global.js?v=20260904-global-ideas-1';
+  ideasScript.src='mitglied-ideen-global.js?v=20260904-global-ideas-2';
   document.head.appendChild(ideasScript);
 
   if(isDemo){
