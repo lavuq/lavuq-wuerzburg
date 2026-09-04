@@ -8,6 +8,7 @@
   const VOTES_KEY='lavuq_demo_meeting1_votes_stable_v1';
   const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
   const FEEDBACK2_KEY='lavuq_demo_meeting2_feedback_v1';
+  const FEEDBACK3_KEY='lavuq_demo_meeting3_feedback_v1';
   const M2_KEY='lavuq_demo_meeting2_state_v1';
   const M3_KEY='lavuq_demo_meeting3_state_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
@@ -22,6 +23,7 @@
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
   function readFeedback(){try{return JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
   function readFeedback2(){try{return JSON.parse(localStorage.getItem(FEEDBACK2_KEY)||'{}')||{};}catch{return{};}}
+  function readFeedback3(){try{return JSON.parse(localStorage.getItem(FEEDBACK3_KEY)||'{}')||{};}catch{return{};}}
   function seedM2(){
     const seeded={proposal:{date:'2026-09-30T18:00',dateLabel:'30.09.2026, 18:00',place:'Bürgerspital Weinstuben'},votes:{leon:false,anna:false,sophie:false,daniel:true}};
     try{localStorage.setItem(M2_KEY,JSON.stringify(seeded));}catch{}
@@ -93,7 +95,7 @@
   }
 
   function renderOtherDemoVote(){
-    if(!isDemo||demoUser==='leon'||demoStage==='feedback'||demoStage==='feedback2')return;
+    if(!isDemo||demoUser==='leon'||demoStage==='feedback'||demoStage==='feedback2'||demoStage==='feedback3')return;
     const box=document.getElementById('schedule-1');
     if(!box||box.classList.contains('hidden')||box.dataset.demoRendered==='1')return;
     if(!box.querySelector('.schedule-form')&&!box.querySelector('.vote-card'))return;
@@ -276,9 +278,54 @@
     }
   }
 
+  function renderFeedback3Stage(){
+    if(!isDemo||demoStage!=='feedback3')return;
+    addLockStyle();
+    const m2=readM2();
+    const m3=readM3();
+    const feedback3=readFeedback3();
+    const count3=Object.keys(feedback3).filter(k=>['leon','anna','sophie','daniel'].includes(k)).length;
+    const mine3=!!feedback3[demoUser];
+
+    const card1=document.getElementById('meeting-1');
+    if(card1){
+      const head=card1.querySelector('.meeting-head');
+      if(head)head.innerHTML=`<span class="meeting-number">1</span><div><strong>Treffen 1</strong><div>${PROPOSAL.date} · ${PROPOSAL.place}</div><div class="muted">Abgeschlossen · Feedback vollständig</div></div>`;
+      const actions=card1.querySelector('.meeting-actions');
+      if(actions)actions.innerHTML='<div class="status ok compact">4 von 4 Feedbacks ✓</div>';
+      const schedule=card1.querySelector('.schedule-panel');if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+    }
+
+    const card2=document.getElementById('meeting-2');
+    if(card2){
+      const head=card2.querySelector('.meeting-head');
+      if(head)head.innerHTML=`<span class="meeting-number">2</span><div><strong>Treffen 2</strong><div>${m2.proposal?.dateLabel||'30.09.2026, 18:00'} · ${m2.proposal?.place||'Bürgerspital Weinstuben'}</div><div class="muted">Abgeschlossen · Feedback vollständig</div></div>`;
+      const actions=card2.querySelector('.meeting-actions');
+      if(actions)actions.innerHTML='<div class="status ok compact">4 von 4 Feedbacks ✓</div>';
+      const schedule=card2.querySelector('.schedule-panel');if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+    }
+
+    const card3=document.getElementById('meeting-3');
+    if(card3){
+      const head=card3.querySelector('.meeting-head');
+      if(head)head.innerHTML=`<span class="meeting-number">3</span><div><strong>Treffen 3</strong><div>${m3.proposal?.dateLabel||'02.10.2026, 19:20'} · ${m3.proposal?.place||'Minigolf am Main'}</div><div class="muted">Treffen abgeschlossen · Feedbackphase</div></div>`;
+      const actions=card3.querySelector('.meeting-actions');
+      if(actions){
+        if(count3>=4){
+          actions.innerHTML='<div class="status ok compact">4 von 4 Feedbacks ✓ · Eure 3 LAVUQ-Treffen sind abgeschlossen.</div>';
+        }else{
+          actions.innerHTML=mine3?'<div class="status ok compact">Feedback abgegeben ✓</div>':`<a class="btn btn-primary" href="feedback/?demo=1&demoUser=${encodeURIComponent(demoUser)}&meeting=3">Feedback zu Treffen 3 abgeben</a>`;
+          actions.insertAdjacentHTML('beforeend',`<div class="demo-feedback-count">${count3} von 4 Feedbacks eingegangen</div>`);
+        }
+      }
+      const schedule=card3.querySelector('.schedule-panel');if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+    }
+  }
+
   function scan(){
     applyIdentity();
-    if(demoStage==='feedback2')renderFeedback2Stage();
+    if(demoStage==='feedback3')renderFeedback3Stage();
+    else if(demoStage==='feedback2')renderFeedback2Stage();
     else if(demoStage==='feedback')renderFeedbackStage();
     else{lockFutureMeetings();markLeonVote();renderOtherDemoVote();}
   }
