@@ -11,6 +11,10 @@
     document.head.appendChild(windowScript);
   }
 
+  const recommendationScript=document.createElement('script');
+  recommendationScript.src='mitglied-empfehlungen.js?v=20260904-all-meetings-1';
+  document.head.appendChild(recommendationScript);
+
   if(isDemo&&demoStage==='round2'){
     const s=document.createElement('script');
     s.src='mitglied-runde2.js?v=20260904-r2-1';
