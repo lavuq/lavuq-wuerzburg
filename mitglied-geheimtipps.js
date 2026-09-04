@@ -2,6 +2,11 @@
   const accessParams=new URLSearchParams(location.search);
   const accessMember=accessParams.get('member');
   const accessToken=accessParams.get('token');
+  const isDemo=accessParams.get('demo')==='1';
+  const demoUser=(accessParams.get('demoUser')||'leon').toLowerCase();
+  const DEMO_NAMES={leon:'Leon',anna:'Anna',sophie:'Sophie',daniel:'Daniel'};
+  const demoName=DEMO_NAMES[demoUser]||'Leon';
+  const DEMO_VOTES_KEY='lavuq_demo_meeting1_votes_v1';
   if(accessMember&&accessToken){
     try{localStorage.setItem('lavuq_member_access',JSON.stringify({member:accessMember,token:accessToken,savedAt:Date.now()}));}catch{}
   }
@@ -23,12 +28,17 @@
     freizeit:['Festung Marienberg','Hofgarten der Residenz','Alte Mainbrücke','Ringpark','Minigolf','Kino']
   };
 
-  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
   function uniq(items){return [...new Set(items.map(clean).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'de'));}
   function key(cat){return `lavuq_wue_${cat}_v2`;}
   function readCache(cat){try{const x=JSON.parse(localStorage.getItem(key(cat))||'null');if(x&&Array.isArray(x.items)&&Date.now()-Number(x.savedAt||0)<CACHE_TTL)return x.items;}catch{}return null;}
   function writeCache(cat,items){try{localStorage.setItem(key(cat),JSON.stringify({savedAt:Date.now(),items}));}catch{}}
+  function readDemoVotes(){
+    try{return JSON.parse(localStorage.getItem(DEMO_VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}
+    catch{return{leon:true,anna:false,sophie:false,daniel:false};}
+  }
+  function writeDemoVotes(v){try{localStorage.setItem(DEMO_VOTES_KEY,JSON.stringify(v));}catch{}}
 
   async function loadCategory(cat){
     const cached=readCache(cat);if(cached?.length)return cached;
@@ -79,6 +89,22 @@
     if(place){const meta=place.parentElement?.querySelector('.schedule-meta');if(meta)meta.textContent='Die Empfehlungen sind nur Inspiration. Du kannst jederzeit komplett frei einen eigenen Treffpunkt oder eine eigene Aktivität eintragen.';}
   }
 
+  function applyDemoIdentity(){
+    if(!isDemo)return;
+    const hello=document.getElementById('hello');
+    if(hello&&hello.textContent!==`Hallo ${demoName} 👋`)hello.textContent=`Hallo ${demoName} 👋`;
+    document.querySelectorAll('#members .member').forEach(card=>{
+      const strong=card.querySelector('strong');
+      if(!strong)return;
+      const isMe=strong.textContent.trim().toLowerCase()===demoName.toLowerCase();
+      card.classList.toggle('me',isMe);
+      card.querySelectorAll('.muted').forEach(x=>{if(x.textContent.trim()==='Du')x.remove();});
+      if(isMe){
+        const d=document.createElement('div');d.className='muted';d.textContent='Du';strong.parentElement.appendChild(d);
+      }
+    });
+  }
+
   function lockFutureMeetings(){
     document.querySelectorAll('.meeting').forEach(card=>{
       const info=card.querySelector('.meeting-head .muted');
@@ -103,6 +129,9 @@
     document.querySelectorAll('.vote-card').forEach(card=>{
       const meta=card.querySelector('.schedule-meta');
       if(!meta||!meta.textContent.includes('Deine Stimme: Ja'))return;
+      if(isDemo&&demoUser==='leon'){
+        const votes=readDemoVotes();votes.leon=true;writeDemoVotes(votes);
+      }
       const actions=card.querySelector('.vote-actions');
       if(!actions||actions.dataset.ownVoteMarked==='1')return;
       actions.dataset.ownVoteMarked='1';
@@ -110,10 +139,41 @@
     });
   }
 
+  function renderSharedDemoVote(){
+    if(!isDemo||demoUser==='leon')return;
+    const box=document.getElementById('schedule-1');
+    if(!box||box.classList.contains('hidden')||box.dataset.sharedDemo==='1')return;
+    if(box.querySelector('.vote-card'))return;
+    const form=box.querySelector('.schedule-form');
+    if(!form)return;
+    box.dataset.sharedDemo='1';
+    const votes=readDemoVotes();
+    const yesCount=Object.values(votes).filter(Boolean).length;
+    const already=!!votes[demoUser];
+    box.innerHTML=`<h3>Terminabstimmung · Treffen 1</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">21.09.2026, 15:00<br>blackout</div><div class="schedule-meta">Zustimmungen: ${yesCount} · Ablehnungen: 0${already?' · Deine Stimme: Ja':''}</div><div class="vote-actions">${already?'<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>':`<button class="btn btn-primary" data-demo-vote="yes">Zustimmen</button><button class="btn btn-light" data-demo-vote="no">Ablehnen</button>`}</div></div>`;
+    box.querySelector('[data-demo-vote="yes"]')?.addEventListener('click',()=>{
+      const v=readDemoVotes();v[demoUser]=true;writeDemoVotes(v);box.dataset.sharedDemo='';renderSharedDemoVote();
+      const count=Object.values(v).filter(Boolean).length;
+      const state=document.getElementById('state');
+      if(state){state.textContent=count===4?'Alle haben zugestimmt. Der Termin ist jetzt verbindlich gespeichert.':`Demo: ${demoName} hat zugestimmt. ${count} von 4 Zustimmungen.`;state.className='status ok';}
+      if(count===4){
+        const card=document.getElementById('meeting-1');
+        const head=card?.querySelector('.meeting-head');
+        if(head)head.innerHTML='<span class="meeting-number">1</span><div><strong>Treffen 1</strong><div>21.09.2026, 15:00 · blackout</div><div class="muted">Bestätigt · verbindlich bestätigt</div></div>';
+      }
+    });
+    box.querySelector('[data-demo-vote="no"]')?.addEventListener('click',()=>{
+      const state=document.getElementById('state');
+      if(state){state.textContent=`Demo: ${demoName} hat den Vorschlag abgelehnt. Eine neue Vorschlagsrunde wäre nötig.`;state.className='status err';}
+    });
+  }
+
   function scan(){
+    applyDemoIdentity();
     document.querySelectorAll('select[id^="suggestion-"]').forEach(enhance);
     lockFutureMeetings();
     markOwnVote();
+    renderSharedDemoVote();
   }
   new MutationObserver(scan).observe(document.documentElement,{childList:true,subtree:true});
   scan();
