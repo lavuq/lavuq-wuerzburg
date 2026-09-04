@@ -19,9 +19,20 @@
   function readVotes(){try{return JSON.parse(localStorage.getItem(VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}catch{return{leon:true,anna:false,sophie:false,daniel:false};}}
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
   function readFeedback(){try{return JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
+  function seedM2(){
+    const seeded={proposal:{date:'2026-09-30T18:00',dateLabel:'30.09.2026, 18:00',place:'Bürgerspital Weinstuben'},votes:{leon:false,anna:false,sophie:false,daniel:true}};
+    try{localStorage.setItem(M2_KEY,JSON.stringify(seeded));}catch{}
+    return seeded;
+  }
   function readM2(){
-    try{return JSON.parse(localStorage.getItem(M2_KEY)||'null')||{proposal:null,votes:{leon:false,anna:false,sophie:false,daniel:false}};}
-    catch{return{proposal:null,votes:{leon:false,anna:false,sophie:false,daniel:false}};}
+    try{
+      const raw=localStorage.getItem(M2_KEY);
+      if(!raw)return seedM2();
+      const state=JSON.parse(raw);
+      if(!state||!state.proposal)return seedM2();
+      state.votes=state.votes||{leon:false,anna:false,sophie:false,daniel:false};
+      return state;
+    }catch{return seedM2();}
   }
   function writeM2(state){try{localStorage.setItem(M2_KEY,JSON.stringify(state));}catch{}}
 
