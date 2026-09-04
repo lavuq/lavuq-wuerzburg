@@ -200,6 +200,7 @@
   }
 
   if(standalone) return;
+  if(location.pathname.includes('mitglied')) return;
 
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
   const isMobile=/android|iphone|ipad|ipod/i.test(navigator.userAgent);
