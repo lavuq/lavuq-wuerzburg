@@ -5,6 +5,12 @@
   const FEEDBACK3_KEY='lavuq_demo_meeting3_feedback_v1';
   const CHOICE_KEY='lavuq_demo_after_round_choice_v1';
 
+  if(isDemo){
+    const windowScript=document.createElement('script');
+    windowScript.src='mitglied-zeitfenster.js?v=20260904-sixweeks-1';
+    document.head.appendChild(windowScript);
+  }
+
   if(isDemo&&demoStage==='round2'){
     const s=document.createElement('script');
     s.src='mitglied-runde2.js?v=20260904-r2-1';
