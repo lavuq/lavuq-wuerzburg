@@ -94,6 +94,18 @@
     });
   }
 
+  function bindMeeting2Open(){
+    if(!isDemo||demoStage!=='feedback')return;
+    const button=document.querySelector('#meeting-2 [data-schedule-open="2"]');
+    const panel=document.getElementById('schedule-2');
+    if(!button||!panel||button.dataset.demoBound==='1')return;
+    button.dataset.demoBound='1';
+    button.addEventListener('click',()=>{
+      panel.classList.remove('hidden');
+      panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+  }
+
   function renderFeedbackStage(){
     if(!isDemo||demoStage!=='feedback')return;
     addLockStyle();
@@ -128,6 +140,7 @@
         card2.classList.remove('meeting-locked');
         if(info)info.textContent='Feedback zu Treffen 1 abgeschlossen. Treffen 2 ist freigeschaltet.';
         if(actions&&!actions.querySelector('[data-schedule-open="2"]'))actions.innerHTML='<button class="btn btn-dark" data-schedule-open="2">Termin festlegen</button>';
+        bindMeeting2Open();
       }
     }
 
