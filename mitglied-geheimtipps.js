@@ -23,7 +23,7 @@
     freizeit:['Festung Marienberg','Hofgarten der Residenz','Alte Mainbrücke','Ringpark','Minigolf','Kino']
   };
 
-  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));}
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
   function uniq(items){return [...new Set(items.map(clean).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'de'));}
   function key(cat){return `lavuq_wue_${cat}_v2`;}
@@ -83,7 +83,6 @@
     document.querySelectorAll('.meeting').forEach(card=>{
       const info=card.querySelector('.meeting-head .muted');
       if(!info||!info.textContent.includes('Wird nach dem vorherigen Feedback freigeschaltet.'))return;
-      if(card.classList.contains('meeting-locked'))return;
       card.classList.add('meeting-locked');
       const actions=card.querySelector('.meeting-actions');
       if(actions&&!actions.querySelector('.meeting-lock-note')){
@@ -100,9 +99,21 @@
     }
   }
 
+  function markOwnVote(){
+    document.querySelectorAll('.vote-card').forEach(card=>{
+      const meta=card.querySelector('.schedule-meta');
+      if(!meta||!meta.textContent.includes('Deine Stimme: Ja'))return;
+      const actions=card.querySelector('.vote-actions');
+      if(!actions||actions.dataset.ownVoteMarked==='1')return;
+      actions.dataset.ownVoteMarked='1';
+      actions.innerHTML='<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>';
+    });
+  }
+
   function scan(){
     document.querySelectorAll('select[id^="suggestion-"]').forEach(enhance);
     lockFutureMeetings();
+    markOwnVote();
   }
   new MutationObserver(scan).observe(document.documentElement,{childList:true,subtree:true});
   scan();
