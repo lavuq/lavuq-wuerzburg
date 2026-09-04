@@ -9,6 +9,7 @@
   const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
   const FEEDBACK2_KEY='lavuq_demo_meeting2_feedback_v1';
   const M2_KEY='lavuq_demo_meeting2_state_v1';
+  const M3_KEY='lavuq_demo_meeting3_state_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
   const M2_RECOMMENDATIONS={
     'Café & Kaffee':['Café Wunschlos Glücklich','Café Fred','Café Schönborn'],
@@ -37,6 +38,17 @@
     }catch{return seedM2();}
   }
   function writeM2(state){try{localStorage.setItem(M2_KEY,JSON.stringify(state));}catch{}}
+  function readM3(){
+    try{
+      const raw=localStorage.getItem(M3_KEY);
+      if(!raw)return {proposal:null,votes:{leon:false,anna:false,sophie:false,daniel:false}};
+      const state=JSON.parse(raw)||{};
+      state.proposal=state.proposal||null;
+      state.votes=state.votes||{leon:false,anna:false,sophie:false,daniel:false};
+      return state;
+    }catch{return {proposal:null,votes:{leon:false,anna:false,sophie:false,daniel:false}};}
+  }
+  function writeM3(state){try{localStorage.setItem(M3_KEY,JSON.stringify(state));}catch{}}
 
   function applyIdentity(){
     if(!isDemo)return;
@@ -139,6 +151,50 @@
     });
   }
 
+  function renderM3Proposal(panel){
+    const state=readM3();
+    if(!state.proposal)return false;
+    const yesCount=Object.values(state.votes||{}).filter(Boolean).length;
+    const already=!!state.votes?.[demoUser];
+    if(yesCount===4){
+      panel.innerHTML=`<h3>Terminabstimmung · Treffen 3</h3><div class="status ok"><strong>Termin verbindlich bestätigt ✓</strong><br>${state.proposal.dateLabel}<br>${state.proposal.place}<br>Alle 4 Teilnehmer haben zugestimmt.</div>`;
+      return true;
+    }
+    panel.innerHTML=`<h3>Terminabstimmung · Treffen 3</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">${state.proposal.dateLabel}<br>${state.proposal.place}</div><div class="schedule-meta">Zustimmungen: ${yesCount} · Ablehnungen: 0${already?' · Deine Stimme: Ja':''}</div><div class="vote-actions">${already?'<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>':'<button class="btn btn-primary" type="button" data-m3-yes>Zustimmen</button><button class="btn btn-light" type="button" data-m3-no>Ablehnen</button>'}</div></div>`;
+    panel.querySelector('[data-m3-yes]')?.addEventListener('click',()=>{
+      const s=readM3();s.votes=s.votes||{leon:false,anna:false,sophie:false,daniel:false};s.votes[demoUser]=true;writeM3(s);renderM3Proposal(panel);
+    });
+    panel.querySelector('[data-m3-no]')?.addEventListener('click',()=>{
+      const stateBox=document.getElementById('state');
+      if(stateBox){stateBox.textContent=`Demo: ${demoName} hat den Vorschlag für Treffen 3 abgelehnt. Eine neue Vorschlagsrunde wäre nötig.`;stateBox.className='status err';}
+    });
+    return true;
+  }
+
+  function openMeeting3(card){
+    let panel=card.querySelector('.schedule-panel');
+    if(!panel){panel=document.createElement('div');panel.className='schedule-panel';panel.id='schedule-3';card.appendChild(panel);}
+    panel.classList.toggle('hidden');
+    if(panel.classList.contains('hidden'))return;
+    if(renderM3Proposal(panel))return;
+    panel.innerHTML=`<h3>Terminabstimmung · Treffen 3</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="schedule-form"><div class="full"><label>Datum & Uhrzeit</label><input type="datetime-local" data-m3-date></div><div class="full"><label>Würzburg-Empfehlungen <span class="muted">(optional)</span></label><select data-m3-cat><option value="">Kategorie auswählen</option><option>Café & Kaffee</option><option>Essen & Trinken</option><option>Spaziergang & draußen</option><option>Aktivität & Freizeit</option></select></div><div class="full"><select data-m3-rec disabled><option value="">Erst Kategorie auswählen</option></select></div><div class="full"><label>Eigener Treffpunkt / genaue Idee</label><input type="text" data-m3-place placeholder="Du kannst frei entscheiden"></div><div class="full"><label style="display:flex;gap:10px;align-items:flex-start;font-weight:800"><input type="checkbox" data-m3-public style="width:auto;margin-top:3px"> Ich bestätige, dass der Treffpunkt öffentlich ist.</label></div><div class="full"><button class="btn btn-primary" type="button" data-m3-send>Vorschlag an die Gruppe senden</button></div></div>`;
+    const category=panel.querySelector('[data-m3-cat]');
+    const recommendation=panel.querySelector('[data-m3-rec]');
+    category?.addEventListener('change',()=>{
+      const options=M2_RECOMMENDATIONS[category.value]||[];
+      recommendation.innerHTML=options.length?'<option value="">Empfehlung auswählen</option>'+options.map(x=>`<option value="${x}">${x}</option>`).join(''):'<option value="">Erst Kategorie auswählen</option>';
+      recommendation.disabled=!options.length;
+    });
+    panel.querySelector('[data-m3-send]')?.addEventListener('click',()=>{
+      const date=panel.querySelector('[data-m3-date]')?.value;
+      const place=(panel.querySelector('[data-m3-place]')?.value||panel.querySelector('[data-m3-rec]')?.value||panel.querySelector('[data-m3-cat]')?.value||'').trim();
+      const pub=panel.querySelector('[data-m3-public]')?.checked;
+      if(!date||!place||!pub){const stateBox=document.getElementById('state');if(stateBox){stateBox.textContent='Bitte Datum, Treffpunkt und die Bestätigung „öffentlicher Treffpunkt“ ausfüllen.';stateBox.className='status err';}return;}
+      const s={proposal:{date,dateLabel:formatM2Date(date),place},votes:{leon:false,anna:false,sophie:false,daniel:false}};
+      s.votes[demoUser]=true;writeM3(s);renderM3Proposal(panel);
+    });
+  }
+
   function renderFeedbackStage(){
     if(!isDemo||demoStage!=='feedback')return;
     addLockStyle();
@@ -212,7 +268,10 @@
       }else{
         card3.classList.remove('meeting-locked');
         if(info)info.textContent='Feedback zu Treffen 2 abgeschlossen. Treffen 3 ist freigeschaltet.';
-        if(actions)actions.innerHTML='<button class="btn btn-dark" type="button">Termin festlegen</button>';
+        if(actions&&!actions.querySelector('[data-demo-open-m3]')){
+          actions.innerHTML='<button class="btn btn-dark" type="button" data-demo-open-m3>Termin festlegen</button>';
+          actions.querySelector('[data-demo-open-m3]').addEventListener('click',()=>openMeeting3(card3));
+        }
       }
     }
   }
