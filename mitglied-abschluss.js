@@ -5,6 +5,13 @@
   const FEEDBACK3_KEY='lavuq_demo_meeting3_feedback_v1';
   const CHOICE_KEY='lavuq_demo_after_round_choice_v1';
 
+  if(isDemo&&demoStage==='round2'){
+    const s=document.createElement('script');
+    s.src='mitglied-runde2.js?v=20260904-r2-1';
+    document.head.appendChild(s);
+    return;
+  }
+
   function feedback3Count(){
     try{
       const data=JSON.parse(localStorage.getItem(FEEDBACK3_KEY)||'{}')||{};
@@ -49,7 +56,10 @@
 
     root.querySelector('[data-completion-new-round]')?.addEventListener('click',()=>{
       try{localStorage.setItem(CHOICE_KEY,'new-round');}catch{}
-      showResult(root,'Neue LAVUQ-Runde ausgewählt ✓ Im nächsten Schritt startet für eure Gruppe eine neue 3-Treffen-Runde.');
+      const p=new URLSearchParams(location.search);
+      p.set('demoStage','round2');
+      p.set('v',String(Date.now()));
+      location.href=`${location.pathname}?${p.toString()}#treffen`;
     });
 
     root.querySelector('[data-completion-leave]')?.addEventListener('click',()=>{
@@ -65,8 +75,6 @@
     addStyles();
     const card=document.getElementById('meeting-3');
     if(!card)return;
-    const list=card.parentElement;
-    if(!list)return;
     let wrap=document.getElementById('lavuq-completion-wrap');
     if(wrap)return;
     wrap=document.createElement('div');
