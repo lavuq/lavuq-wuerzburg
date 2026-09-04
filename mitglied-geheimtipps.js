@@ -7,6 +7,7 @@
   const demoName=DEMO_NAMES[demoUser]||'Leon';
   const VOTES_KEY='lavuq_demo_meeting1_votes_stable_v1';
   const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
+  const M2_KEY='lavuq_demo_meeting2_state_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
   const M2_RECOMMENDATIONS={
     'Café & Kaffee':['Café Wunschlos Glücklich','Café Fred','Café Schönborn'],
@@ -18,6 +19,11 @@
   function readVotes(){try{return JSON.parse(localStorage.getItem(VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}catch{return{leon:true,anna:false,sophie:false,daniel:false};}}
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
   function readFeedback(){try{return JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
+  function readM2(){
+    try{return JSON.parse(localStorage.getItem(M2_KEY)||'null')||{proposal:null,votes:{leon:false,anna:false,sophie:false,daniel:false}};}
+    catch{return{proposal:null,votes:{leon:false,anna:false,sophie:false,daniel:false}};}
+  }
+  function writeM2(state){try{localStorage.setItem(M2_KEY,JSON.stringify(state));}catch{}}
 
   function applyIdentity(){
     if(!isDemo)return;
@@ -72,29 +78,55 @@
     box.querySelector('[data-demo-yes]')?.addEventListener('click',()=>{const v=readVotes();v[demoUser]=true;writeVotes(v);box.dataset.demoRendered='';renderOtherDemoVote();});
   }
 
+  function formatM2Date(value){
+    try{return new Date(value).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'});}catch{return value;}
+  }
+
+  function renderM2Proposal(panel){
+    const state=readM2();
+    if(!state.proposal)return false;
+    const yesCount=Object.values(state.votes||{}).filter(Boolean).length;
+    const already=!!state.votes?.[demoUser];
+    if(yesCount===4){
+      panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="status ok"><strong>Termin verbindlich bestätigt ✓</strong><br>${state.proposal.dateLabel}<br>${state.proposal.place}<br>Alle 4 Teilnehmer haben zugestimmt.</div>`;
+      return true;
+    }
+    panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">${state.proposal.dateLabel}<br>${state.proposal.place}</div><div class="schedule-meta">Zustimmungen: ${yesCount} · Ablehnungen: 0${already?' · Deine Stimme: Ja':''}</div><div class="vote-actions">${already?'<div class="status ok compact" style="width:100%;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div>':'<button class="btn btn-primary" type="button" data-m2-yes>Zustimmen</button><button class="btn btn-light" type="button" data-m2-no>Ablehnen</button>'}</div></div>`;
+    panel.querySelector('[data-m2-yes]')?.addEventListener('click',()=>{
+      const s=readM2();s.votes=s.votes||{leon:false,anna:false,sophie:false,daniel:false};s.votes[demoUser]=true;writeM2(s);renderM2Proposal(panel);
+    });
+    panel.querySelector('[data-m2-no]')?.addEventListener('click',()=>{
+      const stateBox=document.getElementById('state');
+      if(stateBox){stateBox.textContent=`Demo: ${demoName} hat den Vorschlag für Treffen 2 abgelehnt. Eine neue Vorschlagsrunde wäre nötig.`;stateBox.className='status err';}
+    });
+    return true;
+  }
+
   function openMeeting2(card){
     let panel=card.querySelector('.schedule-panel');
     if(!panel){panel=document.createElement('div');panel.className='schedule-panel';panel.id='schedule-2';card.appendChild(panel);}
     panel.classList.toggle('hidden');
     if(panel.classList.contains('hidden'))return;
-    if(panel.dataset.demoReady==='1')return;
     panel.dataset.demoReady='1';
+    if(renderM2Proposal(panel))return;
+
     panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="schedule-form"><div class="full"><label>Datum & Uhrzeit</label><input type="datetime-local" data-m2-date></div><div class="full"><label>Würzburg-Empfehlungen <span class="muted">(optional)</span></label><select data-m2-cat><option value="">Kategorie auswählen</option><option>Café & Kaffee</option><option>Essen & Trinken</option><option>Spaziergang & draußen</option><option>Aktivität & Freizeit</option></select></div><div class="full"><select data-m2-rec disabled><option value="">Erst Kategorie auswählen</option></select></div><div class="full"><label>Eigener Treffpunkt / genaue Idee</label><input type="text" data-m2-place placeholder="Du kannst frei entscheiden"></div><div class="full"><label style="display:flex;gap:10px;align-items:flex-start;font-weight:800"><input type="checkbox" data-m2-public style="width:auto;margin-top:3px"> Ich bestätige, dass der Treffpunkt öffentlich ist.</label></div><div class="full"><button class="btn btn-primary" type="button" data-m2-send>Vorschlag an die Gruppe senden</button></div></div>`;
     const category=panel.querySelector('[data-m2-cat]');
     const recommendation=panel.querySelector('[data-m2-rec]');
     category?.addEventListener('change',()=>{
       const options=M2_RECOMMENDATIONS[category.value]||[];
-      recommendation.innerHTML=options.length
-        ? '<option value="">Empfehlung auswählen</option>'+options.map(x=>`<option value="${x}">${x}</option>`).join('')
-        : '<option value="">Erst Kategorie auswählen</option>';
+      recommendation.innerHTML=options.length?'<option value="">Empfehlung auswählen</option>'+options.map(x=>`<option value="${x}">${x}</option>`).join(''):'<option value="">Erst Kategorie auswählen</option>';
       recommendation.disabled=!options.length;
     });
     panel.querySelector('[data-m2-send]')?.addEventListener('click',()=>{
       const date=panel.querySelector('[data-m2-date]')?.value;
       const place=(panel.querySelector('[data-m2-place]')?.value||panel.querySelector('[data-m2-rec]')?.value||panel.querySelector('[data-m2-cat]')?.value||'').trim();
       const pub=panel.querySelector('[data-m2-public]')?.checked;
-      if(!date||!place||!pub){const state=document.getElementById('state');if(state){state.textContent='Bitte Datum, Treffpunkt und die Bestätigung „öffentlicher Treffpunkt“ ausfüllen.';state.className='status err';}return;}
-      panel.innerHTML=`<h3>Terminabstimmung · Treffen 2</h3><div class="schedule-meta">Vorschlagsrunden: 1 von 5</div><div class="vote-card"><strong>Aktueller Vorschlag</strong><div style="margin-top:6px">${new Date(date).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'})}<br>${place}</div><div class="schedule-meta">Zustimmungen: 1 · Ablehnungen: 0 · Deine Stimme: Ja</div><div class="status ok compact" style="margin-top:12px;text-align:center">Deine Zustimmung ist bereits gespeichert ✓</div></div>`;
+      if(!date||!place||!pub){const stateBox=document.getElementById('state');if(stateBox){stateBox.textContent='Bitte Datum, Treffpunkt und die Bestätigung „öffentlicher Treffpunkt“ ausfüllen.';stateBox.className='status err';}return;}
+      const s={proposal:{date,dateLabel:formatM2Date(date),place},votes:{leon:false,anna:false,sophie:false,daniel:false}};
+      s.votes[demoUser]=true;
+      writeM2(s);
+      renderM2Proposal(panel);
     });
   }
 
