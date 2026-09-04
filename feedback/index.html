@@ -28,7 +28,7 @@
     .choice:hover{border-color:#b18a3f}
     .choice.selected,.choice[aria-pressed="true"]{background:#0b1f3a;color:#fff;border-color:#0b1f3a;box-shadow:0 0 0 2px rgba(216,180,106,.35)}
     textarea{width:100%;min-height:120px;border:1px solid #d8d4ca;border-radius:12px;padding:14px;font:inherit;box-sizing:border-box}
-    .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;padding:15px 18px;background:#0b1f3a;color:#fff;font-weight:750;font-size:1rem;margin-top:10px;cursor:pointer}
+    .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;padding:15px 18px;background:#0b1f3a;color:#fff;font-weight:750;font-size:1rem;margin-top:10px;cursor:pointer;text-decoration:none}
     .btn[disabled]{opacity:.55;cursor:not-allowed}
     .small{font-size:.88rem;color:#647084}
     @media(max-width:540px){.feedback-main{margin-top:24px}.feedback-card{padding:22px 18px;border-radius:18px}.choices{grid-template-columns:1fr}}
@@ -64,6 +64,11 @@
 (function(){
   const params=new URLSearchParams(location.search);
   const token=(params.get('token')||'').trim();
+  const demo=params.get('demo')==='1';
+  const demoUser=(params.get('demoUser')||'leon').toLowerCase();
+  const validDemoUsers=['leon','anna','sophie','daniel'];
+  const demoName=validDemoUsers.includes(demoUser)?demoUser:'leon';
+  const DEMO_FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
   const status=document.getElementById('tokenStatus');
   const form=document.getElementById('feedbackForm');
   const submitButton=document.getElementById('submitFeedback');
@@ -72,7 +77,20 @@
   const endpoint='https://lavuq-bewerbung.lavuq.workers.dev/feedback/submit';
   let sending=false;
 
-  if(!token){
+  function readDemoFeedback(){try{return JSON.parse(localStorage.getItem(DEMO_FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
+  function writeDemoFeedback(v){try{localStorage.setItem(DEMO_FEEDBACK_KEY,JSON.stringify(v));}catch{}}
+
+  if(demo){
+    status.textContent='Teilnehmer-Vorschau · Dieses Feedback wird nur lokal für den Test gespeichert.';
+    document.querySelector('.notice').innerHTML='<strong>Demo:</strong> Es werden keine echten Teilnehmerdaten versendet.';
+    const saved=readDemoFeedback();
+    if(saved[demoName]){
+      form.style.display='none';
+      status.textContent='Feedback bereits abgegeben ✓';
+      status.insertAdjacentHTML('afterend',`<a class="btn" href="../mitglied.html?demo=1&demoUser=${encodeURIComponent(demoName)}&demoStage=feedback#treffen">Zurück zu Mein Q</a>`);
+      return;
+    }
+  }else if(!token){
     status.textContent='Dieser Feedback-Link ist unvollständig.';
     status.classList.add('error');
     form.style.display='none';
@@ -98,14 +116,24 @@
     sending=true;updateSubmitState();submitButton.textContent='Wird gespeichert …';
     status.classList.remove('error');status.textContent='Dein Feedback wird sicher gespeichert …';
     try{
-      const res=await fetch(endpoint,{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,feeling:selected('feeling'),continueChoice:selected('continue'),comment:comment.value.trim()})});
-      const raw=await res.text();let result={};try{result=raw?JSON.parse(raw):{};}catch{}
-      if(!res.ok||result.ok!==true)throw new Error(result.state||`HTTP ${res.status}`);
+      if(demo){
+        const saved=readDemoFeedback();
+        saved[demoName]={feeling:selected('feeling'),continueChoice:selected('continue'),comment:comment.value.trim(),savedAt:new Date().toISOString()};
+        writeDemoFeedback(saved);
+      }else{
+        const res=await fetch(endpoint,{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,feeling:selected('feeling'),continueChoice:selected('continue'),comment:comment.value.trim()})});
+        const raw=await res.text();let result={};try{result=raw?JSON.parse(raw):{};}catch{}
+        if(!res.ok||result.ok!==true)throw new Error(result.state||`HTTP ${res.status}`);
+      }
       form.querySelectorAll('button,textarea').forEach(el=>el.disabled=true);
       status.textContent='Danke! Dein Feedback wurde erfolgreich gespeichert.';
-      hint.textContent='Dein persönlicher Feedback-Link wurde nach der Abgabe deaktiviert.';
+      hint.textContent=demo?'Demo-Feedback gespeichert.':'Dein persönlicher Feedback-Link wurde nach der Abgabe deaktiviert.';
       submitButton.textContent='Feedback gespeichert ✓';
-      history.replaceState(null,'',location.pathname);
+      if(demo){
+        submitButton.insertAdjacentHTML('afterend',`<a class="btn" href="../mitglied.html?demo=1&demoUser=${encodeURIComponent(demoName)}&demoStage=feedback#treffen">Zurück zu Mein Q</a>`);
+      }else{
+        history.replaceState(null,'',location.pathname);
+      }
     }catch(err){
       sending=false;updateSubmitState();submitButton.textContent='Feedback absenden';
       status.classList.add('error');
