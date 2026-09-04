@@ -7,6 +7,7 @@
   const demoName=DEMO_NAMES[demoUser]||'Leon';
   const VOTES_KEY='lavuq_demo_meeting1_votes_stable_v1';
   const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
+  const FEEDBACK2_KEY='lavuq_demo_meeting2_feedback_v1';
   const M2_KEY='lavuq_demo_meeting2_state_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
   const M2_RECOMMENDATIONS={
@@ -19,6 +20,7 @@
   function readVotes(){try{return JSON.parse(localStorage.getItem(VOTES_KEY)||'null')||{leon:true,anna:false,sophie:false,daniel:false};}catch{return{leon:true,anna:false,sophie:false,daniel:false};}}
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
   function readFeedback(){try{return JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
+  function readFeedback2(){try{return JSON.parse(localStorage.getItem(FEEDBACK2_KEY)||'{}')||{};}catch{return{};}}
   function seedM2(){
     const seeded={proposal:{date:'2026-09-30T18:00',dateLabel:'30.09.2026, 18:00',place:'Bürgerspital Weinstuben'},votes:{leon:false,anna:false,sophie:false,daniel:true}};
     try{localStorage.setItem(M2_KEY,JSON.stringify(seeded));}catch{}
@@ -79,7 +81,7 @@
   }
 
   function renderOtherDemoVote(){
-    if(!isDemo||demoUser==='leon'||demoStage==='feedback')return;
+    if(!isDemo||demoUser==='leon'||demoStage==='feedback'||demoStage==='feedback2')return;
     const box=document.getElementById('schedule-1');
     if(!box||box.classList.contains('hidden')||box.dataset.demoRendered==='1')return;
     if(!box.querySelector('.schedule-form')&&!box.querySelector('.vote-card'))return;
@@ -89,9 +91,7 @@
     box.querySelector('[data-demo-yes]')?.addEventListener('click',()=>{const v=readVotes();v[demoUser]=true;writeVotes(v);box.dataset.demoRendered='';renderOtherDemoVote();});
   }
 
-  function formatM2Date(value){
-    try{return new Date(value).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'});}catch{return value;}
-  }
+  function formatM2Date(value){try{return new Date(value).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'});}catch{return value;}}
 
   function renderM2Proposal(panel){
     const state=readM2();
@@ -135,9 +135,7 @@
       const pub=panel.querySelector('[data-m2-public]')?.checked;
       if(!date||!place||!pub){const stateBox=document.getElementById('state');if(stateBox){stateBox.textContent='Bitte Datum, Treffpunkt und die Bestätigung „öffentlicher Treffpunkt“ ausfüllen.';stateBox.className='status err';}return;}
       const s={proposal:{date,dateLabel:formatM2Date(date),place},votes:{leon:false,anna:false,sophie:false,daniel:false}};
-      s.votes[demoUser]=true;
-      writeM2(s);
-      renderM2Proposal(panel);
+      s.votes[demoUser]=true;writeM2(s);renderM2Proposal(panel);
     });
   }
 
@@ -174,6 +172,56 @@
     if(card3){card3.classList.add('meeting-locked');const info=card3.querySelector('.meeting-head .muted');const actions=card3.querySelector('.meeting-actions');if(info)info.textContent='Wird nach dem Feedback zu Treffen 2 freigeschaltet.';if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';}
   }
 
-  function scan(){applyIdentity();if(demoStage==='feedback')renderFeedbackStage();else{lockFutureMeetings();markLeonVote();renderOtherDemoVote();}}
+  function renderFeedback2Stage(){
+    if(!isDemo||demoStage!=='feedback2')return;
+    addLockStyle();
+    const m2=readM2();
+    const feedback2=readFeedback2();
+    const count2=Object.keys(feedback2).filter(k=>['leon','anna','sophie','daniel'].includes(k)).length;
+    const mine2=!!feedback2[demoUser];
+
+    const card1=document.getElementById('meeting-1');
+    if(card1){
+      const head=card1.querySelector('.meeting-head');
+      if(head)head.innerHTML=`<span class="meeting-number">1</span><div><strong>Treffen 1</strong><div>${PROPOSAL.date} · ${PROPOSAL.place}</div><div class="muted">Abgeschlossen · Feedback vollständig</div></div>`;
+      const actions=card1.querySelector('.meeting-actions');
+      if(actions)actions.innerHTML='<div class="status ok compact">4 von 4 Feedbacks ✓</div>';
+      const schedule=card1.querySelector('.schedule-panel');if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+    }
+
+    const card2=document.getElementById('meeting-2');
+    if(card2){
+      const head=card2.querySelector('.meeting-head');
+      if(head)head.innerHTML=`<span class="meeting-number">2</span><div><strong>Treffen 2</strong><div>${m2.proposal?.dateLabel||'30.09.2026, 18:00'} · ${m2.proposal?.place||'Bürgerspital Weinstuben'}</div><div class="muted">Treffen abgeschlossen · Feedbackphase</div></div>`;
+      const actions=card2.querySelector('.meeting-actions');
+      if(actions){
+        actions.innerHTML=mine2?'<div class="status ok compact">Feedback abgegeben ✓</div>':`<a class="btn btn-primary" href="feedback/?demo=1&demoUser=${encodeURIComponent(demoUser)}&meeting=2">Feedback zu Treffen 2 abgeben</a>`;
+        actions.insertAdjacentHTML('beforeend',`<div class="demo-feedback-count">${count2} von 4 Feedbacks eingegangen</div>`);
+      }
+      const schedule=card2.querySelector('.schedule-panel');if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+    }
+
+    const card3=document.getElementById('meeting-3');
+    if(card3){
+      const info=card3.querySelector('.meeting-head .muted');
+      const actions=card3.querySelector('.meeting-actions');
+      if(count2<4){
+        card3.classList.add('meeting-locked');
+        if(info)info.textContent='Wird freigeschaltet, sobald alle Feedbacks zu Treffen 2 vorliegen.';
+        if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';
+      }else{
+        card3.classList.remove('meeting-locked');
+        if(info)info.textContent='Feedback zu Treffen 2 abgeschlossen. Treffen 3 ist freigeschaltet.';
+        if(actions)actions.innerHTML='<button class="btn btn-dark" type="button">Termin festlegen</button>';
+      }
+    }
+  }
+
+  function scan(){
+    applyIdentity();
+    if(demoStage==='feedback2')renderFeedback2Stage();
+    else if(demoStage==='feedback')renderFeedbackStage();
+    else{lockFutureMeetings();markLeonVote();renderOtherDemoVote();}
+  }
   window.addEventListener('load',()=>{scan();setInterval(scan,800);});
 })();
