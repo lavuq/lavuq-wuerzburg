@@ -4,38 +4,39 @@
   const demoStage=(params.get('demoStage')||'').toLowerCase();
   const FEEDBACK3_KEY='lavuq_demo_meeting3_feedback_v1';
   const CHOICE_KEY='lavuq_demo_after_round_choice_v1';
+  const fresh=Date.now();
 
   const ideasScript=document.createElement('script');
-  ideasScript.src='mitglied-ideen-global.js?v=20260904-global-ideas-2';
+  ideasScript.src=`mitglied-ideen-global.js?v=20260904-global-ideas-3&fresh=${fresh}`;
   document.head.appendChild(ideasScript);
 
   if(isDemo&&demoStage==='round2'){
     const rejectScript=document.createElement('script');
-    rejectScript.src='mitglied-runde2-ablehnen.js?v=20260904-r2-reject-2';
+    rejectScript.src=`mitglied-runde2-ablehnen.js?v=20260904-r2-reject-3&fresh=${fresh}`;
     document.head.appendChild(rejectScript);
 
     const feedbackScript=document.createElement('script');
-    feedbackScript.src='mitglied-runde2-feedback.js?v=20260904-r2-feedback-2';
+    feedbackScript.src=`mitglied-runde2-feedback.js?v=20260904-r2-feedback-3&fresh=${fresh}`;
     document.head.appendChild(feedbackScript);
   }
 
   if(isDemo){
     const windowScript=document.createElement('script');
-    windowScript.src='mitglied-zeitfenster.js?v=20260904-sixweeks-1';
+    windowScript.src=`mitglied-zeitfenster.js?v=20260904-sixweeks-2&fresh=${fresh}`;
     document.head.appendChild(windowScript);
   }
 
   const recommendationScript=document.createElement('script');
-  recommendationScript.src='mitglied-empfehlungen.js?v=20260904-all-meetings-1';
+  recommendationScript.src=`mitglied-empfehlungen.js?v=20260904-all-meetings-2&fresh=${fresh}`;
   document.head.appendChild(recommendationScript);
 
   if(isDemo&&demoStage==='round2'){
     const s=document.createElement('script');
-    s.src='mitglied-runde2.js?v=20260904-r2-final-2';
+    s.src=`mitglied-runde2.js?v=20260904-r2-final-3&fresh=${fresh}`;
     document.head.appendChild(s);
 
     const fixScript=document.createElement('script');
-    fixScript.src='mitglied-runde2-fix.js?v=20260904-r2-fix-1';
+    fixScript.src=`mitglied-runde2-fix.js?v=20260904-r2-fix-2&fresh=${fresh}`;
     document.head.appendChild(fixScript);
     return;
   }
