@@ -79,7 +79,30 @@
     if(place){const meta=place.parentElement?.querySelector('.schedule-meta');if(meta)meta.textContent='Die Empfehlungen sind nur Inspiration. Du kannst jederzeit komplett frei einen eigenen Treffpunkt oder eine eigene Aktivität eintragen.';}
   }
 
-  function scan(){document.querySelectorAll('select[id^="suggestion-"]').forEach(enhance);}
+  function lockFutureMeetings(){
+    document.querySelectorAll('.meeting').forEach(card=>{
+      const info=card.querySelector('.meeting-head .muted');
+      if(!info||!info.textContent.includes('Wird nach dem vorherigen Feedback freigeschaltet.'))return;
+      card.classList.add('meeting-locked');
+      const actions=card.querySelector('.meeting-actions');
+      if(actions){
+        actions.innerHTML='<div class="meeting-lock-note" aria-label="Treffen gesperrt">🔒 Noch gesperrt</div>';
+      }
+      const schedule=card.querySelector('.schedule-panel');
+      if(schedule)schedule.classList.add('hidden');
+    });
+    if(!document.getElementById('meeting-lock-style')){
+      const style=document.createElement('style');
+      style.id='meeting-lock-style';
+      style.textContent='.meeting-locked{opacity:.78}.meeting-lock-note{width:100%;min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#eef2f6;color:#687386;font-weight:800;border:1px solid #dde3ea}.meeting-locked .meeting-number{filter:saturate(.65)}';
+      document.head.appendChild(style);
+    }
+  }
+
+  function scan(){
+    document.querySelectorAll('select[id^="suggestion-"]').forEach(enhance);
+    lockFutureMeetings();
+  }
   new MutationObserver(scan).observe(document.documentElement,{childList:true,subtree:true});
   scan();
 })();
