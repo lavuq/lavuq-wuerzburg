@@ -11,11 +11,11 @@
 
   if(isDemo&&demoStage==='round2'){
     const rejectScript=document.createElement('script');
-    rejectScript.src='mitglied-runde2-ablehnen.js?v=20260904-r2-reject-1';
+    rejectScript.src='mitglied-runde2-ablehnen.js?v=20260904-r2-reject-2';
     document.head.appendChild(rejectScript);
 
     const feedbackScript=document.createElement('script');
-    feedbackScript.src='mitglied-runde2-feedback.js?v=20260904-r2-feedback-1';
+    feedbackScript.src='mitglied-runde2-feedback.js?v=20260904-r2-feedback-2';
     document.head.appendChild(feedbackScript);
   }
 
@@ -31,8 +31,12 @@
 
   if(isDemo&&demoStage==='round2'){
     const s=document.createElement('script');
-    s.src='mitglied-runde2.js?v=20260904-r2-compact-2111';
+    s.src='mitglied-runde2.js?v=20260904-r2-final-2';
     document.head.appendChild(s);
+
+    const fixScript=document.createElement('script');
+    fixScript.src='mitglied-runde2-fix.js?v=20260904-r2-fix-1';
+    document.head.appendChild(fixScript);
     return;
   }
 
