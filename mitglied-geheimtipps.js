@@ -83,9 +83,10 @@
     document.querySelectorAll('.meeting').forEach(card=>{
       const info=card.querySelector('.meeting-head .muted');
       if(!info||!info.textContent.includes('Wird nach dem vorherigen Feedback freigeschaltet.'))return;
+      if(card.classList.contains('meeting-locked'))return;
       card.classList.add('meeting-locked');
       const actions=card.querySelector('.meeting-actions');
-      if(actions){
+      if(actions&&!actions.querySelector('.meeting-lock-note')){
         actions.innerHTML='<div class="meeting-lock-note" aria-label="Treffen gesperrt">🔒 Noch gesperrt</div>';
       }
       const schedule=card.querySelector('.schedule-panel');
