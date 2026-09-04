@@ -9,6 +9,12 @@
   ideasScript.src='mitglied-ideen-global.js?v=20260904-global-ideas-2';
   document.head.appendChild(ideasScript);
 
+  if(isDemo&&demoStage==='round2'){
+    const rejectScript=document.createElement('script');
+    rejectScript.src='mitglied-runde2-ablehnen.js?v=20260904-r2-reject-1';
+    document.head.appendChild(rejectScript);
+  }
+
   if(isDemo){
     const windowScript=document.createElement('script');
     windowScript.src='mitglied-zeitfenster.js?v=20260904-sixweeks-1';
