@@ -13,6 +13,10 @@
     const rejectScript=document.createElement('script');
     rejectScript.src='mitglied-runde2-ablehnen.js?v=20260904-r2-reject-1';
     document.head.appendChild(rejectScript);
+
+    const feedbackScript=document.createElement('script');
+    feedbackScript.src='mitglied-runde2-feedback.js?v=20260904-r2-feedback-1';
+    document.head.appendChild(feedbackScript);
   }
 
   if(isDemo){
