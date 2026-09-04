@@ -17,7 +17,8 @@
     const style=document.createElement('style');
     style.id='lavuq-completion-style';
     style.textContent=`
-      .lavuq-completion{width:100%;margin-top:4px;padding:18px;border:1px solid #dcc27f;border-radius:18px;background:#fffaf0;box-shadow:0 8px 22px rgba(4,21,41,.06)}
+      .lavuq-completion-wrap{padding:0 14px 14px;background:#f7f3ea}
+      .lavuq-completion{width:100%;padding:18px;border:1px solid #dcc27f;border-radius:18px;background:#fffaf0;box-shadow:0 8px 22px rgba(4,21,41,.06)}
       .lavuq-completion-badge{display:inline-block;margin-bottom:8px;color:#8b6826;font-size:.76rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
       .lavuq-completion h3{margin:0 0 8px;color:#132033;font-family:Georgia,"Times New Roman",serif;font-size:1.45rem;font-weight:500;line-height:1.15}
       .lavuq-completion p{margin:0;color:#667085;line-height:1.5}
@@ -30,10 +31,10 @@
     document.head.appendChild(style);
   }
 
-  function showResult(text,ok=true){
-    const box=document.querySelector('.lavuq-completion-result');
+  function showResult(root,text){
+    const box=root.querySelector('.lavuq-completion-result');
     if(!box)return;
-    box.className=`lavuq-completion-result status ${ok?'ok':''}`;
+    box.className='lavuq-completion-result status ok';
     box.textContent=text;
   }
 
@@ -48,14 +49,14 @@
 
     root.querySelector('[data-completion-new-round]')?.addEventListener('click',()=>{
       try{localStorage.setItem(CHOICE_KEY,'new-round');}catch{}
-      showResult('Neue LAVUQ-Runde ausgewählt ✓ Im nächsten Schritt startet für eure Gruppe eine neue 3-Treffen-Runde.');
+      showResult(root,'Neue LAVUQ-Runde ausgewählt ✓ Im nächsten Schritt startet für eure Gruppe eine neue 3-Treffen-Runde.');
     });
 
     root.querySelector('[data-completion-leave]')?.addEventListener('click',()=>{
       const confirmed=window.confirm('Möchtest du die LAVUQ-Gruppe wirklich verlassen?');
       if(!confirmed)return;
       try{localStorage.setItem(CHOICE_KEY,'leave');}catch{}
-      showResult('Demo: „Gruppe verlassen“ wurde ausgewählt. In der echten App folgt hier die sichere Austrittsbestätigung.');
+      showResult(root,'Demo: „Gruppe verlassen“ wurde ausgewählt. In der echten App folgt hier die sichere Austrittsbestätigung.');
     });
   }
 
@@ -63,9 +64,15 @@
     if(!isDemo||demoStage!=='feedback3'||feedback3Count()<4)return;
     addStyles();
     const card=document.getElementById('meeting-3');
-    const actions=card?.querySelector('.meeting-actions');
-    if(!actions||actions.querySelector('.lavuq-completion'))return;
-    actions.innerHTML=`
+    if(!card)return;
+    const list=card.parentElement;
+    if(!list)return;
+    let wrap=document.getElementById('lavuq-completion-wrap');
+    if(wrap)return;
+    wrap=document.createElement('div');
+    wrap.id='lavuq-completion-wrap';
+    wrap.className='lavuq-completion-wrap';
+    wrap.innerHTML=`
       <div class="lavuq-completion">
         <span class="lavuq-completion-badge">Eure erste Runde ist geschafft</span>
         <h3>Eure erste LAVUQ-Runde ist abgeschlossen 🎉</h3>
@@ -78,7 +85,8 @@
         </div>
         <div class="lavuq-completion-result hidden"></div>
       </div>`;
-    activateChoiceHandlers(actions);
+    card.insertAdjacentElement('afterend',wrap);
+    activateChoiceHandlers(wrap);
   }
 
   function start(){
