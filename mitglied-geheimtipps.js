@@ -130,6 +130,15 @@
         if(actions&&!actions.querySelector('[data-schedule-open="2"]'))actions.innerHTML='<button class="btn btn-dark" data-schedule-open="2">Termin festlegen</button>';
       }
     }
+
+    const card3=document.getElementById('meeting-3');
+    if(card3){
+      card3.classList.add('meeting-locked');
+      const info=card3.querySelector('.meeting-head .muted');
+      const actions=card3.querySelector('.meeting-actions');
+      if(info)info.textContent='Wird nach dem Feedback zu Treffen 2 freigeschaltet.';
+      if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';
+    }
   }
 
   function scan(){
