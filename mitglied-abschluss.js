@@ -64,8 +64,7 @@
     addStyles();
     const card=document.getElementById('meeting-3');
     const actions=card?.querySelector('.meeting-actions');
-    if(!actions||actions.dataset.completionRendered==='1')return;
-    actions.dataset.completionRendered='1';
+    if(!actions||actions.querySelector('.lavuq-completion'))return;
     actions.innerHTML=`
       <div class="lavuq-completion">
         <span class="lavuq-completion-badge">Eure erste Runde ist geschafft</span>
@@ -82,8 +81,14 @@
     activateChoiceHandlers(actions);
   }
 
-  window.addEventListener('load',()=>{
+  function start(){
     renderCompletion();
-    setInterval(renderCompletion,800);
-  });
+    const target=document.getElementById('meetingList')||document.body;
+    const observer=new MutationObserver(()=>queueMicrotask(renderCompletion));
+    observer.observe(target,{childList:true,subtree:true});
+    setInterval(renderCompletion,250);
+  }
+
+  if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',start);
+  else start();
 })();
