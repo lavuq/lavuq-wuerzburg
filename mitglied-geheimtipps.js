@@ -2,9 +2,11 @@
   const params=new URLSearchParams(location.search);
   const isDemo=params.get('demo')==='1';
   const demoUser=(params.get('demoUser')||'leon').toLowerCase();
+  const demoStage=(params.get('demoStage')||'').toLowerCase();
   const DEMO_NAMES={leon:'Leon',anna:'Anna',sophie:'Sophie',daniel:'Daniel'};
   const demoName=DEMO_NAMES[demoUser]||'Leon';
   const VOTES_KEY='lavuq_demo_meeting1_votes_stable_v1';
+  const FEEDBACK_KEY='lavuq_demo_meeting1_feedback_v1';
   const PROPOSAL={date:'21.09.2026, 15:00',place:'blackout'};
 
   function readVotes(){
@@ -12,6 +14,7 @@
     catch{return{leon:true,anna:false,sophie:false,daniel:false};}
   }
   function writeVotes(v){try{localStorage.setItem(VOTES_KEY,JSON.stringify(v));}catch{}}
+  function readFeedback(){try{return JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'{}')||{};}catch{return{};}}
 
   function applyIdentity(){
     if(!isDemo)return;
@@ -26,7 +29,16 @@
     });
   }
 
+  function addLockStyle(){
+    if(document.getElementById('meeting-lock-style'))return;
+    const style=document.createElement('style');
+    style.id='meeting-lock-style';
+    style.textContent='.meeting-locked{opacity:.78}.meeting-lock-note{width:100%;min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#eef2f6;color:#687386;font-weight:800;border:1px solid #dde3ea}.demo-feedback-box{margin-top:12px;padding:16px;border-radius:14px;background:#f8f3e7;border:1px solid #dfc27f}.demo-feedback-box strong{display:block;margin-bottom:6px}.demo-feedback-count{margin-top:8px;color:#687386;font-weight:700}';
+    document.head.appendChild(style);
+  }
+
   function lockFutureMeetings(){
+    addLockStyle();
     document.querySelectorAll('.meeting').forEach(card=>{
       const info=card.querySelector('.meeting-head .muted');
       if(!info||!info.textContent.includes('Wird nach dem vorherigen Feedback freigeschaltet.'))return;
@@ -34,12 +46,6 @@
       const actions=card.querySelector('.meeting-actions');
       if(actions&&!actions.querySelector('.meeting-lock-note'))actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';
     });
-    if(!document.getElementById('meeting-lock-style')){
-      const style=document.createElement('style');
-      style.id='meeting-lock-style';
-      style.textContent='.meeting-locked{opacity:.78}.meeting-lock-note{width:100%;min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#eef2f6;color:#687386;font-weight:800;border:1px solid #dde3ea}';
-      document.head.appendChild(style);
-    }
   }
 
   function markLeonVote(){
@@ -56,7 +62,7 @@
   }
 
   function renderOtherDemoVote(){
-    if(!isDemo||demoUser==='leon')return;
+    if(!isDemo||demoUser==='leon'||demoStage==='feedback')return;
     const box=document.getElementById('schedule-1');
     if(!box||box.classList.contains('hidden'))return;
     if(box.dataset.demoRendered==='1')return;
@@ -88,11 +94,52 @@
     });
   }
 
+  function renderFeedbackStage(){
+    if(!isDemo||demoStage!=='feedback')return;
+    addLockStyle();
+    const feedback=readFeedback();
+    const count=Object.keys(feedback).filter(k=>['leon','anna','sophie','daniel'].includes(k)).length;
+    const mine=!!feedback[demoUser];
+    const card1=document.getElementById('meeting-1');
+    if(card1&&!card1.dataset.feedbackStage){
+      card1.dataset.feedbackStage='1';
+      const head=card1.querySelector('.meeting-head');
+      if(head)head.innerHTML=`<span class="meeting-number">1</span><div><strong>Treffen 1</strong><div>${PROPOSAL.date} · ${PROPOSAL.place}</div><div class="muted">Treffen abgeschlossen · Feedbackphase</div></div>`;
+      const actions=card1.querySelector('.meeting-actions');
+      if(actions){
+        actions.innerHTML=mine
+          ?'<div class="status ok compact">Feedback abgegeben ✓</div>'
+          :`<a class="btn btn-primary" href="feedback/?demo=1&demoUser=${encodeURIComponent(demoUser)}">Feedback zu Treffen 1 abgeben</a>`;
+        actions.insertAdjacentHTML('beforeend',`<div class="demo-feedback-count">${count} von 4 Feedbacks eingegangen</div>`);
+      }
+      const schedule=card1.querySelector('.schedule-panel');
+      if(schedule){schedule.classList.add('hidden');schedule.innerHTML='';}
+    }
+
+    const card2=document.getElementById('meeting-2');
+    if(card2){
+      const actions=card2.querySelector('.meeting-actions');
+      const info=card2.querySelector('.meeting-head .muted');
+      if(count<4){
+        card2.classList.add('meeting-locked');
+        if(info)info.textContent='Wird freigeschaltet, sobald alle Feedbacks zu Treffen 1 vorliegen.';
+        if(actions)actions.innerHTML='<div class="meeting-lock-note">🔒 Noch gesperrt</div>';
+      }else{
+        card2.classList.remove('meeting-locked');
+        if(info)info.textContent='Feedback zu Treffen 1 abgeschlossen. Treffen 2 ist freigeschaltet.';
+        if(actions&&!actions.querySelector('[data-schedule-open="2"]'))actions.innerHTML='<button class="btn btn-dark" data-schedule-open="2">Termin festlegen</button>';
+      }
+    }
+  }
+
   function scan(){
     applyIdentity();
-    lockFutureMeetings();
-    markLeonVote();
-    renderOtherDemoVote();
+    if(demoStage==='feedback')renderFeedbackStage();
+    else{
+      lockFutureMeetings();
+      markLeonVote();
+      renderOtherDemoVote();
+    }
   }
 
   window.addEventListener('load',()=>{
