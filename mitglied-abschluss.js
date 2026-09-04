@@ -5,6 +5,10 @@
   const FEEDBACK3_KEY='lavuq_demo_meeting3_feedback_v1';
   const CHOICE_KEY='lavuq_demo_after_round_choice_v1';
 
+  const ideasScript=document.createElement('script');
+  ideasScript.src='mitglied-ideen-global.js?v=20260904-global-ideas-1';
+  document.head.appendChild(ideasScript);
+
   if(isDemo){
     const windowScript=document.createElement('script');
     windowScript.src='mitglied-zeitfenster.js?v=20260904-sixweeks-1';
