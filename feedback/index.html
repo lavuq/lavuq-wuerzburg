@@ -69,8 +69,8 @@
   const meeting=Math.max(1,Math.min(3,Number(params.get('meeting')||1)||1));
   const validDemoUsers=['leon','anna','sophie','daniel'];
   const demoName=validDemoUsers.includes(demoUser)?demoUser:'leon';
-  const DEMO_FEEDBACK_KEY=meeting===2?'lavuq_demo_meeting2_feedback_v1':'lavuq_demo_meeting1_feedback_v1';
-  const returnStage=meeting===2?'feedback2':'feedback';
+  const DEMO_FEEDBACK_KEY=meeting===3?'lavuq_demo_meeting3_feedback_v1':meeting===2?'lavuq_demo_meeting2_feedback_v1':'lavuq_demo_meeting1_feedback_v1';
+  const returnStage=meeting===3?'feedback3':meeting===2?'feedback2':'feedback';
   const status=document.getElementById('tokenStatus');
   const form=document.getElementById('feedbackForm');
   const submitButton=document.getElementById('submitFeedback');
