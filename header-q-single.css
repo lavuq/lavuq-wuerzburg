@@ -75,7 +75,7 @@
   html body header.site-header .public-brand-name{
     display:block!important;
     font-family:Georgia,'Times New Roman',serif!important;
-    font-size:2rem!important;
+    font-size:2.20rem!important;
     font-weight:400!important;
     letter-spacing:.16em!important;
     line-height:.96!important;
@@ -87,7 +87,7 @@
     display:block!important;
     margin-top:9px!important;
     font-family:Georgia,'Times New Roman',serif!important;
-    font-size:1.22rem!important;
+    font-size:1.34rem!important;
     font-weight:400!important;
     line-height:1!important;
     color:#d8b46a!important;
@@ -123,8 +123,8 @@
 
 @media(max-width:390px){
   html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{left:13px!important}
-  html body header.site-header .public-brand-name{font-size:1.82rem!important}
-  html body header.site-header .public-brand-city{font-size:1.12rem!important}
+  html body header.site-header .public-brand-name{font-size:2rem!important}
+  html body header.site-header .public-brand-city{font-size:1.22rem!important}
   html body header.site-header .nav-wrap::after{
     width:62px!important;
     height:62px!important;
