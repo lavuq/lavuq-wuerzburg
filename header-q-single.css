@@ -104,7 +104,7 @@
     white-space:nowrap!important;
   }
 
-  /* Exactly one centered original Q, shifted 20px downward in total. */
+  /* One mobile Q only. Direct PNG avoids Safari's embedded-SVG image artifact. */
   html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
     display:block!important;
     visibility:visible!important;
@@ -124,9 +124,9 @@
     margin:0!important;
     padding:0!important;
     overflow:hidden!important;
-    background-image:url('lavuq-q-single-header.svg?v=20260906-q-only-crop-1')!important;
+    background-image:url('lavuq-q-square.png?v=20260906-q-clean-png-1')!important;
     background-repeat:no-repeat!important;
-    background-size:122px 122px!important;
+    background-size:136px 136px!important;
     background-position:center top!important;
     border:0!important;
     box-shadow:none!important;
@@ -147,7 +147,7 @@
     max-width:62px!important;
     max-height:62px!important;
     top:calc(50% + 20px)!important;
-    background-size:111px 111px!important;
+    background-size:124px 124px!important;
     background-position:center top!important;
   }
 }
