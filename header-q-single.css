@@ -24,18 +24,18 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     opacity:0!important;
   }
 
-  /* Render exactly one Q in the mobile header. */
+  /* Render exactly one Q in the mobile header, about 0.5 cm above the gold baseline. */
   html body .site-header .nav-wrap::after{
     content:""!important;
     display:block!important;
     position:absolute!important;
     left:50%!important;
     top:auto!important;
-    bottom:0!important;
+    bottom:19px!important;
     transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
-    background:url('lavuq-q-single-header.svg?v=20260906-1') center center / contain no-repeat!important;
+    background:url('lavuq-q-single-header.svg?v=20260906-2') center center / contain no-repeat!important;
     border:0!important;
     box-shadow:none!important;
     pointer-events:none!important;
@@ -47,6 +47,7 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
   html body .site-header .nav-wrap::after{
     width:62px!important;
     height:62px!important;
+    bottom:19px!important;
   }
 }
 
@@ -58,7 +59,7 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     min-height:54px!important;
   }
   html body .site-header img.public-brand-q{
-    content:url('lavuq-q-single-header.svg?v=20260906-1')!important;
+    content:url('lavuq-q-single-header.svg?v=20260906-2')!important;
     width:54px!important;
     height:54px!important;
     transform:none!important;
