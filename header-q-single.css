@@ -32,9 +32,10 @@ html body .site-header img.mobile-brand-q{
     min-width:68px!important;
     min-height:68px!important;
   }
-  html body .site-header img.mobile-brand-q{
+  html body .site-header .nav-wrap img.mobile-brand-q{
     width:58px!important;
     height:58px!important;
+    top:56%!important;
   }
 }
 
