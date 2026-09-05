@@ -14,20 +14,30 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
 }
 
 @media(max-width:520px){
-  /* Hide every Q image that may come from the original HTML or legacy JS. */
+  /* The legacy mobile script replaces the public brand and creates exactly one
+     .mobile-brand-q image. Hide the original HTML Q container so it cannot flash
+     or appear as a duplicate. */
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop,
   html body .site-header .nav-wrap img.public-brand-q,
-  html body .site-header .nav-wrap img.mobile-brand-q,
   html body .site-header .nav-wrap img.brand-mark{
     display:none!important;
     visibility:hidden!important;
     opacity:0!important;
   }
 
-  /* Render exactly one Q in the mobile header, about 0.5 cm above the gold baseline. */
+  /* Disable the temporary pseudo-image solution completely. */
   html body .site-header .nav-wrap::after{
-    content:""!important;
+    content:none!important;
+    display:none!important;
+    background:none!important;
+  }
+
+  /* Position the actually visible Q created by script.js exactly 19px above
+     the gold header baseline. */
+  html body header.site-header div.nav-wrap > img.mobile-brand-q{
     display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
     position:absolute!important;
     left:50%!important;
     top:auto!important;
@@ -35,16 +45,18 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
-    background:url('lavuq-q-single-header.svg?v=20260906-2') center center / contain no-repeat!important;
-    border:0!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    border-radius:0!important;
     box-shadow:none!important;
-    pointer-events:none!important;
+    background:transparent!important;
+    margin:0!important;
     z-index:80!important;
   }
 }
 
 @media(max-width:390px){
-  html body .site-header .nav-wrap::after{
+  html body header.site-header div.nav-wrap > img.mobile-brand-q{
     width:62px!important;
     height:62px!important;
     bottom:19px!important;
@@ -59,7 +71,7 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     min-height:54px!important;
   }
   html body .site-header img.public-brand-q{
-    content:url('lavuq-q-single-header.svg?v=20260906-2')!important;
+    content:url('lavuq-q-single-header.svg?v=20260906-3')!important;
     width:54px!important;
     height:54px!important;
     transform:none!important;
