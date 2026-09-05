@@ -17,7 +17,7 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
    to use one pre-cropped Q asset. */
 html body .site-header img.public-brand-q,
 html body .site-header img.mobile-brand-q{
-  content:url('lavuq-q-header-single-crop.svg?v=20260905-32')!important;
+  content:url('lavuq-q-header-single-crop.svg?v=20260905-33')!important;
   object-fit:contain!important;
   object-position:center!important;
   border-radius:0!important;
@@ -27,16 +27,24 @@ html body .site-header img.mobile-brand-q{
 
 @media(max-width:520px){
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    position:absolute!important;
+    left:50%!important;
+    top:auto!important;
+    bottom:0!important;
+    transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
     min-width:68px!important;
     min-height:68px!important;
-    top:74%!important;
   }
   html body .site-header .nav-wrap img.mobile-brand-q{
+    position:absolute!important;
+    left:50%!important;
+    top:auto!important;
+    bottom:24px!important;
+    transform:translateX(-50%)!important;
     width:58px!important;
     height:58px!important;
-    top:74%!important;
   }
 }
 
@@ -46,7 +54,11 @@ html body .site-header img.mobile-brand-q{
     height:62px!important;
     min-width:62px!important;
     min-height:62px!important;
-    top:74%!important;
+    top:auto!important;
+    bottom:0!important;
+  }
+  html body .site-header .nav-wrap img.mobile-brand-q{
+    bottom:28px!important;
   }
 }
 
