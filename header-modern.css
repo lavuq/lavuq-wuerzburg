@@ -1,213 +1,27 @@
 /* LAVUQ public website header – approved horizontal mobile layout.
    Loaded only on public website pages. Mein Q and protected/PWA pages remain untouched. */
+.site-header{background:#041529!important;color:#fff!important;border-bottom:1px solid rgba(216,180,106,.55)!important;box-shadow:none!important;backdrop-filter:none!important}
+.site-header .brand{color:#fff!important}.site-header .brand-city{color:#d8b46a!important}
+.site-header .brand-mark{content:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png')!important;background:transparent!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important;object-position:center!important}
+.site-header .mobile-brand-q,.site-header .mobile-brand-copy{display:none!important}.site-header .nav a{color:#fff!important}.site-header .nav a:hover,.site-header .nav a:focus{color:#d8b46a!important}
 
-.site-header{
-  background:#041529!important;
-  color:#fff!important;
-  border-bottom:1px solid rgba(216,180,106,.55)!important;
-  box-shadow:none!important;
-  backdrop-filter:none!important;
+@media(min-width:521px){.site-header{position:sticky!important;top:0!important}.site-header .nav-wrap{min-height:92px!important;height:92px!important}.site-header .brand{gap:12px!important}.site-header .brand-mark{width:54px!important;height:54px!important}.site-header .brand>span{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;letter-spacing:.14em!important}.site-header .brand-city{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;letter-spacing:.03em!important}.site-header .nav{font-size:.91rem!important}.site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important}}
+
+@media(max-width:520px){
+html,body{max-width:100%;overflow-x:hidden}.topbar{display:none!important}
+.site-header{position:relative!important;top:auto!important;width:100%!important;height:132px!important;min-height:132px!important;background:#041529!important;overflow:visible!important}
+.site-header .nav-wrap{position:relative!important;width:100%!important;max-width:none!important;height:132px!important;min-height:132px!important;margin:0!important;padding:0 14px 0 18px!important;display:grid!important;grid-template-columns:minmax(116px,1fr) 78px 108px!important;align-items:center!important;column-gap:10px!important}
+.site-header .brand{display:contents!important}
+.site-header .brand>span:not(.mobile-brand-copy){grid-column:1!important;position:static!important;transform:none!important;width:auto!important;margin:0!important;padding:0!important;display:block!important;font-size:0!important;line-height:1!important;text-align:left!important;border:0!important;z-index:42!important}
+.site-header .brand>span:not(.mobile-brand-copy):before{content:'LAVU'!important;display:block!important;color:#fff!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.72rem!important;font-weight:400!important;line-height:.96!important;letter-spacing:.18em!important;white-space:nowrap!important}
+.site-header .brand>span:not(.mobile-brand-copy):after{content:'Würzburg'!important;display:block!important;color:#d8b46a!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.02rem!important;font-weight:400!important;line-height:1!important;letter-spacing:.01em!important;white-space:nowrap!important;margin-top:7px!important}
+.site-header .brand-city{display:none!important}
+.site-header .brand .brand-mark{grid-column:2!important;position:static!important;justify-self:center!important;align-self:center!important;margin:0!important;padding:0!important;display:block!important;opacity:1!important;visibility:visible!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;transform:scale(1.38)!important;transform-origin:center!important;z-index:43!important}
+.site-header .mobile-brand-q,.site-header .mobile-brand-copy{display:none!important}
+.site-header .nav-wrap:before,.site-header .nav-wrap:after{content:''!important;position:absolute!important;top:50%!important;height:1px!important;background:#d8b46a!important;opacity:.95!important;transform:translateY(-50%)!important;z-index:41!important}
+.site-header .nav-wrap:before{left:132px!important;width:35px!important}.site-header .nav-wrap:after{right:126px!important;width:28px!important}
+.site-header .nav-toggle{grid-column:3!important;position:static!important;justify-self:end!important;align-self:center!important;transform:none!important;width:108px!important;height:52px!important;min-width:108px!important;min-height:52px!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;border:1.5px solid #d8b46a!important;border-radius:999px!important;background:#041529!important;color:transparent!important;box-shadow:none!important;font-size:0!important;z-index:60!important}
+.site-header .nav-toggle:after{content:'☰   Menü'!important;color:#fff!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;font-size:.94rem!important;font-weight:500!important;letter-spacing:.01em!important;white-space:pre!important}.site-header .nav-toggle[aria-expanded='true']:after{content:'✕   Menü'!important}
+.site-header .nav{position:absolute!important;top:122px!important;left:12px!important;right:12px!important;padding:16px!important;background:#041529!important;border:1px solid rgba(216,180,106,.5)!important;border-radius:22px!important;box-shadow:0 24px 60px rgba(0,0,0,.38)!important;z-index:70!important}.site-header .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.18)!important}.site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
 }
-.site-header .nav-wrap{position:relative!important}
-.site-header .brand{color:#fff!important}
-.site-header .brand-city{color:#d8b46a!important}
-.site-header .brand-mark{
-  content:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png')!important;
-  background:transparent!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-  object-fit:contain!important;
-  object-position:center!important;
-}
-.site-header .mobile-brand-q,
-.site-header .mobile-brand-copy{display:none!important}
-.site-header .nav a{color:#fff!important}
-.site-header .nav a:hover,.site-header .nav a:focus{color:#d8b46a!important}
-
-@media (min-width:521px){
-  .site-header{position:sticky!important;top:0!important}
-  .site-header .nav-wrap{min-height:92px!important;height:92px!important}
-  .site-header .brand{gap:12px!important}
-  .site-header .brand-mark{width:54px!important;height:54px!important}
-  .site-header .brand>span{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;letter-spacing:.14em!important}
-  .site-header .brand-city{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;letter-spacing:.03em!important}
-  .site-header .nav{font-size:.91rem!important}
-  .site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important}
-}
-
-@media (max-width:520px){
-  html,body{max-width:100%;overflow-x:hidden}
-  .topbar{display:none!important}
-
-  .site-header{
-    position:relative!important;
-    top:auto!important;
-    width:100%!important;
-    min-height:132px!important;
-    height:132px!important;
-    overflow:visible!important;
-    background:#041529!important;
-  }
-  .site-header .nav-wrap{
-    position:relative!important;
-    width:100%!important;
-    max-width:none!important;
-    height:132px!important;
-    min-height:132px!important;
-    margin:0!important;
-    padding:0!important;
-    display:block!important;
-  }
-
-  /* One clean row: LAVU/Würzburg — Q — Menü */
-  .site-header .brand{
-    position:absolute!important;
-    inset:0!important;
-    width:100%!important;
-    height:132px!important;
-    margin:0!important;
-    padding:0!important;
-    display:block!important;
-    transform:none!important;
-    z-index:40!important;
-  }
-
-  .site-header .brand>span:not(.mobile-brand-copy){
-    position:absolute!important;
-    left:18px!important;
-    top:50%!important;
-    transform:translateY(-50%)!important;
-    width:116px!important;
-    margin:0!important;
-    padding:0!important;
-    display:block!important;
-    font-size:0!important;
-    line-height:1!important;
-    text-align:left!important;
-    border:0!important;
-  }
-  .site-header .brand>span:not(.mobile-brand-copy):before{
-    content:'LAVU'!important;
-    display:block!important;
-    color:#fff!important;
-    font-family:Georgia,'Times New Roman',serif!important;
-    font-size:1.72rem!important;
-    font-weight:400!important;
-    line-height:.96!important;
-    letter-spacing:.18em!important;
-    white-space:nowrap!important;
-  }
-  .site-header .brand>span:not(.mobile-brand-copy):after{
-    content:'Würzburg'!important;
-    display:block!important;
-    color:#d8b46a!important;
-    font-family:Georgia,'Times New Roman',serif!important;
-    font-size:1.02rem!important;
-    font-weight:400!important;
-    line-height:1!important;
-    letter-spacing:.01em!important;
-    white-space:nowrap!important;
-    margin-top:7px!important;
-  }
-  .site-header .brand-city{display:none!important}
-
-  /* Original gold Q, centered, no square/background and never duplicated. */
-  .site-header .brand .brand-mark{
-    position:absolute!important;
-    left:50%!important;
-    top:50%!important;
-    margin:0!important;
-    padding:0!important;
-    display:block!important;
-    opacity:1!important;
-    visibility:visible!important;
-    background:transparent!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    transform:translate(-50%,-50%) scale(1.42)!important;
-    transform-origin:center!important;
-    z-index:42!important;
-  }
-  .site-header .mobile-brand-q,
-  .site-header .mobile-brand-copy{display:none!important}
-
-  /* Gold separator lines around the centered Q. */
-  .site-header .brand:before,
-  .site-header .brand:after{
-    content:''!important;
-    position:absolute!important;
-    top:50%!important;
-    transform:translateY(-50%)!important;
-    height:1px!important;
-    background:#d8b46a!important;
-    opacity:.95!important;
-    z-index:41!important;
-  }
-  .site-header .brand:before{
-    left:135px!important;
-    right:calc(50% + 43px)!important;
-  }
-  .site-header .brand:after{
-    left:calc(50% + 43px)!important;
-    right:128px!important;
-  }
-
-  /* Approved outlined menu pill on the right. */
-  .site-header .nav-toggle{
-    position:absolute!important;
-    right:14px!important;
-    top:50%!important;
-    transform:translateY(-50%)!important;
-    width:106px!important;
-    height:52px!important;
-    min-width:106px!important;
-    min-height:52px!important;
-    margin:0!important;
-    padding:0!important;
-    display:grid!important;
-    place-items:center!important;
-    border:1.5px solid #d8b46a!important;
-    border-radius:999px!important;
-    background:#041529!important;
-    color:transparent!important;
-    box-shadow:none!important;
-    font-size:0!important;
-    z-index:60!important;
-  }
-  .site-header .nav-toggle:after{
-    content:'☰   Menü'!important;
-    color:#fff!important;
-    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
-    font-size:.94rem!important;
-    font-weight:500!important;
-    letter-spacing:.01em!important;
-    white-space:pre!important;
-  }
-  .site-header .nav-toggle[aria-expanded='true']:after{content:'✕   Menü'!important}
-
-  .site-header .nav{
-    position:absolute!important;
-    top:122px!important;
-    left:12px!important;
-    right:12px!important;
-    padding:16px!important;
-    background:#041529!important;
-    border:1px solid rgba(216,180,106,.5)!important;
-    border-radius:22px!important;
-    box-shadow:0 24px 60px rgba(0,0,0,.38)!important;
-    z-index:70!important;
-  }
-  .site-header .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.18)!important}
-  .site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
-}
-
-@media (max-width:390px){
-  .site-header .brand>span:not(.mobile-brand-copy){left:14px!important;width:108px!important}
-  .site-header .brand>span:not(.mobile-brand-copy):before{font-size:1.55rem!important}
-  .site-header .brand>span:not(.mobile-brand-copy):after{font-size:.94rem!important}
-  .site-header .brand:before{left:122px!important;right:calc(50% + 39px)!important}
-  .site-header .brand:after{left:calc(50% + 39px)!important;right:122px!important}
-  .site-header .nav-toggle{right:10px!important;width:102px!important;min-width:102px!important}
-  .site-header .brand .brand-mark{transform:translate(-50%,-50%) scale(1.32)!important}
-}
+@media(max-width:390px){.site-header .nav-wrap{padding-left:14px!important;padding-right:10px!important;grid-template-columns:minmax(108px,1fr) 70px 102px!important;column-gap:8px!important}.site-header .brand>span:not(.mobile-brand-copy):before{font-size:1.55rem!important}.site-header .brand>span:not(.mobile-brand-copy):after{font-size:.94rem!important}.site-header .brand .brand-mark{transform:scale(1.28)!important}.site-header .nav-toggle{width:102px!important;min-width:102px!important}.site-header .nav-wrap:before{left:119px!important;width:28px!important}.site-header .nav-wrap:after{right:118px!important;width:22px!important}}
