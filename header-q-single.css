@@ -1,45 +1,45 @@
-/* Public website only. Mein Q does not load this stylesheet. */
+/* Public website only. Mein Q does not load this stylesheet.
+   Keep the crop behavior from header-modern.css so only one complete gold Q is visible. */
+
 .public-brand-q-crop{
   position:relative!important;
   display:block!important;
-  overflow:visible!important;
+  overflow:hidden!important;
   background:none!important;
   border:0!important;
   box-shadow:none!important;
 }
-html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-  display:block!important;
-  visibility:visible!important;
-  opacity:1!important;
-  position:static!important;
-  transform:none!important;
-  width:100%!important;
-  height:100%!important;
-  min-width:0!important;
-  min-height:0!important;
-  max-width:none!important;
-  max-height:none!important;
-  object-fit:contain!important;
-  object-position:center!important;
-  margin:0!important;
-  padding:0!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-}
 
-/* Only one gold Q is rendered in the header. */
+/* Never render an additional CSS copy of the Q. */
 html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::before{
   content:none!important;
   display:none!important;
 }
 
+/* Preserve the crop dimensions only; image positioning/scaling comes from header-modern.css. */
 @media(max-width:520px){
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:68px!important;height:68px!important;min-width:68px!important;min-height:68px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    width:68px!important;
+    height:68px!important;
+    min-width:68px!important;
+    min-height:68px!important;
+  }
 }
+
 @media(max-width:390px){
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    width:62px!important;
+    height:62px!important;
+    min-width:62px!important;
+    min-height:62px!important;
+  }
 }
+
 @media(min-width:521px){
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    width:54px!important;
+    height:54px!important;
+    min-width:54px!important;
+    min-height:54px!important;
+  }
 }
