@@ -4,7 +4,6 @@
   /* Remove every legacy/duplicate image from the ENTIRE WEBSITE HEADER, even when
      older JS left inline !important sizing/visibility behind. */
   html body header.site-header img{
-    content:""!important;
     display:block!important;
     position:fixed!important;
     left:-10000px!important;
@@ -95,6 +94,23 @@
     line-height:1!important;
     color:#d8b46a!important;
     white-space:nowrap!important;
+  }
+
+  /* Mask any stale broken-image placeholder that an old cached DOM may still
+     paint under the centered Q. The gold border is redrawn through the mask. */
+  html body header.site-header::after{
+    content:""!important;
+    display:block!important;
+    position:absolute!important;
+    left:50%!important;
+    bottom:-72px!important;
+    width:98px!important;
+    height:115px!important;
+    transform:translateX(-50%)!important;
+    background:linear-gradient(to bottom,#041529 0 42px,#d8b46a 42px 43px,#041529 43px 100%)!important;
+    border:0!important;
+    pointer-events:none!important;
+    z-index:79!important;
   }
 
   /* Exactly ONE golden Q in the middle, moved 10px down. */
