@@ -1,0 +1,13 @@
+/* Public website only: show one Q in the header. Mein Q is not linked to this stylesheet. */
+.public-brand-q-crop{
+  background-image:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png')!important;
+  background-repeat:no-repeat!important;
+  background-position:center bottom!important;
+  background-size:100% 200%!important;
+  overflow:hidden!important;
+}
+.public-brand-q-crop>img.public-brand-q{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+}
