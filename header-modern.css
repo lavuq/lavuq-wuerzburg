@@ -1,0 +1,203 @@
+/* LAVUQ public website header – modern centered brand layout.
+   Intentionally NOT loaded on mein-q.html or the protected member/PWA pages. */
+
+.site-header{
+  background:#041529!important;
+  color:#fff!important;
+  border-bottom:1px solid rgba(216,180,106,.55)!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+}
+.site-header .nav-wrap{
+  position:relative!important;
+}
+.site-header .brand{
+  color:#fff!important;
+}
+.site-header .brand-city{
+  color:#d8b46a!important;
+}
+.site-header .nav a{
+  color:#fff!important;
+}
+.site-header .nav a:hover,
+.site-header .nav a:focus{
+  color:#d8b46a!important;
+}
+
+@media (min-width:521px){
+  .site-header{position:sticky!important;top:0!important}
+  .site-header .nav-wrap{min-height:92px!important;height:92px!important}
+  .site-header .brand{gap:12px!important}
+  .site-header .brand-mark{width:54px!important;height:54px!important;object-fit:contain!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}
+  .site-header .brand>span{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;letter-spacing:.14em!important}
+  .site-header .brand-city{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;letter-spacing:.03em!important}
+  .site-header .nav{font-size:.91rem!important}
+  .site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important}
+}
+
+@media (max-width:520px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .topbar{display:none!important}
+  .site-header{
+    position:relative!important;
+    top:auto!important;
+    min-height:248px!important;
+    height:248px!important;
+    overflow:visible!important;
+  }
+  .site-header .nav-wrap{
+    width:100%!important;
+    max-width:none!important;
+    height:248px!important;
+    min-height:248px!important;
+    margin:0!important;
+    padding:0!important;
+    display:block!important;
+  }
+
+  /* Centered brand block: Q, LAVU, Würzburg, thin gold lines. */
+  .site-header .brand{
+    position:absolute!important;
+    left:50%!important;
+    top:26px!important;
+    transform:translateX(-50%)!important;
+    width:250px!important;
+    height:188px!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:0!important;
+    text-align:center!important;
+    z-index:42!important;
+  }
+  .site-header .brand .brand-mark{
+    width:98px!important;
+    height:98px!important;
+    min-width:98px!important;
+    min-height:98px!important;
+    margin:0 0 5px!important;
+    padding:0!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    display:block!important;
+    opacity:1!important;
+  }
+  .site-header .brand>span:not(.mobile-brand-copy){
+    position:relative!important;
+    left:auto!important;
+    top:auto!important;
+    transform:none!important;
+    width:auto!important;
+    margin:0!important;
+    padding:0 38px!important;
+    display:block!important;
+    font-size:0!important;
+    line-height:1!important;
+  }
+  .site-header .brand>span:not(.mobile-brand-copy):before{
+    content:'LAVU'!important;
+    display:block!important;
+    color:#fff!important;
+    font-family:Georgia,'Times New Roman',serif!important;
+    font-size:2.18rem!important;
+    font-weight:400!important;
+    line-height:1!important;
+    letter-spacing:.19em!important;
+    white-space:nowrap!important;
+    margin-left:.19em!important;
+  }
+  .site-header .brand>span:not(.mobile-brand-copy):after{
+    content:'Würzburg'!important;
+    display:block!important;
+    color:#d8b46a!important;
+    font-family:Georgia,'Times New Roman',serif!important;
+    font-size:1.16rem!important;
+    font-weight:400!important;
+    line-height:1!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+    margin:10px 0 0!important;
+  }
+  .site-header .brand>span:not(.mobile-brand-copy){
+    border:0!important;
+  }
+  .site-header .brand>span:not(.mobile-brand-copy)::selection{background:transparent}
+  .site-header .brand:before,
+  .site-header .brand:after{
+    content:''!important;
+    position:absolute!important;
+    bottom:13px!important;
+    width:58px!important;
+    height:1px!important;
+    background:#d8b46a!important;
+    opacity:.95!important;
+  }
+  .site-header .brand:before{left:25px!important}
+  .site-header .brand:after{right:25px!important}
+  .site-header .brand-city{display:none!important}
+  .site-header .mobile-brand-copy{display:none!important}
+
+  /* Modern menu pill, top right. */
+  .site-header .nav-toggle{
+    position:absolute!important;
+    right:18px!important;
+    top:28px!important;
+    transform:none!important;
+    width:104px!important;
+    height:54px!important;
+    min-width:104px!important;
+    min-height:54px!important;
+    margin:0!important;
+    padding:0!important;
+    display:grid!important;
+    place-items:center!important;
+    border:1.5px solid #d8b46a!important;
+    border-radius:999px!important;
+    background:rgba(4,21,41,.86)!important;
+    color:transparent!important;
+    box-shadow:none!important;
+    font-size:0!important;
+    z-index:50!important;
+  }
+  .site-header .nav-toggle:after{
+    content:'☰  Menü'!important;
+    color:#fff!important;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
+    font-size:.96rem!important;
+    font-weight:600!important;
+    letter-spacing:.01em!important;
+    white-space:pre!important;
+  }
+  .site-header .nav-toggle[aria-expanded='true']:after{
+    content:'✕  Menü'!important;
+  }
+
+  .site-header .nav{
+    position:absolute!important;
+    top:236px!important;
+    left:12px!important;
+    right:12px!important;
+    padding:16px!important;
+    background:#041529!important;
+    border:1px solid rgba(216,180,106,.5)!important;
+    border-radius:22px!important;
+    box-shadow:0 24px 60px rgba(0,0,0,.38)!important;
+    z-index:60!important;
+  }
+  .site-header .nav a{
+    color:#fff!important;
+    border-bottom:1px solid rgba(216,180,106,.18)!important;
+  }
+  .site-header .nav .btn-primary{
+    background:#d8b46a!important;
+    color:#041529!important;
+    border-color:#d8b46a!important;
+  }
+}
