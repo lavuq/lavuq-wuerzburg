@@ -21,30 +21,22 @@ jobs:
           from pathlib import Path
           import re
 
-          # Mein Q and protected/PWA views are deliberately excluded.
-          excluded = {
-              'mein-q.html',
-              'mitglied.html',
-              'refresh-lavuq.html'
-          }
-          link = '<link rel="stylesheet" href="header-modern.css?v=20260905-3">'
-
+          excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
+          version = '20260905-4'
           changed = []
           for p in Path('.').rglob('*.html'):
               if '.git' in p.parts or p.name in excluded:
                   continue
               text = p.read_text(encoding='utf-8')
-              # Only touch pages that actually use the public website header.
               if 'class="site-header"' not in text and "class='site-header'" not in text:
                   continue
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text)
-              prefix = '../' * (len(p.parts) - 1)
-              page_link = f'<link rel="stylesheet" href="{prefix}header-modern.css?v=20260905-3">'
+              prefix = '../' * (len(p.parts)-1)
+              page_link = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
               text2 = text2.replace('</head>', page_link + '</head>', 1)
               if text2 != text:
                   p.write_text(text2, encoding='utf-8')
                   changed.append(str(p))
-
           print('Updated:', ', '.join(changed) if changed else 'none')
           PY
       - name: Commit header rollout
