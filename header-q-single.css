@@ -1,5 +1,6 @@
 /* Public website only. Mein Q does not load this stylesheet.
-   Keep the crop behavior from header-modern.css so only one complete gold Q is visible. */
+   The global script resets .brand-mark to a 48x48 source image after page load.
+   These rules compensate for that runtime override and crop the source to one complete Q. */
 
 .public-brand-q-crop{
   position:relative!important;
@@ -10,19 +11,29 @@
   box-shadow:none!important;
 }
 
-/* Never render an additional CSS copy of the Q. */
 html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::before{
   content:none!important;
   display:none!important;
 }
 
-/* Preserve the crop dimensions only; image positioning/scaling comes from header-modern.css. */
+/* script.js forces the image itself to 48x48!important. Scale that image inside
+   the fixed crop window so only the lower complete Q motif remains visible. */
 @media(max-width:520px){
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     width:68px!important;
     height:68px!important;
     min-width:68px!important;
     min-height:68px!important;
+  }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+    position:absolute!important;
+    left:50%!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:0!important;
+    transform:translateX(-50%) scale(2.833333)!important;
+    transform-origin:center bottom!important;
+    margin:0!important;
   }
 }
 
@@ -33,6 +44,9 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     min-width:62px!important;
     min-height:62px!important;
   }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+    transform:translateX(-50%) scale(2.583333)!important;
+  }
 }
 
 @media(min-width:521px){
@@ -41,5 +55,15 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     height:54px!important;
     min-width:54px!important;
     min-height:54px!important;
+  }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+    position:absolute!important;
+    left:50%!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:0!important;
+    transform:translateX(-50%) scale(2.25)!important;
+    transform-origin:center bottom!important;
+    margin:0!important;
   }
 }
