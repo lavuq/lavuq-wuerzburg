@@ -120,11 +120,14 @@
     white-space:nowrap!important;
   }
 
+  /* Anchor the Q crop to the gold lower border. The source asset contains
+     transparent space below the visible Q, so shift the image itself down. */
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     position:absolute!important;
     left:50%!important;
-    top:74%!important;
-    transform:translate(-50%,-50%)!important;
+    bottom:0!important;
+    top:auto!important;
+    transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
     overflow:hidden!important;
@@ -133,7 +136,7 @@
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
     position:absolute!important;
     left:50%!important;
-    bottom:0!important;
+    bottom:-38px!important;
     top:auto!important;
     transform:translateX(-50%)!important;
     width:136px!important;
@@ -210,8 +213,8 @@
   html body .site-header .nav-wrap a.public-brand > span.public-brand-copy{left:13px!important;width:106px!important}
   html body .site-header .nav-wrap .public-brand-name{font-size:1.44rem!important}
   html body .site-header .nav-wrap .public-brand-city{font-size:.90rem!important}
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:62px!important;height:62px!important}
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{width:124px!important;height:124px!important;min-width:124px!important;min-height:124px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:62px!important;height:62px!important;bottom:0!important;top:auto!important;transform:translateX(-50%)!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{width:124px!important;height:124px!important;min-width:124px!important;min-height:124px!important;bottom:-35px!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line-left{left:124px!important;right:calc(50% + 40px)!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line-right{left:calc(50% + 40px)!important;right:130px!important}
   html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle{right:9px!important;width:110px!important;min-width:110px!important;height:48px!important;min-height:48px!important;padding:0 13px!important;gap:9px!important}
