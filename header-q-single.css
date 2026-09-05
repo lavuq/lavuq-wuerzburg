@@ -1,4 +1,4 @@
-/* LAVUQ public header: exactly one gold Q on mobile. */
+/* Public website only. Mein Q does not load this stylesheet. */
 .public-brand-q-crop{
   position:relative!important;
   display:block!important;
@@ -14,24 +14,18 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
 }
 
 @media(max-width:520px){
-  /* Remove every real/legacy Q source. script.js may create .mobile-brand-q,
-     so it is hidden here as well. */
-  html body header.site-header div.nav-wrap a.public-brand > span.public-brand-q-crop,
-  html body header.site-header div.nav-wrap img.public-brand-q,
-  html body header.site-header div.nav-wrap img.mobile-brand-q,
-  html body header.site-header div.nav-wrap img.brand-mark{
+  /* Hide every possible real/legacy Q image in the mobile header. */
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop,
+  html body .site-header .nav-wrap img.public-brand-q,
+  html body .site-header .nav-wrap img.brand-mark,
+  html body .site-header .nav-wrap > img.mobile-brand-q{
     display:none!important;
     visibility:hidden!important;
     opacity:0!important;
-    width:0!important;
-    height:0!important;
-    min-width:0!important;
-    min-height:0!important;
-    pointer-events:none!important;
   }
 
-  /* Exactly one Q. Its lower edge is 19px (~0.5 cm) above the gold line. */
-  html body header.site-header div.nav-wrap::after{
+  /* Render exactly ONE Q, centered and 19px (~0.5 cm) above the gold baseline. */
+  html body .site-header .nav-wrap::after{
     content:""!important;
     display:block!important;
     visibility:visible!important;
@@ -44,21 +38,19 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
-    background-image:url('/lavuq-q-single-header.svg?v=20260906-one-q-final')!important;
-    background-position:center!important;
+    background-image:url('lavuq-q-single-header.svg?v=20260906-single-final')!important;
     background-repeat:no-repeat!important;
+    background-position:center!important;
     background-size:contain!important;
     border:0!important;
     box-shadow:none!important;
-    margin:0!important;
-    padding:0!important;
     pointer-events:none!important;
-    z-index:999!important;
+    z-index:100!important;
   }
 }
 
 @media(max-width:390px){
-  html body header.site-header div.nav-wrap::after{
+  html body .site-header .nav-wrap::after{
     width:62px!important;
     height:62px!important;
     bottom:19px!important;
@@ -72,9 +64,8 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     min-width:54px!important;
     min-height:54px!important;
   }
-
   html body .site-header img.public-brand-q{
-    content:url('/lavuq-q-single-header.svg?v=20260906-one-q-final')!important;
+    content:url('lavuq-q-single-header.svg?v=20260906-single-final')!important;
     width:54px!important;
     height:54px!important;
     transform:none!important;
