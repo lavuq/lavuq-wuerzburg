@@ -1,5 +1,6 @@
 /* LAVUQ public website header – approved horizontal mobile arrangement.
-   Public website only. Mein Q / protected PWA views are intentionally excluded. */
+   Public website only. Mein Q / protected PWA views are intentionally excluded.
+   Header logo source uses one single clean gold Q asset. */
 .site-header{background:#041529!important;color:#fff!important;border-bottom:1px solid rgba(216,180,106,.72)!important;box-shadow:none!important;backdrop-filter:none!important}
 .site-header .nav a{color:#fff!important}.site-header .nav a:hover,.site-header .nav a:focus{color:#d8b46a!important}
 .public-brand{color:#fff!important}.public-brand-q{content:normal!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important;object-position:center!important}.public-brand img:not(.public-brand-q),.public-brand .mobile-brand-q{display:none!important}.public-menu-toggle{cursor:pointer}
