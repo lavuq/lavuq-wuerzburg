@@ -22,7 +22,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260905-11'
+          version = '20260905-12'
           changed = []
 
           for p in Path('.').rglob('*.html'):
@@ -33,7 +33,7 @@ jobs:
                   continue
 
               prefix = '../' * (len(p.parts)-1)
-              logo = prefix + '%20%20lavuq-q-square.png.png'
+              logo = prefix + 'CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png'
               home = prefix + 'index.html'
 
               pattern = re.compile(r'(<header class="site-header"><div class="container nav-wrap">).*?(<nav class="nav">)', re.S)
@@ -73,5 +73,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Show only large Q in public website header"
+          git commit -m "Use single Q in public website header"
           git push
