@@ -14,44 +14,57 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
 }
 
 @media(max-width:520px){
-  /* Hide every real Q image, including the legacy image inserted by script.js. */
+  /* The mobile script replaces the original brand contents and creates one
+     .mobile-brand-q image. Hide every other possible Q source. */
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop,
   html body .site-header .nav-wrap img.public-brand-q,
-  html body .site-header .nav-wrap img.brand-mark,
-  html body header.site-header div.nav-wrap > img.mobile-brand-q{
+  html body .site-header .nav-wrap img.brand-mark{
     display:none!important;
     visibility:hidden!important;
     opacity:0!important;
   }
 
-  /* Render exactly one mobile Q, 19px above the gold header baseline. */
+  /* Never render an additional pseudo Q. */
   html body .site-header .nav-wrap::after{
-    content:""!important;
+    content:none!important;
+    display:none!important;
+    background:none!important;
+  }
+
+  /* Exactly one visible mobile Q, 19px (~0.5 cm) above the gold baseline. */
+  html body header.site-header div.nav-wrap > img.mobile-brand-q{
+    content:url('lavuq-q-single-header.svg?v=20260906-final-1')!important;
     display:block!important;
     visibility:visible!important;
     opacity:1!important;
     position:absolute!important;
     left:50%!important;
+    right:auto!important;
     top:auto!important;
     bottom:19px!important;
     transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
-    background-image:url('lavuq-q-single-header.svg?v=20260906-4')!important;
-    background-position:center!important;
-    background-repeat:no-repeat!important;
-    background-size:contain!important;
+    min-width:68px!important;
+    min-height:68px!important;
+    object-fit:contain!important;
+    object-position:center!important;
     border:0!important;
+    border-radius:0!important;
     box-shadow:none!important;
-    pointer-events:none!important;
+    background:transparent!important;
+    margin:0!important;
     z-index:80!important;
+    cursor:pointer!important;
   }
 }
 
 @media(max-width:390px){
-  html body .site-header .nav-wrap::after{
+  html body header.site-header div.nav-wrap > img.mobile-brand-q{
     width:62px!important;
     height:62px!important;
+    min-width:62px!important;
+    min-height:62px!important;
     bottom:19px!important;
   }
 }
@@ -63,8 +76,9 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
     min-width:54px!important;
     min-height:54px!important;
   }
+
   html body .site-header img.public-brand-q{
-    content:url('lavuq-q-single-header.svg?v=20260906-4')!important;
+    content:url('lavuq-q-single-header.svg?v=20260906-final-1')!important;
     width:54px!important;
     height:54px!important;
     transform:none!important;
