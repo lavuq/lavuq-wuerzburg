@@ -28,8 +28,7 @@
     z-index:-1!important;
   }
 
-  html body header.site-header .public-brand-line,
-  html body header.site-header .public-brand-q-crop{
+  html body header.site-header .public-brand-line{
     display:none!important;
     visibility:hidden!important;
     opacity:0!important;
@@ -104,12 +103,48 @@
     color:#d8b46a!important;
     white-space:nowrap!important;
   }
+
+  /* Exactly one centered Q, shifted 10px downward. */
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    position:absolute!important;
+    left:50%!important;
+    top:calc(50% + 10px)!important;
+    right:auto!important;
+    bottom:auto!important;
+    transform:translate(-50%,-50%)!important;
+    width:68px!important;
+    height:68px!important;
+    min-width:68px!important;
+    min-height:68px!important;
+    max-width:68px!important;
+    max-height:68px!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    background:url('lavuq-q-single-header.svg?v=20260906-q-down-10') center/contain no-repeat!important;
+    border:0!important;
+    box-shadow:none!important;
+    pointer-events:none!important;
+    z-index:80!important;
+  }
 }
 
 @media(max-width:390px){
   html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{left:13px!important}
   html body header.site-header .public-brand-name{font-size:2.50rem!important}
   html body header.site-header .public-brand-city{font-size:1.52rem!important}
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    width:62px!important;
+    height:62px!important;
+    min-width:62px!important;
+    min-height:62px!important;
+    max-width:62px!important;
+    max-height:62px!important;
+    top:calc(50% + 10px)!important;
+  }
 }
 
 @media(min-width:521px){
