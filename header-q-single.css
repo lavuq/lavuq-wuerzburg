@@ -1,35 +1,77 @@
 /* LAVUQ public website header only. */
 
-/* Never allow an extra Q pseudo-element on the brand itself. */
-html body .site-header .public-brand-q-crop::before,
-html body .site-header .public-brand-q-crop::after{
-  content:none!important;
-  display:none!important;
-}
-
 @media(max-width:520px){
-  /* Hide EVERY real/legacy image inside the WEBSITE HEADER.
-     clip-path is intentional: old JS uses inline !important display/visibility
-     rules, but it does not control clip-path. This prevents a second/broken Q. */
-  html body header.site-header .nav-wrap img{
+  /* Remove every legacy/duplicate visual from the WEBSITE HEADER. */
+  html body header.site-header .nav-wrap img,
+  html body header.site-header .public-brand-q-crop,
+  html body header.site-header .public-brand-line{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-width:0!important;
+    max-height:0!important;
+    overflow:hidden!important;
     clip-path:inset(100%)!important;
     -webkit-clip-path:inset(100%)!important;
     pointer-events:none!important;
   }
 
-  html body header.site-header .nav-wrap img.brand-mark,
-  html body header.site-header .nav-wrap img.public-brand-q,
-  html body header.site-header .nav-wrap > img.mobile-brand-q,
-  html body header.site-header .public-brand-q-crop{
+  /* Kill old generated LAVU/Würzburg copies. */
+  html body header.site-header .public-brand-copy::before,
+  html body header.site-header .public-brand-copy::after,
+  html body header.site-header .public-brand-name::before,
+  html body header.site-header .public-brand-name::after,
+  html body header.site-header .public-brand-city::before,
+  html body header.site-header .public-brand-city::after,
+  html body header.site-header .nav-wrap::before{
+    content:none!important;
     display:none!important;
-    visibility:hidden!important;
-    opacity:0!important;
-    overflow:hidden!important;
-    pointer-events:none!important;
   }
 
-  /* Exactly ONE golden Q in the middle of the website header.
-     Its lower edge is 19px (~0.5 cm) above the gold header line. */
+  /* Keep exactly one real wordmark on the left. */
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{
+    position:absolute!important;
+    left:18px!important;
+    top:50%!important;
+    transform:translateY(-50%)!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    width:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+    z-index:60!important;
+  }
+
+  html body header.site-header .public-brand-name{
+    display:block!important;
+    font-family:Georgia,'Times New Roman',serif!important;
+    font-size:1.58rem!important;
+    font-weight:400!important;
+    letter-spacing:.16em!important;
+    line-height:.96!important;
+    color:#fff!important;
+    white-space:nowrap!important;
+  }
+
+  html body header.site-header .public-brand-city{
+    display:block!important;
+    margin-top:7px!important;
+    font-family:Georgia,'Times New Roman',serif!important;
+    font-size:.98rem!important;
+    font-weight:400!important;
+    line-height:1!important;
+    color:#d8b46a!important;
+    white-space:nowrap!important;
+  }
+
+  /* Exactly ONE golden Q in the middle, 19px (~0.5cm) above the gold line. */
   html body header.site-header .nav-wrap::after{
     content:""!important;
     display:block!important;
@@ -45,16 +87,21 @@ html body .site-header .public-brand-q-crop::after{
     height:68px!important;
     margin:0!important;
     padding:0!important;
-    background:url('lavuq-q-single-header.svg?v=20260906-header-final-3') center/contain no-repeat!important;
+    background-image:url('lavuq-q-single-header.svg?v=20260906-header-clean-1')!important;
+    background-repeat:no-repeat!important;
+    background-position:center!important;
+    background-size:contain!important;
     border:0!important;
-    border-radius:0!important;
     box-shadow:none!important;
     pointer-events:none!important;
-    z-index:999!important;
+    z-index:80!important;
   }
 }
 
 @media(max-width:390px){
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{left:13px!important}
+  html body header.site-header .public-brand-name{font-size:1.44rem!important}
+  html body header.site-header .public-brand-city{font-size:.90rem!important}
   html body header.site-header .nav-wrap::after{
     width:62px!important;
     height:62px!important;
@@ -72,22 +119,7 @@ html body .site-header .public-brand-q-crop::after{
     min-width:54px!important;
     min-height:54px!important;
     overflow:hidden!important;
+    background:url('lavuq-q-single-header.svg?v=20260906-header-clean-1') center/contain no-repeat!important;
   }
-
-  html body .site-header img.public-brand-q{
-    content:url('lavuq-q-single-header.svg?v=20260906-header-final-3')!important;
-    display:block!important;
-    visibility:visible!important;
-    opacity:1!important;
-    width:54px!important;
-    height:54px!important;
-    position:static!important;
-    transform:none!important;
-    object-fit:contain!important;
-    object-position:center!important;
-    background:transparent!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-  }
+  html body .site-header .public-brand-q-crop img{display:none!important}
 }
