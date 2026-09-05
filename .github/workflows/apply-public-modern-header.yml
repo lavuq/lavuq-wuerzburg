@@ -19,6 +19,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
 
           files = [
               'index.html',
@@ -37,19 +38,14 @@ jobs:
               'danke.html',
               'danke/index.html'
           ]
-          link = '<link rel="stylesheet" href="header-modern.css?v=20260905-1">'
+          link = '<link rel="stylesheet" href="header-modern.css?v=20260905-2">'
           for name in files:
               p = Path(name)
               if not p.exists():
                   continue
               text = p.read_text(encoding='utf-8')
-              if 'header-modern.css' in text:
-                  continue
-              marker = '<link rel="stylesheet" href="styles.css">'
-              if marker in text:
-                  text = text.replace(marker, marker + link, 1)
-              else:
-                  text = text.replace('</head>', link + '</head>', 1)
+              text = re.sub(r'<link rel="stylesheet" href="header-modern\.css\?v=[^"]+">', '', text)
+              text = text.replace('</head>', link + '</head>', 1)
               p.write_text(text, encoding='utf-8')
           PY
       - name: Commit header rollout
