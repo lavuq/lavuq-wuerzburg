@@ -25,8 +25,10 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-0115'
+          version = '20260906-0118'
           changed = []
+
+          guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
 
           for p in Path('.').rglob('*.html'):
               if '.git' in p.parts or p.name in excluded:
@@ -54,6 +56,9 @@ jobs:
               if n == 0:
                   continue
 
+              text2 = re.sub(r'<script id="lavuq-public-header-image-guard">.*?</script>', '', text2, flags=re.S)
+              text2 = text2.replace('</header>', '</header>' + guard, 1)
+
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text2)
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-q-single\.css\?v=[^"]+">', '', text2)
               modern = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
@@ -75,5 +80,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy clean public header without legacy Q image"
+          git commit -m "Deploy permanent public header image guard"
           git push
