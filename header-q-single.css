@@ -8,7 +8,15 @@ html body .site-header .public-brand-q-crop::after{
 }
 
 @media(max-width:520px){
-  /* Hide every legacy/JS Q image inside the WEBSITE HEADER. */
+  /* Hide EVERY real/legacy image inside the WEBSITE HEADER.
+     clip-path is intentional: old JS uses inline !important display/visibility
+     rules, but it does not control clip-path. This prevents a second/broken Q. */
+  html body header.site-header .nav-wrap img{
+    clip-path:inset(100%)!important;
+    -webkit-clip-path:inset(100%)!important;
+    pointer-events:none!important;
+  }
+
   html body header.site-header .nav-wrap img.brand-mark,
   html body header.site-header .nav-wrap img.public-brand-q,
   html body header.site-header .nav-wrap > img.mobile-brand-q,
@@ -16,10 +24,6 @@ html body .site-header .public-brand-q-crop::after{
     display:none!important;
     visibility:hidden!important;
     opacity:0!important;
-    width:0!important;
-    height:0!important;
-    min-width:0!important;
-    min-height:0!important;
     overflow:hidden!important;
     pointer-events:none!important;
   }
@@ -41,7 +45,7 @@ html body .site-header .public-brand-q-crop::after{
     height:68px!important;
     margin:0!important;
     padding:0!important;
-    background:url('lavuq-q-single-header.svg?v=20260906-header-final-2') center/contain no-repeat!important;
+    background:url('lavuq-q-single-header.svg?v=20260906-header-final-3') center/contain no-repeat!important;
     border:0!important;
     border-radius:0!important;
     box-shadow:none!important;
@@ -71,7 +75,7 @@ html body .site-header .public-brand-q-crop::after{
   }
 
   html body .site-header img.public-brand-q{
-    content:url('lavuq-q-single-header.svg?v=20260906-header-final-2')!important;
+    content:url('lavuq-q-single-header.svg?v=20260906-header-final-3')!important;
     display:block!important;
     visibility:visible!important;
     opacity:1!important;
