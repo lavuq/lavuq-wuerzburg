@@ -1,5 +1,5 @@
-/* LAVUQ public website header – modern centered brand layout.
-   Intentionally NOT loaded on mein-q.html or the protected member/PWA pages. */
+/* LAVUQ public website header – approved horizontal mobile layout.
+   Loaded only on public website pages. Mein Q and protected/PWA pages remain untouched. */
 
 .site-header{
   background:#041529!important;
@@ -17,7 +17,10 @@
   border-radius:0!important;
   box-shadow:none!important;
   object-fit:contain!important;
+  object-position:center!important;
 }
+.site-header .mobile-brand-q,
+.site-header .mobile-brand-copy{display:none!important}
 .site-header .nav a{color:#fff!important}
 .site-header .nav a:hover,.site-header .nav a:focus{color:#d8b46a!important}
 
@@ -35,63 +38,52 @@
 @media (max-width:520px){
   html,body{max-width:100%;overflow-x:hidden}
   .topbar{display:none!important}
+
   .site-header{
     position:relative!important;
     top:auto!important;
-    min-height:248px!important;
-    height:248px!important;
+    width:100%!important;
+    min-height:132px!important;
+    height:132px!important;
     overflow:visible!important;
+    background:#041529!important;
   }
   .site-header .nav-wrap{
+    position:relative!important;
     width:100%!important;
     max-width:none!important;
-    height:248px!important;
-    min-height:248px!important;
+    height:132px!important;
+    min-height:132px!important;
     margin:0!important;
     padding:0!important;
     display:block!important;
   }
 
-  /* Centered brand block: Q, LAVU, Würzburg, thin gold lines. */
+  /* One clean row: LAVU/Würzburg — Q — Menü */
   .site-header .brand{
     position:absolute!important;
-    left:50%!important;
-    top:26px!important;
-    transform:translateX(-50%)!important;
-    width:250px!important;
-    height:188px!important;
+    inset:0!important;
+    width:100%!important;
+    height:132px!important;
     margin:0!important;
     padding:0!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:flex-start!important;
-    gap:0!important;
-    text-align:center!important;
-    z-index:42!important;
-  }
-  .site-header .brand .brand-mark{
-    width:98px!important;
-    height:98px!important;
-    min-width:98px!important;
-    min-height:98px!important;
-    margin:0 0 5px!important;
-    padding:0!important;
-    object-position:center!important;
     display:block!important;
-    opacity:1!important;
-  }
-  .site-header .brand>span:not(.mobile-brand-copy){
-    position:relative!important;
-    left:auto!important;
-    top:auto!important;
     transform:none!important;
-    width:auto!important;
+    z-index:40!important;
+  }
+
+  .site-header .brand>span:not(.mobile-brand-copy){
+    position:absolute!important;
+    left:18px!important;
+    top:50%!important;
+    transform:translateY(-50%)!important;
+    width:116px!important;
     margin:0!important;
-    padding:0 38px!important;
+    padding:0!important;
     display:block!important;
     font-size:0!important;
     line-height:1!important;
+    text-align:left!important;
     border:0!important;
   }
   .site-header .brand>span:not(.mobile-brand-copy):before{
@@ -99,75 +91,104 @@
     display:block!important;
     color:#fff!important;
     font-family:Georgia,'Times New Roman',serif!important;
-    font-size:2.18rem!important;
+    font-size:1.72rem!important;
     font-weight:400!important;
-    line-height:1!important;
-    letter-spacing:.19em!important;
+    line-height:.96!important;
+    letter-spacing:.18em!important;
     white-space:nowrap!important;
-    margin-left:.19em!important;
   }
   .site-header .brand>span:not(.mobile-brand-copy):after{
     content:'Würzburg'!important;
     display:block!important;
     color:#d8b46a!important;
     font-family:Georgia,'Times New Roman',serif!important;
-    font-size:1.16rem!important;
+    font-size:1.02rem!important;
     font-weight:400!important;
     line-height:1!important;
     letter-spacing:.01em!important;
     white-space:nowrap!important;
-    margin:10px 0 0!important;
+    margin-top:7px!important;
   }
-  .site-header .brand:before,.site-header .brand:after{
+  .site-header .brand-city{display:none!important}
+
+  /* Original gold Q, centered, no square/background and never duplicated. */
+  .site-header .brand .brand-mark{
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+    margin:0!important;
+    padding:0!important;
+    display:block!important;
+    opacity:1!important;
+    visibility:visible!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    transform:translate(-50%,-50%) scale(1.42)!important;
+    transform-origin:center!important;
+    z-index:42!important;
+  }
+  .site-header .mobile-brand-q,
+  .site-header .mobile-brand-copy{display:none!important}
+
+  /* Gold separator lines around the centered Q. */
+  .site-header .brand:before,
+  .site-header .brand:after{
     content:''!important;
     position:absolute!important;
-    bottom:13px!important;
-    width:58px!important;
+    top:50%!important;
+    transform:translateY(-50%)!important;
     height:1px!important;
     background:#d8b46a!important;
     opacity:.95!important;
+    z-index:41!important;
   }
-  .site-header .brand:before{left:25px!important}
-  .site-header .brand:after{right:25px!important}
-  .site-header .brand-city{display:none!important}
-  .site-header .mobile-brand-copy{display:none!important}
+  .site-header .brand:before{
+    left:135px!important;
+    right:calc(50% + 43px)!important;
+  }
+  .site-header .brand:after{
+    left:calc(50% + 43px)!important;
+    right:128px!important;
+  }
 
-  /* Modern menu pill, top right. */
+  /* Approved outlined menu pill on the right. */
   .site-header .nav-toggle{
     position:absolute!important;
-    right:18px!important;
-    top:28px!important;
-    transform:none!important;
-    width:104px!important;
-    height:54px!important;
-    min-width:104px!important;
-    min-height:54px!important;
+    right:14px!important;
+    top:50%!important;
+    transform:translateY(-50%)!important;
+    width:106px!important;
+    height:52px!important;
+    min-width:106px!important;
+    min-height:52px!important;
     margin:0!important;
     padding:0!important;
     display:grid!important;
     place-items:center!important;
     border:1.5px solid #d8b46a!important;
     border-radius:999px!important;
-    background:rgba(4,21,41,.86)!important;
+    background:#041529!important;
     color:transparent!important;
     box-shadow:none!important;
     font-size:0!important;
-    z-index:50!important;
+    z-index:60!important;
   }
   .site-header .nav-toggle:after{
-    content:'☰  Menü'!important;
+    content:'☰   Menü'!important;
     color:#fff!important;
     font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
-    font-size:.96rem!important;
-    font-weight:600!important;
+    font-size:.94rem!important;
+    font-weight:500!important;
     letter-spacing:.01em!important;
     white-space:pre!important;
   }
-  .site-header .nav-toggle[aria-expanded='true']:after{content:'✕  Menü'!important}
+  .site-header .nav-toggle[aria-expanded='true']:after{content:'✕   Menü'!important}
 
   .site-header .nav{
     position:absolute!important;
-    top:236px!important;
+    top:122px!important;
     left:12px!important;
     right:12px!important;
     padding:16px!important;
@@ -175,8 +196,18 @@
     border:1px solid rgba(216,180,106,.5)!important;
     border-radius:22px!important;
     box-shadow:0 24px 60px rgba(0,0,0,.38)!important;
-    z-index:60!important;
+    z-index:70!important;
   }
   .site-header .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.18)!important}
   .site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
+}
+
+@media (max-width:390px){
+  .site-header .brand>span:not(.mobile-brand-copy){left:14px!important;width:108px!important}
+  .site-header .brand>span:not(.mobile-brand-copy):before{font-size:1.55rem!important}
+  .site-header .brand>span:not(.mobile-brand-copy):after{font-size:.94rem!important}
+  .site-header .brand:before{left:122px!important;right:calc(50% + 39px)!important}
+  .site-header .brand:after{left:calc(50% + 39px)!important;right:122px!important}
+  .site-header .nav-toggle{right:10px!important;width:102px!important;min-width:102px!important}
+  .site-header .brand .brand-mark{transform:translate(-50%,-50%) scale(1.32)!important}
 }
