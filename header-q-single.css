@@ -75,19 +75,19 @@
   html body header.site-header .public-brand-name{
     display:block!important;
     font-family:Georgia,'Times New Roman',serif!important;
-    font-size:2.20rem!important;
+    font-size:2.45rem!important;
     font-weight:400!important;
-    letter-spacing:.16em!important;
-    line-height:.96!important;
+    letter-spacing:.14em!important;
+    line-height:.94!important;
     color:#fff!important;
     white-space:nowrap!important;
   }
 
   html body header.site-header .public-brand-city{
     display:block!important;
-    margin-top:9px!important;
+    margin-top:10px!important;
     font-family:Georgia,'Times New Roman',serif!important;
-    font-size:1.34rem!important;
+    font-size:1.50rem!important;
     font-weight:400!important;
     line-height:1!important;
     color:#d8b46a!important;
@@ -123,8 +123,8 @@
 
 @media(max-width:390px){
   html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{left:13px!important}
-  html body header.site-header .public-brand-name{font-size:2rem!important}
-  html body header.site-header .public-brand-city{font-size:1.22rem!important}
+  html body header.site-header .public-brand-name{font-size:2.20rem!important}
+  html body header.site-header .public-brand-city{font-size:1.36rem!important}
   html body header.site-header .nav-wrap::after{
     width:62px!important;
     height:62px!important;
