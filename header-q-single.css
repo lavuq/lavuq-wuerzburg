@@ -1,14 +1,16 @@
 /* LAVUQ public website header only. */
 
 @media(max-width:520px){
-  /* Remove every legacy/duplicate image from the WEBSITE HEADER, even when
+  /* Remove every legacy/duplicate image from the ENTIRE WEBSITE HEADER, even when
      older JS left inline !important sizing/visibility behind. */
-  html body header.site-header .nav-wrap img{
+  html body header.site-header img{
     content:""!important;
     display:block!important;
-    position:absolute!important;
+    position:fixed!important;
     left:-10000px!important;
     top:-10000px!important;
+    right:auto!important;
+    bottom:auto!important;
     width:1px!important;
     height:1px!important;
     min-width:1px!important;
@@ -26,6 +28,7 @@
     -webkit-clip-path:inset(100%)!important;
     overflow:hidden!important;
     pointer-events:none!important;
+    z-index:-1!important;
   }
 
   html body header.site-header .public-brand-q-crop,
