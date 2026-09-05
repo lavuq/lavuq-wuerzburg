@@ -14,11 +14,11 @@
 .public-brand img:not(.public-brand-q),.public-brand .mobile-brand-q{display:none!important}
 .public-menu-toggle{cursor:pointer}
 
-/* The public header now uses the dedicated single-Q source image. */
+/* Source contains two stacked motifs; deliberately crop to the lower, complete Q. */
 .public-brand-q-crop{
   position:relative!important;
   display:block!important;
-  overflow:visible!important;
+  overflow:hidden!important;
   background:transparent!important;
   border:0!important;
   box-shadow:none!important;
@@ -32,7 +32,6 @@
   border:0!important;
   border-radius:0!important;
   box-shadow:none!important;
-  object-fit:contain!important;
 }
 
 @media(min-width:521px){
@@ -41,7 +40,7 @@
   .public-brand{display:flex!important;align-items:center!important;gap:12px!important}
   .public-brand-copy{display:flex!important;flex-direction:column!important;order:2!important}
   .public-brand-q-crop{order:1!important;width:54px!important;height:54px!important}
-  .public-brand-q{position:static!important;width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important;transform:none!important}
+  .public-brand-q{position:absolute!important;width:108px!important;height:108px!important;min-width:108px!important;min-height:108px!important;left:50%!important;bottom:0!important;top:auto!important;transform:translateX(-50%)!important;object-fit:fill!important}
   .public-brand-line{display:none!important}
   .public-brand-name{font-family:Georgia,'Times New Roman',serif!important;font-size:1.2rem!important;font-weight:500!important;letter-spacing:.14em!important;line-height:1!important}
   .public-brand-city{font-family:Georgia,'Times New Roman',serif!important;font-size:.78rem!important;line-height:1!important;margin-top:5px!important;color:#d8b46a!important}
@@ -128,20 +127,20 @@
     transform:translate(-50%,-50%)!important;
     width:68px!important;
     height:68px!important;
-    overflow:visible!important;
+    overflow:hidden!important;
     z-index:56!important;
   }
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
     position:absolute!important;
     left:50%!important;
-    top:50%!important;
-    bottom:auto!important;
-    transform:translate(-50%,-50%)!important;
-    width:68px!important;
-    height:68px!important;
-    min-width:68px!important;
-    min-height:68px!important;
-    object-fit:contain!important;
+    bottom:0!important;
+    top:auto!important;
+    transform:translateX(-50%)!important;
+    width:136px!important;
+    height:136px!important;
+    min-width:136px!important;
+    min-height:136px!important;
+    object-fit:fill!important;
     object-position:center!important;
     visibility:visible!important;
     opacity:1!important;
@@ -212,7 +211,7 @@
   html body .site-header .nav-wrap .public-brand-name{font-size:1.44rem!important}
   html body .site-header .nav-wrap .public-brand-city{font-size:.90rem!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:62px!important;height:62px!important}
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{width:124px!important;height:124px!important;min-width:124px!important;min-height:124px!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line-left{left:124px!important;right:calc(50% + 40px)!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line-right{left:calc(50% + 40px)!important;right:130px!important}
   html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle{right:9px!important;width:110px!important;min-width:110px!important;height:48px!important;min-height:48px!important;padding:0 13px!important;gap:9px!important}
