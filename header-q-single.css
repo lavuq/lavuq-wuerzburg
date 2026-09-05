@@ -48,12 +48,20 @@
   html body header.site-header .public-brand-name::after,
   html body header.site-header .public-brand-city::before,
   html body header.site-header .public-brand-city::after,
+  html body header.site-header .public-brand::before,
+  html body header.site-header .public-brand::after,
+  html body header.site-header .brand::before,
+  html body header.site-header .brand::after,
+  html body header.site-header .public-brand-q-crop::before,
+  html body header.site-header .public-brand-q-crop::after,
   html body header.site-header .nav-wrap::before,
   html body header.site-header .nav-wrap::after,
   html body header.site-header::before,
   html body header.site-header::after{
     content:none!important;
     display:none!important;
+    background:none!important;
+    background-image:none!important;
   }
 
   html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{
@@ -114,7 +122,7 @@
     margin:0!important;
     padding:0!important;
     overflow:hidden!important;
-    background-image:url('lavuq-q-square.png?v=20260906-single-crop-q-1')!important;
+    background-image:url('lavuq-q-square.png?v=20260906-single-crop-q-2')!important;
     background-repeat:no-repeat!important;
     background-size:136px 136px!important;
     background-position:center bottom -38px!important;
