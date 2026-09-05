@@ -19,44 +19,46 @@
 @media(max-width:520px){
   html,body{max-width:100%;overflow-x:hidden}
   .topbar{display:none!important}
-  body .site-header{position:relative!important;top:auto!important;width:100%!important;height:126px!important;min-height:126px!important;background:#041529!important;overflow:visible!important;border-bottom:1px solid rgba(216,180,106,.72)!important}
-  body .site-header .nav-wrap{position:relative!important;width:100%!important;max-width:none!important;height:126px!important;min-height:126px!important;margin:0!important;padding:0!important;display:block!important}
-  body .site-header .public-brand{position:static!important;display:block!important;width:100%!important;height:126px!important;margin:0!important;padding:0!important;transform:none!important}
+  html body .site-header{position:relative!important;top:auto!important;width:100%!important;height:126px!important;min-height:126px!important;background:#041529!important;overflow:visible!important;border-bottom:1px solid rgba(216,180,106,.72)!important}
+  html body .site-header .nav-wrap{position:relative!important;width:100%!important;max-width:none!important;height:126px!important;min-height:126px!important;margin:0!important;padding:0!important;display:block!important}
+  html body .site-header .nav-wrap a.public-brand{position:static!important;display:block!important;width:100%!important;height:126px!important;margin:0!important;padding:0!important;transform:none!important}
 
-  /* Left copy – force neutralisation of legacy .brand > span rules. */
-  body .site-header .public-brand-copy{position:absolute!important;left:20px!important;top:50%!important;transform:translateY(-50%)!important;width:118px!important;height:auto!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;font-size:initial!important;line-height:1!important;text-align:left!important;z-index:55!important;color:#fff!important}
-  body .site-header .public-brand-copy:before,body .site-header .public-brand-copy:after{content:none!important;display:none!important}
-  body .site-header .public-brand-name{display:block!important;position:static!important;transform:none!important;margin:0!important;padding:0!important;color:#fff!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.58rem!important;font-weight:400!important;letter-spacing:.16em!important;line-height:.96!important;white-space:nowrap!important}
-  body .site-header .public-brand-city{display:block!important;position:static!important;transform:none!important;margin:7px 0 0!important;padding:0!important;color:#d8b46a!important;font-family:Georgia,'Times New Roman',serif!important;font-size:.98rem!important;font-weight:400!important;line-height:1!important;white-space:nowrap!important}
+  /* Stronger than all legacy .brand > span rules. */
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy{position:absolute!important;left:18px!important;top:50%!important;transform:translateY(-50%)!important;width:120px!important;height:auto!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;font-size:initial!important;line-height:1!important;text-align:left!important;z-index:55!important;color:#fff!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy:before,
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy:after{content:none!important;display:none!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy > span.public-brand-name{display:block!important;position:static!important;left:auto!important;top:auto!important;transform:none!important;margin:0!important;padding:0!important;color:#fff!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.58rem!important;font-weight:400!important;letter-spacing:.16em!important;line-height:.96!important;white-space:nowrap!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy > span.public-brand-city{display:block!important;position:static!important;left:auto!important;top:auto!important;transform:none!important;margin:7px 0 0!important;padding:0!important;color:#d8b46a!important;font-family:Georgia,'Times New Roman',serif!important;font-size:.98rem!important;font-weight:400!important;line-height:1!important;white-space:nowrap!important}
 
-  /* Exact centered original Q. */
-  body .site-header .public-brand-q{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;margin:0!important;padding:0!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:56!important}
+  /* Exact centered original Q; override legacy .brand-mark rules. */
+  html body .site-header .nav-wrap a.public-brand > img.brand-mark.public-brand-q{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;margin:0!important;padding:0!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:56!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important}
 
-  /* Gold lines around the Q. */
-  body .site-header .public-brand-line{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;height:1px!important;background:#d8b46a!important;opacity:.95!important;z-index:54!important}
-  body .site-header .public-brand-line-left{left:143px!important;right:calc(50% + 42px)!important;margin:0!important}
-  body .site-header .public-brand-line-right{left:calc(50% + 42px)!important;right:140px!important;margin:0!important}
+  /* Gold lines around Q. */
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-line{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;height:1px!important;background:#d8b46a!important;opacity:.95!important;z-index:54!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-line-left{left:146px!important;right:calc(50% + 43px)!important;margin:0!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-line-right{left:calc(50% + 43px)!important;right:142px!important;margin:0!important}
 
-  /* Menu pill. */
-  body .site-header .public-menu-toggle{position:absolute!important;right:16px!important;top:50%!important;transform:translateY(-50%)!important;width:116px!important;height:52px!important;min-width:116px!important;min-height:52px!important;margin:0!important;padding:0 16px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:11px!important;border:1.5px solid #d8b46a!important;border-radius:999px!important;background:#041529!important;color:#fff!important;box-shadow:none!important;font-size:initial!important;text-indent:0!important;overflow:visible!important;z-index:60!important}
-  body .site-header .public-menu-toggle:before,body .site-header .public-menu-toggle:after{content:none!important;display:none!important}
-  body .site-header .public-menu-icon{display:inline-block!important;position:static!important;transform:none!important;margin:0!important;color:#d8b46a!important;font-family:Arial,sans-serif!important;font-size:1.28rem!important;font-weight:700!important;line-height:1!important;text-indent:0!important}
-  body .site-header .public-menu-label{display:inline-block!important;position:static!important;transform:none!important;margin:0!important;color:#fff!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;font-size:.92rem!important;font-weight:600!important;line-height:1!important;white-space:nowrap!important;text-indent:0!important}
+  /* Menu pill – explicit inner spans avoid pseudo-element conflicts. */
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle{position:absolute!important;right:16px!important;top:50%!important;transform:translateY(-50%)!important;width:118px!important;height:52px!important;min-width:118px!important;min-height:52px!important;margin:0!important;padding:0 16px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:11px!important;border:1.5px solid #d8b46a!important;border-radius:999px!important;background:#041529!important;color:#fff!important;box-shadow:none!important;font-size:initial!important;text-indent:0!important;overflow:visible!important;z-index:60!important}
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle:before,
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle:after{content:none!important;display:none!important}
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle > span.public-menu-icon{display:inline-block!important;position:static!important;transform:none!important;margin:0!important;color:#d8b46a!important;font-family:Arial,sans-serif!important;font-size:1.28rem!important;font-weight:700!important;line-height:1!important;text-indent:0!important}
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle > span.public-menu-label{display:inline-block!important;position:static!important;transform:none!important;margin:0!important;color:#fff!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;font-size:.92rem!important;font-weight:600!important;line-height:1!important;white-space:nowrap!important;text-indent:0!important}
 
-  body .site-header .nav{position:absolute!important;top:116px!important;left:12px!important;right:12px!important;padding:16px!important;background:#041529!important;border:1px solid rgba(216,180,106,.5)!important;border-radius:22px!important;box-shadow:0 24px 60px rgba(0,0,0,.38)!important;z-index:70!important}
-  body .site-header .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.18)!important}
-  body .site-header .nav .btn-primary{background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
+  html body .site-header .nav-wrap .nav{position:absolute!important;top:116px!important;left:12px!important;right:12px!important;padding:16px!important;background:#041529!important;border:1px solid rgba(216,180,106,.5)!important;border-radius:22px!important;box-shadow:0 24px 60px rgba(0,0,0,.38)!important;z-index:70!important}
+  html body .site-header .nav-wrap .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.18)!important}
+  html body .site-header .nav-wrap .nav .btn-primary{background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
 }
 
 @media(max-width:390px){
-  body .site-header{height:122px!important;min-height:122px!important}
-  body .site-header .nav-wrap,body .site-header .public-brand{height:122px!important;min-height:122px!important}
-  body .site-header .public-brand-copy{left:14px!important;width:108px!important}
-  body .site-header .public-brand-name{font-size:1.44rem!important}
-  body .site-header .public-brand-city{font-size:.90rem!important}
-  body .site-header .public-brand-q{width:56px!important;height:56px!important;min-width:56px!important;min-height:56px!important}
-  body .site-header .public-brand-line-left{left:126px!important;right:calc(50% + 38px)!important}
-  body .site-header .public-brand-line-right{left:calc(50% + 38px)!important;right:128px!important}
-  body .site-header .public-menu-toggle{right:10px!important;width:108px!important;min-width:108px!important;height:48px!important;min-height:48px!important;padding:0 13px!important;gap:9px!important}
-  body .site-header .public-menu-label{font-size:.88rem!important}
+  html body .site-header{height:122px!important;min-height:122px!important}
+  html body .site-header .nav-wrap,html body .site-header .nav-wrap a.public-brand{height:122px!important;min-height:122px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy{left:13px!important;width:106px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy > span.public-brand-name{font-size:1.44rem!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy > span.public-brand-city{font-size:.90rem!important}
+  html body .site-header .nav-wrap a.public-brand > img.brand-mark.public-brand-q{width:56px!important;height:56px!important;min-width:56px!important;min-height:56px!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-line-left{left:124px!important;right:calc(50% + 39px)!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-line-right{left:calc(50% + 39px)!important;right:130px!important}
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle{right:9px!important;width:110px!important;min-width:110px!important;height:48px!important;min-height:48px!important;padding:0 13px!important;gap:9px!important}
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle > span.public-menu-label{font-size:.88rem!important}
 }
