@@ -1,46 +1,32 @@
 /* Public website only. Mein Q does not load this stylesheet. */
 
-/* The source artwork contains two stacked Q motifs. The public header must show
-   ONLY the lower, larger Q. This last-loaded stylesheet performs the crop. */
+/* The source artwork contains two vertically stacked Q motifs.
+   Hide the <img> completely and use it only as a cropped background so
+   the upper/smaller Q can never appear in the public header. */
 .public-brand-q-crop{
   position:relative!important;
   display:block!important;
   overflow:hidden!important;
-  background:none!important;
-  background-image:none!important;
+  background-repeat:no-repeat!important;
+  background-position:center bottom!important;
+  background-image:url('lavuq-q-single-header.svg?v=20260905-24')!important;
+  border:0!important;
+  box-shadow:none!important;
 }
 
 html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-  display:block!important;
-  visibility:visible!important;
-  opacity:1!important;
-  position:absolute!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:0!important;
-  transform:translateX(-50%)!important;
-  object-fit:fill!important;
-  object-position:center bottom!important;
-  margin:0!important;
-  padding:0!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
 }
 
 @media(max-width:520px){
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     width:68px!important;
     height:68px!important;
-  }
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-    width:136px!important;
-    height:136px!important;
-    min-width:136px!important;
-    min-height:136px!important;
-    max-width:136px!important;
-    max-height:136px!important;
+    min-width:68px!important;
+    min-height:68px!important;
+    background-size:136px 136px!important;
   }
 }
 
@@ -48,14 +34,9 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     width:62px!important;
     height:62px!important;
-  }
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-    width:124px!important;
-    height:124px!important;
-    min-width:124px!important;
-    min-height:124px!important;
-    max-width:124px!important;
-    max-height:124px!important;
+    min-width:62px!important;
+    min-height:62px!important;
+    background-size:124px 124px!important;
   }
 }
 
@@ -63,13 +44,8 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     width:54px!important;
     height:54px!important;
-  }
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-    width:108px!important;
-    height:108px!important;
-    min-width:108px!important;
-    min-height:108px!important;
-    max-width:108px!important;
-    max-height:108px!important;
+    min-width:54px!important;
+    min-height:54px!important;
+    background-size:108px 108px!important;
   }
 }
