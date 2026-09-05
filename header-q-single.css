@@ -13,11 +13,10 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
   display:none!important;
 }
 
-/* Force every public-header Q, including the mobile Q inserted by script.js,
-   to use one pre-cropped Q asset. */
+/* Always use the single-Q asset. */
 html body .site-header img.public-brand-q,
 html body .site-header img.mobile-brand-q{
-  content:url('lavuq-q-header-single-crop.svg?v=20260905-34')!important;
+  content:url('lavuq-q-header-single-crop.svg?v=20260905-35')!important;
   object-fit:contain!important;
   object-position:center!important;
   border-radius:0!important;
@@ -26,6 +25,7 @@ html body .site-header img.mobile-brand-q{
 }
 
 @media(max-width:520px){
+  /* Public header Q in the original markup. */
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     position:absolute!important;
     left:50%!important;
@@ -42,22 +42,27 @@ html body .site-header img.mobile-brand-q{
     position:absolute!important;
     left:50%!important;
     top:auto!important;
-    bottom:-35px!important;
-    transform:translateX(-50%)!important;
+    bottom:0!important;
+    transform:translate(-50%,35px)!important;
     width:68px!important;
     height:68px!important;
     min-width:68px!important;
     min-height:68px!important;
     object-fit:contain!important;
   }
-  html body .site-header .nav-wrap img.mobile-brand-q{
+
+  /* Q inserted later by script.js. This selector deliberately outranks the
+     old inline/mobile rules that keep setting top:50%. */
+  html body header.site-header div.nav-wrap > img.mobile-brand-q{
     position:absolute!important;
     left:50%!important;
-    top:auto!important;
-    bottom:-11px!important;
-    transform:translateX(-50%)!important;
+    top:100%!important;
+    bottom:auto!important;
+    transform:translate(-50%,-100%) translateY(0px)!important;
     width:58px!important;
     height:58px!important;
+    margin:0!important;
+    z-index:62!important;
   }
 }
 
@@ -67,18 +72,16 @@ html body .site-header img.mobile-brand-q{
     height:62px!important;
     min-width:62px!important;
     min-height:62px!important;
-    top:auto!important;
-    bottom:0!important;
   }
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-    bottom:-35px!important;
     width:62px!important;
     height:62px!important;
     min-width:62px!important;
     min-height:62px!important;
   }
-  html body .site-header .nav-wrap img.mobile-brand-q{
-    bottom:-7px!important;
+  html body header.site-header div.nav-wrap > img.mobile-brand-q{
+    top:100%!important;
+    transform:translate(-50%,-100%)!important;
   }
 }
 
