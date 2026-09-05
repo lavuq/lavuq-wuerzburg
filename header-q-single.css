@@ -1,8 +1,6 @@
 /* LAVUQ public website header only. */
 
 @media(max-width:520px){
-  /* Remove every legacy/duplicate image from the ENTIRE WEBSITE HEADER, even when
-     older JS left inline !important sizing/visibility behind. */
   html body header.site-header img{
     display:block!important;
     position:fixed!important;
@@ -45,7 +43,6 @@
     pointer-events:none!important;
   }
 
-  /* Kill old generated LAVU/Würzburg copies. */
   html body header.site-header .public-brand-copy::before,
   html body header.site-header .public-brand-copy::after,
   html body header.site-header .public-brand-name::before,
@@ -57,7 +54,6 @@
     display:none!important;
   }
 
-  /* Keep exactly one wordmark on the left. */
   html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{
     position:absolute!important;
     left:18px!important;
@@ -96,24 +92,11 @@
     white-space:nowrap!important;
   }
 
-  /* Mask any stale broken-image placeholder that an old cached DOM may still
-     paint under the centered Q. The gold border is redrawn through the mask. */
   html body header.site-header::after{
-    content:""!important;
-    display:block!important;
-    position:absolute!important;
-    left:50%!important;
-    bottom:-72px!important;
-    width:98px!important;
-    height:115px!important;
-    transform:translateX(-50%)!important;
-    background:linear-gradient(to bottom,#041529 0 42px,#d8b46a 42px 43px,#041529 43px 100%)!important;
-    border:0!important;
-    pointer-events:none!important;
-    z-index:79!important;
+    content:none!important;
+    display:none!important;
   }
 
-  /* Exactly ONE golden Q in the middle, moved 10px down. */
   html body header.site-header .nav-wrap::after{
     content:""!important;
     display:block!important;
@@ -129,7 +112,7 @@
     height:68px!important;
     margin:0!important;
     padding:0!important;
-    background-image:url('lavuq-q-single-header.svg?v=20260906-header-clean-2')!important;
+    background-image:url('lavuq-q-square.png?v=20260906-direct-header-q-1')!important;
     background-repeat:no-repeat!important;
     background-position:center!important;
     background-size:contain!important;
