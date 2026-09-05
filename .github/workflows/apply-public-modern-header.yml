@@ -15,28 +15,52 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Apply modern header stylesheet to public website pages
+      - name: Standardize public header markup and stylesheet
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260905-4'
+          version = '20260905-5'
           changed = []
+
           for p in Path('.').rglob('*.html'):
               if '.git' in p.parts or p.name in excluded:
                   continue
               text = p.read_text(encoding='utf-8')
               if 'class="site-header"' not in text and "class='site-header'" not in text:
                   continue
-              text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text)
+
               prefix = '../' * (len(p.parts)-1)
+              logo = prefix + 'CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png'
+              home = prefix + 'index.html'
+
+              # Replace only the public header controls; keep each page's nav links/content.
+              pattern = re.compile(r'(<header class="site-header"><div class="container nav-wrap">).*?(<nav class="nav">)', re.S)
+              replacement = (
+                  r'\1'
+                  f'<a class="brand public-brand" href="{home}">'
+                  '<span class="public-brand-copy"><span class="public-brand-name">LAVU</span><span class="public-brand-city">Würzburg</span></span>'
+                  '<span class="public-brand-line public-brand-line-left" aria-hidden="true"></span>'
+                  f'<img class="brand-mark public-brand-q" src="{logo}" alt="LAVUQ Logo">'
+                  '<span class="public-brand-line public-brand-line-right" aria-hidden="true"></span>'
+                  '</a>'
+                  '<button class="nav-toggle public-menu-toggle" aria-label="Menü öffnen" aria-expanded="false"><span class="public-menu-icon" aria-hidden="true">☰</span><span class="public-menu-label">Menü</span></button>'
+                  r'\2'
+              )
+              text2, n = pattern.subn(replacement, text, count=1)
+              if n == 0:
+                  continue
+
+              text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text2)
               page_link = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
               text2 = text2.replace('</head>', page_link + '</head>', 1)
+
               if text2 != text:
                   p.write_text(text2, encoding='utf-8')
                   changed.append(str(p))
+
           print('Updated:', ', '.join(changed) if changed else 'none')
           PY
       - name: Commit header rollout
@@ -48,5 +72,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Apply exact modern header to public website pages"
+          git commit -m "Standardize modern public website header"
           git push
