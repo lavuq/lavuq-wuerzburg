@@ -25,7 +25,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-0145'
+          version = '20260906-0147'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
