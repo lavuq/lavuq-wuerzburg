@@ -16,7 +16,7 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
 /* Always use the single-Q asset. */
 html body .site-header img.public-brand-q,
 html body .site-header img.mobile-brand-q{
-  content:url('lavuq-q-header-single-crop.svg?v=20260905-36')!important;
+  content:url('lavuq-q-header-single-crop.svg?v=20260905-37')!important;
   object-fit:contain!important;
   object-position:center!important;
   border-radius:0!important;
@@ -43,7 +43,7 @@ html body .site-header img.mobile-brand-q{
     left:50%!important;
     top:auto!important;
     bottom:0!important;
-    transform:translate(-50%,63px)!important;
+    transform:translateX(-50%)!important;
     width:68px!important;
     height:68px!important;
     min-width:68px!important;
@@ -51,13 +51,15 @@ html body .site-header img.mobile-brand-q{
     object-fit:contain!important;
   }
 
-  /* Q inserted later by script.js. */
+  /* Legacy Q inserted by script.js: anchor its bottom edge directly to the
+     gold header baseline. This selector deliberately outranks the legacy
+     top:50% rule injected later by script.js. */
   html body header.site-header div.nav-wrap > img.mobile-brand-q{
     position:absolute!important;
     left:50%!important;
-    top:100%!important;
-    bottom:auto!important;
-    transform:translate(-50%,-100%) translateY(28px)!important;
+    top:auto!important;
+    bottom:0!important;
+    transform:translateX(-50%)!important;
     width:58px!important;
     height:58px!important;
     margin:0!important;
@@ -77,11 +79,11 @@ html body .site-header img.mobile-brand-q{
     height:62px!important;
     min-width:62px!important;
     min-height:62px!important;
-    transform:translate(-50%,59px)!important;
   }
   html body header.site-header div.nav-wrap > img.mobile-brand-q{
-    top:100%!important;
-    transform:translate(-50%,-100%) translateY(28px)!important;
+    top:auto!important;
+    bottom:0!important;
+    transform:translateX(-50%)!important;
   }
 }
 
