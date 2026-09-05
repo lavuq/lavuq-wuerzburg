@@ -17,7 +17,7 @@ html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop::befo
    to use one pre-cropped Q asset. */
 html body .site-header img.public-brand-q,
 html body .site-header img.mobile-brand-q{
-  content:url('lavuq-q-header-single-crop.svg?v=20260905-31')!important;
+  content:url('lavuq-q-header-single-crop.svg?v=20260905-32')!important;
   object-fit:contain!important;
   object-position:center!important;
   border-radius:0!important;
@@ -31,6 +31,7 @@ html body .site-header img.mobile-brand-q{
     height:68px!important;
     min-width:68px!important;
     min-height:68px!important;
+    top:74%!important;
   }
   html body .site-header .nav-wrap img.mobile-brand-q{
     width:58px!important;
@@ -45,6 +46,7 @@ html body .site-header img.mobile-brand-q{
     height:62px!important;
     min-width:62px!important;
     min-height:62px!important;
+    top:74%!important;
   }
 }
 
