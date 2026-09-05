@@ -1,13 +1,38 @@
-/* Public website only: show one Q in the header. Mein Q is not linked to this stylesheet. */
+/* Public website only: force exactly one Q in the header. Mein Q does not load this stylesheet. */
 .public-brand-q-crop{
-  background-image:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png')!important;
-  background-repeat:no-repeat!important;
-  background-position:center bottom!important;
-  background-size:100% 200%!important;
-  overflow:hidden!important;
+  background:none!important;
+  background-image:none!important;
+  overflow:visible!important;
 }
-.public-brand-q-crop>img.public-brand-q{
-  display:none!important;
-  visibility:hidden!important;
-  opacity:0!important;
+html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:68px!important;
+  height:68px!important;
+  min-width:68px!important;
+  min-height:68px!important;
+  max-width:68px!important;
+  max-height:68px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+@media(max-width:390px){
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+    width:62px!important;
+    height:62px!important;
+    min-width:62px!important;
+    min-height:62px!important;
+    max-width:62px!important;
+    max-height:62px!important;
+  }
 }
