@@ -1,8 +1,33 @@
 /* LAVUQ public website header only. */
 
 @media(max-width:520px){
-  /* Remove every legacy/duplicate visual from the WEBSITE HEADER. */
-  html body header.site-header .nav-wrap img,
+  /* Remove every legacy/duplicate image from the WEBSITE HEADER, even when
+     older JS left inline !important sizing/visibility behind. */
+  html body header.site-header .nav-wrap img{
+    content:""!important;
+    display:block!important;
+    position:absolute!important;
+    left:-10000px!important;
+    top:-10000px!important;
+    width:1px!important;
+    height:1px!important;
+    min-width:1px!important;
+    min-height:1px!important;
+    max-width:1px!important;
+    max-height:1px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    transform:scale(0)!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(100%)!important;
+    -webkit-clip-path:inset(100%)!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
   html body header.site-header .public-brand-q-crop,
   html body header.site-header .public-brand-line{
     display:none!important;
@@ -15,8 +40,6 @@
     max-width:0!important;
     max-height:0!important;
     overflow:hidden!important;
-    clip-path:inset(100%)!important;
-    -webkit-clip-path:inset(100%)!important;
     pointer-events:none!important;
   }
 
@@ -32,7 +55,7 @@
     display:none!important;
   }
 
-  /* Keep exactly one real wordmark on the left. */
+  /* Keep exactly one wordmark on the left. */
   html body header.site-header .nav-wrap a.public-brand > .public-brand-copy{
     position:absolute!important;
     left:18px!important;
@@ -71,7 +94,7 @@
     white-space:nowrap!important;
   }
 
-  /* Exactly ONE golden Q in the middle, 19px (~0.5cm) above the gold line. */
+  /* Exactly ONE golden Q in the middle, 19px (~0.5 cm) above the gold line. */
   html body header.site-header .nav-wrap::after{
     content:""!important;
     display:block!important;
@@ -87,7 +110,7 @@
     height:68px!important;
     margin:0!important;
     padding:0!important;
-    background-image:url('lavuq-q-single-header.svg?v=20260906-header-clean-1')!important;
+    background-image:url('lavuq-q-single-header.svg?v=20260906-header-clean-2')!important;
     background-repeat:no-repeat!important;
     background-position:center!important;
     background-size:contain!important;
@@ -119,7 +142,7 @@
     min-width:54px!important;
     min-height:54px!important;
     overflow:hidden!important;
-    background:url('lavuq-q-single-header.svg?v=20260906-header-clean-1') center/contain no-repeat!important;
+    background:url('lavuq-q-single-header.svg?v=20260906-header-clean-2') center/contain no-repeat!important;
   }
   html body .site-header .public-brand-q-crop img{display:none!important}
 }
