@@ -22,7 +22,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260905-7'
+          version = '20260905-8'
           changed = []
 
           for p in Path('.').rglob('*.html'):
@@ -33,7 +33,7 @@ jobs:
                   continue
 
               prefix = '../' * (len(p.parts)-1)
-              logo = prefix + 'CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png'
+              logo = prefix + 'lavuq-q-square.png'
               home = prefix + 'index.html'
 
               pattern = re.compile(r'(<header class="site-header"><div class="container nav-wrap">).*?(<nav class="nav">)', re.S)
