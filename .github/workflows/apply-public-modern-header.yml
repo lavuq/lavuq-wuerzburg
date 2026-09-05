@@ -1,0 +1,65 @@
+name: Apply public modern header
+
+on:
+  push:
+    paths:
+      - 'header-modern.css'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-header:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Add modern header stylesheet to public pages
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          files = [
+              'index.html',
+              'bewerben.html',
+              'sicherheit.html',
+              'fuer-wen-ist-lavuq.html',
+              'so-finden-wir-deine-gruppe.html',
+              'warum-wir-in-wuerzburg-starten.html',
+              'unsere-regeln.html',
+              'kein-dating.html',
+              'faq.html',
+              'impressum.html',
+              'datenschutz.html',
+              'sicherheitsmeldung.html',
+              'sicherheitsmeldung-danke.html',
+              'danke.html',
+              'danke/index.html'
+          ]
+          link = '<link rel="stylesheet" href="header-modern.css?v=20260905-1">'
+          for name in files:
+              p = Path(name)
+              if not p.exists():
+                  continue
+              text = p.read_text(encoding='utf-8')
+              if 'header-modern.css' in text:
+                  continue
+              marker = '<link rel="stylesheet" href="styles.css">'
+              if marker in text:
+                  text = text.replace(marker, marker + link, 1)
+              else:
+                  text = text.replace('</head>', link + '</head>', 1)
+              p.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit header rollout
+        run: |
+          if git diff --quiet; then
+            echo "No public pages needed updating."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html bewerben.html sicherheit.html fuer-wen-ist-lavuq.html so-finden-wir-deine-gruppe.html warum-wir-in-wuerzburg-starten.html unsere-regeln.html kein-dating.html faq.html impressum.html datenschutz.html sicherheitsmeldung.html sicherheitsmeldung-danke.html danke.html danke/index.html
+          git commit -m "Apply modern header to public pages"
+          git push
