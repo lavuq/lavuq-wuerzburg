@@ -1,38 +1,55 @@
-/* Public website only: force exactly one Q in the header. Mein Q does not load this stylesheet. */
+/* Public website only. Mein Q does not load this stylesheet. */
 .public-brand-q-crop{
   background:none!important;
   background-image:none!important;
-  overflow:visible!important;
 }
 html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  right:auto!important;
-  bottom:auto!important;
-  transform:translate(-50%,-50%)!important;
-  width:68px!important;
-  height:68px!important;
-  min-width:68px!important;
-  min-height:68px!important;
-  max-width:68px!important;
-  max-height:68px!important;
-  object-fit:contain!important;
-  object-position:center!important;
   background:transparent!important;
   border:0!important;
   box-shadow:none!important;
 }
-@media(max-width:390px){
+
+/* Mobile: the source artwork contains two Qs stacked vertically.
+   Crop away the small upper Q and enlarge only the large lower Q. */
+@media(max-width:520px){
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    width:68px!important;
+    height:68px!important;
+    overflow:hidden!important;
+  }
   html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+    position:absolute!important;
+    left:50%!important;
+    top:auto!important;
+    right:auto!important;
+    bottom:0!important;
+    transform:translateX(-50%)!important;
+    width:136px!important;
+    height:136px!important;
+    min-width:136px!important;
+    min-height:136px!important;
+    max-width:136px!important;
+    max-height:136px!important;
+    object-fit:contain!important;
+    object-position:center bottom!important;
+    margin:0!important;
+  }
+}
+
+@media(max-width:390px){
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
     width:62px!important;
     height:62px!important;
-    min-width:62px!important;
-    min-height:62px!important;
-    max-width:62px!important;
-    max-height:62px!important;
+  }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
+    width:124px!important;
+    height:124px!important;
+    min-width:124px!important;
+    min-height:124px!important;
+    max-width:124px!important;
+    max-height:124px!important;
   }
 }
