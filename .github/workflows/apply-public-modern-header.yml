@@ -25,7 +25,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260905-26'
+          version = '20260906-0115'
           changed = []
 
           for p in Path('.').rglob('*.html'):
@@ -36,7 +36,6 @@ jobs:
                   continue
 
               prefix = '../' * (len(p.parts)-1)
-              logo = prefix + 'lavuq-q-single-header.svg?v=' + version
               home = prefix + 'index.html'
 
               pattern = re.compile(r'(<header class="site-header"><div class="container nav-wrap">).*?(<nav class="nav">)', re.S)
@@ -45,9 +44,7 @@ jobs:
                   f'<a class="brand public-brand" href="{home}">'
                   '<span class="public-brand-copy"><span class="public-brand-name">LAVU</span><span class="public-brand-city">Würzburg</span></span>'
                   '<span class="public-brand-line public-brand-line-left" aria-hidden="true"></span>'
-                  '<span class="public-brand-q-crop" aria-hidden="true">'
-                  f'<img class="brand-mark public-brand-q" src="{logo}" alt="">'
-                  '</span>'
+                  '<span class="public-brand-q-crop" aria-hidden="true"></span>'
                   '<span class="public-brand-line public-brand-line-right" aria-hidden="true"></span>'
                   '</a>'
                   '<button class="nav-toggle public-menu-toggle" aria-label="Menü öffnen" aria-expanded="false"><span class="public-menu-icon" aria-hidden="true">☰</span><span class="public-menu-label">Menü</span></button>'
@@ -78,5 +75,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy enlarged upper Q public header"
+          git commit -m "Deploy clean public header without legacy Q image"
           git push
