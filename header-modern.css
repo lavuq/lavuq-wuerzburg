@@ -2,7 +2,7 @@
    Public website only. Mein Q / protected PWA views are intentionally excluded. */
 .site-header{background:#041529!important;color:#fff!important;border-bottom:1px solid rgba(216,180,106,.72)!important;box-shadow:none!important;backdrop-filter:none!important}
 .site-header .nav a{color:#fff!important}.site-header .nav a:hover,.site-header .nav a:focus{color:#d8b46a!important}
-.public-brand{color:#fff!important}.public-brand-q{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important;object-position:center!important}.public-menu-toggle{cursor:pointer}
+.public-brand{color:#fff!important}.public-brand-q{content:normal!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important;object-position:center!important}.public-brand img:not(.public-brand-q),.public-brand .mobile-brand-q{display:none!important}.public-menu-toggle{cursor:pointer}
 
 @media(min-width:521px){
   .site-header{position:sticky!important;top:0!important}
@@ -22,29 +22,18 @@
   html body .site-header{position:relative!important;top:auto!important;width:100%!important;height:126px!important;min-height:126px!important;background:#041529!important;overflow:visible!important;border-bottom:1px solid rgba(216,180,106,.72)!important}
   html body .site-header .nav-wrap{position:relative!important;width:100%!important;max-width:none!important;height:126px!important;min-height:126px!important;margin:0!important;padding:0!important;display:block!important}
   html body .site-header .nav-wrap a.public-brand{position:static!important;display:block!important;width:100%!important;height:126px!important;margin:0!important;padding:0!important;transform:none!important}
-
-  /* Stronger than all legacy .brand > span rules. */
   html body .site-header .nav-wrap a.public-brand > span.public-brand-copy{position:absolute!important;left:18px!important;top:50%!important;transform:translateY(-50%)!important;width:120px!important;height:auto!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;font-size:initial!important;line-height:1!important;text-align:left!important;z-index:55!important;color:#fff!important}
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy:before,
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy:after{content:none!important;display:none!important}
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-copy:before,html body .site-header .nav-wrap a.public-brand > span.public-brand-copy:after{content:none!important;display:none!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-copy > span.public-brand-name{display:block!important;position:static!important;left:auto!important;top:auto!important;transform:none!important;margin:0!important;padding:0!important;color:#fff!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.58rem!important;font-weight:400!important;letter-spacing:.16em!important;line-height:.96!important;white-space:nowrap!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-copy > span.public-brand-city{display:block!important;position:static!important;left:auto!important;top:auto!important;transform:none!important;margin:7px 0 0!important;padding:0!important;color:#d8b46a!important;font-family:Georgia,'Times New Roman',serif!important;font-size:.98rem!important;font-weight:400!important;line-height:1!important;white-space:nowrap!important}
-
-  /* Exact centered original Q; override legacy .brand-mark rules. */
-  html body .site-header .nav-wrap a.public-brand > img.brand-mark.public-brand-q{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;margin:0!important;padding:0!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:56!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important}
-
-  /* Gold lines around Q. */
+  html body .site-header .nav-wrap a.public-brand > img.brand-mark.public-brand-q{content:normal!important;position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;margin:0!important;padding:0!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:56!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;height:1px!important;background:#d8b46a!important;opacity:.95!important;z-index:54!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line-left{left:146px!important;right:calc(50% + 43px)!important;margin:0!important}
   html body .site-header .nav-wrap a.public-brand > span.public-brand-line-right{left:calc(50% + 43px)!important;right:142px!important;margin:0!important}
-
-  /* Menu pill – explicit inner spans avoid pseudo-element conflicts. */
   html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle{position:absolute!important;right:16px!important;top:50%!important;transform:translateY(-50%)!important;width:118px!important;height:52px!important;min-width:118px!important;min-height:52px!important;margin:0!important;padding:0 16px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:11px!important;border:1.5px solid #d8b46a!important;border-radius:999px!important;background:#041529!important;color:#fff!important;box-shadow:none!important;font-size:initial!important;text-indent:0!important;overflow:visible!important;z-index:60!important}
-  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle:before,
-  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle:after{content:none!important;display:none!important}
+  html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle:before,html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle:after{content:none!important;display:none!important}
   html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle > span.public-menu-icon{display:inline-block!important;position:static!important;transform:none!important;margin:0!important;color:#d8b46a!important;font-family:Arial,sans-serif!important;font-size:1.28rem!important;font-weight:700!important;line-height:1!important;text-indent:0!important}
   html body .site-header .nav-wrap button.nav-toggle.public-menu-toggle > span.public-menu-label{display:inline-block!important;position:static!important;transform:none!important;margin:0!important;color:#fff!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;font-size:.92rem!important;font-weight:600!important;line-height:1!important;white-space:nowrap!important;text-indent:0!important}
-
   html body .site-header .nav-wrap .nav{position:absolute!important;top:116px!important;left:12px!important;right:12px!important;padding:16px!important;background:#041529!important;border:1px solid rgba(216,180,106,.5)!important;border-radius:22px!important;box-shadow:0 24px 60px rgba(0,0,0,.38)!important;z-index:70!important}
   html body .site-header .nav-wrap .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.18)!important}
   html body .site-header .nav-wrap .nav .btn-primary{background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
