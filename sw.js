@@ -1,4 +1,4 @@
-const CACHE='lavuq-pwa-v4';
+const CACHE='lavuq-pwa-v5';
 const CORE=[
   '/',
   '/index.html',
