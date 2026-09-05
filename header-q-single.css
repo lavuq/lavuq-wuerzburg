@@ -1,51 +1,38 @@
 /* Public website only. Mein Q does not load this stylesheet. */
-
-/* The source artwork contains two vertically stacked Q motifs.
-   Hide the <img> completely and use it only as a cropped background so
-   the upper/smaller Q can never appear in the public header. */
 .public-brand-q-crop{
   position:relative!important;
   display:block!important;
-  overflow:hidden!important;
-  background-repeat:no-repeat!important;
-  background-position:center bottom!important;
-  background-image:url('lavuq-q-single-header.svg?v=20260905-24')!important;
+  overflow:visible!important;
+  background:none!important;
   border:0!important;
   box-shadow:none!important;
 }
-
 html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop > img.brand-mark.public-brand-q{
-  display:none!important;
-  visibility:hidden!important;
-  opacity:0!important;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:static!important;
+  transform:none!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
 }
-
 @media(max-width:520px){
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
-    width:68px!important;
-    height:68px!important;
-    min-width:68px!important;
-    min-height:68px!important;
-    background-size:136px 136px!important;
-  }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:68px!important;height:68px!important;min-width:68px!important;min-height:68px!important}
 }
-
 @media(max-width:390px){
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
-    width:62px!important;
-    height:62px!important;
-    min-width:62px!important;
-    min-height:62px!important;
-    background-size:124px 124px!important;
-  }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important}
 }
-
 @media(min-width:521px){
-  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
-    width:54px!important;
-    height:54px!important;
-    min-width:54px!important;
-    min-height:54px!important;
-    background-size:108px 108px!important;
-  }
+  html body .site-header .nav-wrap a.public-brand > span.public-brand-q-crop{width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important}
 }
