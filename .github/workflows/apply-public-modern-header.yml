@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'header-modern.css'
+      - 'header-q-single.css'
+      - '.github/workflows/apply-public-modern-header.yml'
 
 permissions:
   contents: write
@@ -22,7 +24,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260905-13'
+          version = '20260905-14'
           changed = []
 
           for p in Path('.').rglob('*.html'):
@@ -55,8 +57,10 @@ jobs:
                   continue
 
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text2)
-              page_link = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
-              text2 = text2.replace('</head>', page_link + '</head>', 1)
+              text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-q-single\.css\?v=[^"]+">', '', text2)
+              modern = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
+              single_q = f'<link rel="stylesheet" href="{prefix}header-q-single.css?v={version}">'
+              text2 = text2.replace('</head>', modern + single_q + '</head>', 1)
 
               if text2 != text:
                   p.write_text(text2, encoding='utf-8')
@@ -73,5 +77,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Use single Q in public website header"
+          git commit -m "Load single-Q public header override"
           git push
