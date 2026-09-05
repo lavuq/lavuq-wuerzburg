@@ -22,7 +22,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260905-10'
+          version = '20260905-11'
           changed = []
 
           for p in Path('.').rglob('*.html'):
@@ -42,7 +42,9 @@ jobs:
                   f'<a class="brand public-brand" href="{home}">'
                   '<span class="public-brand-copy"><span class="public-brand-name">LAVU</span><span class="public-brand-city">Würzburg</span></span>'
                   '<span class="public-brand-line public-brand-line-left" aria-hidden="true"></span>'
-                  f'<img class="brand-mark public-brand-q" src="{logo}" alt="LAVUQ Logo">'
+                  '<span class="public-brand-q-crop" aria-hidden="true">'
+                  f'<img class="brand-mark public-brand-q" src="{logo}" alt="">'
+                  '</span>'
                   '<span class="public-brand-line public-brand-line-right" aria-hidden="true"></span>'
                   '</a>'
                   '<button class="nav-toggle public-menu-toggle" aria-label="Menü öffnen" aria-expanded="false"><span class="public-menu-icon" aria-hidden="true">☰</span><span class="public-menu-label">Menü</span></button>'
@@ -71,5 +73,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Crop public header Q to single mark"
+          git commit -m "Show only large Q in public website header"
           git push
