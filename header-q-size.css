@@ -10,7 +10,7 @@
     background-size:contain!important;
     background-position:center!important;
     background-repeat:no-repeat!important;
-    top:calc(50% - 10px)!important;
+    top:calc(50% - 20px)!important;
     bottom:auto!important;
     transform:translate(-50%,-50%)!important;
   }
