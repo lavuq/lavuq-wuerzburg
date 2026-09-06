@@ -27,16 +27,17 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1420'
+          version = '20260906-1425'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
 
           # This inline rule is deliberately inserted AFTER all public-header stylesheets.
           # It is the single authoritative mobile Q size/position rule, so older files cannot override it.
-          q_position = '''<style id="lavuq-mobile-q-authoritative">@media(max-width:520px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{position:absolute!important;left:50%!important;right:auto!important;top:-12px!important;bottom:auto!important;transform:translateX(-50%)!important;width:98px!important;height:98px!important;min-width:98px!important;min-height:98px!important;max-width:98px!important;max-height:98px!important;overflow:hidden!important;z-index:56!important}}@media(max-width:390px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{top:-10px!important;width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important;max-width:92px!important;max-height:92px!important}}</style>'''
+          q_position = '''<style id="lavuq-mobile-q-authoritative">@media(max-width:520px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{position:absolute!important;left:50%!important;right:auto!important;top:-40px!important;bottom:auto!important;transform:translateX(-50%)!important;width:98px!important;height:98px!important;min-width:98px!important;min-height:98px!important;max-width:98px!important;max-height:98px!important;overflow:hidden!important;z-index:56!important}}@media(max-width:390px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{top:-38px!important;width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important;max-width:92px!important;max-height:92px!important}}</style>'''
 
           # Remove the old generic mobile brand rules from styles.css.
+          # They injected LAVU/Würzburg into every brand span, including the centered Q container.
           styles_path = Path('styles.css')
           if styles_path.exists():
               styles = styles_path.read_text(encoding='utf-8')
@@ -121,5 +122,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy authoritative raised mobile gold Q"
+          git commit -m "Deploy gold Q above header line"
           git push
