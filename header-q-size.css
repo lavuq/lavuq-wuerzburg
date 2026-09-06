@@ -1,0 +1,28 @@
+/* Final mobile public-header Q sizing override. Loaded last so it wins over older Q rules. */
+@media(max-width:520px){
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    width:98px!important;
+    height:98px!important;
+    min-width:98px!important;
+    min-height:98px!important;
+    max-width:98px!important;
+    max-height:98px!important;
+    background-size:contain!important;
+    background-position:center!important;
+    background-repeat:no-repeat!important;
+    top:calc(50% + 10px)!important;
+    bottom:auto!important;
+    transform:translate(-50%,-50%)!important;
+  }
+}
+
+@media(max-width:390px){
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    width:92px!important;
+    height:92px!important;
+    min-width:92px!important;
+    min-height:92px!important;
+    max-width:92px!important;
+    max-height:92px!important;
+  }
+}
