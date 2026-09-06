@@ -63,7 +63,24 @@ jobs:
           if preference_pos < 0:
               raise SystemExit('Deine Präferenz Abschnitt nach Einfügen nicht wiedergefunden')
           insert_at = preference_pos + len(preference_block)
-          new_html = html[:insert_at] + '\n' + klare_block + html[insert_at:]
+          html = html[:insert_at] + '\n' + klare_block + html[insert_at:]
+
+          # Place the complete Sicherheit section immediately before Auf einen Blick.
+          sections = find_sections(html)
+          safety = next((m for m in sections if 'safety-feature' in m.group(0) or 'Sicherheit bei LAVUQ' in m.group(0)), None)
+          glance = next((m for m in sections if 'Auf einen Blick' in m.group(0)), None)
+
+          if not safety or not glance:
+              raise SystemExit('Sicherheit oder Auf einen Blick nicht gefunden')
+
+          safety_block = safety.group(0)
+          safety_pos = html.find(safety_block)
+          html = html[:safety_pos] + html[safety_pos + len(safety_block):]
+
+          glance_pos = html.find(glance.group(0))
+          if glance_pos < 0:
+              raise SystemExit('Auf einen Blick nach Entfernen nicht wiedergefunden')
+          new_html = html[:glance_pos] + safety_block + '\n' + html[glance_pos:]
 
           new_html = re.sub(
               r'header-q-background-fix\.css\?v=[^"\']+',
@@ -88,5 +105,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Move Deine Präferenz between So funktioniert's and Klare Abgrenzung"
+          git commit -m "Move Sicherheit before Auf einen Blick"
           git push
