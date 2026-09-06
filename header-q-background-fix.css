@@ -56,59 +56,7 @@
   }
 }
 
-/* Mein Q: reliable Safari shimmer using a bright duplicate of the exact logo. */
-.section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
-  position:relative!important;
-  overflow:hidden!important;
-}
-
-.section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"])::after{
-  content:""!important;
-  display:block!important;
-  position:absolute!important;
-  inset:0!important;
-  z-index:4!important;
-  pointer-events:none!important;
-  background-image:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png')!important;
-  background-position:center!important;
-  background-repeat:no-repeat!important;
-  background-size:contain!important;
-  opacity:0;
-  -webkit-filter:brightness(1.9) saturate(1.15) drop-shadow(0 0 3px rgba(255,225,145,.45))!important;
-  filter:brightness(1.9) saturate(1.15) drop-shadow(0 0 3px rgba(255,225,145,.45))!important;
-  -webkit-clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
-  clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
-  -webkit-animation:lavuqMeinQClipShine 3.8s ease-in-out infinite!important;
-  animation:lavuqMeinQClipShine 3.8s ease-in-out infinite!important;
-  will-change:clip-path,opacity;
-}
-
-@-webkit-keyframes lavuqMeinQClipShine{
-  0%,55%{
-    opacity:0;
-    -webkit-clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
-  }
-  60%{opacity:1;}
-  82%{
-    opacity:1;
-    -webkit-clip-path:polygon(105% 0,135% 0,155% 100%,125% 100%);
-  }
-  88%,100%{opacity:0;}
-}
-
-@keyframes lavuqMeinQClipShine{
-  0%,55%{
-    opacity:0;
-    clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
-  }
-  60%{opacity:1;}
-  82%{
-    opacity:1;
-    clip-path:polygon(105% 0,135% 0,155% 100%,125% 100%);
-  }
-  88%,100%{opacity:0;}
-}
-
+/* Mein Q layout. */
 @media(max-width:520px){
   .section-white.compact-section .visual-split{
     display:flex!important;
@@ -125,6 +73,7 @@
     display:block!important;
     align-self:center!important;
     border-radius:0!important;
+    overflow:visible!important;
   }
 
   .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]) > img{
@@ -134,9 +83,55 @@
     margin:0!important;
     display:block!important;
     object-fit:contain!important;
-    -webkit-animation:none!important;
-    animation:none!important;
-    -webkit-filter:none!important;
-    filter:none!important;
+    transform:translateZ(0)!important;
+    -webkit-animation:lavuqMeinQDirectShimmer 2.8s ease-in-out infinite!important;
+    animation:lavuqMeinQDirectShimmer 2.8s ease-in-out infinite!important;
+    will-change:filter,transform;
+  }
+}
+
+@-webkit-keyframes lavuqMeinQDirectShimmer{
+  0%,45%,100%{
+    -webkit-filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
+    filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
+    transform:translateZ(0) scale(1);
+  }
+  58%{
+    -webkit-filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
+    filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
+    transform:translateZ(0) scale(1.005);
+  }
+  67%{
+    -webkit-filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
+    filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
+    transform:translateZ(0) scale(1.012);
+  }
+  78%{
+    -webkit-filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
+    filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
+    transform:translateZ(0) scale(1.004);
+  }
+}
+
+@keyframes lavuqMeinQDirectShimmer{
+  0%,45%,100%{
+    -webkit-filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
+    filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
+    transform:translateZ(0) scale(1);
+  }
+  58%{
+    -webkit-filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
+    filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
+    transform:translateZ(0) scale(1.005);
+  }
+  67%{
+    -webkit-filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
+    filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
+    transform:translateZ(0) scale(1.012);
+  }
+  78%{
+    -webkit-filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
+    filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
+    transform:translateZ(0) scale(1.004);
   }
 }
