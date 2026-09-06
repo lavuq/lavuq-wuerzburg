@@ -219,3 +219,12 @@
   html body .site-header .nav-wrap .public-menu-icon{font-size:1.35rem!important}
   html body .site-header .nav-wrap .public-menu-label{font-size:1rem!important}
 }
+
+/* Final mobile Q position override: move the current centered Q exactly 10px upward. */
+@media(max-width:520px){
+  html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop{
+    top:calc(50% + 10px)!important;
+    bottom:auto!important;
+    transform:translate(-50%,-50%)!important;
+  }
+}
