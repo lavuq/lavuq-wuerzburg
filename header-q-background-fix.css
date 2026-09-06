@@ -1,6 +1,5 @@
 /* Final authoritative mobile header Q cleanup: keep only the public-brand-q-crop renderer. */
 @media(max-width:520px){
-  /* Remove every possible legacy/duplicate child or sibling renderer. */
   html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop > *,
   html body header.site-header .nav-wrap a.public-brand > *:not(.public-brand-copy):not(.public-brand-q-crop),
   html body header.site-header img,
@@ -16,7 +15,6 @@
     pointer-events:none!important;
   }
 
-  /* Remove any logo background/pseudo-layer from ancestors. */
   html body header.site-header,
   html body header.site-header .nav-wrap,
   html body header.site-header .nav-wrap a.public-brand,
@@ -46,7 +44,6 @@
     background-image:none!important;
   }
 
-  /* Keep exactly one center Q: the existing CSS background on this element. */
   html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
     display:block!important;
     visibility:visible!important;
@@ -59,53 +56,72 @@
   }
 }
 
-/* Mein Q section: Safari-safe metallic shimmer. The Q itself stays still. */
+/* Mein Q section: restore the intended mobile layout and add a Safari-safe shimmer. */
 .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
   position:relative!important;
-  overflow:visible!important;
+  overflow:hidden!important;
 }
 
 .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"])::after{
   content:""!important;
   position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  width:min(280px,72vw)!important;
-  aspect-ratio:1/1!important;
-  transform:translate(-50%,-50%)!important;
+  top:-10%!important;
+  bottom:-10%!important;
+  width:34%!important;
+  left:-48%!important;
   pointer-events:none!important;
   z-index:3!important;
   opacity:0;
-  background:linear-gradient(110deg,
+  transform:skewX(-18deg)!important;
+  background:linear-gradient(90deg,
     rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0) 36%,
-    rgba(255,244,196,.18) 43%,
-    rgba(255,255,255,.95) 50%,
-    rgba(255,244,196,.22) 57%,
-    rgba(255,255,255,0) 64%,
+    rgba(255,255,255,.15) 25%,
+    rgba(255,255,255,.92) 50%,
+    rgba(255,248,205,.32) 72%,
     rgba(255,255,255,0) 100%)!important;
-  background-size:300% 100%!important;
-  background-repeat:no-repeat!important;
-  background-position:200% 50%;
-  -webkit-mask:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat!important;
-  mask:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat!important;
-  -webkit-animation:lavuqMeinQShimmerSafari 4.2s linear infinite!important;
-  animation:lavuqMeinQShimmerSafari 4.2s linear infinite!important;
-  will-change:background-position,opacity;
+  -webkit-animation:lavuqMeinQShimmer 4.6s ease-in-out infinite!important;
+  animation:lavuqMeinQShimmer 4.6s ease-in-out infinite!important;
+  will-change:left,opacity;
 }
 
-@-webkit-keyframes lavuqMeinQShimmerSafari{
-  0%,58%{background-position:200% 50%;opacity:0}
-  62%{opacity:.2}
-  68%{opacity:1}
-  82%{background-position:-100% 50%;opacity:1}
-  88%,100%{background-position:-100% 50%;opacity:0}
+@-webkit-keyframes lavuqMeinQShimmer{
+  0%,62%{left:-48%;opacity:0}
+  66%{opacity:1}
+  82%{left:114%;opacity:1}
+  88%,100%{left:114%;opacity:0}
 }
 
-@keyframes lavuqMeinQShimmerSafari{
-  0%,58%{background-position:200% 50%;opacity:0}
-  62%{opacity:.2}
-  68%{opacity:1}
-  82%{background-position:-100% 50%;opacity:1}
-  88%,100%{background-position:-100% 50%;opacity:0}
+@keyframes lavuqMeinQShimmer{
+  0%,62%{left:-48%;opacity:0}
+  66%{opacity:1}
+  82%{left:114%;opacity:1}
+  88%,100%{left:114%;opacity:0}
+}
+
+@media(max-width:520px){
+  .section-white.compact-section .visual-split{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:0!important;
+  }
+
+  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
+    order:-1!important;
+    width:190px!important;
+    max-width:58vw!important;
+    margin:0 auto 28px!important;
+    display:block!important;
+    align-self:center!important;
+    border-radius:0!important;
+  }
+
+  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]) > img{
+    width:100%!important;
+    max-width:none!important;
+    height:auto!important;
+    margin:0!important;
+    display:block!important;
+    object-fit:contain!important;
+  }
 }
