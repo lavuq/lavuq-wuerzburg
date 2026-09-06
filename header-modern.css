@@ -220,11 +220,11 @@
   html body .site-header .nav-wrap .public-menu-label{font-size:1rem!important}
 }
 
-/* Final mobile Q position override: move the current centered Q exactly 10px upward. */
+/* Final authoritative mobile Q position rule. This selector intentionally matches the highest specificity used for the Q. */
 @media(max-width:520px){
   html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop{
-    top:calc(50% + 10px)!important;
-    bottom:auto!important;
-    transform:translate(-50%,-50%)!important;
+    top:auto!important;
+    bottom:24px!important;
+    transform:translateX(-50%)!important;
   }
 }
