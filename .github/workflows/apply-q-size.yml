@@ -23,7 +23,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1356'
+          version = '20260906-1359'
           changed = []
 
           for p in Path('.').rglob('*.html'):
