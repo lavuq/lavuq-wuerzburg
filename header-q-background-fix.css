@@ -110,9 +110,9 @@
 
   .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
     order:-1!important;
-    width:130px!important;
-    max-width:38vw!important;
-    margin:0 auto 22px!important;
+    width:110px!important;
+    max-width:34vw!important;
+    margin:0 auto 20px!important;
     display:block!important;
     align-self:center!important;
     border-radius:0!important;
