@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reorder key home sections
+      - name: Reorder key home sections and refresh mobile CSS
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -40,32 +40,36 @@ jobs:
           so_block = so.group(0)
           klare_block = klare.group(0)
 
-          # Remove So funktioniert's and Klare Abgrenzung from their current positions.
           for block in (so_block, klare_block):
               pos = html.find(block)
               if pos >= 0:
                   html = html[:pos] + html[pos + len(block):]
 
-          # Insert So funktioniert's directly after Mein Q.
           mein_pos = html.find(mein_block)
           if mein_pos < 0:
               raise SystemExit('Mein Q Abschnitt nach Entfernen nicht wiedergefunden')
           insert_at = mein_pos + len(mein_block)
           html = html[:insert_at] + '\n' + so_block + html[insert_at:]
 
-          # Insert Klare Abgrenzung directly after So funktioniert's.
           so_pos = html.find(so_block)
           if so_pos < 0:
               raise SystemExit('So funktioniert\'s Abschnitt nach Einfügen nicht wiedergefunden')
           insert_at = so_pos + len(so_block)
           new_html = html[:insert_at] + '\n' + klare_block + html[insert_at:]
 
+          # Force browsers to fetch the latest CSS containing the corrected stacked safety layout.
+          new_html = re.sub(
+              r'header-q-background-fix\.css\?v=[^"\']+',
+              'header-q-background-fix.css?v=20260907-0042',
+              new_html
+          )
+
           original = path.read_text(encoding='utf-8')
           if new_html != original:
               path.write_text(new_html, encoding='utf-8')
-              print('Reordered sections successfully')
+              print('Updated section order and CSS cache-buster successfully')
           else:
-              print('Already in desired order')
+              print('Already in desired state')
           PY
 
       - name: Commit change
@@ -77,5 +81,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Move Klare Abgrenzung after So funktioniert's"
+          git commit -m "Refresh mobile safety layout CSS"
           git push
