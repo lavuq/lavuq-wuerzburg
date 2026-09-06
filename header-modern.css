@@ -279,3 +279,17 @@
     overflow:visible!important;
   }
 }
+
+/* Mobile: keep exactly ONE center Q. The CSS background is the only renderer; remove the rear/duplicate image layer. */
+@media(max-width:520px){
+  html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop > img,
+  html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop > object,
+  html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop > embed{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    width:0!important;
+    height:0!important;
+    pointer-events:none!important;
+  }
+}
