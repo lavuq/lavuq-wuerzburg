@@ -59,135 +59,48 @@
   .hero:has(.mobile-hero-photo) .eyebrow:after{content:"LAVU-Q STEHT FÜR"!important}
 }
 
-/* Brand meaning section directly after the hero. */
-.hero:has(.mobile-hero-photo)::after{
-  content:"WAS LAVUQ BEDEUTET\A\A LAVUQ verbindet Menschen aus Würzburg & Umgebung, die neue Freundschaften suchen – ohne Dating. Hier entstehen echte Treffen, gemeinsame Unternehmungen, Austausch und Vertrauen.\A\A L  ·  Lachen\A A  ·  Austausch\A V  ·  Vertrauen\A U  ·  Unternehmungen\A Q  ·  Quelle\A\A LAVU-Q – die Quelle für neue Freundschaften in Würzburg & Umgebung.";
-  white-space:pre-line;
-  display:block;
-  width:min(1120px,calc(100% - 40px));
-  margin:0 auto;
-  padding:44px 42px 40px;
-  box-sizing:border-box;
-  background:linear-gradient(145deg,#fffdf8 0%,#f5efe3 100%);
-  border:1px solid rgba(216,180,106,.48);
-  border-radius:24px;
-  color:#102039;
-  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
-  font-size:1.05rem;
-  font-weight:600;
-  line-height:1.72;
-  letter-spacing:-.01em;
-  box-shadow:0 18px 44px rgba(7,24,47,.10);
-}
-@media(max-width:520px){
-  .hero:has(.mobile-hero-photo)::after{
-    width:calc(100% - 32px);
-    margin:22px auto 28px!important;
-    padding:30px 24px 28px;
-    border-radius:20px;
-    font-size:1rem;
-    line-height:1.62;
-    color:#102039;
-    background:linear-gradient(145deg,#fffdf9 0%,#f7f1e7 100%);
-  }
+/* Old generated meaning block disabled; real structured section is inserted after the hero. */
+.hero:has(.mobile-hero-photo)::after{content:none!important;display:none!important}
+
+/* Premium LAVUQ meaning section. */
+.brand-meaning-section{background:#041529;padding:28px 0 34px}
+.brand-meaning-section .brand-meaning-card{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:42px;border:1px solid rgba(216,180,106,.5);border-radius:26px;background:linear-gradient(145deg,#fffdf9 0%,#f6efe2 100%);box-shadow:0 22px 52px rgba(7,24,47,.18)}
+.brand-meaning-section .brand-meaning-eyebrow{margin:0 0 12px;color:#b88f3f;font-size:.82rem;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
+.brand-meaning-section .brand-meaning-title{margin:0 0 14px;color:#0b1b32;font-size:clamp(2rem,4vw,3.15rem);line-height:1.04;letter-spacing:-.045em}
+.brand-meaning-section .brand-meaning-intro{max-width:780px;margin:0 0 28px;color:#536079;font-size:1.06rem;line-height:1.65;font-weight:560}
+.brand-meaning-section .brand-meaning-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0 0 24px}
+.brand-meaning-section .brand-meaning-item{min-height:112px;padding:18px 16px;border:1px solid rgba(216,180,106,.34);border-radius:18px;background:rgba(255,255,255,.7);box-shadow:0 10px 26px rgba(7,24,47,.055)}
+.brand-meaning-section .brand-meaning-letter{display:grid;place-items:center;width:42px;height:42px;margin:0 0 12px;border-radius:14px;background:linear-gradient(145deg,#e5c77f,#c99e47);color:#07182f;font-size:1.25rem;font-weight:950;box-shadow:0 8px 18px rgba(184,140,55,.2)}
+.brand-meaning-section .brand-meaning-word{color:#102039;font-size:1rem;font-weight:820;line-height:1.25}
+.brand-meaning-section .brand-meaning-item.q-item{background:linear-gradient(145deg,#0a2342,#07182f);border-color:rgba(216,180,106,.6)}
+.brand-meaning-section .brand-meaning-item.q-item .brand-meaning-word{color:#fff}
+.brand-meaning-section .brand-meaning-claim{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:18px;background:#07182f;color:#fff;font-weight:760;line-height:1.45}
+.brand-meaning-section .brand-meaning-claim strong{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:12px;background:#d8b46a;color:#07182f;font-size:1.15rem}
+@media(max-width:720px){
+  .brand-meaning-section{padding:22px 0 30px}
+  .brand-meaning-section .brand-meaning-card{width:calc(100% - 32px);padding:28px 20px 22px;border-radius:22px}
+  .brand-meaning-section .brand-meaning-eyebrow{font-size:.76rem;margin-bottom:10px}
+  .brand-meaning-section .brand-meaning-title{font-size:2rem;margin-bottom:12px}
+  .brand-meaning-section .brand-meaning-intro{font-size:.98rem;line-height:1.58;margin-bottom:22px}
+  .brand-meaning-section .brand-meaning-grid{grid-template-columns:1fr;gap:10px;margin-bottom:18px}
+  .brand-meaning-section .brand-meaning-item{display:flex;align-items:center;gap:14px;min-height:0;padding:13px 14px;border-radius:16px}
+  .brand-meaning-section .brand-meaning-letter{flex:0 0 40px;width:40px;height:40px;margin:0;border-radius:12px}
+  .brand-meaning-section .brand-meaning-word{font-size:1.04rem}
+  .brand-meaning-section .brand-meaning-claim{align-items:flex-start;padding:16px 16px;font-size:.95rem;border-radius:16px}
 }
 
 /* Safety section: vertical, readable mobile layout. */
 @media(max-width:720px){
-  .section-white.safety-feature > .container.visual-split{
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:24px!important;
-  }
-
-  .section-white.safety-feature .visual-copy{
-    display:contents!important;
-  }
-
-  .section-white.safety-feature .visual-copy .eyebrow{
-    order:1!important;
-    margin:0 0 -8px!important;
-  }
-
-  .section-white.safety-feature .visual-copy h2{
-    order:2!important;
-    margin:0!important;
-    max-width:none!important;
-  }
-
-  .section-white.safety-feature .visual-frame.city-photo{
-    order:3!important;
-    width:100%!important;
-    max-width:none!important;
-    margin:0!important;
-    border-radius:22px!important;
-    overflow:hidden!important;
-  }
-
-  .section-white.safety-feature .visual-frame.city-photo img{
-    width:100%!important;
-    height:auto!important;
-    aspect-ratio:16/9!important;
-    object-fit:cover!important;
-    display:block!important;
-  }
-
-  .section-white.safety-feature .visual-frame.city-photo .visual-caption{
-    padding:18px 20px 20px!important;
-    font-size:1rem!important;
-    line-height:1.5!important;
-  }
-
-  .section-white.safety-feature .visual-copy .compact-checks{
-    order:4!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:12px!important;
-    margin:0!important;
-  }
-
-  .section-white.safety-feature .visual-copy .compact-checks > div{
-    display:flex!important;
-    align-items:flex-start!important;
-    gap:12px!important;
-    padding:0!important;
-    border:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    min-height:0!important;
-    font-size:1.06rem!important;
-    line-height:1.48!important;
-    color:#132033!important;
-    font-weight:650!important;
-  }
-
-  .section-white.safety-feature .visual-copy .compact-checks > div > span{
-    flex:0 0 auto!important;
-    width:auto!important;
-    height:auto!important;
-    margin:0!important;
-    background:none!important;
-    box-shadow:none!important;
-    color:#07182f!important;
-    font-size:1.2rem!important;
-    line-height:1.35!important;
-  }
-
-  .section-white.safety-feature .visual-copy > div:last-child{
-    order:5!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:12px!important;
-    width:100%!important;
-    margin:0!important;
-  }
-
-  .section-white.safety-feature .visual-copy > div:last-child .btn{
-    width:100%!important;
-    justify-content:center!important;
-    text-align:center!important;
-    margin:0!important;
-    min-height:56px!important;
-  }
+  .section-white.safety-feature > .container.visual-split{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:24px!important}
+  .section-white.safety-feature .visual-copy{display:contents!important}
+  .section-white.safety-feature .visual-copy .eyebrow{order:1!important;margin:0 0 -8px!important}
+  .section-white.safety-feature .visual-copy h2{order:2!important;margin:0!important;max-width:none!important}
+  .section-white.safety-feature .visual-frame.city-photo{order:3!important;width:100%!important;max-width:none!important;margin:0!important;border-radius:22px!important;overflow:hidden!important}
+  .section-white.safety-feature .visual-frame.city-photo img{width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;display:block!important}
+  .section-white.safety-feature .visual-frame.city-photo .visual-caption{padding:18px 20px 20px!important;font-size:1rem!important;line-height:1.5!important}
+  .section-white.safety-feature .visual-copy .compact-checks{order:4!important;display:grid!important;grid-template-columns:1fr!important;gap:12px!important;margin:0!important}
+  .section-white.safety-feature .visual-copy .compact-checks > div{display:flex!important;align-items:flex-start!important;gap:12px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;min-height:0!important;font-size:1.06rem!important;line-height:1.48!important;color:#132033!important;font-weight:650!important}
+  .section-white.safety-feature .visual-copy .compact-checks > div > span{flex:0 0 auto!important;width:auto!important;height:auto!important;margin:0!important;background:none!important;box-shadow:none!important;color:#07182f!important;font-size:1.2rem!important;line-height:1.35!important}
+  .section-white.safety-feature .visual-copy > div:last-child{order:5!important;display:flex!important;flex-direction:column!important;gap:12px!important;width:100%!important;margin:0!important}
+  .section-white.safety-feature .visual-copy > div:last-child .btn{width:100%!important;justify-content:center!important;text-align:center!important;margin:0!important;min-height:56px!important}
 }
