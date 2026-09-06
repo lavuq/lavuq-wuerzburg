@@ -25,10 +25,40 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-0233'
+          version = '20260906-0235'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
+
+          q_mask = '''<style id="lavuq-q-legacy-mask">
+@media(max-width:520px){
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    width:112px!important;
+    height:108px!important;
+    min-width:112px!important;
+    min-height:108px!important;
+    max-width:112px!important;
+    max-height:108px!important;
+    background-color:#041529!important;
+    background-size:68px 68px!important;
+    background-position:center center!important;
+    background-repeat:no-repeat!important;
+    overflow:hidden!important;
+    z-index:80!important;
+  }
+}
+@media(max-width:390px){
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    width:104px!important;
+    height:102px!important;
+    min-width:104px!important;
+    min-height:102px!important;
+    max-width:104px!important;
+    max-height:102px!important;
+    background-size:62px 62px!important;
+  }
+}
+</style>'''
 
           legacy_header_rules = [
               r'\s*\.site-header \.brand>span:not\(\.mobile-brand-copy\):not\(\.public-brand-q-crop\):not\(\.public-brand-line\)\{[^}]*\}',
@@ -70,11 +100,12 @@ jobs:
               text2 = re.sub(r'<script id="lavuq-public-header-image-guard">.*?</script>', '', text2, flags=re.S)
               text2 = text2.replace('</header>', '</header>' + guard, 1)
 
+              text2 = re.sub(r'<style id="lavuq-q-legacy-mask">.*?</style>', '', text2, flags=re.S)
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text2)
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-q-single\.css\?v=[^"]+">', '', text2)
               modern = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
               single_q = f'<link rel="stylesheet" href="{prefix}header-q-single.css?v={version}">'
-              text2 = text2.replace('</head>', modern + single_q + '</head>', 1)
+              text2 = text2.replace('</head>', modern + single_q + q_mask + '</head>', 1)
 
               if text2 != text:
                   p.write_text(text2, encoding='utf-8')
@@ -91,5 +122,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy cleaned public mobile header"
+          git commit -m "Deploy masked public mobile header"
           git push
