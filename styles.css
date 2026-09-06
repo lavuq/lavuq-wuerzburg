@@ -18,100 +18,35 @@ footer{background:#041124;color:#c7d0dc;padding:52px 0 24px}.footer-grid{display
 @media(max-width:520px){.compact-section,.preference-section{padding:48px 0}.steps-grid{gap:12px}.steps-grid .step{min-height:auto;padding:18px 18px 18px 72px}.preference-grid{gap:10px}.preference-grid div{padding:14px 8px;font-size:.9rem}.desktop-city-photo{display:none}.final-cta{padding:54px 0}.final-cta h2{font-size:2.1rem;color:#fff!important}}
 .companion-note{margin:14px 0 0;padding:10px 12px;border-left:3px solid var(--gold);background:rgba(255,255,255,.06);border-radius:0 10px 10px 0;color:#eef3f8;font-size:.96rem;max-width:680px}.companion-note strong{color:#f1d38c}
 .bot-field{position:absolute!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;height:1px!important;width:1px!important;margin:-1px!important;padding:0!important;border:0!important}
-@media (max-width:520px){html,body{width:100%;max-width:100%;overflow-x:hidden}.topbar{display:none!important}.site-header{position:relative!important;top:auto!important;background:#041529!important;border-bottom:1px solid rgba(216,180,106,.9)!important;backdrop-filter:none!important}.site-header .nav-wrap{position:relative!important;width:100%!important;height:150px!important;padding:0 8px!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important}.site-header .brand{position:static!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;gap:0!important;color:#fff!important}.site-header .brand-city{display:none!important}.site-header .brand-mark,.site-header .mobile-brand-q{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:58px!important;height:58px!important;object-fit:contain!important;object-position:center!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;margin:0!important;z-index:42!important}.site-header .nav-toggle{position:absolute!important;right:18px!important;top:50%!important;transform:translateY(-50%)!important;display:grid!important;margin:0!important;width:44px!important;height:44px!important;background:transparent!important;color:#d8b46a!important;border:0!important;border-radius:0!important;box-shadow:none!important;font-size:1.65rem!important;z-index:43!important}.site-header .nav{position:absolute!important;top:156px!important;left:12px!important;right:12px!important;padding:16px!important;background:#041529!important;border:1px solid rgba(216,180,106,.42)!important;border-radius:24px!important;box-shadow:0 22px 55px rgba(0,0,0,.34)!important;color:#fff!important;max-height:none!important;overflow:visible!important}.site-header .nav a{color:#fff!important;border-bottom:1px solid rgba(216,180,106,.22)!important}.site-header .nav .btn-primary{background:#d8b46a!important;color:#07182f!important;border-color:#d8b46a!important}}
 
-/* Public website premium polish – purely visual, no content changes */
-@media(min-width:521px){body{background:#f8f4ec;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}.site-header{background:rgba(248,244,236,.93);border-bottom:1px solid rgba(7,24,47,.07);box-shadow:0 8px 28px rgba(7,24,47,.035)}.nav-wrap{height:80px}.nav{gap:21px;font-size:.91rem}.nav>a:not(.btn){position:relative;padding:29px 0 27px;transition:color .18s ease}.nav>a:not(.btn):after{content:"";position:absolute;left:0;right:100%;bottom:19px;height:1px;background:var(--gold);transition:right .2s ease}.nav>a:not(.btn):hover:after{right:0}.brand-mark{border-radius:8px;box-shadow:0 8px 20px rgba(7,24,47,.08)}}
-.hero{position:relative;background:radial-gradient(circle at 78% 18%,rgba(216,180,106,.11),transparent 28%),linear-gradient(132deg,#06162b 0%,#0a203c 58%,#102a4d 100%)}
-.hero:after{content:"";position:absolute;inset:auto -12% -45% 45%;height:420px;border:1px solid rgba(216,180,106,.09);border-radius:50%;pointer-events:none}.hero>.container{position:relative;z-index:1}.hero h1{font-weight:780;text-wrap:balance}.hero p{line-height:1.72;color:#d8e0ea}.hero-card{border-radius:28px;border:1px solid rgba(216,180,106,.25);box-shadow:0 32px 84px rgba(0,0,0,.24)}.hero-card:before{opacity:.72}.person-card{background:#f7f2e8;border:1px solid rgba(216,180,106,.12)}.section{padding:96px 0}.section-tight{padding:72px 0}.section-white{background:#fffdfa}.intro{margin-bottom:44px}.intro h2{font-weight:760;text-wrap:balance}.card{border-color:rgba(7,24,47,.075);border-radius:22px;box-shadow:0 12px 32px rgba(7,24,47,.045);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.section-dark .card{background:linear-gradient(180deg,#0e2747,#0b213d);border-color:rgba(216,180,106,.12)}.icon{border-radius:12px;background:#f3e7c9;color:#60450f}.steps-grid .step{border-color:rgba(7,24,47,.075);border-radius:20px;box-shadow:0 10px 26px rgba(7,24,47,.035)}.preference-grid div{background:#faf6ee;border-color:rgba(7,24,47,.075);border-radius:16px}.visual-frame{border-radius:24px;border-color:rgba(7,24,47,.08);box-shadow:0 24px 62px rgba(7,24,47,.095)}.visual-caption{background:#fffdfa;padding:17px 20px}.safety-banner{border-radius:26px;border:1px solid rgba(216,180,106,.14);box-shadow:0 24px 58px rgba(7,24,47,.13)}.btn{border-radius:14px;min-height:48px;padding:13px 21px;letter-spacing:.005em}.btn-primary{box-shadow:0 8px 22px rgba(178,141,64,.13)}.btn-outline{border-color:rgba(7,24,47,.2)}footer{border-top:1px solid rgba(216,180,106,.2)}
-@media(hover:hover) and (pointer:fine){.card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(7,24,47,.075);border-color:rgba(216,180,106,.28)}.visual-frame:hover{box-shadow:0 30px 72px rgba(7,24,47,.12)}}
-@media(max-width:520px){.section{padding:58px 0}.section-white{background:#fffdfa}.card{border-radius:20px;box-shadow:0 10px 26px rgba(7,24,47,.045)}.btn{border-radius:13px}}
-
-/* Brand consistency: use the same deep navy as the mobile header on every blue surface. */
-:root{--navy:#041529;--navy2:#041529}
-.hero,.section-dark,.score,.safety-banner,footer,.btn-dark{background:#041529!important}
-.section-dark .card{background:#041529!important}
-@media(max-width:860px){.nav.open{background:#041529!important;color:#fff}}
-@media(max-width:520px){body .site-header,body .site-header .nav{background:#041529!important}}
-
-/* Mobile fix for the public Mein Q section on the homepage. */
-@media(max-width:860px){
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .visual-split{grid-template-columns:1fr!important;gap:24px!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .visual-copy{order:2}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .visual-split>div:last-child{order:1;display:flex!important;justify-content:center!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .visual-split>div:last-child img{width:120px!important;max-width:120px!important;margin:0 auto 4px!important}
+/* Mein Q section – visible premium shimmer on the original gold Q only. */
+.section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
+  position:relative;
+  isolation:isolate;
 }
-@media(max-width:520px){
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2){padding:46px 0!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .eyebrow{text-align:center;margin-bottom:12px!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) h2{font-size:2.05rem!important;line-height:1.08!important;letter-spacing:-.035em!important;text-align:center!important;margin-bottom:18px!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) p{font-size:1rem!important;line-height:1.65!important;text-align:left!important;margin-bottom:20px!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .compact-checks{display:grid!important;gap:10px!important;margin:18px 0 24px!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .compact-checks>div{font-size:.95rem!important;line-height:1.45!important;padding:11px 12px!important;border-radius:12px!important;background:#f7f3ea!important}
-  body:has(.mobile-hero-photo) main>section:nth-of-type(2) .btn{width:100%!important}
+.section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"])::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(280px,72vw);
+  aspect-ratio:1/1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:2;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.16) 41%,rgba(255,255,255,.98) 50%,rgba(255,240,185,.58) 56%,transparent 70%);
+  background-size:260% 100%;
+  background-position:160% 0;
+  -webkit-mask:url("CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png") center/contain no-repeat;
+  mask:url("CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png") center/contain no-repeat;
+  animation:lavuqMeinQShimmer 4.6s ease-in-out infinite;
 }
-
-/* Mobile fix for the safety feature on the homepage. */
-@media(max-width:860px){
-  .safety-feature .visual-split{grid-template-columns:1fr!important;gap:22px!important}
+@keyframes lavuqMeinQShimmer{
+  0%,58%{background-position:160% 0;opacity:0}
+  62%{opacity:.95}
+  82%{background-position:-160% 0;opacity:.95}
+  86%,100%{background-position:-160% 0;opacity:0}
 }
-@media(max-width:520px){
-  .safety-feature{padding:48px 0!important}
-  .safety-feature .visual-frame{width:100%!important;max-width:none!important;border-radius:20px!important}
-  .safety-feature .city-photo img{width:100%!important;height:auto!important;aspect-ratio:16/10!important;object-fit:cover!important}
-  .safety-feature .visual-caption{padding:14px 16px!important;font-size:.9rem!important;line-height:1.45!important}
-  .safety-feature .visual-copy{width:100%!important;min-width:0!important}
-  .safety-feature .visual-copy h2{font-size:2.15rem!important;line-height:1.06!important;letter-spacing:-.04em!important;margin-bottom:18px!important}
-  .safety-feature .compact-checks{display:grid!important;gap:10px!important;margin:0 0 20px!important}
-  .safety-feature .compact-checks>div{display:grid!important;grid-template-columns:24px 1fr!important;gap:8px!important;align-items:start!important;font-size:1rem!important;line-height:1.45!important}
-  .safety-feature .visual-copy>div[style*="display:flex"]{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;width:100%!important}
-  .safety-feature .visual-copy .btn{width:100%!important;white-space:normal!important;text-align:center!important;padding:14px 16px!important}
-}
-
-/* Strong mobile stacking for homepage safety block. */
-@media(max-width:860px){
-  body:has(.mobile-hero-photo) .safety-feature .visual-split{display:flex!important;flex-direction:column!important;align-items:stretch!important;width:100%!important;gap:24px!important}
-  body:has(.mobile-hero-photo) .safety-feature .visual-frame,
-  body:has(.mobile-hero-photo) .safety-feature .visual-copy{width:100%!important;max-width:100%!important;min-width:0!important}
-  body:has(.mobile-hero-photo) .safety-feature .visual-frame{order:1!important}
-  body:has(.mobile-hero-photo) .safety-feature .visual-copy{order:2!important}
-}
-@media(max-width:520px){
-  body:has(.mobile-hero-photo) .safety-feature .container{width:min(calc(100% - 28px),var(--max))!important}
-  body:has(.mobile-hero-photo) .safety-feature .visual-frame img{width:100%!important;height:210px!important;aspect-ratio:auto!important;object-fit:cover!important;object-position:center!important}
-  body:has(.mobile-hero-photo) .safety-feature .visual-copy .eyebrow{font-size:.74rem!important;letter-spacing:.13em!important;margin-bottom:10px!important}
-  body:has(.mobile-hero-photo) .safety-feature .visual-copy h2{font-size:2rem!important;line-height:1.08!important;letter-spacing:-.035em!important;margin-bottom:20px!important}
-  body:has(.mobile-hero-photo) .safety-feature .compact-checks>div{font-size:.96rem!important;line-height:1.42!important}
-}
-
-/* 2026-09-05 modern public header. Mein Q (.mq-site-header) is intentionally excluded. */
-body:has(.site-header:not(.mq-site-header)) .topbar{display:none!important}
-body .site-header:not(.mq-site-header){position:sticky!important;top:0!important;z-index:80!important;background:#041529!important;border-bottom:1px solid rgba(216,180,106,.78)!important;backdrop-filter:blur(18px)!important;box-shadow:0 10px 32px rgba(0,0,0,.16)!important}
-body .site-header:not(.mq-site-header) .nav-wrap{position:relative!important;width:min(calc(100% - 32px),1160px)!important;height:158px!important;margin:0 auto!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
-body .site-header:not(.mq-site-header) .brand{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:230px!important;height:136px!important;margin:0!important;padding:8px 0 4px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:0!important;color:#fff!important;text-decoration:none!important;z-index:2!important}
-body .site-header:not(.mq-site-header) .brand:before{content:""!important;display:block!important;width:76px!important;height:76px!important;flex:0 0 76px!important;margin:0 auto 2px!important;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat!important;filter:drop-shadow(0 7px 18px rgba(0,0,0,.14))!important}
-body .site-header:not(.mq-site-header) .brand-mark,
-body .site-header:not(.mq-site-header) .mobile-brand-q{position:absolute!important;left:-10000px!important;top:auto!important;transform:none!important;pointer-events:none!important}
-body .site-header:not(.mq-site-header) .brand>span:not(.mobile-brand-copy){display:block!important;position:static!important;transform:none!important;width:auto!important;margin:0!important;padding:0!important;font-size:0!important;line-height:1!important;text-align:center!important}
-body .site-header:not(.mq-site-header) .brand>span:not(.mobile-brand-copy):before{content:"LAVU"!important;display:block!important;color:#fff!important;font-family:Georgia,'Times New Roman',serif!important;font-size:2.02rem!important;font-weight:400!important;letter-spacing:.22em!important;line-height:1!important;padding-left:.22em!important}
-body .site-header:not(.mq-site-header) .brand>span:not(.mobile-brand-copy):after{content:"Würzburg"!important;display:block!important;color:#d8b46a!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.03rem!important;font-weight:400!important;letter-spacing:.01em!important;line-height:1!important;margin-top:7px!important}
-body .site-header:not(.mq-site-header) .brand-city,
-body .site-header:not(.mq-site-header) .mobile-brand-copy{display:none!important}
-body .site-header:not(.mq-site-header) .nav-toggle{position:absolute!important;right:0!important;top:50%!important;transform:translateY(-50%)!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;width:116px!important;height:48px!important;margin:0!important;padding:0 16px!important;border:1px solid rgba(216,180,106,.82)!important;border-radius:999px!important;background:rgba(4,21,41,.84)!important;color:#d8b46a!important;box-shadow:none!important;font-size:1.42rem!important;line-height:1!important;z-index:4!important}
-body .site-header:not(.mq-site-header) .nav-toggle:after{content:"Menü";font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.01em;color:#fff}
-body .site-header:not(.mq-site-header) .nav{display:none!important;position:absolute!important;top:calc(100% + 10px)!important;right:0!important;left:auto!important;width:min(390px,calc(100vw - 32px))!important;max-height:calc(100vh - 190px)!important;overflow:auto!important;padding:14px!important;background:rgba(4,21,41,.98)!important;border:1px solid rgba(216,180,106,.38)!important;border-radius:22px!important;box-shadow:0 24px 60px rgba(0,0,0,.34)!important;flex-direction:column!important;align-items:stretch!important;gap:2px!important;color:#fff!important;z-index:90!important}
-body .site-header:not(.mq-site-header) .nav.open{display:flex!important}
-body .site-header:not(.mq-site-header) .nav a{color:#fff!important;padding:12px 13px!important;border:0!important;border-bottom:1px solid rgba(216,180,106,.14)!important;border-radius:10px!important;font-size:.96rem!important}
-body .site-header:not(.mq-site-header) .nav a:hover,
-body .site-header:not(.mq-site-header) .nav a:focus{background:rgba(216,180,106,.08)!important;color:#e8c978!important}
-body .site-header:not(.mq-site-header) .nav .btn-primary{margin-top:8px!important;background:#d8b46a!important;color:#041529!important;border-color:#d8b46a!important}
-@media(max-width:520px){
-  body .site-header:not(.mq-site-header) .nav-wrap{width:100%!important;height:170px!important;padding:0 16px!important;margin:0!important}
-  body .site-header:not(.mq-site-header) .brand{width:205px!important;height:148px!important;padding-top:10px!important}
-  body .site-header:not(.mq-site-header) .brand:before{width:74px!important;height:74px!important;flex-basis:74px!important;margin-bottom:3px!important}
-  body .site-header:not(.mq-site-header) .brand>span:not(.mobile-brand-copy):before{font-size:1.92rem!important}
-  body .site-header:not(.mq-site-header) .brand>span:not(.mobile-brand-copy):after{font-size:1rem!important;margin-top:7px!important}
-  body .site-header:not(.mq-site-header) .nav-toggle{right:16px!important;width:50px!important;height:50px!important;padding:0!important;border-radius:50%!important;font-size:1.5rem!important;background:transparent!important}
-  body .site-header:not(.mq-site-header) .nav-toggle:after{display:none!important}
-  body .site-header:not(.mq-site-header) .nav{top:calc(100% + 8px)!important;left:12px!important;right:12px!important;width:auto!important;max-height:calc(100vh - 205px)!important}
+@media (prefers-reduced-motion:reduce){
+  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"])::after{animation:none;opacity:0}
 }
