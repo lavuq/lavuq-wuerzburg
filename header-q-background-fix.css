@@ -246,3 +246,10 @@
     font-size:.9rem!important;
   }
 }
+
+/* Hero photo label copy. */
+@media(max-width:520px){
+  .hero:has(.mobile-hero-photo) .mobile-photo-label:before{
+    content:"WÜRZBURG & UMGEBUNG"!important;
+  }
+}
