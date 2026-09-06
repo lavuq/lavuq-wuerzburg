@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reorder key home sections and refresh mobile CSS
+      - name: Reorder key home sections and build premium brand meaning block
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -27,6 +27,34 @@ jobs:
 
           def find_sections(source):
               return list(re.finditer(r'<section\b[^>]*>.*?</section>', source, flags=re.S|re.I))
+
+          # Remove an older real brand meaning block if it already exists.
+          html = re.sub(r'\s*<section\b[^>]*class=["\'][^"\']*brand-meaning-section[^"\']*["\'][^>]*>.*?</section>\s*', '\n', html, flags=re.S|re.I)
+
+          # Insert a real, structured and readable LAVUQ meaning section directly after the hero.
+          sections = find_sections(html)
+          hero = next((m for m in sections if 'mobile-hero-photo' in m.group(0)), None)
+          if not hero:
+              raise SystemExit('Hero Abschnitt nicht gefunden')
+
+          meaning_block = '''<section class="brand-meaning-section" aria-labelledby="brand-meaning-title">
+            <div class="brand-meaning-card">
+              <div class="brand-meaning-eyebrow">Was LAVUQ bedeutet</div>
+              <h2 class="brand-meaning-title" id="brand-meaning-title">Mehr als ein Name.</h2>
+              <p class="brand-meaning-intro">LAVUQ verbindet Menschen aus Würzburg & Umgebung, die neue Freundschaften suchen – ohne Dating. Gemeinsam entstehen echte Treffen, Austausch, Vertrauen und Unternehmungen.</p>
+              <div class="brand-meaning-grid" aria-label="Bedeutung von LAVUQ">
+                <div class="brand-meaning-item"><span class="brand-meaning-letter">L</span><span class="brand-meaning-word">Lachen</span></div>
+                <div class="brand-meaning-item"><span class="brand-meaning-letter">A</span><span class="brand-meaning-word">Austausch</span></div>
+                <div class="brand-meaning-item"><span class="brand-meaning-letter">V</span><span class="brand-meaning-word">Vertrauen</span></div>
+                <div class="brand-meaning-item"><span class="brand-meaning-letter">U</span><span class="brand-meaning-word">Unternehmungen</span></div>
+                <div class="brand-meaning-item q-item"><span class="brand-meaning-letter">Q</span><span class="brand-meaning-word">Quelle</span></div>
+              </div>
+              <div class="brand-meaning-claim"><strong>Q</strong><span>LAVU-Q – die Quelle für neue Freundschaften in Würzburg & Umgebung.</span></div>
+            </div>
+          </section>'''
+
+          insert_at = hero.end()
+          html = html[:insert_at] + '\n' + meaning_block + html[insert_at:]
 
           sections = find_sections(html)
           mein = next((m for m in sections if 'Goldenes LAVUQ Q – Mein Q' in m.group(0)), None)
@@ -82,16 +110,17 @@ jobs:
               raise SystemExit('Auf einen Blick nach Entfernen nicht wiedergefunden')
           new_html = html[:glance_pos] + safety_block + '\n' + html[glance_pos:]
 
+          # Force browsers to use the redesigned brand meaning CSS.
           new_html = re.sub(
               r'header-q-background-fix\.css\?v=[^"\']+',
-              'header-q-background-fix.css?v=20260907-0042',
+              'header-q-background-fix.css?v=20260907-0102',
               new_html
           )
 
           original = path.read_text(encoding='utf-8')
           if new_html != original:
               path.write_text(new_html, encoding='utf-8')
-              print('Updated section order successfully')
+              print('Updated brand meaning section and section order successfully')
           else:
               print('Already in desired state')
           PY
@@ -105,5 +134,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Move Sicherheit before Auf einen Blick"
+          git commit -m "Redesign LAVUQ meaning section"
           git push
