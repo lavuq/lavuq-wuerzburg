@@ -5,6 +5,7 @@ on:
     paths:
       - 'header-modern.css'
       - 'header-q-single.css'
+      - 'styles.css'
       - 'lavuq-q-single-header.svg'
       - '.github/workflows/apply-public-modern-header.yml'
 
@@ -25,10 +26,27 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1039'
+          version = '20260906-1040'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
+
+          # Remove the old generic mobile brand rules from styles.css.
+          # They injected LAVU/Würzburg into every brand span, including the centered Q container.
+          styles_path = Path('styles.css')
+          if styles_path.exists():
+              styles = styles_path.read_text(encoding='utf-8')
+              styles2 = styles
+              styles_legacy_rules = [
+                  r'\.site-header \.brand>span:not\(\.mobile-brand-copy\)\{[^}]*\}',
+                  r'\.site-header \.brand>span:not\(\.mobile-brand-copy\):before\{[^}]*\}',
+                  r'\.site-header \.brand>span:not\(\.mobile-brand-copy\):after\{[^}]*\}',
+              ]
+              for legacy_rule in styles_legacy_rules:
+                  styles2 = re.sub(legacy_rule, '', styles2)
+              if styles2 != styles:
+                  styles_path.write_text(styles2, encoding='utf-8')
+                  changed.append('styles.css')
 
           legacy_header_rules = [
               r'\s*\.site-header \.brand>span:not\(\.mobile-brand-copy\):not\(\.public-brand-q-crop\):not\(\.public-brand-line\)\{[^}]*\}',
@@ -94,5 +112,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy clean public mobile header"
+          git commit -m "Remove legacy mobile header text renderers"
           git push
