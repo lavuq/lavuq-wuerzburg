@@ -1,29 +1,18 @@
-/* Final authoritative mobile header Q cleanup: keep only the public-brand-q-crop renderer. */
+/* Final authoritative mobile header Q cleanup. */
 @media(max-width:520px){
   html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop > *,
   html body header.site-header .nav-wrap a.public-brand > *:not(.public-brand-copy):not(.public-brand-q-crop),
   html body header.site-header img,
   html body header.site-header object,
   html body header.site-header embed{
-    display:none!important;
-    visibility:hidden!important;
-    opacity:0!important;
-    width:0!important;
-    height:0!important;
-    max-width:0!important;
-    max-height:0!important;
-    pointer-events:none!important;
+    display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;height:0!important;max-width:0!important;max-height:0!important;pointer-events:none!important;
   }
-
   html body header.site-header,
   html body header.site-header .nav-wrap,
   html body header.site-header .nav-wrap a.public-brand,
   html body header.site-header .public-brand-copy,
   html body header.site-header .public-brand-name,
-  html body header.site-header .public-brand-city{
-    background-image:none!important;
-  }
-
+  html body header.site-header .public-brand-city{background-image:none!important}
   html body header.site-header::before,
   html body header.site-header::after,
   html body header.site-header .nav-wrap::before,
@@ -37,223 +26,68 @@
   html body header.site-header .public-brand-city::before,
   html body header.site-header .public-brand-city::after,
   html body header.site-header .public-brand-q-crop::before,
-  html body header.site-header .public-brand-q-crop::after{
-    content:none!important;
-    display:none!important;
-    background:none!important;
-    background-image:none!important;
-  }
-
-  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
-    display:block!important;
-    visibility:visible!important;
-    opacity:1!important;
-    background-repeat:no-repeat!important;
-    background-position:center!important;
-    background-size:contain!important;
-    box-shadow:none!important;
-    border:0!important;
-  }
+  html body header.site-header .public-brand-q-crop::after{content:none!important;display:none!important;background:none!important;background-image:none!important}
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{display:block!important;visibility:visible!important;opacity:1!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;box-shadow:none!important;border:0!important}
 }
 
-/* Mein Q layout. */
+/* Mein Q mobile layout + glow. */
 @media(max-width:520px){
-  .section-white.compact-section .visual-split{
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:0!important;
-  }
-
-  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
-    order:-1!important;
-    width:110px!important;
-    max-width:34vw!important;
-    margin:0 auto 20px!important;
-    display:block!important;
-    align-self:center!important;
-    border-radius:0!important;
-    overflow:visible!important;
-  }
-
-  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]) > img{
-    width:100%!important;
-    max-width:none!important;
-    height:auto!important;
-    margin:0!important;
-    display:block!important;
-    object-fit:contain!important;
-    transform:translateZ(0)!important;
-    -webkit-animation:lavuqMeinQDirectShimmer 2.8s ease-in-out infinite!important;
-    animation:lavuqMeinQDirectShimmer 2.8s ease-in-out infinite!important;
-    will-change:filter,transform;
-  }
+  .section-white.compact-section .visual-split{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:0!important}
+  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){order:-1!important;width:110px!important;max-width:34vw!important;margin:0 auto 20px!important;display:block!important;align-self:center!important;border-radius:0!important;overflow:visible!important}
+  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]) > img{width:100%!important;max-width:none!important;height:auto!important;margin:0!important;display:block!important;object-fit:contain!important;transform:translateZ(0)!important;-webkit-animation:lavuqMeinQDirectShimmer 2.8s ease-in-out infinite!important;animation:lavuqMeinQDirectShimmer 2.8s ease-in-out infinite!important;will-change:filter,transform}
 }
+@-webkit-keyframes lavuqMeinQDirectShimmer{0%,45%,100%{-webkit-filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));transform:translateZ(0) scale(1)}58%{-webkit-filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));transform:translateZ(0) scale(1.005)}67%{-webkit-filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));transform:translateZ(0) scale(1.012)}78%{-webkit-filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));transform:translateZ(0) scale(1.004)}}
+@keyframes lavuqMeinQDirectShimmer{0%,45%,100%{filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));transform:translateZ(0) scale(1)}58%{filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));transform:translateZ(0) scale(1.005)}67%{filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));transform:translateZ(0) scale(1.012)}78%{filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));transform:translateZ(0) scale(1.004)}}
 
-@-webkit-keyframes lavuqMeinQDirectShimmer{
-  0%,45%,100%{
-    -webkit-filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
-    filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
-    transform:translateZ(0) scale(1);
-  }
-  58%{
-    -webkit-filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
-    filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
-    transform:translateZ(0) scale(1.005);
-  }
-  67%{
-    -webkit-filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
-    filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
-    transform:translateZ(0) scale(1.012);
-  }
-  78%{
-    -webkit-filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
-    filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
-    transform:translateZ(0) scale(1.004);
-  }
-}
-
-@keyframes lavuqMeinQDirectShimmer{
-  0%,45%,100%{
-    -webkit-filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
-    filter:brightness(1) saturate(1) drop-shadow(0 0 0 rgba(255,220,130,0));
-    transform:translateZ(0) scale(1);
-  }
-  58%{
-    -webkit-filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
-    filter:brightness(1.25) saturate(1.08) drop-shadow(0 0 4px rgba(255,220,130,.28));
-    transform:translateZ(0) scale(1.005);
-  }
-  67%{
-    -webkit-filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
-    filter:brightness(1.75) saturate(1.22) drop-shadow(0 0 10px rgba(255,225,145,.62));
-    transform:translateZ(0) scale(1.012);
-  }
-  78%{
-    -webkit-filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
-    filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px rgba(255,220,130,.2));
-    transform:translateZ(0) scale(1.004);
-  }
-}
-
-/* Mein Q benefits: premium, clear cards directly below the intro text. */
-.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:12px!important;
-  margin:28px 0 26px!important;
-}
-
-.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div{
-  position:relative!important;
-  display:flex!important;
-  align-items:flex-start!important;
-  gap:13px!important;
-  min-height:92px!important;
-  padding:18px 18px 17px!important;
-  border:1px solid rgba(216,180,106,.34)!important;
-  border-radius:18px!important;
-  background:linear-gradient(145deg,#fffdf8 0%,#f7f2e8 100%)!important;
-  box-shadow:0 10px 28px rgba(7,24,47,.055)!important;
-  color:#132033!important;
-  font-size:1rem!important;
-  font-weight:720!important;
-  line-height:1.48!important;
-  letter-spacing:-.01em!important;
-}
-
-.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div::before{
-  content:""!important;
-  position:absolute!important;
-  inset:0!important;
-  border-radius:18px!important;
-  pointer-events:none!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.9)!important;
-}
-
-.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div > span{
-  flex:0 0 30px!important;
-  width:30px!important;
-  height:30px!important;
-  margin-top:1px!important;
-  display:grid!important;
-  place-items:center!important;
-  border-radius:999px!important;
-  background:linear-gradient(145deg,#e5c77f,#c99e47)!important;
-  color:#07182f!important;
-  box-shadow:0 6px 14px rgba(184,140,55,.2)!important;
-  font-size:.95rem!important;
-  font-weight:950!important;
-  line-height:1!important;
-}
-
-/* Fifth app benefit: same premium card and badge as the four items above. */
-.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks::after{
-  content:"Rätsel, Würzburg-Quiz & weitere gemeinsame Challenges in der App"!important;
-  display:flex!important;
-  align-items:flex-start!important;
-  min-height:92px!important;
-  padding:18px 18px 17px 61px!important;
-  border:1px solid rgba(216,180,106,.34)!important;
-  border-radius:18px!important;
-  background-image:url("benefit-check-gold.svg"),linear-gradient(145deg,#fffdf8 0%,#f7f2e8 100%)!important;
-  background-position:18px 19px,0 0!important;
-  background-size:30px 30px,100% 100%!important;
-  background-repeat:no-repeat!important;
-  box-shadow:0 10px 28px rgba(7,24,47,.055)!important;
-  color:#132033!important;
-  font-size:1rem!important;
-  font-weight:720!important;
-  line-height:1.48!important;
-  letter-spacing:-.01em!important;
-}
-
+/* Mein Q premium benefit cards. */
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin:28px 0 26px!important}
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div{position:relative!important;display:flex!important;align-items:flex-start!important;gap:13px!important;min-height:92px!important;padding:18px 18px 17px!important;border:1px solid rgba(216,180,106,.34)!important;border-radius:18px!important;background:linear-gradient(145deg,#fffdf8 0%,#f7f2e8 100%)!important;box-shadow:0 10px 28px rgba(7,24,47,.055)!important;color:#132033!important;font-size:1rem!important;font-weight:720!important;line-height:1.48!important;letter-spacing:-.01em!important}
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div::before{content:""!important;position:absolute!important;inset:0!important;border-radius:18px!important;pointer-events:none!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)!important}
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div > span{flex:0 0 30px!important;width:30px!important;height:30px!important;margin-top:1px!important;display:grid!important;place-items:center!important;border-radius:999px!important;background:linear-gradient(145deg,#e5c77f,#c99e47)!important;color:#07182f!important;box-shadow:0 6px 14px rgba(184,140,55,.2)!important;font-size:.95rem!important;font-weight:950!important;line-height:1!important}
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks::after{content:"Rätsel, Würzburg-Quiz & weitere gemeinsame Challenges in der App"!important;display:flex!important;align-items:flex-start!important;min-height:92px!important;padding:18px 18px 17px 61px!important;border:1px solid rgba(216,180,106,.34)!important;border-radius:18px!important;background-image:url("benefit-check-gold.svg"),linear-gradient(145deg,#fffdf8 0%,#f7f2e8 100%)!important;background-position:18px 19px,0 0!important;background-size:30px 30px,100% 100%!important;background-repeat:no-repeat!important;box-shadow:0 10px 28px rgba(7,24,47,.055)!important;color:#132033!important;font-size:1rem!important;font-weight:720!important;line-height:1.48!important;letter-spacing:-.01em!important}
 @media(max-width:720px){
-  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks{
-    grid-template-columns:1fr!important;
-    gap:11px!important;
-    margin:26px 0 24px!important;
-  }
-
-  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div{
-    min-height:0!important;
-    padding:15px 16px!important;
-    border-radius:16px!important;
-    font-size:1.02rem!important;
-    line-height:1.42!important;
-    box-shadow:0 8px 22px rgba(7,24,47,.05)!important;
-  }
-
-  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks::after{
-    min-height:0!important;
-    padding:15px 16px 15px 57px!important;
-    border-radius:16px!important;
-    background-position:16px 16px,0 0!important;
-    background-size:28px 28px,100% 100%!important;
-    font-size:1.02rem!important;
-    line-height:1.42!important;
-    box-shadow:0 8px 22px rgba(7,24,47,.05)!important;
-  }
-
-  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div::before{
-    border-radius:16px!important;
-  }
-
-  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div > span{
-    flex-basis:28px!important;
-    width:28px!important;
-    height:28px!important;
-    font-size:.9rem!important;
-  }
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks{grid-template-columns:1fr!important;gap:11px!important;margin:26px 0 24px!important}
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div{min-height:0!important;padding:15px 16px!important;border-radius:16px!important;font-size:1.02rem!important;line-height:1.42!important;box-shadow:0 8px 22px rgba(7,24,47,.05)!important}
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks::after{min-height:0!important;padding:15px 16px 15px 57px!important;border-radius:16px!important;background-position:16px 16px,0 0!important;background-size:28px 28px,100% 100%!important;font-size:1.02rem!important;line-height:1.42!important;box-shadow:0 8px 22px rgba(7,24,47,.05)!important}
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div::before{border-radius:16px!important}
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div > span{flex-basis:28px!important;width:28px!important;height:28px!important;font-size:.9rem!important}
 }
 
-/* Hero photo label copy. */
+/* Hero copy overrides. */
 @media(max-width:520px){
-  .hero:has(.mobile-hero-photo) .mobile-photo-label:before{
-    content:"WÜRZBURG & UMGEBUNG"!important;
-  }
+  .hero:has(.mobile-hero-photo) .mobile-photo-label:before{content:"WÜRZBURG & UMGEBUNG"!important}
+  .hero:has(.mobile-hero-photo) .eyebrow:after{content:"LAVU-Q STEHT FÜR"!important}
+}
 
-  .hero:has(.mobile-hero-photo) .eyebrow:after{
-    content:"LAVU-Q STEHT FÜR"!important;
+/* Brand meaning section directly after the hero. */
+.hero:has(.mobile-hero-photo)::after{
+  content:"WAS LAVUQ BEDEUTET\A\A LAVUQ verbindet Menschen aus Würzburg & Umgebung, die neue Freundschaften suchen – ohne Dating. Hier entstehen echte Treffen, gemeinsame Unternehmungen, Austausch und Vertrauen.\A\A L  ·  Lachen\A A  ·  Austausch\A V  ·  Vertrauen\A U  ·  Unternehmungen\A Q  ·  Quelle\A\A LAVU-Q – die Quelle für neue Freundschaften in Würzburg & Umgebung.";
+  white-space:pre-line;
+  display:block;
+  width:min(1120px,calc(100% - 40px));
+  margin:0 auto;
+  padding:44px 42px 40px;
+  box-sizing:border-box;
+  background:linear-gradient(145deg,#fffdf8 0%,#f5efe3 100%);
+  border:1px solid rgba(216,180,106,.48);
+  border-radius:24px;
+  color:#102039;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-size:1.05rem;
+  font-weight:600;
+  line-height:1.72;
+  letter-spacing:-.01em;
+  box-shadow:0 18px 44px rgba(7,24,47,.10);
+}
+@media(max-width:520px){
+  .hero:has(.mobile-hero-photo)::after{
+    width:calc(100% - 32px);
+    margin:22px auto 28px!important;
+    padding:30px 24px 28px;
+    border-radius:20px;
+    font-size:1rem;
+    line-height:1.62;
+    color:#102039;
+    background:linear-gradient(145deg,#fffdf9 0%,#f7f1e7 100%);
   }
 }
