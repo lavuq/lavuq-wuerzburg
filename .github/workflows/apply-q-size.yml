@@ -23,7 +23,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1406'
+          version = '20260906-1409'
           changed = []
 
           for p in Path('.').rglob('*.html'):
@@ -51,5 +51,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy gold Q clearly above header line"
+          git commit -m "Deploy gold Q 10px higher"
           git push
