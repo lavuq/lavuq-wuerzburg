@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Move So funktioniert's directly after Mein Q
+      - name: Reorder key home sections
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -25,27 +25,43 @@ jobs:
           path = Path('index.html')
           html = path.read_text(encoding='utf-8')
 
-          sections = list(re.finditer(r'<section\b[^>]*>.*?</section>', html, flags=re.S|re.I))
+          def find_sections(source):
+              return list(re.finditer(r'<section\b[^>]*>.*?</section>', source, flags=re.S|re.I))
+
+          sections = find_sections(html)
           mein = next((m for m in sections if 'Goldenes LAVUQ Q – Mein Q' in m.group(0)), None)
           so = next((m for m in sections if re.search(r'id=["\']so-gehts["\']', m.group(0), flags=re.I)), None)
+          klare = next((m for m in sections if 'Klare Abgrenzung' in m.group(0)), None)
 
-          if not mein or not so:
-              raise SystemExit('Mein Q oder So funktioniert\'s Abschnitt nicht gefunden')
+          if not mein or not so or not klare:
+              raise SystemExit('Mein Q, So funktioniert\'s oder Klare Abgrenzung nicht gefunden')
 
           mein_block = mein.group(0)
           so_block = so.group(0)
+          klare_block = klare.group(0)
 
-          # Remove So funktioniert's from its old position.
-          html_without_so = html[:so.start()] + html[so.end():]
+          # Remove So funktioniert's and Klare Abgrenzung from their current positions.
+          for block in (so_block, klare_block):
+              pos = html.find(block)
+              if pos >= 0:
+                  html = html[:pos] + html[pos + len(block):]
 
-          # Find Mein Q again after removal and insert directly afterwards.
-          mein_pos = html_without_so.find(mein_block)
+          # Insert So funktioniert's directly after Mein Q.
+          mein_pos = html.find(mein_block)
           if mein_pos < 0:
               raise SystemExit('Mein Q Abschnitt nach Entfernen nicht wiedergefunden')
           insert_at = mein_pos + len(mein_block)
-          new_html = html_without_so[:insert_at] + '\n' + so_block + html_without_so[insert_at:]
+          html = html[:insert_at] + '\n' + so_block + html[insert_at:]
 
-          if new_html != html:
+          # Insert Klare Abgrenzung directly after So funktioniert's.
+          so_pos = html.find(so_block)
+          if so_pos < 0:
+              raise SystemExit('So funktioniert\'s Abschnitt nach Einfügen nicht wiedergefunden')
+          insert_at = so_pos + len(so_block)
+          new_html = html[:insert_at] + '\n' + klare_block + html[insert_at:]
+
+          original = path.read_text(encoding='utf-8')
+          if new_html != original:
               path.write_text(new_html, encoding='utf-8')
               print('Reordered sections successfully')
           else:
@@ -61,5 +77,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Move So funktioniert's after Mein Q"
+          git commit -m "Move Klare Abgrenzung after So funktioniert's"
           git push
