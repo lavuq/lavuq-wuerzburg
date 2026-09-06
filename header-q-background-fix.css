@@ -1,0 +1,29 @@
+/* Mobile public header: remove visible dark square behind the centered Q only. */
+@media(max-width:520px){
+  html body header.site-header .nav-wrap a.public-brand{
+    background:transparent!important;
+    background-color:transparent!important;
+    box-shadow:none!important;
+    border:0!important;
+  }
+
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    background-color:transparent!important;
+    box-shadow:none!important;
+    border:0!important;
+    mix-blend-mode:lighten!important;
+    isolation:auto!important;
+  }
+
+  html body header.site-header .nav-wrap a.public-brand::before,
+  html body header.site-header .nav-wrap a.public-brand::after,
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop::before,
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop::after{
+    content:none!important;
+    display:none!important;
+    background:none!important;
+    background-color:transparent!important;
+    box-shadow:none!important;
+    border:0!important;
+  }
+}
