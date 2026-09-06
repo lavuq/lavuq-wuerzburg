@@ -224,16 +224,16 @@
 @media(max-width:520px){
   html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-copy.public-brand-copy{
     left:22px!important;
-    width:145px!important;
+    width:128px!important;
   }
   html body header.site-header.site-header .nav-wrap .public-brand-name.public-brand-name{
-    font-size:2.65rem!important;
+    font-size:2.25rem!important;
     letter-spacing:.12em!important;
     line-height:.90!important;
   }
   html body header.site-header.site-header .nav-wrap .public-brand-city.public-brand-city{
-    margin-top:8px!important;
-    font-size:1.55rem!important;
+    margin-top:7px!important;
+    font-size:1.32rem!important;
     line-height:1!important;
   }
   html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop{
@@ -255,13 +255,13 @@
 @media(max-width:390px){
   html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-copy.public-brand-copy{
     left:15px!important;
-    width:132px!important;
+    width:118px!important;
   }
   html body header.site-header.site-header .nav-wrap .public-brand-name.public-brand-name{
-    font-size:2.40rem!important;
+    font-size:2.05rem!important;
   }
   html body header.site-header.site-header .nav-wrap .public-brand-city.public-brand-city{
-    font-size:1.42rem!important;
+    font-size:1.20rem!important;
   }
   html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop{
     top:30px!important;
