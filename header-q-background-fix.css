@@ -135,3 +135,82 @@
     transform:translateZ(0) scale(1.004);
   }
 }
+
+/* Mein Q benefits: premium, clear cards directly below the intro text. */
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;
+  margin:28px 0 26px!important;
+}
+
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div{
+  position:relative!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:13px!important;
+  min-height:92px!important;
+  padding:18px 18px 17px!important;
+  border:1px solid rgba(216,180,106,.34)!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#fffdf8 0%,#f7f2e8 100%)!important;
+  box-shadow:0 10px 28px rgba(7,24,47,.055)!important;
+  color:#132033!important;
+  font-size:1rem!important;
+  font-weight:720!important;
+  line-height:1.48!important;
+  letter-spacing:-.01em!important;
+}
+
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  border-radius:18px!important;
+  pointer-events:none!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+
+.section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div > span{
+  flex:0 0 30px!important;
+  width:30px!important;
+  height:30px!important;
+  margin-top:1px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:999px!important;
+  background:linear-gradient(145deg,#e5c77f,#c99e47)!important;
+  color:#07182f!important;
+  box-shadow:0 6px 14px rgba(184,140,55,.2)!important;
+  font-size:.95rem!important;
+  font-weight:950!important;
+  line-height:1!important;
+}
+
+@media(max-width:720px){
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks{
+    grid-template-columns:1fr!important;
+    gap:11px!important;
+    margin:26px 0 24px!important;
+  }
+
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div{
+    min-height:0!important;
+    padding:15px 16px!important;
+    border-radius:16px!important;
+    font-size:1.02rem!important;
+    line-height:1.42!important;
+    box-shadow:0 8px 22px rgba(7,24,47,.05)!important;
+  }
+
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div::before{
+    border-radius:16px!important;
+  }
+
+  .section-white.compact-section .visual-split:has(img[alt="Goldenes LAVUQ Q – Mein Q"]) .compact-checks > div > span{
+    flex-basis:28px!important;
+    width:28px!important;
+    height:28px!important;
+    font-size:.9rem!important;
+  }
+}
