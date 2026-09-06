@@ -28,10 +28,8 @@ jobs:
           def find_sections(source):
               return list(re.finditer(r'<section\b[^>]*>.*?</section>', source, flags=re.S|re.I))
 
-          # Remove an older real brand meaning block if it already exists.
           html = re.sub(r'\s*<section\b[^>]*class=["\'][^"\']*brand-meaning-section[^"\']*["\'][^>]*>.*?</section>\s*', '\n', html, flags=re.S|re.I)
 
-          # Insert a real, structured and readable LAVUQ meaning section directly after the hero.
           sections = find_sections(html)
           hero = next((m for m in sections if 'mobile-hero-photo' in m.group(0)), None)
           if not hero:
@@ -93,34 +91,36 @@ jobs:
           insert_at = preference_pos + len(preference_block)
           html = html[:insert_at] + '\n' + klare_block + html[insert_at:]
 
-          # Place the complete Sicherheit section immediately before Auf einen Blick.
           sections = find_sections(html)
           safety = next((m for m in sections if 'safety-feature' in m.group(0) or 'Sicherheit bei LAVUQ' in m.group(0)), None)
           glance = next((m for m in sections if 'Auf einen Blick' in m.group(0)), None)
-
           if not safety or not glance:
               raise SystemExit('Sicherheit oder Auf einen Blick nicht gefunden')
 
           safety_block = safety.group(0)
           safety_pos = html.find(safety_block)
           html = html[:safety_pos] + html[safety_pos + len(safety_block):]
-
           glance_pos = html.find(glance.group(0))
           if glance_pos < 0:
               raise SystemExit('Auf einen Blick nach Entfernen nicht wiedergefunden')
           new_html = html[:glance_pos] + safety_block + '\n' + html[glance_pos:]
 
-          # Force browsers to use the redesigned brand meaning CSS.
           new_html = re.sub(
               r'header-q-background-fix\.css\?v=[^"\']+',
-              'header-q-background-fix.css?v=20260907-0102',
+              'header-q-background-fix.css?v=20260907-0103',
               new_html
           )
+
+          premium_link = '<link rel="stylesheet" href="brand-meaning-premium.css?v=20260907-0103">'
+          if re.search(r'<link\s+rel=["\']stylesheet["\']\s+href=["\']brand-meaning-premium\.css[^"\']*["\']\s*/?>', new_html, flags=re.I):
+              new_html = re.sub(r'<link\s+rel=["\']stylesheet["\']\s+href=["\']brand-meaning-premium\.css[^"\']*["\']\s*/?>', premium_link, new_html, flags=re.I)
+          else:
+              new_html = new_html.replace('</head>', premium_link + '</head>', 1)
 
           original = path.read_text(encoding='utf-8')
           if new_html != original:
               path.write_text(new_html, encoding='utf-8')
-              print('Updated brand meaning section and section order successfully')
+              print('Updated premium brand meaning section and styles successfully')
           else:
               print('Already in desired state')
           PY
@@ -134,5 +134,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Redesign LAVUQ meaning section"
+          git commit -m "Load polished LAVUQ meaning styles"
           git push
