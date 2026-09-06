@@ -252,4 +252,8 @@
   .hero:has(.mobile-hero-photo) .mobile-photo-label:before{
     content:"WÜRZBURG & UMGEBUNG"!important;
   }
+
+  .hero:has(.mobile-hero-photo) .eyebrow:after{
+    content:"LAVU-Q STEHT FÜR"!important;
+  }
 }
