@@ -5,6 +5,7 @@ on:
     paths:
       - 'header-modern.css'
       - 'header-q-single.css'
+      - 'header-q-background-fix.css'
       - 'styles.css'
       - 'lavuq-q-single-header.svg'
       - '.github/workflows/apply-public-modern-header.yml'
@@ -26,7 +27,7 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1040'
+          version = '20260906-1153'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
@@ -93,9 +94,11 @@ jobs:
 
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-modern\.css\?v=[^"]+">', '', text2)
               text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-q-single\.css\?v=[^"]+">', '', text2)
+              text2 = re.sub(r'<link rel="stylesheet" href="(?:\.\./)*header-q-background-fix\.css\?v=[^"]+">', '', text2)
               modern = f'<link rel="stylesheet" href="{prefix}header-modern.css?v={version}">'
               single_q = f'<link rel="stylesheet" href="{prefix}header-q-single.css?v={version}">'
-              text2 = text2.replace('</head>', modern + single_q + '</head>', 1)
+              q_fix = f'<link rel="stylesheet" href="{prefix}header-q-background-fix.css?v={version}">'
+              text2 = text2.replace('</head>', modern + single_q + q_fix + '</head>', 1)
 
               if text2 != text:
                   p.write_text(text2, encoding='utf-8')
@@ -112,5 +115,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Remove legacy mobile header text renderers"
+          git commit -m "Deploy transparent mobile Q background fix"
           git push
