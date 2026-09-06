@@ -1,9 +1,11 @@
-/* Final mobile header Q rule: keep the CSS-background Q only and remove the duplicate image layer behind it. */
+/* Final authoritative mobile header Q cleanup: keep only the public-brand-q-crop renderer. */
 @media(max-width:520px){
-  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop > img,
-  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop .public-brand-q,
-  html body header.site-header img.public-brand-q,
-  html body header.site-header img.brand-mark{
+  /* Remove every possible legacy/duplicate child or sibling renderer. */
+  html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop > *,
+  html body header.site-header .nav-wrap a.public-brand > *:not(.public-brand-copy):not(.public-brand-q-crop),
+  html body header.site-header img,
+  html body header.site-header object,
+  html body header.site-header embed{
     display:none!important;
     visibility:hidden!important;
     opacity:0!important;
@@ -14,9 +16,45 @@
     pointer-events:none!important;
   }
 
+  /* Remove any logo background/pseudo-layer from ancestors. */
+  html body header.site-header,
+  html body header.site-header .nav-wrap,
+  html body header.site-header .nav-wrap a.public-brand,
+  html body header.site-header .public-brand-copy,
+  html body header.site-header .public-brand-name,
+  html body header.site-header .public-brand-city{
+    background-image:none!important;
+  }
+
+  html body header.site-header::before,
+  html body header.site-header::after,
+  html body header.site-header .nav-wrap::before,
+  html body header.site-header .nav-wrap::after,
+  html body header.site-header .nav-wrap a.public-brand::before,
+  html body header.site-header .nav-wrap a.public-brand::after,
+  html body header.site-header .public-brand-copy::before,
+  html body header.site-header .public-brand-copy::after,
+  html body header.site-header .public-brand-name::before,
+  html body header.site-header .public-brand-name::after,
+  html body header.site-header .public-brand-city::before,
+  html body header.site-header .public-brand-city::after,
+  html body header.site-header .public-brand-q-crop::before,
+  html body header.site-header .public-brand-q-crop::after{
+    content:none!important;
+    display:none!important;
+    background:none!important;
+    background-image:none!important;
+  }
+
+  /* Keep exactly one center Q: the existing CSS background on this element. */
   html body header.site-header .nav-wrap a.public-brand > .public-brand-q-crop{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
     background-repeat:no-repeat!important;
     background-position:center!important;
     background-size:contain!important;
+    box-shadow:none!important;
+    border:0!important;
   }
 }
