@@ -105,6 +105,9 @@ jobs:
               raise SystemExit('Auf einen Blick nach Entfernen nicht wiedergefunden')
           new_html = html[:glance_pos] + safety_block + '\n' + html[glance_pos:]
 
+          # Move only the mobile center Q slightly upward.
+          new_html = new_html.replace('bottom:-3px!important;', 'bottom:8px!important;')
+
           new_html = re.sub(
               r'header-q-background-fix\.css\?v=[^"\']+',
               'header-q-background-fix.css?v=20260907-0103',
@@ -120,7 +123,7 @@ jobs:
           original = path.read_text(encoding='utf-8')
           if new_html != original:
               path.write_text(new_html, encoding='utf-8')
-              print('Updated premium brand meaning section and styles successfully')
+              print('Updated premium brand meaning section, styles and mobile Q position successfully')
           else:
               print('Already in desired state')
           PY
@@ -134,5 +137,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load polished LAVUQ meaning styles"
+          git commit -m "Raise mobile header Q slightly"
           git push
