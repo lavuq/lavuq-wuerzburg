@@ -73,11 +73,11 @@
   background-position:center!important;
   background-repeat:no-repeat!important;
   background-size:contain!important;
-  opacity:0!important;
+  opacity:0;
   -webkit-filter:brightness(1.9) saturate(1.15) drop-shadow(0 0 3px rgba(255,225,145,.45))!important;
   filter:brightness(1.9) saturate(1.15) drop-shadow(0 0 3px rgba(255,225,145,.45))!important;
-  -webkit-clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%)!important;
-  clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%)!important;
+  -webkit-clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
+  clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
   -webkit-animation:lavuqMeinQClipShine 3.8s ease-in-out infinite!important;
   animation:lavuqMeinQClipShine 3.8s ease-in-out infinite!important;
   will-change:clip-path,opacity;
@@ -85,28 +85,28 @@
 
 @-webkit-keyframes lavuqMeinQClipShine{
   0%,55%{
-    opacity:0!important;
+    opacity:0;
     -webkit-clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
   }
-  60%{opacity:1!important;}
+  60%{opacity:1;}
   82%{
-    opacity:1!important;
+    opacity:1;
     -webkit-clip-path:polygon(105% 0,135% 0,155% 100%,125% 100%);
   }
-  88%,100%{opacity:0!important;}
+  88%,100%{opacity:0;}
 }
 
 @keyframes lavuqMeinQClipShine{
   0%,55%{
-    opacity:0!important;
+    opacity:0;
     clip-path:polygon(-35% 0,-5% 0,15% 100%,-15% 100%);
   }
-  60%{opacity:1!important;}
+  60%{opacity:1;}
   82%{
-    opacity:1!important;
+    opacity:1;
     clip-path:polygon(105% 0,135% 0,155% 100%,125% 100%);
   }
-  88%,100%{opacity:0!important;}
+  88%,100%{opacity:0;}
 }
 
 @media(max-width:520px){
