@@ -7,6 +7,7 @@ on:
       - 'header-q-single.css'
       - 'header-q-background-fix.css'
       - 'q-header-transparent.svg'
+      - 'q-header-clean.svg'
       - 'styles.css'
       - 'lavuq-q-single-header.svg'
       - '.github/workflows/apply-public-modern-header.yml'
@@ -28,14 +29,14 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1720'
+          version = '20260906-1724'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
 
-          # Single authoritative mobile Q geometry rule, loaded last.
-          # Keep the exact transparent Q centered and make its lower tail sit directly on the gold divider line.
-          q_position = '''<style id="lavuq-mobile-q-authoritative">@media(max-width:520px){html body header.site-header,html body header.site-header .nav-wrap{overflow:visible!important}html body header.site-header .nav-wrap{position:relative!important}html body header.site-header .nav-wrap a.public-brand{position:static!important;overflow:visible!important}html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:50%!important;right:auto!important;top:auto!important;bottom:-18px!important;transform:translateX(-50%)!important;width:90px!important;height:90px!important;min-width:90px!important;min-height:90px!important;max-width:90px!important;max-height:90px!important;overflow:visible!important;z-index:56!important;background-position:center center!important;background-size:90px 90px!important;background-repeat:no-repeat!important;background-color:transparent!important;box-shadow:none!important;border:0!important}}@media(max-width:390px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{top:auto!important;bottom:-16px!important;transform:translateX(-50%)!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;max-width:84px!important;max-height:84px!important;background-position:center center!important;background-size:84px 84px!important;background-repeat:no-repeat!important;background-color:transparent!important}}</style>'''
+          # Single authoritative mobile Q rule, loaded last.
+          # Use the cleaned exact Q asset and let the Q tail rest directly on the gold divider.
+          q_position = '''<style id="lavuq-mobile-q-authoritative">@media(max-width:520px){html body header.site-header,html body header.site-header .nav-wrap{overflow:visible!important}html body header.site-header .nav-wrap{position:relative!important}html body header.site-header .nav-wrap a.public-brand{position:static!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;border:0!important}html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;left:50%!important;right:auto!important;top:auto!important;bottom:-3px!important;transform:translateX(-50%)!important;width:90px!important;height:90px!important;min-width:90px!important;min-height:90px!important;max-width:90px!important;max-height:90px!important;overflow:visible!important;z-index:56!important;background-image:url('/q-header-clean.svg?v=20260906-1724')!important;background-position:center center!important;background-size:contain!important;background-repeat:no-repeat!important;background-color:transparent!important;box-shadow:none!important;border:0!important}}@media(max-width:390px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{top:auto!important;bottom:-3px!important;transform:translateX(-50%)!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;max-width:84px!important;max-height:84px!important;background-image:url('/q-header-clean.svg?v=20260906-1724')!important;background-position:center center!important;background-size:contain!important;background-repeat:no-repeat!important;background-color:transparent!important;box-shadow:none!important;border:0!important}}</style>'''
 
           styles_path = Path('styles.css')
           if styles_path.exists():
@@ -120,5 +121,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Place mobile gold Q directly on divider line"
+          git commit -m "Use clean exact Q on mobile divider line"
           git push
