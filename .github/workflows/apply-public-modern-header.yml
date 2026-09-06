@@ -25,10 +25,18 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-0228'
+          version = '20260906-0231'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
+
+          legacy_header_rules = [
+              r'\s*\.site-header \.brand>span:not\(\.mobile-brand-copy\):not\(\.public-brand-q-crop\):not\(\.public-brand-line\)\{[^}]*\}',
+              r'\s*\.site-header \.brand>span:not\(\.mobile-brand-copy\):not\(\.public-brand-q-crop\):not\(\.public-brand-line\):before\{[^}]*\}',
+              r'\s*\.site-header \.brand>span:not\(\.mobile-brand-copy\):not\(\.public-brand-q-crop\):not\(\.public-brand-line\):after\{[^}]*\}',
+              r'\s*body \.site-header \.nav-wrap \.brand-mark:not\(\.public-brand-q\),\s*body \.site-header \.nav-wrap \.mobile-brand-q\{[^}]*\}',
+              r'\s*body \.site-header \.nav-wrap a\.public-brand>\.public-brand-q-crop\{[^}]*\}',
+          ]
 
           for p in Path('.').rglob('*.html'):
               if '.git' in p.parts or p.name in excluded:
@@ -56,6 +64,10 @@ jobs:
               if n == 0:
                   continue
 
+              # Remove obsolete inline mobile-header renderers that created the extra centered LA/Würzburg.
+              for legacy_rule in legacy_header_rules:
+                  text2 = re.sub(legacy_rule, '', text2)
+
               text2 = re.sub(r'<script id="lavuq-public-header-image-guard">.*?</script>', '', text2, flags=re.S)
               text2 = text2.replace('</header>', '</header>' + guard, 1)
 
@@ -80,5 +92,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Deploy permanent public header image guard"
+          git commit -m "Deploy cleaned public mobile header"
           git push
