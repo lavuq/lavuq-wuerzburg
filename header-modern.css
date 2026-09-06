@@ -223,8 +223,15 @@
 /* Final authoritative mobile Q position rule. This selector intentionally matches the highest specificity used for the Q. */
 @media(max-width:520px){
   html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop{
-    top:auto!important;
-    bottom:24px!important;
+    top:22px!important;
+    bottom:auto!important;
+    transform:translateX(-50%)!important;
+  }
+}
+@media(max-width:390px){
+  html body header.site-header.site-header .nav-wrap a.public-brand.public-brand > span.public-brand-q-crop.public-brand-q-crop{
+    top:24px!important;
+    bottom:auto!important;
     transform:translateX(-50%)!important;
   }
 }
