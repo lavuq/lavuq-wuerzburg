@@ -31,16 +31,18 @@ jobs:
           sections = find_sections(html)
           mein = next((m for m in sections if 'Goldenes LAVUQ Q – Mein Q' in m.group(0)), None)
           so = next((m for m in sections if re.search(r'id=["\']so-gehts["\']', m.group(0), flags=re.I)), None)
+          preference = next((m for m in sections if 'preference-section' in m.group(0) or 'Deine Präferenz' in m.group(0)), None)
           klare = next((m for m in sections if 'Klare Abgrenzung' in m.group(0)), None)
 
-          if not mein or not so or not klare:
-              raise SystemExit('Mein Q, So funktioniert\'s oder Klare Abgrenzung nicht gefunden')
+          if not mein or not so or not preference or not klare:
+              raise SystemExit('Mein Q, So funktioniert\'s, Deine Präferenz oder Klare Abgrenzung nicht gefunden')
 
           mein_block = mein.group(0)
           so_block = so.group(0)
+          preference_block = preference.group(0)
           klare_block = klare.group(0)
 
-          for block in (so_block, klare_block):
+          for block in (so_block, preference_block, klare_block):
               pos = html.find(block)
               if pos >= 0:
                   html = html[:pos] + html[pos + len(block):]
@@ -55,9 +57,14 @@ jobs:
           if so_pos < 0:
               raise SystemExit('So funktioniert\'s Abschnitt nach Einfügen nicht wiedergefunden')
           insert_at = so_pos + len(so_block)
+          html = html[:insert_at] + '\n' + preference_block + html[insert_at:]
+
+          preference_pos = html.find(preference_block)
+          if preference_pos < 0:
+              raise SystemExit('Deine Präferenz Abschnitt nach Einfügen nicht wiedergefunden')
+          insert_at = preference_pos + len(preference_block)
           new_html = html[:insert_at] + '\n' + klare_block + html[insert_at:]
 
-          # Force browsers to fetch the latest CSS containing the corrected stacked safety layout.
           new_html = re.sub(
               r'header-q-background-fix\.css\?v=[^"\']+',
               'header-q-background-fix.css?v=20260907-0042',
@@ -67,7 +74,7 @@ jobs:
           original = path.read_text(encoding='utf-8')
           if new_html != original:
               path.write_text(new_html, encoding='utf-8')
-              print('Updated section order and CSS cache-buster successfully')
+              print('Updated section order successfully')
           else:
               print('Already in desired state')
           PY
@@ -81,5 +88,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Refresh mobile safety layout CSS"
+          git commit -m "Move Deine Präferenz between So funktioniert's and Klare Abgrenzung"
           git push
