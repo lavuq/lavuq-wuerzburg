@@ -27,14 +27,14 @@ jobs:
           import re
 
           excluded = {'mein-q.html','mitglied.html','refresh-lavuq.html'}
-          version = '20260906-1455'
+          version = '20260906-1458'
           changed = []
 
           guard = '''<script id="lavuq-public-header-image-guard">(function(){const h=document.querySelector('header.site-header');if(!h)return;const clean=()=>h.querySelectorAll('img,object,embed').forEach(el=>el.remove());clean();new MutationObserver(clean).observe(h,{childList:true,subtree:true});})();</script>'''
 
-          # Single authoritative mobile Q rule, loaded last.
-          # Keep the full original Q asset and current smaller size, raised by 8px above the prior position.
-          q_position = '''<style id="lavuq-mobile-q-authoritative">@media(max-width:520px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{position:absolute!important;left:50%!important;right:auto!important;top:4px!important;bottom:auto!important;transform:translateX(-50%)!important;width:90px!important;height:90px!important;min-width:90px!important;min-height:90px!important;max-width:90px!important;max-height:90px!important;overflow:visible!important;z-index:56!important;background-image:url('lavuq-q-single-header.svg?v=20260906-1455')!important;background-position:center center!important;background-size:contain!important;background-repeat:no-repeat!important;background-color:transparent!important}}@media(max-width:390px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{top:7px!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;max-width:84px!important;max-height:84px!important;background-image:url('lavuq-q-single-header.svg?v=20260906-1455')!important;background-position:center center!important;background-size:contain!important;background-repeat:no-repeat!important}}</style>'''
+          # Single authoritative mobile Q geometry rule, loaded last.
+          # IMPORTANT: do not override background-image here. header-q-background-fix.css contains the working transparent gold-Q asset.
+          q_position = '''<style id="lavuq-mobile-q-authoritative">@media(max-width:520px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{position:absolute!important;left:50%!important;right:auto!important;top:4px!important;bottom:auto!important;transform:translateX(-50%)!important;width:90px!important;height:90px!important;min-width:90px!important;min-height:90px!important;max-width:90px!important;max-height:90px!important;overflow:visible!important;z-index:56!important;background-position:center center!important;background-size:90px 90px!important;background-repeat:no-repeat!important;background-color:transparent!important}}@media(max-width:390px){html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{top:7px!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;max-width:84px!important;max-height:84px!important;background-position:center center!important;background-size:84px 84px!important;background-repeat:no-repeat!important}}</style>'''
 
           styles_path = Path('styles.css')
           if styles_path.exists():
@@ -119,5 +119,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Force deploy final raised mobile gold Q"
+          git commit -m "Restore working transparent mobile gold Q"
           git push
