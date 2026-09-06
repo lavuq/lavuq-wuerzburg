@@ -1,0 +1,35 @@
+/* Premium refinement for the LAVUQ meaning section. */
+.brand-meaning-section{position:relative;overflow:hidden;background:#041529;padding:34px 0 42px}
+.brand-meaning-section:before{content:"";position:absolute;inset:-120px auto auto 50%;width:520px;height:520px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(216,180,106,.12),rgba(216,180,106,0) 68%);pointer-events:none}
+.brand-meaning-section .brand-meaning-card{position:relative;width:min(1120px,calc(100% - 40px));margin:0 auto;padding:46px;border:1px solid rgba(216,180,106,.56);border-radius:30px;background:linear-gradient(150deg,#fffdf8 0%,#f8f2e7 54%,#f3eadb 100%);box-shadow:0 28px 70px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.92)}
+.brand-meaning-section .brand-meaning-card:before{content:"";position:absolute;inset:0;border-radius:30px;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.46),transparent 36%)}
+.brand-meaning-section .brand-meaning-eyebrow{position:relative;margin:0 0 10px;color:#ad8537;font-size:.8rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase}
+.brand-meaning-section .brand-meaning-title{position:relative;margin:0 0 14px;color:#0a1930;font-size:clamp(2.25rem,4.4vw,3.55rem);line-height:1;letter-spacing:-.05em}
+.brand-meaning-section .brand-meaning-intro{position:relative;max-width:760px;margin:0 0 32px;color:#536079;font-size:1.05rem;line-height:1.62;font-weight:570}
+.brand-meaning-section .brand-meaning-grid{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin:0 0 26px}
+.brand-meaning-section .brand-meaning-item{position:relative;min-height:122px;padding:19px 17px;border:1px solid rgba(216,180,106,.3);border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.92),rgba(250,246,238,.78));box-shadow:0 12px 26px rgba(7,24,47,.06);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.brand-meaning-section .brand-meaning-item:after{content:"";position:absolute;left:17px;right:17px;bottom:13px;height:1px;background:linear-gradient(90deg,rgba(216,180,106,.52),rgba(216,180,106,0))}
+.brand-meaning-section .brand-meaning-item:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(7,24,47,.09);border-color:rgba(216,180,106,.58)}
+.brand-meaning-section .brand-meaning-letter{display:grid;place-items:center;width:46px;height:46px;margin:0 0 14px;border-radius:15px;background:linear-gradient(145deg,#f0d79b 0%,#d2a84f 52%,#b88933 100%);color:#07182f;font-size:1.28rem;font-weight:950;box-shadow:0 9px 20px rgba(184,140,55,.24),inset 0 1px 0 rgba(255,255,255,.58)}
+.brand-meaning-section .brand-meaning-word{color:#102039;font-size:1.02rem;font-weight:850;line-height:1.22}
+.brand-meaning-section .brand-meaning-item.q-item{background:linear-gradient(145deg,#0c294d 0%,#07182f 100%);border-color:rgba(216,180,106,.72);box-shadow:0 14px 32px rgba(7,24,47,.2)}
+.brand-meaning-section .brand-meaning-item.q-item:after{background:linear-gradient(90deg,rgba(216,180,106,.72),rgba(216,180,106,0))}
+.brand-meaning-section .brand-meaning-item.q-item .brand-meaning-word{color:#fff}
+.brand-meaning-section .brand-meaning-claim{position:relative;display:flex;align-items:center;gap:15px;padding:19px 21px;border:1px solid rgba(216,180,106,.42);border-radius:19px;background:linear-gradient(135deg,#06172e,#0b2341);color:#fff;font-weight:760;line-height:1.45;box-shadow:0 14px 30px rgba(7,24,47,.18)}
+.brand-meaning-section .brand-meaning-claim strong{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#efd495,#c89b43);color:#07182f;font-size:1.18rem;box-shadow:0 7px 18px rgba(216,180,106,.22)}
+@media(max-width:720px){
+  .brand-meaning-section{padding:24px 0 34px}
+  .brand-meaning-section:before{width:360px;height:360px;top:-110px}
+  .brand-meaning-section .brand-meaning-card{width:calc(100% - 30px);padding:30px 18px 20px;border-radius:24px}
+  .brand-meaning-section .brand-meaning-card:before{border-radius:24px}
+  .brand-meaning-section .brand-meaning-eyebrow{font-size:.73rem;letter-spacing:.18em;margin-bottom:9px}
+  .brand-meaning-section .brand-meaning-title{font-size:2.12rem;margin-bottom:11px}
+  .brand-meaning-section .brand-meaning-intro{font-size:.96rem;line-height:1.56;margin-bottom:22px}
+  .brand-meaning-section .brand-meaning-grid{grid-template-columns:1fr;gap:11px;margin-bottom:18px}
+  .brand-meaning-section .brand-meaning-item{display:grid;grid-template-columns:46px 1fr;align-items:center;gap:14px;min-height:72px;padding:12px 14px;border-radius:17px}
+  .brand-meaning-section .brand-meaning-item:after{left:74px;right:14px;bottom:10px}
+  .brand-meaning-section .brand-meaning-letter{width:44px;height:44px;margin:0;border-radius:13px}
+  .brand-meaning-section .brand-meaning-word{font-size:1.05rem}
+  .brand-meaning-section .brand-meaning-claim{align-items:flex-start;padding:16px;font-size:.94rem;border-radius:17px}
+  .brand-meaning-section .brand-meaning-claim strong{flex-basis:38px;width:38px;height:38px;border-radius:12px}
+}
