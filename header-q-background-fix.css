@@ -59,54 +59,53 @@
   }
 }
 
-/* Mein Q section: elegant metallic shimmer. The Q itself stays completely still. */
+/* Mein Q section: Safari-safe metallic shimmer. The Q itself stays still. */
 .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"]){
-  position:relative;
-  overflow:visible;
+  position:relative!important;
+  overflow:visible!important;
 }
 
 .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"])::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:min(280px,72vw);
-  aspect-ratio:1/1;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  z-index:2;
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:min(280px,72vw)!important;
+  aspect-ratio:1/1!important;
+  transform:translate(-50%,-50%)!important;
+  pointer-events:none!important;
+  z-index:3!important;
+  opacity:0;
   background:linear-gradient(110deg,
-    transparent 0%,
-    transparent 38%,
-    rgba(255,255,255,.18) 43%,
-    rgba(255,248,214,.92) 50%,
-    rgba(255,255,255,.18) 57%,
-    transparent 62%,
-    transparent 100%);
-  background-size:55% 100%;
-  background-repeat:no-repeat;
-  background-position:-120% 50%;
-  -webkit-mask-image:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png');
-  mask-image:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png');
-  -webkit-mask-size:contain;
-  mask-size:contain;
-  -webkit-mask-position:center;
-  mask-position:center;
-  -webkit-mask-repeat:no-repeat;
-  mask-repeat:no-repeat;
-  animation:lavuqMeinQShimmer 5.2s ease-in-out infinite;
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0) 36%,
+    rgba(255,244,196,.18) 43%,
+    rgba(255,255,255,.95) 50%,
+    rgba(255,244,196,.22) 57%,
+    rgba(255,255,255,0) 64%,
+    rgba(255,255,255,0) 100%)!important;
+  background-size:300% 100%!important;
+  background-repeat:no-repeat!important;
+  background-position:200% 50%;
+  -webkit-mask:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat!important;
+  mask:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat!important;
+  -webkit-animation:lavuqMeinQShimmerSafari 4.2s linear infinite!important;
+  animation:lavuqMeinQShimmerSafari 4.2s linear infinite!important;
+  will-change:background-position,opacity;
 }
 
-@keyframes lavuqMeinQShimmer{
-  0%,68%{background-position:-120% 50%;opacity:0}
-  72%{opacity:1}
-  88%{background-position:220% 50%;opacity:1}
-  92%,100%{background-position:220% 50%;opacity:0}
+@-webkit-keyframes lavuqMeinQShimmerSafari{
+  0%,58%{background-position:200% 50%;opacity:0}
+  62%{opacity:.2}
+  68%{opacity:1}
+  82%{background-position:-100% 50%;opacity:1}
+  88%,100%{background-position:-100% 50%;opacity:0}
 }
 
-@media (prefers-reduced-motion:reduce){
-  .section-white.compact-section .visual-split > div:has(> img[alt="Goldenes LAVUQ Q – Mein Q"])::after{
-    animation:none!important;
-    display:none!important;
-  }
+@keyframes lavuqMeinQShimmerSafari{
+  0%,58%{background-position:200% 50%;opacity:0}
+  62%{opacity:.2}
+  68%{opacity:1}
+  82%{background-position:-100% 50%;opacity:1}
+  88%,100%{background-position:-100% 50%;opacity:0}
 }
