@@ -1,4 +1,12 @@
 (()=>{
+  if(!document.querySelector('link[data-lavuq-premium-app]')){
+    const premium=document.createElement('link');
+    premium.rel='stylesheet';
+    premium.href='/lavuq-app-premium-2026.css?v=20260907-1500';
+    premium.dataset.lavuqPremiumApp='1';
+    document.head.appendChild(premium);
+  }
+
   const params=new URLSearchParams(location.search);
   const isDemo=params.get('demo')==='1';
   const demoStage=(params.get('demoStage')||'').toLowerCase();
