@@ -1,0 +1,79 @@
+/* LAVUQ premium visual system – inspired by the approved Website + PWA-App visual direction. */
+:root{
+  --navy:#06172d;
+  --navy-2:#0b2340;
+  --navy-3:#102d50;
+  --gold:#d9b15d;
+  --gold-deep:#b88c35;
+  --cream:#f7f3e9;
+  --paper:#fffdf8;
+  --ink:#0b1b32;
+  --muted:#657083;
+  --line:#e5dccd;
+  --soft-shadow:0 16px 42px rgba(6,23,45,.08);
+  --premium-shadow:0 26px 70px rgba(6,23,45,.14);
+}
+
+body{background:var(--cream)!important;color:var(--ink)!important}
+
+h1,h2,.hero h1,.final-cta h2{font-family:Georgia,"Times New Roman",serif!important;font-weight:500!important}
+.eyebrow{color:var(--gold-deep)!important;letter-spacing:.18em!important;font-weight:850!important}
+
+.site-header{background:#041529!important;border-bottom:1px solid rgba(217,177,93,.78)!important}
+.site-header .nav a{font-weight:650!important;letter-spacing:.01em!important}
+.site-header .nav .btn-primary{border-radius:8px!important;padding:11px 18px!important;box-shadow:0 8px 22px rgba(217,177,93,.18)!important}
+
+.btn{border-radius:10px!important;min-height:48px!important;padding:13px 20px!important;letter-spacing:.01em!important}
+.btn-primary{background:linear-gradient(135deg,#e2bf73,#cf9f45)!important;color:#06172d!important;box-shadow:0 10px 24px rgba(190,142,54,.22)!important}
+.btn-primary:hover{box-shadow:0 14px 30px rgba(190,142,54,.28)!important}
+.btn-dark{background:#06172d!important;color:#fff!important}
+.btn-outline{border-color:#ccb275!important;background:rgba(255,255,255,.04)!important}
+
+.hero{position:relative!important;background:linear-gradient(110deg,rgba(4,21,41,.93),rgba(8,34,61,.72)),url('wuerzburg-real.jpg') center/cover no-repeat!important;padding:92px 0 86px!important}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(4,21,41,.35),transparent 62%);pointer-events:none}
+.hero>.container{position:relative;z-index:1}
+.hero .eyebrow{color:#e4c57c!important}
+.hero h1{max-width:760px!important;text-shadow:0 4px 28px rgba(0,0,0,.22)}
+.hero p{color:#eef2f6!important;max-width:700px!important}
+.hero .companion-note{background:rgba(4,21,41,.56)!important;border:1px solid rgba(217,177,93,.34)!important;border-left:4px solid var(--gold)!important;backdrop-filter:blur(8px)}
+.hero .pill{background:rgba(255,255,255,.08)!important;border-color:rgba(217,177,93,.4)!important;color:#fff!important}
+.hero-card{background:rgba(255,253,248,.97)!important;border:1px solid rgba(217,177,93,.38)!important;border-radius:18px!important;box-shadow:var(--premium-shadow)!important}
+.hero-card .person-card{background:#f7f1e4!important;border:1px solid #eadfc8!important;border-radius:14px!important}
+.hero-card .score{border-radius:12px!important;background:#06172d!important}
+
+.section{position:relative}
+.section-white{background:var(--paper)!important}
+.section-dark{background:#06172d!important}
+.section-dark .card{background:#0b2340!important;border-color:rgba(217,177,93,.18)!important}
+.card,.compact-card{border-radius:16px!important;border:1px solid var(--line)!important;box-shadow:var(--soft-shadow)!important}
+.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!important;font-weight:600!important}
+.icon{border-radius:10px!important;background:#f1dfb5!important;color:#6f511b!important}
+
+.visual-frame{border-radius:18px!important;border-color:#dfd4c2!important;box-shadow:var(--premium-shadow)!important}
+.visual-caption{background:#fffdf8!important}
+
+.steps-grid .step{border-radius:16px!important;background:#fffdf8!important;box-shadow:var(--soft-shadow)!important}
+.steps-grid .step:before{background:#06172d!important;color:#d9b15d!important;border:1px solid rgba(217,177,93,.55)!important}
+.preference-grid div{background:#fffdf8!important;border-color:#dfd3bf!important;border-radius:14px!important;box-shadow:0 8px 20px rgba(6,23,45,.04)!important}
+
+.safety-banner{border-radius:18px!important;background:linear-gradient(135deg,#0b2a4a,#06172d)!important;border:1px solid rgba(217,177,93,.38)!important;box-shadow:var(--premium-shadow)!important}
+
+.final-cta{background:linear-gradient(120deg,#06172d,#0c2b4d)!important;border-top:1px solid rgba(217,177,93,.25)!important}
+.final-cta .eyebrow{color:#d9b15d!important}
+.final-cta .muted{color:#d1dae5!important}
+
+footer{background:#031022!important;border-top:1px solid rgba(217,177,93,.28)!important}
+footer .brand{font-family:Georgia,"Times New Roman",serif!important;letter-spacing:.08em!important}
+
+@media(max-width:860px){
+  .nav{background:#041529!important;border-color:rgba(217,177,93,.48)!important}
+  .nav a{color:#fff!important}
+  .nav a:hover{color:#d9b15d!important}
+}
+
+@media(max-width:520px){
+  .hero{padding:52px 0 46px!important;background:linear-gradient(180deg,rgba(4,21,41,.86),rgba(4,21,41,.48)),url('wuerzburg-real.jpg') center/cover no-repeat!important}
+  .hero:before{background:linear-gradient(to bottom,rgba(4,21,41,.25),rgba(4,21,41,.5))}
+  .hero .mobile-hero-photo{border-radius:16px!important;border:1px solid rgba(217,177,93,.36)!important}
+  .card,.compact-card,.steps-grid .step{border-radius:14px!important}
+}
