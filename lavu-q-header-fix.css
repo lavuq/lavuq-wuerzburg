@@ -51,3 +51,28 @@
     max-height:80px!important
   }
 }
+
+/* LAVU-Q hero: keep all five value chips visually centered, including wrapped rows. */
+.lavuq-meaning-hero .hero-values{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:center!important;
+  width:100%!important;
+}
+
+.lavuq-meaning-hero .hero-value{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+@media(max-width:520px){
+  .lavuq-meaning-hero .hero-values{
+    justify-content:center!important;
+    gap:10px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+}
