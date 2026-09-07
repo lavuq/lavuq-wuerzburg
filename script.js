@@ -8,6 +8,17 @@
     document.head.appendChild(design);
   }
 
+  // Homepage needs one final layer after old inline/legacy mobile CSS.
+  const path=(location.pathname||'').replace(/\/+$/,'');
+  const isHome=path==='' || path==='/' || path.endsWith('/index.html');
+  if(isHome && !document.querySelector('link[data-lavuq-home-final]')){
+    const home=document.createElement('link');
+    home.rel='stylesheet';
+    home.href='lavuq-home-final-2026.css?v=20260907-1524';
+    home.dataset.lavuqHomeFinal='1';
+    document.head.appendChild(home);
+  }
+
   const publicNav=document.querySelector('.nav');
   if(publicNav && !publicNav.querySelector('a[href="lavu-q.html"]')){
     const lavuQ=document.createElement('a');
