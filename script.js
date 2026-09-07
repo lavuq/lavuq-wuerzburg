@@ -1,22 +1,8 @@
-// LAVUQ public runtime: visual V2 isolation + existing behaviour.
+// LAVUQ public runtime — behaviour only. Visuals come exclusively from lavuq-visual-v2.css.
 (function(){
-  const isPublic=!!document.querySelector('.site-header');
-
-  if(isPublic){
-    // Remove every legacy author stylesheet. V2 is the only visual stylesheet afterwards.
-    document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>link.remove());
-    document.querySelectorAll('style').forEach(style=>style.remove());
-
-    const design=document.createElement('link');
-    design.rel='stylesheet';
-    design.href='lavuq-visual-v2.css?v=20260907-clean-1';
-    design.dataset.lavuqVisualV2='1';
-    document.head.appendChild(design);
-    document.documentElement.classList.add('lavuq-visual-v2');
-    document.body.classList.add('lavuq-public-v2');
-  }
-
   const publicNav=document.querySelector('.nav');
+  const toggle=document.querySelector('.nav-toggle');
+
   if(publicNav && !publicNav.querySelector('a[href="lavu-q.html"]')){
     const lavuQ=document.createElement('a');
     lavuQ.href='lavu-q.html';
@@ -28,9 +14,27 @@
     else publicNav.prepend(lavuQ);
   }
 
-  // Existing functional behaviour stays untouched.
-  const legacy=document.createElement('script');
-  legacy.src='script-legacy.js?v=20260907-lavuq-nav';
-  legacy.async=false;
-  document.head.appendChild(legacy);
+  if(toggle && publicNav){
+    const closeMenu=()=>{
+      publicNav.classList.remove('open');
+      document.body.classList.remove('menu-open');
+      toggle.setAttribute('aria-expanded','false');
+    };
+    toggle.addEventListener('click',()=>{
+      const open=publicNav.classList.toggle('open');
+      document.body.classList.toggle('menu-open',open);
+      toggle.setAttribute('aria-expanded',String(open));
+    });
+    publicNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+  }
+
+  // Only load the legacy behaviour on pages that still require its form/FAQ logic.
+  // The homepage and normal content pages stay completely free from legacy runtime styling.
+  const needsLegacy=!!document.querySelector('#applyForm,.faq-q');
+  if(needsLegacy){
+    const legacy=document.createElement('script');
+    legacy.src='script-legacy.js?v=20260907-functional-only-1';
+    legacy.async=false;
+    document.head.appendChild(legacy);
+  }
 })();
