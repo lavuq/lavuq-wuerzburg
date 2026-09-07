@@ -1,0 +1,39 @@
+/* Premium visual system for LAVUQ PWA / Mein Q. */
+:root{--navy:#041529;--navy2:#0b2340;--gold:#d8b46a;--gold2:#e7c77e;--cream:#f7f3ea;--paper:#fffdf8;--ink:#132033;--muted:#667085;--line:#e6dccb}
+html,body{background:var(--cream)!important;color:var(--ink)!important}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+header{background:#041529!important;border-bottom:1px solid rgba(216,180,106,.75)!important;box-shadow:0 8px 26px rgba(4,21,41,.14)!important}
+.brand-city,.app-min-header .city{color:var(--gold)!important;font-family:Georgia,"Times New Roman",serif!important}
+h1,h2,.overview-welcome h2,.next-step h2,.group-card h2{font-family:Georgia,"Times New Roman",serif!important;font-weight:500!important}
+.eyebrow{color:#b88e3b!important;letter-spacing:.17em!important}
+.app-shell{border-radius:22px!important;border-color:rgba(216,180,106,.34)!important;background:rgba(255,253,248,.76)!important;box-shadow:0 22px 60px rgba(4,21,41,.10)!important}
+.app-tabs{background:#041529!important;border-bottom:1px solid rgba(216,180,106,.26)!important}
+.app-tab{border-radius:10px!important}
+.app-tab.active{background:linear-gradient(135deg,#e5c575,#cda14e)!important;color:#041529!important}
+.app-content{background:#f7f3ea!important}
+.card,.quick,.meeting,.schedule-panel,.vote-card{background:#fffdf8!important;border-color:#e4dac9!important;border-radius:16px!important;box-shadow:0 10px 26px rgba(4,21,41,.055)!important}
+.overview-welcome{background:linear-gradient(135deg,#0b2a49,#041529)!important;border-color:rgba(216,180,106,.48)!important;border-radius:18px!important;box-shadow:0 18px 40px rgba(4,21,41,.16)!important}
+.overview-badge{border-radius:10px!important;background:rgba(216,180,106,.11)!important}
+.next-step{background:#fff9ec!important;border-color:#dcc17c!important}
+.quick-grid.overview-actions .quick{border-top:3px solid rgba(216,180,106,.66)!important}
+.avatar{background:#041529!important;color:#d8b46a!important}
+.member.me{background:#fff8e7!important;border-color:#d8b46a!important}
+.chat-log{background:#f4efe5!important;border-radius:14px!important}
+.bubble{border-radius:14px 14px 14px 5px!important;background:#fff!important;box-shadow:0 3px 10px rgba(4,21,41,.06)!important}
+.bubble.me{border-radius:14px 14px 5px 14px!important;background:#fff1c9!important;border-color:#dfc477!important}
+.btn{border-radius:10px!important;min-height:48px!important}
+.btn-primary{background:linear-gradient(135deg,#e5c575,#cda14e)!important;color:#041529!important}
+.btn-dark{background:#041529!important;color:#fff!important}
+.btn-light{background:#f2eee5!important;color:#041529!important;border:1px solid #e1d7c7!important}
+.composer textarea,.safety-box textarea,.safety-box select,.schedule-form input,.schedule-form select{background:#fffdf8!important;border-color:#d9d0c2!important;border-radius:12px!important}
+.danger-note{background:#fff0e8!important;border-color:#e8b898!important}
+.privacy-note,.overview-tip{background:#f1eee7!important;border:1px solid #e5ddd1!important}
+html.lavuq-standalone body{background:#f7f3ea!important}
+html.lavuq-standalone .lavuq-app-bottom-nav{background:rgba(4,21,41,.98)!important;border-top:1px solid rgba(216,180,106,.62)!important}
+html.lavuq-standalone .lavuq-app-bottom-nav .app-tab.active{background:rgba(216,180,106,.15)!important;color:#e7c97d!important}
+@media(max-width:760px){
+  .wrap{width:min(calc(100% - 20px),1080px)!important}
+  .app-content{padding:12px!important}
+  .card{border-radius:15px!important}
+  .overview-welcome{border-radius:16px!important}
+}
