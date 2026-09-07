@@ -1,0 +1,53 @@
+/* LAVU-Q page: authoritative mobile header Q renderer. Uses the existing original gold Q asset. */
+@media(max-width:520px){
+  html body header.site-header,
+  html body header.site-header .nav-wrap{overflow:visible!important}
+
+  html body header.site-header .nav-wrap{position:relative!important}
+
+  html body header.site-header .nav-wrap a.public-brand{
+    position:static!important;
+    overflow:visible!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    border:0!important
+  }
+
+  html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    position:absolute!important;
+    left:50%!important;
+    right:auto!important;
+    top:50%!important;
+    bottom:auto!important;
+    transform:translate(-50%,-50%)!important;
+    width:88px!important;
+    height:88px!important;
+    min-width:88px!important;
+    min-height:88px!important;
+    max-width:88px!important;
+    max-height:88px!important;
+    overflow:visible!important;
+    z-index:70!important;
+    background-image:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png')!important;
+    background-position:center!important;
+    background-size:contain!important;
+    background-repeat:no-repeat!important;
+    background-color:transparent!important;
+    box-shadow:none!important;
+    border:0!important
+  }
+}
+
+@media(max-width:390px){
+  html body header.site-header .nav-wrap a.public-brand > span.public-brand-q-crop{
+    width:80px!important;
+    height:80px!important;
+    min-width:80px!important;
+    min-height:80px!important;
+    max-width:80px!important;
+    max-height:80px!important
+  }
+}
