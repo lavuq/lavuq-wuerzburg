@@ -1,7 +1,16 @@
-// LAVUQ public runtime — behaviour only. Visuals come exclusively from lavuq-visual-v3.css.
+// LAVUQ public runtime — behaviour only. Visuals come exclusively from the new V3/V4 stylesheets.
 (function(){
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
-  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260907-v3-1';
+  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260907-v3-2';
+
+  // Homepage gets its own isolated hero presentation layered on top of the clean V3 design system.
+  if(document.querySelector('body main .hero') && !document.querySelector('link[data-lavuq-home-hero]')){
+    const heroStyle=document.createElement('link');
+    heroStyle.rel='stylesheet';
+    heroStyle.href='homepage-hero-v4.css?v=20260907-v4-1';
+    heroStyle.dataset.lavuqHomeHero='1';
+    document.head.appendChild(heroStyle);
+  }
 
   const publicNav=document.querySelector('.nav');
   const toggle=document.querySelector('.nav-toggle');
@@ -32,7 +41,6 @@
   }
 
   // Legacy runtime is restricted to pages that still need its form/FAQ behaviour.
-  // Normal content pages and the homepage get no legacy runtime styling or PWA overlay.
   const needsLegacy=!!document.querySelector('#applyForm,.faq-q');
   if(needsLegacy){
     const legacy=document.createElement('script');
