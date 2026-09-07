@@ -1,11 +1,21 @@
 (()=>{
-  if(!document.querySelector('link[data-lavuq-premium-app]')){
-    const premium=document.createElement('link');
-    premium.rel='stylesheet';
-    premium.href='/lavuq-app-premium-2026.css?v=20260907-1512';
-    premium.dataset.lavuqPremiumApp='1';
-    document.head.appendChild(premium);
+  // Visual isolation: after the member scripts have initialized, remove all legacy CSS/style blocks
+  // and keep only the independent V2 app stylesheet. Functional JS remains untouched.
+  function isolateMemberVisuals(){
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>link.remove());
+    document.querySelectorAll('style').forEach(style=>style.remove());
+    if(!document.querySelector('link[data-lavuq-app-v2]')){
+      const v2=document.createElement('link');
+      v2.rel='stylesheet';
+      v2.href='/lavuq-app-v2.css?v=20260907-clean-1';
+      v2.dataset.lavuqAppV2='1';
+      document.head.appendChild(v2);
+    }
+    document.documentElement.classList.add('lavuq-app-v2');
+    document.body.classList.add('lavuq-app-v2');
   }
+  setTimeout(isolateMemberVisuals,120);
+  setTimeout(isolateMemberVisuals,1200);
 
   const params=new URLSearchParams(location.search);
   const isDemo=params.get('demo')==='1';
@@ -56,24 +66,7 @@
     }catch{return 0;}
   }
 
-  function addStyles(){
-    if(document.getElementById('lavuq-completion-style'))return;
-    const style=document.createElement('style');
-    style.id='lavuq-completion-style';
-    style.textContent=`
-      .lavuq-completion-wrap{padding:0 14px 14px;background:#f7f3ea}
-      .lavuq-completion{width:100%;padding:18px;border:1px solid #dcc27f;border-radius:18px;background:#fffaf0;box-shadow:0 8px 22px rgba(4,21,41,.06)}
-      .lavuq-completion-badge{display:inline-block;margin-bottom:8px;color:#8b6826;font-size:.76rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
-      .lavuq-completion h3{margin:0 0 8px;color:#132033;font-family:Georgia,"Times New Roman",serif;font-size:1.45rem;font-weight:500;line-height:1.15}
-      .lavuq-completion p{margin:0;color:#667085;line-height:1.5}
-      .lavuq-completion-note{margin-top:12px;padding:12px 13px;border-radius:13px;background:#edf8f1;color:#20543b;font-weight:750;line-height:1.4}
-      .lavuq-completion-actions{display:grid;gap:9px;margin-top:15px}
-      .lavuq-completion-actions .btn{width:100%;min-height:48px}
-      .lavuq-completion-leave{background:#eef2f6;color:#132033}
-      .lavuq-completion-result{margin-top:12px}
-    `;
-    document.head.appendChild(style);
-  }
+  function addStyles(){/* Visual styling now lives exclusively in lavuq-app-v2.css. */}
 
   function showResult(root,text){
     const box=root.querySelector('.lavuq-completion-result');
