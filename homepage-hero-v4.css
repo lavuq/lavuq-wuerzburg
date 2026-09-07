@@ -1,0 +1,126 @@
+/* LAVUQ HOMEPAGE HERO V4 — standalone hero presentation */
+.hero{
+  position:relative;
+  overflow:hidden;
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(5,22,40,.95) 0%,rgba(5,22,40,.83) 42%,rgba(5,22,40,.30) 76%,rgba(5,22,40,.15) 100%),
+    url('wuerzburg-real.jpg') center 50%/cover no-repeat;
+  padding:72px 0 68px;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 36%,rgba(3,15,29,.24));
+  pointer-events:none;
+}
+.hero::after{display:none!important}
+.hero .hero-grid{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:minmax(0,760px) minmax(300px,390px);
+  justify-content:space-between;
+  gap:54px;
+  align-items:center;
+}
+.hero .hero-grid>div:first-child{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.hero .eyebrow{order:1;margin:0 0 18px;color:#efd38d;font-size:.72rem;letter-spacing:.19em}
+.hero h1{order:2;margin:0 0 18px;max-width:720px;font-size:clamp(3.7rem,6.4vw,5.7rem);line-height:.93;letter-spacing:-.045em;text-shadow:0 3px 22px rgba(0,0,0,.20)}
+.hero h1 span{color:#efd38d}
+.hero .hero-intro{order:3;max-width:610px;margin:0;color:rgba(255,255,255,.91);font-size:1rem;line-height:1.55}
+.hero .hero-actions{order:4;display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 0}
+.hero .hero-actions .btn{min-height:50px}
+.hero .companion-note{
+  order:5;
+  width:min(100%,610px);
+  margin:20px 0 0;
+  padding:13px 16px;
+  border:1px solid rgba(225,190,112,.42);
+  border-left:3px solid #d7ae5b;
+  border-radius:10px;
+  background:rgba(5,26,48,.55);
+  box-shadow:none;
+  backdrop-filter:blur(5px);
+  color:rgba(255,255,255,.9);
+  font-size:.83rem;
+  line-height:1.45;
+}
+.hero .companion-note strong{color:#efd38d}
+.hero .free-note{order:6;margin:14px 0 0;color:rgba(255,255,255,.72);font-size:.76rem}
+.hero .pill-row{order:7;margin-top:15px;display:flex;flex-wrap:wrap;gap:7px}
+.hero .pill{min-height:32px;padding:6px 11px;border:1px solid rgba(215,174,91,.44);background:rgba(5,22,40,.46);font-size:.75rem;font-weight:750}
+.hero .mobile-hero-photo{display:none!important}
+
+.hero .hero-card{
+  align-self:center;
+  background:rgba(255,253,248,.96);
+  border:1px solid rgba(215,174,91,.44);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 28px 64px rgba(0,0,0,.22);
+}
+
+@media(max-width:900px){
+  .hero .hero-grid{grid-template-columns:1fr;gap:28px}
+  .hero .hero-card{display:none}
+}
+
+@media(max-width:520px){
+  .hero{
+    min-height:auto;
+    padding:42px 0 38px;
+    background:
+      linear-gradient(180deg,rgba(5,22,40,.90) 0%,rgba(5,22,40,.76) 37%,rgba(5,22,40,.52) 70%,rgba(5,22,40,.78) 100%),
+      url('wuerzburg-real.jpg') center 52%/cover no-repeat;
+  }
+  .hero .container{width:min(calc(100% - 34px),1180px)}
+  .hero .hero-grid{display:block}
+  .hero .hero-grid>div:first-child{display:flex;flex-direction:column;align-items:stretch}
+  .hero .eyebrow{margin-bottom:15px;font-size:.66rem;line-height:1.45;letter-spacing:.17em}
+  .hero h1{margin-bottom:16px;font-size:clamp(2.85rem,12.2vw,3.65rem);line-height:.92;letter-spacing:-.047em}
+  .hero .hero-intro{max-width:none;font-size:.9rem;line-height:1.48;color:rgba(255,255,255,.9)}
+  .hero .hero-intro-desktop{display:none!important}
+  .hero .hero-intro-mobile{display:inline!important}
+  .hero .hero-actions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:20px;align-items:stretch}
+  .hero .hero-actions .btn{min-height:47px;padding:11px 15px;font-size:.82rem}
+  .hero .hero-actions .btn-primary{width:100%}
+  .hero .hero-actions .btn-outline{padding-inline:14px;background:rgba(5,22,40,.28)}
+  .hero .companion-note{
+    width:100%;
+    margin-top:16px;
+    padding:11px 13px;
+    border-radius:9px;
+    background:rgba(5,24,44,.56);
+    font-size:.78rem;
+    line-height:1.4;
+  }
+  .hero .free-note{display:none!important}
+  .hero .pill-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-top:16px;
+  }
+  .hero .pill{
+    justify-content:center;
+    text-align:center;
+    min-height:34px;
+    padding:7px 8px;
+    border-radius:999px;
+    font-size:.71rem;
+    background:rgba(4,20,37,.54);
+  }
+  .hero .pill:nth-child(5){display:none}
+}
+
+@media(max-width:380px){
+  .hero h1{font-size:2.75rem}
+  .hero .hero-actions{grid-template-columns:1fr}
+  .hero .hero-actions .btn{width:100%}
+}
