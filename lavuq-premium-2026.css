@@ -7,24 +7,18 @@
   --shadow-soft:0 12px 32px rgba(4,21,41,.07);
   --shadow-premium:0 28px 75px rgba(4,21,41,.15);
 }
-
 html{background:var(--cream)}
 body{background:var(--cream)!important;color:var(--ink)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:-.005em}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 8% 12%,rgba(216,180,106,.09),transparent 27%),radial-gradient(circle at 94% 38%,rgba(4,21,41,.035),transparent 30%)}
-
 h1,h2,.hero h1,.final-cta h2,.intro h2,.visual-copy h2{font-family:Georgia,"Times New Roman",serif!important;font-weight:500!important;letter-spacing:-.035em!important}
 h3,.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!important;font-weight:600!important;letter-spacing:-.015em!important}
 .eyebrow{color:var(--gold-deep)!important;letter-spacing:.19em!important;font-weight:900!important;font-size:.74rem!important}
 .muted{color:var(--muted)!important}
-
-/* Brand header */
 .site-header{background:#041529!important;border-bottom:1px solid rgba(216,180,106,.72)!important;box-shadow:0 10px 38px rgba(4,21,41,.11)!important}
 .site-header .nav a{font-weight:650!important;letter-spacing:.01em!important;color:#f7f4ee!important}
 .site-header .nav a:hover,.site-header .nav a:focus{color:var(--gold-2)!important}
 .site-header .nav .btn-primary{border-radius:8px!important;padding:11px 18px!important;background:linear-gradient(135deg,var(--gold-2),#cf9e45)!important;color:#041529!important;box-shadow:0 8px 22px rgba(216,180,106,.19)!important}
 .topbar{background:#d8b46a!important;color:#041529!important;letter-spacing:.02em}
-
-/* Buttons */
 .btn{border-radius:9px!important;min-height:49px!important;padding:13px 21px!important;font-weight:850!important;letter-spacing:.01em!important;box-shadow:none;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
 .btn:hover{transform:translateY(-2px)}
 .btn-primary{background:linear-gradient(135deg,#e7c77f,#ca9941)!important;color:#041529!important;border-color:rgba(141,98,24,.2)!important;box-shadow:0 10px 24px rgba(178,128,42,.2)!important}
@@ -32,8 +26,6 @@ h3,.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!importa
 .btn-dark{background:#041529!important;color:#fff!important}
 .btn-outline{background:transparent!important;border:1px solid #c9ae74!important;color:#0b1b32!important}
 .section-dark .btn-outline,.hero .btn-outline{color:#fff!important;border-color:rgba(216,180,106,.62)!important;background:rgba(4,21,41,.22)!important}
-
-/* Hero: editorial Würzburg cover */
 .hero{position:relative!important;isolation:isolate;background-image:linear-gradient(90deg,rgba(4,21,41,.96) 0%,rgba(4,21,41,.87) 42%,rgba(4,21,41,.52) 68%,rgba(4,21,41,.27) 100%),url('wuerzburg-real.jpg')!important;background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important;color:#fff!important;padding:96px 0 92px!important;min-height:610px;display:flex;align-items:center;overflow:hidden!important}
 .hero:before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;z-index:-1!important;background:linear-gradient(180deg,rgba(216,180,106,.03),transparent 28%),radial-gradient(circle at 78% 32%,rgba(216,180,106,.13),transparent 28%)!important}
 .hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(216,180,106,.85),transparent)}
@@ -51,8 +43,6 @@ h3,.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!importa
 .hero-card:before{border-color:rgba(216,180,106,.58)!important}
 .hero-card .person-card{background:#f7f1e5!important;border:1px solid #e8dcc7!important;border-radius:12px!important}
 .hero-card .score{background:#041529!important;border-radius:11px!important}
-
-/* Section rhythm */
 .section{padding:92px 0!important}
 .section-white{background:var(--paper)!important}
 .section-white:nth-of-type(even){background:var(--paper-2)!important}
@@ -61,8 +51,6 @@ h3,.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!importa
 .intro{max-width:790px!important;margin-bottom:42px!important}
 .intro h2{font-size:clamp(2.25rem,4.4vw,4.2rem)!important;line-height:1.02!important}
 .intro p{font-size:1.02rem;line-height:1.68}
-
-/* Cards and information tiles */
 .card,.compact-card,.steps-grid .step,.preference-grid div{background:rgba(255,253,248,.97)!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:var(--shadow-soft)!important}
 .card,.compact-card{padding:27px!important}
 .card:hover,.compact-card:hover{border-color:#d6bf8b!important;box-shadow:0 18px 42px rgba(4,21,41,.09)!important}
@@ -72,15 +60,11 @@ h3,.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!importa
 .steps-grid .step{padding-top:27px!important;padding-bottom:27px!important}
 .steps-grid .step:before{background:#041529!important;color:#d8b46a!important;border:1px solid rgba(216,180,106,.55)!important;box-shadow:0 8px 20px rgba(4,21,41,.12)!important}
 .preference-grid div{font-family:Georgia,"Times New Roman",serif!important;font-weight:600!important;font-size:1rem!important}
-
-/* Image language */
 .visual-frame{border-radius:16px!important;border:1px solid #ded2be!important;background:#fffdf8!important;box-shadow:var(--shadow-premium)!important}
 .visual-frame img{filter:saturate(.94) contrast(1.02)}
 .visual-caption{background:#fffdf8!important;border-top:1px solid #e6dccb!important;padding:17px 20px!important}
 .visual-split{gap:42px!important}
 .city-photo:after{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(216,180,106,.65),transparent);pointer-events:none}
-
-/* Safety / CTA / footer */
 .safety-banner{border-radius:16px!important;background:linear-gradient(135deg,#0c2d4e,#041529)!important;border:1px solid rgba(216,180,106,.38)!important;box-shadow:var(--shadow-premium)!important;padding:42px!important}
 .final-cta{background:linear-gradient(120deg,#041529,#0b2b4a)!important;border-top:1px solid rgba(216,180,106,.28)!important;border-bottom:1px solid rgba(216,180,106,.22)!important;padding-top:92px!important;padding-bottom:92px!important}
 .final-cta .eyebrow{color:#d8b46a!important}
@@ -89,13 +73,9 @@ h3,.card h3,.compact-card h3{font-family:Georgia,"Times New Roman",serif!importa
 footer{background:#020e1d!important;border-top:1px solid rgba(216,180,106,.28)!important;padding-top:62px!important}
 footer .brand{font-family:Georgia,"Times New Roman",serif!important;letter-spacing:.08em!important}
 .footer-links a{transition:color .18s ease}.footer-links a:hover{color:#e5c67c!important}
-
-/* Forms / application */
 input,select,textarea{border-radius:9px!important;border-color:#d9cebc!important;background:#fffdf8!important}
 input:focus,select:focus,textarea:focus{border-color:#b8944d!important;outline:3px solid rgba(216,180,106,.15)!important}
 fieldset,.field{accent-color:#cda756}
-
-/* Responsive */
 @media(max-width:860px){
   .nav{background:#041529!important;border:1px solid rgba(216,180,106,.48)!important;border-radius:18px!important;box-shadow:0 25px 60px rgba(0,0,0,.32)!important}
   .nav a{color:#fff!important}
@@ -104,13 +84,8 @@ fieldset,.field{accent-color:#cda756}
   .hero-grid{grid-template-columns:1fr!important;gap:34px!important}
   .section{padding:74px 0!important}
 }
-
 @media(max-width:520px){
   body{background:#f6f1e6!important}
-  .hero{min-height:0!important;padding:54px 0 50px!important;background-image:linear-gradient(180deg,rgba(4,21,41,.93) 0%,rgba(4,21,41,.74) 50%,rgba(4,21,41,.86) 100%),url('wuerzburg-real.jpg')!important;background-position:center!important}
-  .hero h1{font-size:clamp(3rem,14vw,4.55rem)!important;line-height:.94!important}
-  .hero p{font-size:.98rem!important}
-  .hero .mobile-hero-photo{border-radius:14px!important;border:1px solid rgba(216,180,106,.35)!important;box-shadow:0 16px 38px rgba(0,0,0,.2)!important}
   .section{padding:62px 0!important}
   .intro{margin-bottom:30px!important}
   .intro h2{font-size:clamp(2.1rem,10vw,3.1rem)!important}
@@ -120,4 +95,20 @@ fieldset,.field{accent-color:#cda756}
   .safety-banner{padding:27px 20px!important;border-radius:14px!important}
   .final-cta{padding:68px 0!important}
   .final-cta h2{font-size:2.35rem!important}
+
+  /* Homepage mobile: closer to approved editorial mockup. */
+  body .hero:has(.mobile-hero-photo){padding:34px 0 0!important;background:#041529!important;min-height:0!important}
+  body .hero:has(.mobile-hero-photo)>.container{padding:0 22px!important}
+  body .hero:has(.mobile-hero-photo) .eyebrow{margin-bottom:14px!important}
+  body .hero:has(.mobile-hero-photo) h1{margin-bottom:16px!important}
+  body .hero:has(.mobile-hero-photo) h1:before,
+  body .hero:has(.mobile-hero-photo) h1:after{font-size:clamp(2.8rem,12.5vw,3.95rem)!important;line-height:.92!important}
+  body .hero:has(.mobile-hero-photo) .companion-note{margin:0 0 18px!important;padding:12px 15px!important;font-size:.84rem!important;line-height:1.4!important;border-radius:12px!important;background:rgba(12,38,66,.72)!important}
+  body .hero:has(.mobile-hero-photo) .mobile-hero-photo{width:calc(100% + 44px)!important;margin:0 -22px!important}
+  body .hero:has(.mobile-hero-photo) .mobile-hero-photo img{height:330px!important;object-position:center 42%!important;filter:brightness(.72) saturate(1.02) contrast(1.04)!important;transform:none!important}
+  body .hero:has(.mobile-hero-photo) .mobile-hero-photo:before{background:linear-gradient(to bottom,rgba(4,21,41,.6) 0%,rgba(4,21,41,.18) 22%,rgba(4,21,41,.02) 62%,rgba(4,21,41,.2) 100%)!important}
+  body .hero:has(.mobile-hero-photo) .mobile-photo-label{left:6%!important;right:6%!important;bottom:18px!important;min-height:84px!important;padding:14px 16px 14px 66px!important;border-radius:14px!important;background:rgba(4,21,41,.82)!important;backdrop-filter:blur(9px)!important}
+  body .hero:has(.mobile-hero-photo) .mobile-photo-label:before{font-size:.7rem!important;margin-bottom:5px!important}
+  body .hero:has(.mobile-hero-photo) .mobile-photo-label:after{font-size:.74rem!important;line-height:1.38!important}
+  body .hero:has(.mobile-hero-photo) .people-four-icon{width:44px!important;height:36px!important;left:13px!important}
 }
