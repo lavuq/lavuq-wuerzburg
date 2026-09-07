@@ -1,0 +1,197 @@
+/* LAVUQ VISUAL V3 — completely independent visual system */
+:root{
+  --navy:#061a30;
+  --navy-soft:#0d2a47;
+  --gold:#d7ae5b;
+  --gold-light:#efd38d;
+  --cream:#f6f1e7;
+  --paper:#fffdf8;
+  --ink:#0a1a30;
+  --muted:#667085;
+  --line:#ded4c3;
+  --shadow:0 18px 48px rgba(6,26,48,.11);
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--cream)}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.container{width:min(calc(100% - 40px),var(--max));margin-inline:auto}
+.muted{color:var(--muted)}
+.eyebrow,.brand-meaning-eyebrow{text-transform:uppercase;letter-spacing:.19em;font-weight:850;font-size:.74rem;color:#a57828}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.04em;line-height:.98;margin:0 0 18px}
+h1{font-size:clamp(3rem,6.6vw,5.9rem)}
+h2{font-size:clamp(2.15rem,4.3vw,3.9rem)}
+h3{margin:0 0 10px;line-height:1.15}
+p{margin:0 0 16px}
+
+/* Header */
+.topbar{background:var(--gold);color:var(--navy);text-align:center;padding:9px 0;font-size:.9rem;font-weight:800}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(6,26,48,.985);border-bottom:1px solid rgba(215,174,91,.65)}
+.nav-wrap{min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.public-brand{display:flex;align-items:center;gap:13px;color:#fff}
+.public-brand-copy{display:flex;flex-direction:column;line-height:1}
+.public-brand-name{font-family:Georgia,"Times New Roman",serif;font-size:1.72rem;letter-spacing:.12em}
+.public-brand-city{font-family:Georgia,"Times New Roman",serif;color:var(--gold);font-size:.92rem;margin-top:7px}
+.public-brand-q-crop{width:58px;height:58px;flex:none;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat}
+.nav{display:flex;align-items:center;gap:18px;color:#fff;font-size:.88rem;font-weight:700}
+.nav a{transition:.2s ease}
+.nav a:hover{color:var(--gold-light)}
+.nav-toggle{display:none;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border:1px solid var(--gold);border-radius:999px;background:transparent;color:#fff;font:800 .95rem/1 inherit}
+.public-menu-icon{color:var(--gold)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border-radius:8px;border:1px solid transparent;font-weight:850;line-height:1.2}
+.btn-primary{background:linear-gradient(135deg,var(--gold-light),#c99539);color:var(--navy);box-shadow:0 10px 26px rgba(174,121,35,.2)}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-outline{border-color:#c8ad75;background:transparent;color:var(--navy)}
+.hero .btn-outline{border-color:rgba(255,255,255,.52);color:#fff}
+.btn-small{min-height:40px;padding:9px 15px;font-size:.86rem}
+
+/* Homepage hero — reference-driven */
+.hero{position:relative;overflow:hidden;color:#fff;background-image:linear-gradient(90deg,rgba(6,26,48,.93) 0%,rgba(6,26,48,.72) 46%,rgba(6,26,48,.22) 100%),url('wuerzburg-real.jpg');background-size:cover;background-position:center 52%;padding:78px 0 72px}
+.hero:after{content:"";position:absolute;inset:auto 0 0;height:120px;background:linear-gradient(transparent,rgba(6,26,48,.7));pointer-events:none}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.72fr);gap:48px;align-items:center}
+.hero .eyebrow{color:var(--gold-light);margin-bottom:22px}
+.hero h1{max-width:760px;text-shadow:0 2px 18px rgba(0,0,0,.18)}
+.hero h1 span{color:var(--gold-light)}
+.hero-intro{max-width:660px;color:#f1f4f7;font-size:1.03rem;line-height:1.62}
+.hero-intro-mobile{display:none}
+.companion-note{max-width:660px;margin:24px 0 0;padding:17px 20px;border:1px solid rgba(215,174,91,.55);border-left:5px solid var(--gold);border-radius:14px;background:rgba(7,29,52,.74);box-shadow:0 16px 40px rgba(0,0,0,.18);backdrop-filter:blur(5px);font-size:.93rem;line-height:1.5}
+.companion-note strong{color:var(--gold-light)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin:25px 0 18px}
+.free-note{color:#e4e9ee;font-size:.86rem;margin-bottom:18px}
+.free-note-mobile{display:none}
+.pill-row{display:flex;flex-wrap:wrap;gap:9px}
+.pill{display:inline-flex;align-items:center;min-height:34px;padding:7px 12px;border:1px solid rgba(215,174,91,.46);border-radius:999px;background:rgba(5,24,44,.53);color:#fff;font-size:.8rem;font-weight:750}
+.mobile-hero-photo{display:none!important}
+.hero-card{background:rgba(255,253,248,.97);color:var(--ink);border:1px solid rgba(215,174,91,.48);border-radius:17px;padding:25px;box-shadow:0 30px 72px rgba(0,0,0,.23)}
+.hero-card .eyebrow{color:#9a7227;margin-bottom:10px}
+.hero-card h3{font-family:Georgia,"Times New Roman",serif;font-size:1.7rem;font-weight:500}
+.group-visual{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.person-card{padding:13px;border:1px solid var(--line);border-radius:11px;background:#fff;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}
+.person-card small{grid-column:2;color:var(--muted)}
+.person-dot{width:10px;height:10px;border-radius:50%;background:var(--gold);grid-row:1/3}
+.score{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.score strong{color:#8d6822}
+
+/* Brand meaning */
+.brand-meaning-section{background:var(--paper);padding:76px 20px}
+.brand-meaning-card{width:min(100%,var(--max));margin:auto}
+.brand-meaning-title{color:var(--ink)}
+.brand-meaning-intro{max-width:760px;color:var(--muted)}
+.brand-meaning-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}
+.brand-meaning-item{padding:18px;border:1px solid var(--line);background:#fff;border-radius:13px;box-shadow:0 9px 24px rgba(6,26,48,.05)}
+.brand-meaning-letter{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:#f0dfb9;color:#6e4e15;font-weight:900;margin-bottom:10px}
+.brand-meaning-word{font-weight:800}
+.brand-meaning-item.q-item{border-color:#d9bd7c;background:#fffaf0}
+.brand-meaning-claim{margin-top:20px;padding:18px 20px;border-radius:13px;background:var(--navy);color:#fff;display:flex;gap:14px;align-items:center}
+.brand-meaning-claim strong{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--gold);color:var(--navy);font:700 1.35rem Georgia,serif;flex:none}
+
+/* Sections */
+.section{padding:76px 0}
+.section-white{background:var(--paper)}
+.section-dark{background:linear-gradient(135deg,var(--navy),var(--navy-soft));color:#fff}
+.section-dark .muted{color:#cbd5df}
+.section-dark .card h3{color:var(--gold-light)}
+.intro{max-width:790px;margin-bottom:34px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid-2,.visual-split{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.card,.compact-card{padding:23px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.section-dark .card{background:#0b2948;border-color:rgba(215,174,91,.22)}
+.icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:#efdfb9;color:#6d4e17;font-weight:900;margin-bottom:14px}
+.steps{counter-reset:step}
+.steps-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.step{position:relative;padding:22px 22px 22px 72px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+.step:before{counter-increment:step;content:counter(step);position:absolute;left:19px;top:20px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:var(--gold-light);font-weight:900}
+.preference-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.preference-grid>div{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center;font-weight:800}
+.visual-frame{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#fff;box-shadow:var(--shadow)}
+.visual-frame img{width:100%;height:auto}
+.visual-caption{padding:14px 17px;color:var(--muted)}
+.visual-caption strong{color:var(--ink)}
+.compact-checks{display:grid;gap:10px;margin:20px 0}
+.compact-checks>div{display:flex;gap:10px;align-items:flex-start}
+.compact-checks span{color:#a97b28;font-weight:900}
+.section-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}
+.section-pills{margin-top:24px}
+.q-showcase{display:flex;justify-content:center}
+.q-showcase img{width:min(280px,72vw);height:auto;object-fit:contain}
+.section-visual-break{padding:0;background:var(--cream)}
+.section-visual-break .container{padding:54px 0}
+.final-cta{background:linear-gradient(125deg,var(--navy),var(--navy-soft));color:#fff;text-align:center}
+.final-cta .container{max-width:820px}
+.final-cta .muted{color:#d5dde6}
+
+/* Footer */
+footer{background:#020f1e;color:#c9d2dc;padding:54px 0 28px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:34px}
+.footer-grid h3{color:#fff}
+.footer-links{display:grid;gap:8px}
+.footer-intro{margin-top:14px}
+.footer-intro strong{color:var(--gold-light)}
+.brand-mark{width:48px;height:48px;object-fit:contain}
+
+/* Forms */
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:#fff;border:1px solid #d8cfbf;border-radius:10px;padding:12px 13px}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(215,174,91,.18);border-color:#b69048}
+
+/* PWA install UI — if loaded on functional pages */
+.lavuq-pwa-install{position:fixed!important;right:16px!important;bottom:18px!important;z-index:9998!important;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 32px);border:1px solid rgba(215,174,91,.8)!important;background:var(--navy)!important;color:#fff!important;border-radius:999px!important;padding:11px 16px!important;font:800 .82rem/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;box-shadow:0 12px 34px rgba(0,0,0,.22)!important}
+.lavuq-pwa-install span{color:var(--gold-light)}
+.lavuq-pwa-sheet{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.5);display:grid;place-items:end center;padding:16px}
+.lavuq-pwa-card{width:min(100%,460px);background:var(--paper);color:var(--ink);border-radius:22px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.32)}
+
+/* Navigation mobile */
+@media(max-width:900px){
+  .nav{display:none;position:absolute;top:78px;left:14px;right:14px;flex-direction:column;align-items:stretch;background:var(--navy);border:1px solid rgba(215,174,91,.5);border-radius:15px;padding:13px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
+  .nav.open{display:flex}
+  .nav-toggle{display:flex}
+  .hero-grid,.grid-3,.grid-2,.visual-split,.footer-grid{grid-template-columns:1fr}
+  .hero-card{max-width:620px}
+  .brand-meaning-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+@media(max-width:520px){
+  .topbar{display:none}
+  .container{width:min(calc(100% - 28px),var(--max))}
+  .site-header{position:relative}
+  .nav-wrap{min-height:118px;position:relative;padding:0 4px}
+  .public-brand{gap:0}
+  .public-brand-name{font-size:2.2rem;letter-spacing:.12em}
+  .public-brand-city{font-size:1.38rem;margin-top:9px}
+  .public-brand-q-crop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:88px;height:88px}
+  .nav-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);min-width:116px;height:54px;padding:0 16px}
+  .nav{top:112px}
+
+  .hero{padding:48px 0 42px;background-image:linear-gradient(180deg,rgba(6,26,48,.92) 0%,rgba(6,26,48,.77) 42%,rgba(6,26,48,.48) 72%,rgba(6,26,48,.78) 100%),url('wuerzburg-real.jpg');background-position:center 55%}
+  .hero:after{height:80px}
+  .hero-grid{display:block}
+  .hero .eyebrow{margin-bottom:18px;font-size:.69rem;line-height:1.5}
+  .hero h1{font-size:clamp(2.9rem,13vw,4rem);line-height:.96;margin-bottom:20px}
+  .hero-intro{font-size:.96rem;line-height:1.58;margin-bottom:0}
+  .hero-intro-desktop{display:none}
+  .hero-intro-mobile{display:inline}
+  .companion-note{margin-top:21px;padding:14px 16px;font-size:.88rem;border-radius:12px}
+  .hero-actions{display:grid;grid-template-columns:1fr;margin:20px 0 14px}
+  .hero-actions .btn{width:100%}
+  .free-note{font-size:.79rem;margin-bottom:14px}
+  .free-note-desktop{display:none}
+  .free-note-mobile{display:inline}
+  .pill-row{gap:7px}
+  .pill{font-size:.74rem;padding:6px 10px}
+  .hero-card{display:none}
+  .mobile-hero-photo{display:none!important}
+
+  .brand-meaning-section,.section{padding:54px 0}
+  .brand-meaning-section{padding-inline:14px}
+  .brand-meaning-grid{grid-template-columns:1fr 1fr;gap:9px}
+  .brand-meaning-item{padding:15px}
+  .brand-meaning-claim{align-items:flex-start}
+  .steps-grid,.preference-grid{grid-template-columns:1fr}
+  .card,.compact-card{padding:19px}
+  .section-actions{display:grid}
+  .section-actions .btn{width:100%}
+  .lavuq-pwa-install{right:10px!important;bottom:10px!important;font-size:.75rem!important;padding:10px 13px!important}
+}
