@@ -12,12 +12,22 @@
   <link rel="stylesheet" href="header-q-background-fix.css?v=20260907-0103">
   <link rel="stylesheet" href="lavu-q-header-fix.css?v=20260907-1437">
   <style>
-    .lavuq-meaning-hero{background:linear-gradient(145deg,#041529,#102b49);color:#fff;padding:84px 0 72px;position:relative;overflow:hidden}
-    .lavuq-meaning-hero:after{content:"Q";position:absolute;right:-10px;bottom:-105px;font-family:Georgia,"Times New Roman",serif;font-size:min(38vw,420px);line-height:1;color:rgba(216,180,106,.06);pointer-events:none}
+    .lavuq-meaning-hero{background:radial-gradient(circle at 78% 26%,rgba(216,180,106,.11),transparent 26%),linear-gradient(145deg,#041529 0%,#0a2342 58%,#102b49 100%);color:#fff;padding:78px 0 72px;position:relative;overflow:hidden}
+    .lavuq-meaning-hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 46%,rgba(255,255,255,.025) 47% 49%,transparent 50% 100%)}
+    .lavuq-meaning-hero:after{content:"Q";position:absolute;right:-22px;bottom:-122px;font-family:Georgia,"Times New Roman",serif;font-size:min(42vw,460px);line-height:1;color:rgba(216,180,106,.055);pointer-events:none}
     .lavuq-meaning-hero .container{position:relative;z-index:1}
-    .lavuq-meaning-hero h1{max-width:900px;color:#fff;margin:10px 0 20px;font-size:clamp(3rem,7vw,6.3rem);letter-spacing:-.055em}
+    .lavuq-meaning-hero .hero-copy{max-width:900px}
+    .lavuq-meaning-hero h1{max-width:900px;color:#fff;margin:10px 0 14px;font-size:clamp(3.2rem,7vw,6.4rem);letter-spacing:-.055em;line-height:.95}
     .lavuq-meaning-hero h1 span{color:var(--gold)}
-    .lavuq-meaning-hero p{max-width:720px;color:#dce3eb;font-size:1.13rem;line-height:1.7}
+    .lavuq-meaning-hero .hero-subline{max-width:760px;margin:0 0 18px;color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.55rem,3.2vw,2.55rem);line-height:1.18;letter-spacing:-.028em}
+    .lavuq-meaning-hero .hero-intro{max-width:720px;margin:0;color:#dce3eb;font-size:1.02rem;line-height:1.65}
+    .hero-values{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 24px}
+    .hero-value{display:inline-flex;align-items:center;min-height:38px;padding:9px 14px;border:1px solid rgba(216,180,106,.45);border-radius:999px;background:rgba(255,255,255,.055);color:#f7f2e8;font-size:.82rem;font-weight:800;letter-spacing:.02em;backdrop-filter:blur(8px)}
+    .hero-value:last-child{background:rgba(216,180,106,.14);color:#f0cf82;border-color:rgba(216,180,106,.72)}
+    .hero-source-box{max-width:720px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:18px 20px;border:1px solid rgba(216,180,106,.58);border-radius:18px;background:linear-gradient(135deg,rgba(216,180,106,.12),rgba(255,255,255,.045));box-shadow:0 14px 34px rgba(0,0,0,.12)}
+    .hero-source-box .source-q{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#d8b46a;color:#07182f;font-family:Georgia,"Times New Roman",serif;font-size:1.9rem;font-weight:700;line-height:1}
+    .hero-source-box strong{display:block;color:#f0cf82;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+    .hero-source-box span{display:block;color:#eef2f6;font-size:.95rem;line-height:1.5}
     .friendship-origin{background:#f7f3ea;padding:74px 0}
     .friendship-origin .origin-inner{max-width:980px;margin:0 auto;text-align:center}
     .friendship-origin h2{max-width:760px;margin:8px auto 18px;font-size:clamp(2.3rem,5vw,4.4rem);letter-spacing:-.045em;color:#132033}
@@ -38,14 +48,33 @@
     .q-claim strong{font-family:Georgia,"Times New Roman",serif;font-size:3.4rem;color:#d8b46a;line-height:1}
     .q-claim p{margin:0;color:#e3e8ee;font-size:1.06rem;line-height:1.6}
     @media(max-width:900px){.origin-statements{grid-template-columns:1fr}.meaning-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.meaning-card:last-child{grid-column:1/-1}}
-    @media(max-width:520px){.lavuq-meaning-hero{padding:54px 0 50px}.lavuq-meaning-hero h1{font-size:clamp(2.65rem,13vw,4.2rem)}.friendship-origin{padding:52px 0}.friendship-origin h2{font-size:clamp(2.2rem,10vw,3.4rem)}.origin-card{padding:21px 18px}.origin-claim{font-size:1.02rem}.meaning-grid{grid-template-columns:1fr}.meaning-card:last-child{grid-column:auto}.q-claim{grid-template-columns:1fr;gap:8px}.q-claim strong{font-size:2.8rem}}
+    @media(max-width:520px){
+      .lavuq-meaning-hero{padding:48px 0 44px}
+      .lavuq-meaning-hero h1{font-size:clamp(3rem,13.5vw,4.35rem);margin-bottom:12px}
+      .lavuq-meaning-hero .hero-subline{font-size:clamp(1.45rem,6.8vw,2rem);margin-bottom:14px}
+      .lavuq-meaning-hero .hero-intro{font-size:.94rem;line-height:1.58}
+      .hero-values{gap:8px;margin:22px 0 20px}
+      .hero-value{min-height:34px;padding:8px 11px;font-size:.75rem}
+      .hero-source-box{grid-template-columns:auto 1fr;gap:12px;padding:15px 16px;border-radius:16px}
+      .hero-source-box .source-q{width:42px;height:42px;border-radius:12px;font-size:1.65rem}
+      .hero-source-box strong{font-size:.74rem}
+      .hero-source-box span{font-size:.86rem;line-height:1.42}
+      .friendship-origin{padding:52px 0}
+      .friendship-origin h2{font-size:clamp(2.2rem,10vw,3.4rem)}
+      .origin-card{padding:21px 18px}
+      .origin-claim{font-size:1.02rem}
+      .meaning-grid{grid-template-columns:1fr}
+      .meaning-card:last-child{grid-column:auto}
+      .q-claim{grid-template-columns:1fr;gap:8px}
+      .q-claim strong{font-size:2.8rem}
+    }
   </style>
 </head>
 <body>
   <div class="topbar"><div class="container">Jetzt kostenlos dabei sein. <span>Die aktuelle Startphase ist kostenlos.</span></div></div>
   <header class="site-header"><div class="container nav-wrap"><a class="brand public-brand" href="index.html"><span class="public-brand-copy"><span class="public-brand-name">LAVU</span><span class="public-brand-city">Würzburg</span></span><span class="public-brand-q-crop" aria-hidden="true"></span></a><button class="nav-toggle public-menu-toggle" aria-label="Menü öffnen" aria-expanded="false"><span class="public-menu-icon" aria-hidden="true">☰</span><span class="public-menu-label">Menü</span></button><nav class="nav"><a href="index.html#so-gehts">So funktioniert’s</a><a href="lavu-q.html" aria-current="page">LAVU-Q</a><a href="mein-q.html">Mein Q</a><a href="sicherheit.html">Sicherheit</a><a href="fuer-wen-ist-lavuq.html">Für wen ist LAVUQ?</a><a href="so-finden-wir-deine-gruppe.html">So finden wir deine Gruppe</a><a href="warum-wir-in-wuerzburg-starten.html">Warum wir in Würzburg starten</a><a href="unsere-regeln.html">Unsere Regeln</a><a href="kein-dating.html">Freundschaft im Fokus</a><a href="faq.html">FAQ</a><a class="btn btn-primary btn-small" href="bewerben.html">Jetzt bewerben</a></nav></div></header>
   <main>
-    <section class="lavuq-meaning-hero"><div class="container"><div class="eyebrow">Die Idee hinter unserem Namen</div><h1>LAVU<span>-Q</span></h1><p>LAVUQ ist mehr als ein Name. Jeder Buchstabe steht für etwas, das echte Freundschaft entstehen lässt. Das Q steht am Ende bewusst für die Quelle – den Ausgangspunkt für neue Kontakte, echte Begegnungen und gemeinsame Erlebnisse.</p></div></section>
+    <section class="lavuq-meaning-hero"><div class="container"><div class="hero-copy"><div class="eyebrow">Die Idee hinter unserem Namen</div><h1>LAVU<span>-Q</span></h1><div class="hero-subline">Nicht einfach ein Name.<br>Sondern das, wofür echte Freundschaft steht.</div><p class="hero-intro">Lachen, Austausch, Vertrauen und gemeinsame Unternehmungen – und mit dem Q die Quelle, an der neue Freundschaften beginnen können.</p><div class="hero-values" aria-label="Die Werte von LAVUQ"><span class="hero-value">Lachen</span><span class="hero-value">Austausch</span><span class="hero-value">Vertrauen</span><span class="hero-value">Unternehmungen</span><span class="hero-value">Quelle</span></div><div class="hero-source-box"><div class="source-q" aria-hidden="true">Q</div><div><strong>Q = Quelle</strong><span>Der Ausgangspunkt für neue Kontakte, echte Begegnungen und gemeinsame Erlebnisse.</span></div></div></div></div></section>
 
     <section class="friendship-origin"><div class="container"><div class="origin-inner"><div class="eyebrow">Was Freundschaft wirklich entstehen lässt</div><h2>Freundschaft beginnt nicht mit einem Match.</h2><p class="origin-intro">Sie entsteht dort, wo Menschen sich wirklich begegnen, miteinander lachen, sich austauschen und mit der Zeit Vertrauen aufbauen.</p><div class="origin-statements"><article class="origin-card"><span class="origin-kicker">Nicht mit einem Match</span><strong>Sondern mit gemeinsamen Momenten.</strong><p>Ein Gespräch, ein Kaffee, ein Spaziergang oder ein gemeinsamer Abend können der Anfang von etwas Echtem sein.</p></article><article class="origin-card"><span class="origin-kicker">Nicht mit perfekten Profilen</span><strong>Sondern mit ehrlichem Austausch.</strong><p>Freundschaft entsteht nicht durch Selbstdarstellung, sondern dadurch, dass Menschen sich so kennenlernen, wie sie wirklich sind.</p></article><article class="origin-card"><span class="origin-kicker">Nicht nur durch einen Algorithmus</span><strong>Sondern durch Vertrauen, Zeit und echte Begegnungen.</strong><p>Eine gute Gruppenzusammenstellung kann den Anfang erleichtern. Ob daraus Freundschaft wird, entscheiden die Menschen selbst.</p></article></div><div class="origin-claim"><b>Genau dafür steht LAVU-Q.</b><br>Lachen. Austausch. Vertrauen. Unternehmungen. Und eine Quelle, an der neue Freundschaften beginnen können.</div></div></div></section>
 
