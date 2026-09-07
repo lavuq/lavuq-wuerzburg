@@ -2,7 +2,7 @@
   if(!document.querySelector('link[data-lavuq-premium-app]')){
     const premium=document.createElement('link');
     premium.rel='stylesheet';
-    premium.href='/lavuq-app-premium-2026.css?v=20260907-1500';
+    premium.href='/lavuq-app-premium-2026.css?v=20260907-1512';
     premium.dataset.lavuqPremiumApp='1';
     document.head.appendChild(premium);
   }
