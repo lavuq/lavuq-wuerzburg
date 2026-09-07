@@ -1,6 +1,13 @@
-// Global public navigation extension for LAVU-Q.
-// The previous site behaviour is preserved in script-legacy.js and loaded below.
+// Global public navigation extension for LAVU-Q + global premium visual system.
 (function(){
+  if(!document.querySelector('link[data-lavuq-editorial]')){
+    const design=document.createElement('link');
+    design.rel='stylesheet';
+    design.href='lavuq-premium-2026.css?v=20260907-1512';
+    design.dataset.lavuqEditorial='1';
+    document.head.appendChild(design);
+  }
+
   const publicNav=document.querySelector('.nav');
   if(publicNav && !publicNav.querySelector('a[href="lavu-q.html"]')){
     const lavuQ=document.createElement('a');
