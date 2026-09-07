@@ -1,5 +1,8 @@
-// LAVUQ public runtime — behaviour only. Visuals come exclusively from lavuq-visual-v2.css.
+// LAVUQ public runtime — behaviour only. Visuals come exclusively from lavuq-visual-v3.css.
 (function(){
+  const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
+  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260907-v3-1';
+
   const publicNav=document.querySelector('.nav');
   const toggle=document.querySelector('.nav-toggle');
 
@@ -28,12 +31,12 @@
     publicNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
   }
 
-  // Only load the legacy behaviour on pages that still require its form/FAQ logic.
-  // The homepage and normal content pages stay completely free from legacy runtime styling.
+  // Legacy runtime is restricted to pages that still need its form/FAQ behaviour.
+  // Normal content pages and the homepage get no legacy runtime styling or PWA overlay.
   const needsLegacy=!!document.querySelector('#applyForm,.faq-q');
   if(needsLegacy){
     const legacy=document.createElement('script');
-    legacy.src='script-legacy.js?v=20260907-functional-only-1';
+    legacy.src='script-legacy.js?v=20260907-functional-only-2';
     legacy.async=false;
     document.head.appendChild(legacy);
   }
