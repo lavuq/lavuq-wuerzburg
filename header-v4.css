@@ -1,26 +1,194 @@
-/* LAVUQ HEADER V4 — intentionally distinct from legacy header */
-.site-header{position:sticky;top:0;z-index:1000;background:rgba(5,24,44,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(215,174,91,.42);box-shadow:0 10px 30px rgba(4,18,34,.12)}
-.nav-wrap{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:10px}
-.public-brand{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#fff}
-.public-brand-copy{display:flex;align-items:baseline;gap:8px;flex-direction:row;white-space:nowrap}
-.public-brand-name{font-family:Georgia,"Times New Roman",serif;font-size:1.55rem;letter-spacing:.11em;line-height:1;color:#fff}
-.public-brand-city{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin:0;font-weight:800}
-.public-brand-q-crop{position:static;transform:none;width:46px;height:46px;flex:0 0 46px;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat;order:-1}
-.nav-toggle{display:none;align-items:center;justify-content:center;gap:7px;min-width:auto;min-height:44px;height:44px;padding:0 15px;border:1px solid rgba(215,174,91,.7);border-radius:12px;background:rgba(255,255,255,.025);color:#fff;font-weight:800;box-shadow:none}
-.public-menu-icon{color:var(--gold-light);font-size:.92rem}
-.public-menu-label{font-size:.9rem}
-@media(max-width:900px){
-  .nav-toggle{display:inline-flex}
-  .nav{top:calc(100% + 8px)}
+/* LAVUQ HEADER V5 — Floating Glass + Split Header */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(246,241,231,.82);
+  backdrop-filter:blur(18px) saturate(130%);
+  -webkit-backdrop-filter:blur(18px) saturate(130%);
+  border-bottom:1px solid rgba(10,26,48,.07);
+  box-shadow:0 10px 34px rgba(6,26,48,.08);
+  padding:10px 0;
 }
+.nav-wrap{
+  min-height:64px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:20px;
+  padding:0 14px;
+  border:1px solid rgba(255,255,255,.62);
+  border-radius:22px;
+  background:rgba(6,26,48,.94);
+  box-shadow:0 14px 34px rgba(6,26,48,.16),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.public-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  color:#fff;
+}
+.public-brand-q-crop{
+  position:static;
+  transform:none;
+  order:-1;
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat;
+}
+.public-brand-copy{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.public-brand-name{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.38rem;
+  letter-spacing:.11em;
+  line-height:1;
+  color:#fff;
+}
+.public-brand-city{
+  margin:0;
+  color:var(--gold-light);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:.57rem;
+  font-weight:800;
+  letter-spacing:.17em;
+  line-height:1;
+  text-transform:uppercase;
+}
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+  color:#dfe6ee;
+  font-size:.81rem;
+  font-weight:750;
+}
+.nav>a{
+  display:inline-flex;
+  align-items:center;
+  min-height:38px;
+  padding:0 11px;
+  border-radius:999px;
+  white-space:nowrap;
+  transition:background .2s ease,color .2s ease,transform .2s ease;
+}
+.nav>a:hover{
+  background:rgba(255,255,255,.07);
+  color:#fff;
+}
+/* Keep the desktop navigation intentionally focused like a startup header. */
+.nav>a[href="so-finden-wir-deine-gruppe.html"],
+.nav>a[href="warum-wir-in-wuerzburg-starten.html"],
+.nav>a[href="unsere-regeln.html"],
+.nav>a[href="kein-dating.html"],
+.nav>a[href="faq.html"]{display:none}
+.nav>a.btn-primary{
+  margin-left:auto;
+  min-height:42px;
+  padding:0 18px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--gold-light),#c89539);
+  color:var(--navy);
+  box-shadow:0 9px 22px rgba(188,136,47,.2);
+  font-weight:900;
+}
+.nav>a.btn-primary:hover{
+  background:linear-gradient(135deg,#f4dda0,#d7a94e);
+  color:var(--navy);
+  transform:translateY(-1px);
+}
+.nav-toggle{display:none}
+
+@media(max-width:1080px){
+  .nav-wrap{grid-template-columns:auto 1fr auto}
+  .nav{gap:2px;font-size:.76rem}
+  .nav>a{padding:0 8px}
+  .nav>a[href="fuer-wen-ist-lavuq.html"]{display:none}
+}
+
+@media(max-width:900px){
+  .site-header{padding:8px 0;background:rgba(246,241,231,.9)}
+  .nav-wrap{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    min-height:62px;
+    padding:0 10px 0 12px;
+    border-radius:18px;
+  }
+  .public-brand{gap:9px}
+  .public-brand-q-crop{width:40px;height:40px;flex-basis:40px}
+  .public-brand-name{font-size:1.28rem}
+  .public-brand-city{font-size:.54rem}
+  .nav-toggle{
+    position:static;
+    transform:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    width:auto;
+    min-width:82px;
+    height:40px;
+    min-height:40px;
+    padding:0 12px;
+    border:1px solid rgba(215,174,91,.6);
+    border-radius:11px;
+    background:rgba(255,255,255,.035);
+    color:#fff;
+    font-weight:850;
+  }
+  .public-menu-icon{color:var(--gold-light);font-size:.86rem}
+  .public-menu-label{font-size:.86rem}
+  .nav{
+    position:absolute;
+    top:calc(100% + 10px);
+    left:0;
+    right:0;
+    display:none;
+    flex-direction:column;
+    align-items:stretch;
+    gap:3px;
+    padding:10px;
+    border:1px solid rgba(215,174,91,.34);
+    border-radius:17px;
+    background:rgba(6,26,48,.985);
+    box-shadow:0 24px 56px rgba(6,26,48,.28);
+    backdrop-filter:blur(18px);
+  }
+  .nav.open{display:flex}
+  .nav>a,
+  .nav>a[href="so-finden-wir-deine-gruppe.html"],
+  .nav>a[href="warum-wir-in-wuerzburg-starten.html"],
+  .nav>a[href="unsere-regeln.html"],
+  .nav>a[href="kein-dating.html"],
+  .nav>a[href="faq.html"],
+  .nav>a[href="fuer-wen-ist-lavuq.html"]{
+    display:flex;
+    min-height:44px;
+    padding:0 13px;
+    border-radius:10px;
+  }
+  .nav>a.btn-primary{margin:6px 0 0;justify-content:center}
+}
+
 @media(max-width:520px){
-  .site-header{position:sticky;top:0}
-  .nav-wrap{min-height:72px;padding:9px 0}
-  .public-brand{gap:9px;max-width:calc(100% - 104px)}
-  .public-brand-q-crop{position:static;left:auto;top:auto;transform:none;width:48px;height:48px;flex-basis:48px}
-  .public-brand-copy{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
-  .public-brand-name{font-size:1.42rem;letter-spacing:.1em}
-  .public-brand-city{font-size:.62rem;letter-spacing:.11em;margin:0}
-  .nav-toggle{position:static;right:auto;top:auto;transform:none;min-width:92px;width:auto;height:44px;padding:0 13px;border-radius:12px}
-  .nav{top:68px;left:10px;right:10px}
+  .site-header{position:sticky;top:0;padding:7px 0}
+  .nav-wrap{min-height:58px;border-radius:16px;padding:0 8px 0 10px}
+  .public-brand{max-width:calc(100% - 92px)}
+  .public-brand-q-crop{width:38px;height:38px;flex-basis:38px}
+  .public-brand-name{font-size:1.18rem;letter-spacing:.1em}
+  .public-brand-city{font-size:.5rem;letter-spacing:.15em}
+  .nav-toggle{min-width:76px;height:38px;min-height:38px;padding:0 10px;border-radius:10px}
+  .public-menu-label{font-size:.82rem}
+  .nav{top:calc(100% + 8px);left:0;right:0}
 }
