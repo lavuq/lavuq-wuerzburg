@@ -1,4 +1,9 @@
 (function(){
+  const finalCtaScript=document.createElement('script');
+  finalCtaScript.src='home-final-cta-v2.js?v=20260910-final-v2-1';
+  finalCtaScript.defer=true;
+  document.head.appendChild(finalCtaScript);
+
   function renderWhy(){
     const sections=[...document.querySelectorAll('section')];
     const why=sections.find(el=>el.querySelector('.eyebrow')?.textContent?.trim()==='Warum LAVUQ?');
@@ -14,14 +19,12 @@
           <div class="why-lavuq-v3__divider"></div>
           <div class="why-lavuq-v3__topitem"><span>⌁</span><strong>Für mehr Verbundenheit</strong></div>
         </div>
-
         <div class="why-lavuq-v3__intro">
           <div class="eyebrow">Warum LAVUQ?</div>
           <h2>Gemeinsamkeiten statt Zufall.</h2>
           <p>Du bewirbst dich für eine kleine Freundesgruppe. Wir betrachten deine Angaben im Gesamtbild und stellen eine passende Gruppe zusammen.</p>
           <div class="why-lavuq-v3__note">Mehr Menschen.<br>Mehr erleben. ♡</div>
         </div>
-
         <div class="why-lavuq-v3__timeline">
           <div class="why-lavuq-v3__line"></div>
           <article class="why-card left"><div class="why-card__icon">◎</div><div class="why-card__content"><h3>Kleine Gruppen</h3><p>Vier Menschen lernen sich gemeinsam kennen.</p></div><div class="why-card__number">1</div></article>
@@ -31,7 +34,6 @@
           <article class="why-card left"><div class="why-card__icon">♡</div><div class="why-card__content"><h3>Kein Dating</h3><p>LAVUQ ist keine Dating-Plattform, sondern für echte Freundschaften.</p></div><div class="why-card__number">5</div></article>
           <article class="why-card right"><div class="why-card__number">6</div><div class="why-card__icon">✓</div><div class="why-card__content"><h3>Sicherer Rahmen</h3><p>Verifizierte Teilnehmende, klare Regeln und ein respektvoller Umgang.</p></div></article>
         </div>
-
         <div class="why-lavuq-v3__footer-note">Freundschaften beginnen hier. ♡</div>
       </div>`;
   }
