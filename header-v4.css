@@ -1,0 +1,26 @@
+/* LAVUQ HEADER V4 — intentionally distinct from legacy header */
+.site-header{position:sticky;top:0;z-index:1000;background:rgba(5,24,44,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(215,174,91,.42);box-shadow:0 10px 30px rgba(4,18,34,.12)}
+.nav-wrap{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:10px}
+.public-brand{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#fff}
+.public-brand-copy{display:flex;align-items:baseline;gap:8px;flex-direction:row;white-space:nowrap}
+.public-brand-name{font-family:Georgia,"Times New Roman",serif;font-size:1.55rem;letter-spacing:.11em;line-height:1;color:#fff}
+.public-brand-city{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin:0;font-weight:800}
+.public-brand-q-crop{position:static;transform:none;width:46px;height:46px;flex:0 0 46px;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat;order:-1}
+.nav-toggle{display:none;align-items:center;justify-content:center;gap:7px;min-width:auto;min-height:44px;height:44px;padding:0 15px;border:1px solid rgba(215,174,91,.7);border-radius:12px;background:rgba(255,255,255,.025);color:#fff;font-weight:800;box-shadow:none}
+.public-menu-icon{color:var(--gold-light);font-size:.92rem}
+.public-menu-label{font-size:.9rem}
+@media(max-width:900px){
+  .nav-toggle{display:inline-flex}
+  .nav{top:calc(100% + 8px)}
+}
+@media(max-width:520px){
+  .site-header{position:sticky;top:0}
+  .nav-wrap{min-height:72px;padding:9px 0}
+  .public-brand{gap:9px;max-width:calc(100% - 104px)}
+  .public-brand-q-crop{position:static;left:auto;top:auto;transform:none;width:48px;height:48px;flex-basis:48px}
+  .public-brand-copy{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+  .public-brand-name{font-size:1.42rem;letter-spacing:.1em}
+  .public-brand-city{font-size:.62rem;letter-spacing:.11em;margin:0}
+  .nav-toggle{position:static;right:auto;top:auto;transform:none;min-width:92px;width:auto;height:44px;padding:0 13px;border-radius:12px}
+  .nav{top:68px;left:10px;right:10px}
+}
