@@ -4,10 +4,10 @@
   style.id='home-meinq-size-110-style';
   style.textContent=`
     @media(max-width:820px){
-      .home-meinq-phone{width:min(82vw,357px)!important;}
+      .home-meinq-phone{width:min(74vw,321px)!important;}
     }
     @media(max-width:520px){
-      .home-meinq-phone{width:min(86.5vw,337px)!important;}
+      .home-meinq-phone{width:min(78vw,303px)!important;}
     }
   `;
   document.head.appendChild(style);
