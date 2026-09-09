@@ -1,13 +1,22 @@
 // LAVUQ public runtime — behaviour only. Visuals come exclusively from the new V3/V4 stylesheets.
 (function(){
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
-  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260907-v3-2';
+  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-3';
+
+  // New compact public header — intentionally independent from the legacy header styling.
+  if(document.querySelector('.site-header') && !document.querySelector('link[data-lavuq-header-v4]')){
+    const headerStyle=document.createElement('link');
+    headerStyle.rel='stylesheet';
+    headerStyle.href='header-v4.css?v=20260909-v4-1';
+    headerStyle.dataset.lavuqHeaderV4='1';
+    document.head.appendChild(headerStyle);
+  }
 
   // Homepage gets its own isolated hero presentation layered on top of the clean V3 design system.
   if(document.querySelector('body main .hero') && !document.querySelector('link[data-lavuq-home-hero]')){
     const heroStyle=document.createElement('link');
     heroStyle.rel='stylesheet';
-    heroStyle.href='homepage-hero-v4.css?v=20260907-v4-1';
+    heroStyle.href='homepage-hero-v4.css?v=20260909-v4-2';
     heroStyle.dataset.lavuqHomeHero='1';
     document.head.appendChild(heroStyle);
   }
@@ -44,7 +53,7 @@
   const needsLegacy=!!document.querySelector('#applyForm,.faq-q');
   if(needsLegacy){
     const legacy=document.createElement('script');
-    legacy.src='script-legacy.js?v=20260907-functional-only-2';
+    legacy.src='script-legacy.js?v=20260909-functional-only-3';
     legacy.async=false;
     document.head.appendChild(legacy);
   }
