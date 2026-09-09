@@ -114,3 +114,44 @@
 .brand-meaning-word{font-size:1.08rem!important}
 .brand-meaning-word::after{font-size:.88rem!important;line-height:1.42!important}
 }
+
+/* GLOBAL FOOTER — Variant 3, light premium and consistent across public pages */
+footer{position:relative;overflow:hidden;background:linear-gradient(180deg,#fffdf9 0%,#fbf7ef 100%)!important;color:#0a1d3b!important;padding:74px 0 28px!important;border-top:1px solid rgba(183,138,54,.18)!important;box-shadow:inset 0 14px 50px rgba(183,138,54,.035)}
+footer>.container{position:relative;width:min(calc(100% - 40px),1120px)!important;margin:0 auto!important;padding:34px 36px 110px!important;border:1px solid rgba(183,138,54,.18);border-radius:32px;background:rgba(255,255,255,.78);box-shadow:0 18px 50px rgba(6,26,48,.055)}
+footer>.container::before{content:'Würzburg verbindet. ♡';position:absolute;right:44px;top:42px;color:#b18432;font-family:'Segoe Script','Bradley Hand',cursive;font-size:clamp(1.7rem,3vw,2.7rem);line-height:1;transform:rotate(-4deg);opacity:.95}
+footer>.container::after{content:'Gemeinsam mehr erleben.';position:absolute;left:36px;right:36px;bottom:34px;padding-top:24px;border-top:1px solid rgba(183,138,54,.34);color:#a97d2f;font-family:Georgia,'Times New Roman',serif;font-size:.8rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;text-align:center}
+.footer-grid{display:grid!important;grid-template-columns:1.15fr .85fr .85fr!important;gap:44px!important;align-items:start!important}
+.footer-grid>div:first-child{padding-right:32px}
+footer .brand{display:flex!important;align-items:center!important;gap:14px!important;color:#061a30!important;font-family:Georgia,'Times New Roman',serif!important;font-size:clamp(1.7rem,3vw,2.35rem)!important;font-weight:500!important;letter-spacing:.08em!important}
+footer .brand-mark{width:68px!important;height:68px!important;object-fit:contain!important}
+.footer-intro{margin:22px 0 0!important;max-width:470px!important;color:#5f697b!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.08rem!important;line-height:1.55!important}
+.footer-intro strong{display:inline-block;margin-top:8px;color:#b18432!important;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:.9rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+footer h3{margin:12px 0 18px!important;color:#b18432!important;font-size:.72rem!important;font-weight:900!important;letter-spacing:.22em!important;text-transform:uppercase!important}
+.footer-links{display:grid!important;gap:10px!important}
+.footer-links a{display:flex!important;align-items:center!important;min-height:34px!important;color:#0a1d3b!important;text-decoration:none!important;font-size:.95rem!important;font-weight:620!important;transition:color .2s ease,transform .2s ease!important}
+.footer-links a:hover{color:#b18432!important;transform:translateX(3px)!important}
+.footer-links a[href='bewerben.html']{grid-column:1/-1!important;position:absolute!important;left:36px!important;right:36px!important;bottom:70px!important;min-height:64px!important;justify-content:center!important;border-radius:999px!important;background:linear-gradient(135deg,#d9b662 0%,#b9872e 100%)!important;color:#fff!important;font-size:1.05rem!important;font-weight:850!important;box-shadow:0 14px 30px rgba(183,138,54,.22)!important;transform:none!important}
+.footer-links a[href='bewerben.html']::after{content:'  →';margin-left:10px;font-size:1.25em}
+footer a[href='impressum.html'],footer a[href='datenschutz.html']{color:#556174!important}
+
+@media(max-width:820px){
+footer{padding:50px 0 22px!important}
+footer>.container{width:min(calc(100% - 28px),1120px)!important;padding:28px 24px 124px!important;border-radius:26px!important}
+footer>.container::before{position:static;display:block;margin:0 0 24px;color:#b18432;font-size:2rem;transform:rotate(-3deg)}
+footer>.container::after{left:24px;right:24px;bottom:26px;padding-top:18px;font-size:.64rem;letter-spacing:.16em}
+.footer-grid{grid-template-columns:1fr 1fr!important;gap:28px 20px!important}
+.footer-grid>div:first-child{grid-column:1/-1;padding-right:0!important}
+footer .brand{font-size:1.8rem!important}.footer-intro{font-size:.96rem!important;max-width:520px!important}
+.footer-links a[href='bewerben.html']{left:24px!important;right:24px!important;bottom:66px!important;min-height:58px!important;font-size:.98rem!important}
+}
+
+@media(max-width:520px){
+footer{padding:42px 0 18px!important}
+footer>.container{padding:24px 18px 128px!important;border-radius:22px!important}
+footer>.container::before{font-size:1.72rem;margin-bottom:20px}
+.footer-grid{grid-template-columns:1fr 1fr!important;gap:24px 14px!important}
+footer .brand{gap:11px!important;font-size:1.52rem!important}footer .brand-mark{width:58px!important;height:58px!important}.footer-intro{margin-top:17px!important;font-size:.9rem!important;line-height:1.5!important}
+footer h3{font-size:.64rem!important;letter-spacing:.16em!important;margin-bottom:13px!important}.footer-links{gap:7px!important}.footer-links a{font-size:.84rem!important;min-height:30px!important}
+.footer-links a[href='bewerben.html']{left:18px!important;right:18px!important;bottom:64px!important;min-height:56px!important;font-size:.92rem!important}
+footer>.container::after{left:18px;right:18px;bottom:24px;font-size:.58rem;letter-spacing:.12em}
+}
