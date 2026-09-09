@@ -1,26 +1,72 @@
 // LAVUQ public runtime — behaviour only. Visuals come from the new V3/V4/V5 stylesheets.
 (function(){
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
-  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-4';
+  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-5';
 
   if(document.querySelector('.site-header') && !document.querySelector('link[data-lavuq-header-v4]')){
     const headerStyle=document.createElement('link');
     headerStyle.rel='stylesheet';
-    headerStyle.href='header-v4.css?v=20260909-v5-2';
+    headerStyle.href='header-v4.css?v=20260909-v5-3';
     headerStyle.dataset.lavuqHeaderV4='1';
     document.head.appendChild(headerStyle);
   }
 
-  if(document.querySelector('body main .hero')){
+  const legacyHero=document.querySelector('body main .hero');
+  if(legacyHero){
     const oldHero=document.querySelector('link[data-lavuq-home-hero]');
     if(oldHero) oldHero.remove();
+
     if(!document.querySelector('link[data-lavuq-home-startup-v5]')){
       const heroStyle=document.createElement('link');
       heroStyle.rel='stylesheet';
-      heroStyle.href='homepage-startup-v5.css?v=20260909-v5-2';
+      heroStyle.href='homepage-startup-v5.css?v=20260909-v5-3';
       heroStyle.dataset.lavuqHomeStartupV5='1';
       document.head.appendChild(heroStyle);
     }
+
+    const startupHero=document.createElement('section');
+    startupHero.className='hero-startup';
+    startupHero.innerHTML=`
+      <div class="hero-startup__inner">
+        <div class="hero-startup__content">
+          <p class="hero-startup__eyebrow">Freundschaften in Würzburg & Umgebung</p>
+          <h1 class="hero-startup__title">
+            <span class="hero-startup__title-main">Neue Freundschaften.</span>
+            <span class="hero-startup__title-accent">Kein Dating.</span>
+          </h1>
+          <p class="hero-startup__text">Lerne Menschen aus deiner Region kennen – für ehrliche Freundschaften, gemeinsame Unternehmungen und eine kleine Gruppe, in der man sich wirklich wohlfühlen kann.</p>
+          <div class="hero-startup__actions">
+            <a href="bewerben.html" class="hero-btn hero-btn--primary">Für eine Freundesgruppe bewerben</a>
+            <a href="#so-gehts" class="hero-btn hero-btn--link">So funktioniert’s <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-startup__safety">
+            <span class="hero-startup__safety-label">Sicher dabei</span>
+            <span class="hero-startup__safety-text">Begleitperson bei jedem Treffen erlaubt · Erstes Treffen immer öffentlich</span>
+          </div>
+          <div class="hero-startup__facts">
+            <div class="hero-fact"><strong>4</strong><span>Menschen</span></div>
+            <div class="hero-fact"><strong>6</strong><span>Wochen</span></div>
+            <div class="hero-fact"><strong>3+</strong><span>echte Treffen</span></div>
+            <div class="hero-fact"><strong>+1</strong><span>Begleitperson möglich</span></div>
+          </div>
+        </div>
+        <div class="hero-startup__preview" aria-label="Vorschau auf Mein Q">
+          <div class="hero-preview-card">
+            <div class="hero-preview-card__top">
+              <div class="hero-preview-card__brand"><img src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt=""><span class="hero-preview-card__label">Mein Q</span></div>
+              <span class="hero-preview-card__status">live</span>
+            </div>
+            <div class="hero-preview-card__image"><img src="wuerzburg-real.jpg" alt="Würzburg"></div>
+            <div class="hero-preview-card__grid">
+              <div class="hero-preview-box">Meine Gruppe</div>
+              <div class="hero-preview-box">Chat</div>
+              <div class="hero-preview-box">Treffen</div>
+              <div class="hero-preview-box">Sicherheit</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    legacyHero.replaceWith(startupHero);
   }
 
   const publicNav=document.querySelector('.nav');
@@ -54,7 +100,7 @@
   const needsLegacy=!!document.querySelector('#applyForm,.faq-q');
   if(needsLegacy){
     const legacy=document.createElement('script');
-    legacy.src='script-legacy.js?v=20260909-functional-only-4';
+    legacy.src='script-legacy.js?v=20260909-functional-only-5';
     legacy.async=false;
     document.head.appendChild(legacy);
   }
