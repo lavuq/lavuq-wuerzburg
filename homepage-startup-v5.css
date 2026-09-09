@@ -63,3 +63,58 @@
 .hero-startup__preview::before{inset:0;border-radius:24px;background-position:center 40%}
 .hero-startup__preview::after{font-size:2rem;right:6%;bottom:8%}
 }
+
+/* SAFETY FEATURE — standout version 1 */
+.safety-feature{position:relative;overflow:hidden;background:linear-gradient(180deg,#fffdf8 0%,#fbf7ef 100%)!important;padding-top:76px!important;padding-bottom:82px!important}
+.safety-feature::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% 18%,rgba(216,181,101,.18),transparent 30%),radial-gradient(circle at 12% 88%,rgba(216,181,101,.10),transparent 28%);pointer-events:none}
+.safety-feature>.container{position:relative;z-index:1;display:grid!important;grid-template-columns:1.02fr .98fr!important;gap:34px!important;align-items:stretch!important}
+.safety-feature .visual-frame.city-photo{grid-column:2!important;grid-row:1!important;position:relative;min-height:520px;border-radius:30px!important;overflow:hidden;border:1px solid rgba(184,138,51,.24)!important;box-shadow:0 22px 55px rgba(9,35,63,.12)!important}
+.safety-feature .visual-frame.city-photo::after{content:'♡\A SICHER\A GEMEINSAM\A UNTERWEGS';white-space:pre;position:absolute;right:22px;top:22px;width:142px;height:166px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:32% 32% 42% 42%/22% 22% 52% 52%;background:linear-gradient(145deg,#d8b565,#b8842d);color:#fff;font-weight:850;letter-spacing:.08em;line-height:1.25;box-shadow:0 14px 30px rgba(157,112,31,.28);border:4px solid rgba(255,255,255,.78)}
+.safety-feature .visual-frame.city-photo img{width:100%;height:100%!important;min-height:520px;object-fit:cover!important;object-position:center 42%;display:block}
+.safety-feature .visual-caption{position:absolute!important;left:22px;right:22px;bottom:22px;background:rgba(255,255,255,.92)!important;border:1px solid rgba(184,138,51,.2)!important;border-radius:18px!important;padding:16px 18px!important;backdrop-filter:blur(10px);color:#173654!important;box-shadow:0 10px 28px rgba(9,35,63,.10)}
+.safety-feature .visual-caption strong{display:block;color:#09233f!important;font-size:1.06rem;margin-bottom:3px}
+.safety-feature .visual-copy{grid-column:1!important;grid-row:1!important;display:flex;flex-direction:column;justify-content:center;padding:18px 4px}
+.safety-feature .eyebrow{color:#b88a33!important;font-size:.78rem!important;letter-spacing:.22em!important;font-weight:850!important;text-transform:uppercase!important;margin-bottom:12px!important}
+.safety-feature h2{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;color:#09233f!important;font-size:clamp(3.1rem,5.2vw,5.5rem)!important;line-height:.94!important;letter-spacing:-.045em!important;margin:0 0 22px!important;max-width:680px}
+.safety-feature h2::after{content:'Neue Menschen kennenlernen soll Freude machen. Deshalb setzen wir auf klare Regeln, transparente Abläufe und einen sicheren Rahmen – für alle.';display:block;margin-top:22px;color:#607087;font-family:inherit;font-family:Arial,sans-serif;font-size:1.05rem;font-weight:500;line-height:1.55;letter-spacing:0;max-width:620px}
+.safety-feature .compact-checks{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;margin:18px 0 28px!important}
+.safety-feature .compact-checks>div{position:relative;display:block!important;min-height:150px;padding:24px 22px 22px 86px!important;border-radius:22px;background:#fff!important;border:1px solid rgba(184,138,51,.22)!important;box-shadow:0 12px 28px rgba(9,35,63,.07);color:#617086!important;font-size:.95rem!important;line-height:1.45!important}
+.safety-feature .compact-checks>div::before{position:absolute;left:20px;top:22px;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fbf2d9;color:#b1842f;font-size:1.35rem;font-weight:900}
+.safety-feature .compact-checks>div:nth-child(1)::before{content:'⌖'}
+.safety-feature .compact-checks>div:nth-child(2)::before{content:'+'}
+.safety-feature .compact-checks>div:nth-child(3)::before{content:'4'}
+.safety-feature .compact-checks>div:nth-child(4)::before{content:'✓'}
+.safety-feature .compact-checks>div span{display:none!important}
+.safety-feature .compact-checks>div::after{display:block;margin-top:8px;color:#09233f;font-weight:850;font-size:1.12rem;line-height:1.25;order:-1}
+.safety-feature .compact-checks>div:nth-child(1)::after{content:'Erstes Treffen immer öffentlich'}
+.safety-feature .compact-checks>div:nth-child(2)::after{content:'Begleitperson bei jedem Treffen erlaubt'}
+.safety-feature .compact-checks>div:nth-child(3)::after{content:'Vierergruppe statt 1:1-Treffen'}
+.safety-feature .compact-checks>div:nth-child(4)::after{content:'Klare Regeln und direkter Meldeweg'}
+.safety-feature .section-actions{grid-column:1/-1!important;display:grid!important;grid-template-columns:1fr!important;gap:12px!important;margin-top:0!important}
+.safety-feature .section-actions .btn{width:100%!important;min-height:62px!important;border-radius:16px!important;font-size:1.05rem!important;font-weight:850!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.safety-feature .section-actions .btn-dark{background:linear-gradient(135deg,#071b39,#0c2b52)!important;color:#fff!important;box-shadow:0 14px 30px rgba(7,27,57,.16)!important}
+.safety-feature .section-actions .btn-outline{background:#fff!important;color:#09233f!important;border:1.5px solid #cda24f!important}
+@media(max-width:880px){
+.safety-feature{padding-top:48px!important;padding-bottom:58px!important}
+.safety-feature>.container{grid-template-columns:1fr!important;gap:24px!important}
+.safety-feature .visual-copy{grid-column:1!important;grid-row:1!important;padding:0!important}
+.safety-feature .visual-frame.city-photo{grid-column:1!important;grid-row:2!important;min-height:390px!important}
+.safety-feature .visual-frame.city-photo img{min-height:390px!important}
+.safety-feature .compact-checks{grid-column:1!important;grid-template-columns:1fr 1fr!important;grid-row:3!important;margin-top:4px!important}
+.safety-feature .section-actions{grid-column:1!important;grid-row:4!important}
+}
+@media(max-width:620px){
+.safety-feature{padding-top:38px!important;padding-bottom:48px!important}
+.safety-feature>.container{width:min(calc(100% - 28px),1200px)!important;gap:18px!important}
+.safety-feature h2{font-size:clamp(2.8rem,13vw,4.1rem)!important;line-height:.96!important;margin-bottom:10px!important}
+.safety-feature h2::after{font-size:.96rem;line-height:1.5;margin-top:18px}
+.safety-feature .visual-frame.city-photo{min-height:360px!important;border-radius:24px!important}
+.safety-feature .visual-frame.city-photo img{min-height:360px!important}
+.safety-feature .visual-frame.city-photo::after{right:14px;top:14px;width:112px;height:132px;font-size:.76rem;border-width:3px}
+.safety-feature .visual-caption{left:14px;right:14px;bottom:14px;padding:14px!important;font-size:.88rem!important}
+.safety-feature .compact-checks{grid-template-columns:1fr!important;gap:12px!important}
+.safety-feature .compact-checks>div{min-height:126px!important;padding:20px 18px 18px 78px!important;font-size:.9rem!important;border-radius:18px!important}
+.safety-feature .compact-checks>div::before{left:17px;top:18px;width:44px;height:44px}
+.safety-feature .compact-checks>div::after{font-size:1.06rem}
+.safety-feature .section-actions .btn{min-height:58px!important;font-size:1rem!important}
+}
