@@ -1,56 +1,109 @@
-/* LAVUQ HEADER V5 — Floating Glass + Split Header */
+/* LAVUQ HEADER — Light premium header matching the homepage hero */
 .site-header{
   position:sticky;
   top:0;
   z-index:1000;
-  background:rgba(246,241,231,.82);
+  background:rgba(255,255,255,.94);
   backdrop-filter:blur(18px) saturate(130%);
   -webkit-backdrop-filter:blur(18px) saturate(130%);
-  border-bottom:1px solid rgba(10,26,48,.07);
-  box-shadow:0 10px 34px rgba(6,26,48,.08);
-  padding:10px 0;
+  border-bottom:1px solid rgba(183,138,54,.12);
+  box-shadow:0 8px 28px rgba(6,26,48,.055);
+  padding:8px 0;
 }
 .nav-wrap{
-  min-height:64px;
+  min-height:72px;
   display:grid;
   grid-template-columns:auto minmax(0,1fr) auto;
   align-items:center;
   gap:20px;
-  padding:0 14px;
-  border:1px solid rgba(255,255,255,.62);
-  border-radius:22px;
-  background:rgba(6,26,48,.94);
-  box-shadow:0 14px 34px rgba(6,26,48,.16),inset 0 1px 0 rgba(255,255,255,.05);
+  padding:0 8px;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
 }
-.public-brand{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#fff}
-.public-brand-q-crop{position:static;transform:none;order:-1;width:42px;height:42px;flex:0 0 42px;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat}
-.public-brand-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
-.public-brand-name{font-family:Georgia,"Times New Roman",serif;font-size:1.38rem;letter-spacing:.11em;line-height:1;color:#fff}
-.public-brand-city{margin:0;color:var(--gold-light);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:.57rem;font-weight:800;letter-spacing:.17em;line-height:1;text-transform:uppercase}
-.nav{display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;color:#dfe6ee;font-size:.81rem;font-weight:750}
-.nav>a{display:inline-flex;align-items:center;min-height:38px;padding:0 11px;border-radius:999px;white-space:nowrap;transition:background .2s ease,color .2s ease,transform .2s ease}
-.nav>a:hover{background:rgba(255,255,255,.07);color:#fff}
-.nav>a[href="so-finden-wir-deine-gruppe.html"],.nav>a[href="warum-wir-in-wuerzburg-starten.html"],.nav>a[href="unsere-regeln.html"],.nav>a[href="kein-dating.html"],.nav>a[href="faq.html"]{display:none}
-.nav>a.btn-primary{margin-left:auto;min-height:42px;padding:0 18px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:linear-gradient(135deg,var(--gold-light),#c89539);color:var(--navy);box-shadow:0 9px 22px rgba(188,136,47,.2);font-weight:900}
-.nav>a.btn-primary:hover{background:linear-gradient(135deg,#f4dda0,#d7a94e);color:var(--navy);transform:translateY(-1px)}
+.public-brand{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#061a30;text-decoration:none}
+.public-brand-q-crop{position:static;transform:none;order:-1;width:46px;height:46px;flex:0 0 46px;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat}
+.public-brand-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.public-brand-name{font-family:Georgia,"Times New Roman",serif;font-size:1.48rem;letter-spacing:.11em;line-height:1;color:#061a30}
+.public-brand-city{margin:0;color:#b78a36;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.17em;line-height:1;text-transform:uppercase}
+.nav{display:flex;align-items:center;justify-content:flex-end;gap:2px;min-width:0;color:#132c47;font-size:.74rem;font-weight:730}
+.nav>a{position:relative;display:inline-flex;align-items:center;min-height:38px;padding:0 8px;border-radius:9px;white-space:nowrap;color:#132c47;text-decoration:none;transition:background .2s ease,color .2s ease,transform .2s ease}
+.nav>a:hover{background:rgba(183,138,54,.08);color:#061a30}
+.nav>a:not(.btn-primary)::after{content:"";position:absolute;left:9px;right:9px;bottom:2px;height:1.5px;background:#c59a48;transform:scaleX(0);transform-origin:center;transition:transform .2s ease}
+.nav>a:not(.btn-primary):hover::after{transform:scaleX(1)}
+/* Every public subpage remains visible in the desktop navigation. */
+.nav>a[href="so-finden-wir-deine-gruppe.html"],
+.nav>a[href="warum-wir-in-wuerzburg-starten.html"],
+.nav>a[href="unsere-regeln.html"],
+.nav>a[href="kein-dating.html"],
+.nav>a[href="faq.html"],
+.nav>a[href="fuer-wen-ist-lavuq.html"]{display:inline-flex}
+.nav>a.btn-primary{margin-left:8px;min-height:44px;padding:0 17px;border:1px solid #061a30;border-radius:999px;background:#061a30;color:#fff;box-shadow:0 9px 22px rgba(6,26,48,.12);font-weight:850}
+.nav>a.btn-primary:hover{background:#0d2947;color:#fff;transform:translateY(-1px)}
 .nav-toggle{display:none}
 
-/* Reliable startup hero fallback: lives in the header file because this stylesheet is confirmed to load on the live site. */
-.hero-startup{position:relative;overflow:hidden;color:#fff;background:linear-gradient(112deg,rgba(5,22,40,.92) 0%,rgba(5,22,40,.70) 44%,rgba(5,22,40,.24) 100%),url('wuerzburg-real.jpg') center 52%/cover no-repeat;padding:68px 0 56px}
-.hero-startup::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 15%,rgba(255,255,255,.06),transparent 34%),linear-gradient(180deg,transparent 62%,rgba(3,15,29,.32));pointer-events:none}
-.hero-startup__inner{position:relative;z-index:1;width:min(calc(100% - 40px),1180px);margin:auto;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(320px,420px);gap:48px;align-items:center}
-.hero-startup__content{max-width:720px}.hero-startup__eyebrow{margin:0 0 18px;color:#efd38d;font-size:.76rem;font-weight:850;letter-spacing:.18em;text-transform:uppercase}.hero-startup__title{margin:0 0 18px;line-height:.94;letter-spacing:-.045em}.hero-startup__title-main,.hero-startup__title-accent{display:block;font-family:Georgia,'Times New Roman',serif;font-weight:500}.hero-startup__title-main{font-size:clamp(3.2rem,6.2vw,5.35rem);color:#fff}.hero-startup__title-accent{font-size:clamp(2.75rem,5.5vw,4.65rem);color:#d7ae5b}.hero-startup__text{margin:0;max-width:620px;color:rgba(255,255,255,.92);font-size:1rem;line-height:1.58}
-.hero-startup__actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:26px}.hero-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.hero-btn--primary{min-height:52px;padding:0 23px;border-radius:14px;background:linear-gradient(135deg,#efd38d 0%,#d7ae5b 55%,#c99635 100%);color:#061a30;font-weight:850;font-size:.98rem;box-shadow:0 14px 34px rgba(181,133,49,.24)}.hero-btn--link{gap:8px;color:#fff;font-weight:750;font-size:.94rem}.hero-btn--link span{color:#efd38d;font-size:1.15em}
-.hero-startup__safety{margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;align-items:center;width:fit-content;max-width:100%;padding:11px 14px;border:1px solid rgba(215,174,91,.32);background:rgba(8,28,49,.42);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border-radius:13px}.hero-startup__safety-label{color:#efd38d;font-weight:850;font-size:.8rem;letter-spacing:.03em}.hero-startup__safety-text{color:rgba(255,255,255,.92);font-size:.88rem;line-height:1.4}
-.hero-startup__facts{margin-top:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.hero-fact{padding:13px 12px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.075);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border-radius:15px}.hero-fact strong{display:block;margin-bottom:3px;color:#efd38d;font-size:1.04rem}.hero-fact span{display:block;color:#fff;font-size:.81rem;line-height:1.28}
-.hero-startup__preview{display:flex;justify-content:flex-end}.hero-preview-card{width:100%;max-width:390px;padding:17px;border-radius:24px;background:rgba(255,253,248,.95);border:1px solid rgba(215,174,91,.42);box-shadow:0 28px 68px rgba(0,0,0,.24);color:#061a30}.hero-preview-card__top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.hero-preview-card__brand{display:flex;align-items:center;gap:9px}.hero-preview-card__brand img{width:34px;height:34px;object-fit:contain}.hero-preview-card__label{font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;font-weight:600}.hero-preview-card__status{padding:5px 9px;border-radius:999px;background:#f2e4bf;color:#6d4e17;font-size:.7rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase}.hero-preview-card__image{position:relative;overflow:hidden;border-radius:16px;margin-bottom:12px;aspect-ratio:16/9}.hero-preview-card__image img{width:100%;height:100%;object-fit:cover}.hero-preview-card__image:after{content:'Schön, dass du dabei bist!';position:absolute;left:12px;right:12px;bottom:10px;color:#fff;font-weight:800;font-size:.9rem;text-shadow:0 2px 8px rgba(0,0,0,.55)}.hero-preview-card__grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hero-preview-box{padding:13px 12px;border-radius:13px;background:#fff;border:1px solid #e7dcc9;font-weight:800;font-size:.84rem;display:flex;align-items:center;justify-content:space-between}.hero-preview-box::after{content:'›';color:#b1832d;font-size:1.1rem}
+/* Keep the current hero fallback aligned with the new light homepage design. */
+.hero-startup{position:relative;overflow:hidden;color:#061a30;background:#fff;padding:68px 0 56px}
+.hero-startup::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 26% 16%,rgba(215,174,91,.10),transparent 32%),linear-gradient(180deg,rgba(255,255,255,.1),rgba(245,248,251,.4));pointer-events:none}
+.hero-startup__inner{position:relative;z-index:1;width:min(calc(100% - 40px),1180px);margin:auto;display:grid;grid-template-columns:minmax(0,1.03fr) minmax(360px,.97fr);gap:54px;align-items:center}
+.hero-startup__content{max-width:720px}
+.hero-startup__eyebrow{margin:0 0 18px;color:#183a5d;font-size:.76rem;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
+.hero-startup__title{margin:0 0 18px;line-height:.92;letter-spacing:-.045em}
+.hero-startup__title-main,.hero-startup__title-accent{display:block;font-family:Georgia,'Times New Roman',serif;font-weight:500}
+.hero-startup__title-main{font-size:clamp(3.2rem,6.2vw,5.35rem);color:#061a30}
+.hero-startup__title-accent{font-size:clamp(2.9rem,5.7vw,4.8rem);color:#b78a36}
+.hero-startup__text{margin:0;max-width:620px;color:#17324d;font-size:1rem;line-height:1.58}
+.hero-startup__actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:26px}
+.hero-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.hero-btn--primary{min-height:52px;padding:0 23px;border-radius:999px;background:linear-gradient(135deg,#d8b66b 0%,#b78a36 100%);color:#fff;font-weight:850;font-size:.98rem;box-shadow:0 14px 30px rgba(183,138,54,.2)}
+.hero-btn--link{min-height:50px;padding:0 22px;border:1px solid rgba(183,138,54,.55);border-radius:999px;gap:8px;color:#061a30;font-weight:750;font-size:.94rem;background:#fff}
+.hero-btn--link span{color:#b78a36;font-size:1.15em}
+.hero-startup__safety{margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;align-items:center;width:fit-content;max-width:100%;padding:11px 14px;border:1px solid rgba(183,138,54,.24);background:#fff;border-radius:13px;box-shadow:0 8px 22px rgba(6,26,48,.05)}
+.hero-startup__safety-label{color:#9b7027;font-weight:850;font-size:.8rem;letter-spacing:.03em}
+.hero-startup__safety-text{color:#17324d;font-size:.88rem;line-height:1.4}
+.hero-startup__facts{margin-top:22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.hero-fact{padding:13px 12px;border-top:1px solid rgba(183,138,54,.28);background:transparent}
+.hero-fact strong{display:block;margin-bottom:3px;color:#b78a36;font-size:1.04rem}
+.hero-fact span{display:block;color:#17324d;font-size:.81rem;line-height:1.28}
+.hero-startup__preview{display:flex;justify-content:flex-end}
+.hero-preview-card{width:100%;max-width:500px;padding:0;border-radius:30px;background:#f8f5ee;border:1px solid rgba(183,138,54,.18);box-shadow:0 24px 52px rgba(6,26,48,.10);color:#061a30;overflow:hidden}
+.hero-preview-card__top{display:none}
+.hero-preview-card__brand{display:none}.hero-preview-card__status{display:none}
+.hero-preview-card__image{position:relative;overflow:hidden;border-radius:0;margin:0;aspect-ratio:4/3}
+.hero-preview-card__image img{width:100%;height:100%;object-fit:cover}
+.hero-preview-card__image:after{content:'Würzburg verbindet uns.';position:absolute;right:22px;bottom:22px;color:#e2bd69;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:600;font-size:1.45rem;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.hero-preview-card__grid{display:none}
+.hero-preview-box{display:none}
 
-@media(max-width:1080px){.nav-wrap{grid-template-columns:auto 1fr auto}.nav{gap:2px;font-size:.76rem}.nav>a{padding:0 8px}.nav>a[href="fuer-wen-ist-lavuq.html"]{display:none}}
+@media(max-width:1280px){
+  .nav{font-size:.7rem;gap:0}.nav>a{padding:0 6px}.nav>a.btn-primary{padding:0 14px;margin-left:5px}
+}
+@media(max-width:1080px){
+  .nav-wrap{grid-template-columns:auto 1fr auto}
+  .nav{font-size:.68rem;gap:0}
+  .nav>a{padding:0 5px}
+  .public-brand-q-crop{width:42px;height:42px;flex-basis:42px}
+  .public-brand-name{font-size:1.34rem}
+}
 @media(max-width:900px){
-  .site-header{padding:8px 0;background:rgba(246,241,231,.9)}.nav-wrap{position:relative;display:flex;justify-content:space-between;min-height:62px;padding:0 10px 0 12px;border-radius:18px}.public-brand{gap:9px}.public-brand-q-crop{width:40px;height:40px;flex-basis:40px}.public-brand-name{font-size:1.28rem}.public-brand-city{font-size:.54rem}.nav-toggle{position:static;transform:none;display:inline-flex;align-items:center;justify-content:center;gap:7px;width:auto;min-width:82px;height:40px;min-height:40px;padding:0 12px;border:1px solid rgba(215,174,91,.6);border-radius:11px;background:rgba(255,255,255,.035);color:#fff;font-weight:850}.public-menu-icon{color:var(--gold-light);font-size:.86rem}.public-menu-label{font-size:.86rem}.nav{position:absolute;top:calc(100% + 10px);left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:3px;padding:10px;border:1px solid rgba(215,174,91,.34);border-radius:17px;background:rgba(6,26,48,.985);box-shadow:0 24px 56px rgba(6,26,48,.28);backdrop-filter:blur(18px)}.nav.open{display:flex}.nav>a,.nav>a[href="so-finden-wir-deine-gruppe.html"],.nav>a[href="warum-wir-in-wuerzburg-starten.html"],.nav>a[href="unsere-regeln.html"],.nav>a[href="kein-dating.html"],.nav>a[href="faq.html"],.nav>a[href="fuer-wen-ist-lavuq.html"]{display:flex;min-height:44px;padding:0 13px;border-radius:10px}.nav>a.btn-primary{margin:6px 0 0;justify-content:center}
+  .site-header{padding:7px 0;background:rgba(255,255,255,.97)}
+  .nav-wrap{position:relative;display:flex;justify-content:space-between;min-height:62px;padding:0 10px 0 12px}
+  .public-brand{gap:9px}.public-brand-q-crop{width:40px;height:40px;flex-basis:40px}.public-brand-name{font-size:1.28rem}.public-brand-city{font-size:.54rem}
+  .nav-toggle{position:static;transform:none;display:inline-flex;align-items:center;justify-content:center;gap:7px;width:auto;min-width:82px;height:40px;min-height:40px;padding:0 12px;border:1px solid rgba(183,138,54,.45);border-radius:999px;background:#fff;color:#061a30;font-weight:850;box-shadow:0 5px 14px rgba(6,26,48,.05)}
+  .public-menu-icon{color:#b78a36;font-size:.86rem}.public-menu-label{font-size:.86rem}
+  .nav{position:absolute;top:calc(100% + 9px);left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:2px;padding:10px;border:1px solid rgba(183,138,54,.24);border-radius:17px;background:rgba(255,255,255,.99);box-shadow:0 22px 48px rgba(6,26,48,.16);backdrop-filter:blur(18px)}
+  .nav.open{display:flex}
+  .nav>a,.nav>a[href="so-finden-wir-deine-gruppe.html"],.nav>a[href="warum-wir-in-wuerzburg-starten.html"],.nav>a[href="unsere-regeln.html"],.nav>a[href="kein-dating.html"],.nav>a[href="faq.html"],.nav>a[href="fuer-wen-ist-lavuq.html"]{display:flex;min-height:44px;padding:0 13px;border-radius:10px;color:#061a30}
+  .nav>a.btn-primary{margin:6px 0 0;justify-content:center;border-radius:999px;color:#fff}
   .hero-startup__inner{grid-template-columns:1fr}.hero-startup__preview{display:none}.hero-startup__facts{max-width:680px}
 }
 @media(max-width:520px){
-  .site-header{position:sticky;top:0;padding:7px 0}.nav-wrap{min-height:58px;border-radius:16px;padding:0 8px 0 10px}.public-brand{max-width:calc(100% - 92px)}.public-brand-q-crop{width:38px;height:38px;flex-basis:38px}.public-brand-name{font-size:1.18rem;letter-spacing:.1em}.public-brand-city{font-size:.5rem;letter-spacing:.15em}.nav-toggle{min-width:76px;height:38px;min-height:38px;padding:0 10px;border-radius:10px}.public-menu-label{font-size:.82rem}.nav{top:calc(100% + 8px);left:0;right:0}
-  .hero-startup{padding:44px 0 38px;background:linear-gradient(180deg,rgba(5,22,40,.88) 0%,rgba(5,22,40,.65) 44%,rgba(5,22,40,.72) 100%),url('wuerzburg-real.jpg') center 54%/cover no-repeat}.hero-startup__inner{width:min(calc(100% - 32px),1180px)}.hero-startup__eyebrow{font-size:.67rem;margin-bottom:14px;line-height:1.45}.hero-startup__title{margin-bottom:15px}.hero-startup__title-main{font-size:clamp(2.75rem,11.8vw,3.8rem)}.hero-startup__title-accent{font-size:clamp(2.35rem,10.5vw,3.35rem)}.hero-startup__text{font-size:.93rem;line-height:1.5}.hero-startup__actions{margin-top:21px;flex-direction:column;align-items:stretch;gap:9px}.hero-btn--primary{width:100%;min-height:50px;border-radius:12px;font-size:.9rem}.hero-btn--link{justify-content:flex-start;padding-left:3px;font-size:.89rem}.hero-startup__safety{margin-top:17px;padding:10px 12px;border-radius:12px;gap:5px}.hero-startup__safety-label{font-size:.76rem}.hero-startup__safety-text{font-size:.82rem}.hero-startup__facts{margin-top:17px;grid-template-columns:1fr 1fr;gap:8px}.hero-fact{padding:11px;border-radius:13px}.hero-fact strong{font-size:.96rem}.hero-fact span{font-size:.76rem}
+  .site-header{position:sticky;top:0;padding:6px 0}
+  .nav-wrap{min-height:58px;padding:0 8px 0 10px}
+  .public-brand{max-width:calc(100% - 92px)}.public-brand-q-crop{width:38px;height:38px;flex-basis:38px}.public-brand-name{font-size:1.18rem;letter-spacing:.1em}.public-brand-city{font-size:.5rem;letter-spacing:.15em}
+  .nav-toggle{min-width:76px;height:38px;min-height:38px;padding:0 10px}.public-menu-label{font-size:.82rem}.nav{top:calc(100% + 8px);left:0;right:0}
+  .hero-startup{padding:44px 0 38px;background:#fff}
+  .hero-startup__inner{width:min(calc(100% - 32px),1180px)}
+  .hero-startup__eyebrow{font-size:.67rem;margin-bottom:14px;line-height:1.45}.hero-startup__title{margin-bottom:15px}.hero-startup__title-main{font-size:clamp(2.75rem,11.8vw,3.8rem)}.hero-startup__title-accent{font-size:clamp(2.35rem,10.5vw,3.35rem)}.hero-startup__text{font-size:.93rem;line-height:1.5}.hero-startup__actions{margin-top:21px;flex-direction:column;align-items:stretch;gap:9px}.hero-btn--primary{width:100%;min-height:50px}.hero-btn--link{justify-content:center;font-size:.89rem}.hero-startup__safety{margin-top:17px;padding:10px 12px;border-radius:12px;gap:5px}.hero-startup__safety-label{font-size:.76rem}.hero-startup__safety-text{font-size:.82rem}.hero-startup__facts{margin-top:17px;grid-template-columns:1fr;gap:7px}.hero-fact{padding:10px 4px}.hero-fact strong{font-size:.96rem}.hero-fact span{font-size:.76rem}
 }
