@@ -5,6 +5,11 @@
   meinQHome.defer=true;
   document.head.appendChild(meinQHome);
 
+  const preferenceVisual=document.createElement('script');
+  preferenceVisual.src='home-preference-visual.js?v=20260909-visual-1';
+  preferenceVisual.defer=true;
+  document.head.appendChild(preferenceVisual);
+
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
   if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-8';
 
