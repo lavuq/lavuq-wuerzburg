@@ -52,4 +52,12 @@
     @media(max-width:520px){.home-meinq-phone{width:min(88vw,340px)}.home-meinq-feature{grid-template-columns:1fr;align-content:start;gap:9px;min-height:168px}.home-meinq-feature p{font-size:.76rem}}
   `;
   document.head.appendChild(style);
+
+  if(!document.querySelector('script[data-lavuq-timeline]')){
+    const timeline=document.createElement('script');
+    timeline.src='home-timeline.js?v=20260909-timeline-1';
+    timeline.defer=true;
+    timeline.dataset.lavuqTimeline='1';
+    document.head.appendChild(timeline);
+  }
 })();
