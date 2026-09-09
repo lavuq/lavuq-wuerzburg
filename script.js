@@ -1,5 +1,10 @@
 // LAVUQ public runtime — behaviour only. Visuals are loaded directly by the page.
 (function(){
+  const meinQHome=document.createElement('script');
+  meinQHome.src='home-meinq-middle.js?v=20260909-middle-1';
+  meinQHome.defer=true;
+  document.head.appendChild(meinQHome);
+
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
   if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-8';
 
