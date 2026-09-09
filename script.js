@@ -1,27 +1,36 @@
 // LAVUQ public runtime — behaviour only. Visuals come from the new V3/V4/V5 stylesheets.
 (function(){
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
-  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-5';
+  if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-7';
 
-  if(document.querySelector('.site-header') && !document.querySelector('link[data-lavuq-header-v4]')){
-    const headerStyle=document.createElement('link');
+  // Reuse the stylesheet already present in the document instead of appending a stale duplicate.
+  let headerStyle=document.querySelector('link[rel="stylesheet"][href*="header-v4.css"]');
+  if(headerStyle){
+    headerStyle.href='header-v4.css?v=20260909-v5-6';
+    headerStyle.dataset.lavuqHeaderV4='1';
+  } else if(document.querySelector('.site-header')) {
+    headerStyle=document.createElement('link');
     headerStyle.rel='stylesheet';
-    headerStyle.href='header-v4.css?v=20260909-v5-3';
+    headerStyle.href='header-v4.css?v=20260909-v5-6';
     headerStyle.dataset.lavuqHeaderV4='1';
     document.head.appendChild(headerStyle);
   }
 
+  let startupStyle=document.querySelector('link[rel="stylesheet"][href*="homepage-startup-v5.css"]');
+  if(startupStyle){
+    startupStyle.href='homepage-startup-v5.css?v=20260909-v5-6';
+    startupStyle.dataset.lavuqHomeStartupV5='1';
+  }
+
+  // Only transform legacy hero markup. The current homepage already contains the startup hero directly.
   const legacyHero=document.querySelector('body main .hero');
   if(legacyHero){
-    const oldHero=document.querySelector('link[data-lavuq-home-hero]');
-    if(oldHero) oldHero.remove();
-
-    if(!document.querySelector('link[data-lavuq-home-startup-v5]')){
-      const heroStyle=document.createElement('link');
-      heroStyle.rel='stylesheet';
-      heroStyle.href='homepage-startup-v5.css?v=20260909-v5-3';
-      heroStyle.dataset.lavuqHomeStartupV5='1';
-      document.head.appendChild(heroStyle);
+    if(!startupStyle){
+      startupStyle=document.createElement('link');
+      startupStyle.rel='stylesheet';
+      startupStyle.href='homepage-startup-v5.css?v=20260909-v5-6';
+      startupStyle.dataset.lavuqHomeStartupV5='1';
+      document.head.appendChild(startupStyle);
     }
 
     const startupHero=document.createElement('section');
@@ -100,7 +109,7 @@
   const needsLegacy=!!document.querySelector('#applyForm,.faq-q');
   if(needsLegacy){
     const legacy=document.createElement('script');
-    legacy.src='script-legacy.js?v=20260909-functional-only-5';
+    legacy.src='script-legacy.js?v=20260909-functional-only-6';
     legacy.async=false;
     document.head.appendChild(legacy);
   }
