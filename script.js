@@ -10,6 +10,11 @@
   preferenceVisual.defer=true;
   document.head.appendChild(preferenceVisual);
 
+  const boundaryVisual=document.createElement('script');
+  boundaryVisual.src='home-boundary-light.js?v=20260909-light-1';
+  boundaryVisual.defer=true;
+  document.head.appendChild(boundaryVisual);
+
   const visualLink=document.querySelector('link[rel="stylesheet"][href*="lavuq-visual-"]');
   if(visualLink) visualLink.href='lavuq-visual-v3.css?v=20260909-v3-8';
 
