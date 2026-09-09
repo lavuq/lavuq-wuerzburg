@@ -5,7 +5,7 @@
 
   const headerStyle=document.querySelector('link[rel="stylesheet"][href*="header-v4.css"]');
   if(headerStyle){
-    headerStyle.href='header-v4.css?v=20260909-v5-8';
+    headerStyle.href='header-v4.css?v=20260909-light-hero-header-1';
     headerStyle.dataset.lavuqHeaderV4='1';
   }
 
