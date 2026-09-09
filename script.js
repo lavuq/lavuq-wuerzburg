@@ -7,7 +7,7 @@
   if(document.querySelector('.site-header') && !document.querySelector('link[data-lavuq-header-v4]')){
     const headerStyle=document.createElement('link');
     headerStyle.rel='stylesheet';
-    headerStyle.href='header-v4.css?v=20260909-v4-1';
+    headerStyle.href='header-v4.css?v=20260909-v5-1';
     headerStyle.dataset.lavuqHeaderV4='1';
     document.head.appendChild(headerStyle);
   }
