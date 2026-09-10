@@ -28,24 +28,20 @@
         justify-self:center!important;
       }
       .hero-startup__preview{display:none!important;}
-      .hero-startup__content{
-        display:flex!important;
-        flex-direction:column!important;
-      }
-      .hero-mobile-group-photo{
+      .hero-startup > .hero-mobile-group-photo{
         display:block!important;
         position:relative!important;
-        order:-9999!important;
-        width:100%!important;
+        width:calc(100% - 56px)!important;
+        max-width:760px!important;
         min-height:0!important;
         aspect-ratio:800/451!important;
-        margin:0 0 28px!important;
+        margin:24px auto 26px!important;
         border-radius:24px!important;
         overflow:hidden!important;
         background:url('hero-variant3.jpg?v=20260910-v5') center center/100% 100% no-repeat!important;
         box-shadow:0 16px 34px rgba(9,35,63,.10)!important;
       }
-      .hero-mobile-group-photo::after{display:none!important;content:none!important;}
+      .hero-startup > .hero-mobile-group-photo::after{display:none!important;content:none!important;}
     }
     @media(max-width:520px){
       .home-meinq-premium .home-meinq-phone{
@@ -54,9 +50,14 @@
         transform:rotate(2deg)!important;
         margin:14px auto 30px!important;
       }
-      .hero-mobile-group-photo{min-height:0!important;aspect-ratio:800/451!important;margin:0 0 24px!important;background-position:center center!important;order:-9999!important;}
+      .hero-startup > .hero-mobile-group-photo{
+        width:calc(100% - 56px)!important;
+        aspect-ratio:800/451!important;
+        margin:22px auto 24px!important;
+        background-position:center center!important;
+      }
     }
-    @media(min-width:821px){.hero-mobile-group-photo{display:none!important;}}
+    @media(min-width:821px){.hero-startup > .hero-mobile-group-photo{display:none!important;}}
   `;
   document.head.appendChild(meinQScaleStyle);
 
@@ -76,25 +77,22 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  // Mobile hero order: image -> eyebrow -> heading -> text -> buttons -> trust facts.
+  // Mobile hero order: image sits directly under the header, before the entire hero inner block.
   const ensureMobileHeroPhoto=()=>{
     const hero=document.querySelector('.hero-startup');
-    const content=hero?.querySelector('.hero-startup__content');
-    if(!hero || !content) return;
-    let photo=content.querySelector('.hero-mobile-group-photo');
+    if(!hero) return;
+    let photo=hero.querySelector(':scope > .hero-mobile-group-photo');
+    if(!photo){
+      photo=hero.querySelector('.hero-mobile-group-photo');
+    }
     if(!photo){
       photo=document.createElement('div');
       photo.className='hero-mobile-group-photo';
       photo.setAttribute('role','img');
       photo.setAttribute('aria-label','Vier Menschen mit Blick auf Würzburg in warmem Abendlicht');
     }
-    if(content.firstElementChild!==photo){
-      content.insertBefore(photo,content.firstElementChild);
-    }
-    if(window.innerWidth<=820){
-      content.style.setProperty('display','flex','important');
-      content.style.setProperty('flex-direction','column','important');
-      photo.style.setProperty('order','-9999','important');
+    if(hero.firstElementChild!==photo){
+      hero.insertBefore(photo,hero.firstElementChild);
     }
     photo.style.setProperty('background-image',"url('hero-variant3.jpg?v=20260910-v5')",'important');
     photo.style.setProperty('background-position','center center','important');
@@ -117,6 +115,7 @@
     lockMeinQPhone();
     ensureMobileHeroPhoto();
   });
+  ensureMobileHeroPhoto();
 
   const core=document.createElement('script');
   core.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@62295bf5f1a33e7933693ce477cf403fa24ac2b8/script.js';
