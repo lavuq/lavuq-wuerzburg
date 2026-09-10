@@ -31,13 +31,13 @@
   const style=document.createElement('style');
   style.id='final-cta-v2-style';
   style.textContent=`
-    .final-cta-v2{position:relative;background:#071b39;padding:0!important;overflow:hidden;color:#0a1d3b}
-    .final-cta-v2__scene{position:relative;min-height:900px;background:#071b39;overflow:hidden}
-    .final-cta-v2__photo{position:absolute;inset:0 0 38% 0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(7,27,57,.22)),url('group-companions.jpg') center 44%/cover no-repeat}
-    .final-cta-v2__photo:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,27,57,0) 58%,#071b39 100%)}
+    .final-cta-v2{position:relative;background:#fff;padding:0!important;overflow:hidden;color:#0a1d3b}
+    .final-cta-v2__scene{position:relative;min-height:900px;background:#fff;overflow:hidden}
+    .final-cta-v2__photo{position:absolute;inset:0 0 38% 0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.18)),url('group-companions.jpg') center 44%/cover no-repeat}
+    .final-cta-v2__photo:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 58%,#fff 100%)}
     .final-cta-v2__hand{position:absolute;z-index:2;left:max(5vw,28px);top:46px;color:#c69538;font-family:'Brush Script MT','Segoe Script',cursive;font-size:clamp(2.2rem,4vw,4rem);line-height:.9;transform:rotate(-5deg);text-shadow:0 2px 12px rgba(255,255,255,.45)}
     .final-cta-v2__inner{position:relative;z-index:3;width:min(calc(100% - 40px),1080px);margin:0 auto;padding-top:360px;padding-bottom:80px}
-    .final-cta-v2__card{max-width:880px;margin:0 auto;background:linear-gradient(180deg,#fffdfa,#fbf7ef);border:1px solid rgba(201,160,82,.26);border-radius:34px;padding:50px 58px 38px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.24)}
+    .final-cta-v2__card{max-width:880px;margin:0 auto;background:linear-gradient(180deg,#fffdfa,#fbf7ef);border:1px solid rgba(201,160,82,.26);border-radius:34px;padding:50px 58px 38px;text-align:center;box-shadow:0 30px 70px rgba(10,29,59,.12)}
     .final-cta-v2__eyebrow{margin:0 0 14px;color:#b18432;font-size:.82rem;font-weight:900;letter-spacing:.24em;text-transform:uppercase}
     .final-cta-v2 h2{margin:0;color:#0a1d3b;font-family:Georgia,'Times New Roman',serif;font-size:clamp(3rem,5.7vw,5.4rem);line-height:.94;font-weight:500;letter-spacing:-.045em}
     .final-cta-v2__lead{margin:22px auto 30px;max-width:640px;color:#667187;font-size:1.08rem;line-height:1.5;font-weight:560}
