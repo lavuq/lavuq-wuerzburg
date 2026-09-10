@@ -51,15 +51,17 @@
     .final-cta-v2__skyline{height:74px;margin:28px auto 6px;max-width:620px;opacity:.62;background:url('wuerzburg-real.jpg') center 47%/cover no-repeat;filter:sepia(1) saturate(.7) contrast(.7);mask-image:linear-gradient(180deg,transparent 0,#000 45%,#000 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 45%,#000 100%)}
     .final-cta-v2__tagline{color:#b18432;font-size:.72rem;font-weight:850;letter-spacing:.22em;text-transform:uppercase}
     @media(max-width:760px){
-      .final-cta-v2__scene{min-height:820px}.final-cta-v2__photo{inset:0 0 46% 0;background-position:center 42%}.final-cta-v2__hand{left:22px;top:26px;font-size:2rem}
-      .final-cta-v2__inner{width:min(calc(100% - 24px),1080px);padding-top:330px;padding-bottom:44px}
+      .final-cta-v2,.final-cta-v2__scene{background:#fff!important}
+      .final-cta-v2__scene{min-height:auto!important}
+      .final-cta-v2__photo,.final-cta-v2__photo:after,.final-cta-v2__hand{display:none!important}
+      .final-cta-v2__inner{width:min(calc(100% - 24px),1080px);padding-top:24px!important;padding-bottom:44px}
       .final-cta-v2__card{padding:32px 18px 26px;border-radius:28px}
       .final-cta-v2__eyebrow{font-size:.68rem;letter-spacing:.18em}.final-cta-v2 h2{font-size:clamp(2.45rem,11vw,4rem);line-height:.96}.final-cta-v2__lead{font-size:.94rem;margin:18px auto 22px}
       .final-cta-v2__facts{margin:4px 0 22px}.final-cta-v2__facts>div{min-height:98px;padding:6px 7px;font-size:.73rem}.final-cta-v2__icon{width:48px;height:48px;font-size:1.15rem}
       .final-cta-v2__primary{min-height:62px;font-size:1.02rem;border-radius:16px;gap:10px}.final-cta-v2__secondary{margin-top:16px;font-size:.92rem}.final-cta-v2__skyline{height:55px;margin-top:22px}.final-cta-v2__tagline{font-size:.59rem;letter-spacing:.14em}
     }
     @media(max-width:420px){
-      .final-cta-v2__photo{inset:0 0 49% 0}.final-cta-v2__inner{padding-top:300px}.final-cta-v2__card{padding-left:14px;padding-right:14px}.final-cta-v2 h2{font-size:2.55rem}.final-cta-v2__facts>div{font-size:.68rem}.final-cta-v2__primary{font-size:.98rem}
+      .final-cta-v2__inner{padding-top:18px!important}.final-cta-v2__card{padding-left:14px;padding-right:14px}.final-cta-v2 h2{font-size:2.55rem}.final-cta-v2__facts>div{font-size:.68rem}.final-cta-v2__primary{font-size:.98rem}
     }
   `;
   document.head.appendChild(style);
