@@ -1,7 +1,5 @@
 // LAVUQ public runtime loader.
 (function(){
-  // Force the final CTA surround to the new light website style, even if an older
-  // cached version of the CTA component is still loaded by the runtime bundle.
   const lightCtaStyle=document.createElement('style');
   lightCtaStyle.id='final-cta-light-override';
   lightCtaStyle.textContent=`
@@ -11,8 +9,6 @@
   `;
   document.head.appendChild(lightCtaStyle);
 
-  // Approved mobile framing: the complete Mein-Q device must remain visible on
-  // every side, with the same centered, lightly tilted presentation as the mockup.
   const meinQScaleStyle=document.createElement('style');
   meinQScaleStyle.id='home-meinq-global-scale-fix';
   meinQScaleStyle.textContent=`
@@ -41,9 +37,6 @@
   `;
   document.head.appendChild(meinQScaleStyle);
 
-  // Re-apply the approved geometry after the Mein-Q component is injected by
-  // the legacy runtime. Inline important values prevent later component CSS from
-  // pushing the device outside the viewport again.
   const lockMeinQPhone=()=>{
     const phone=document.querySelector('.home-meinq-premium .home-meinq-phone');
     if(!phone || window.innerWidth>820) return;
@@ -60,16 +53,41 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  const observer=new MutationObserver(()=>lockMeinQPhone());
+  // Mobile hero order: image first, then the three trust facts.
+  const swapHeroImageAndFacts=()=>{
+    if(window.innerWidth>820) return;
+    const hero=document.querySelector('.hero-startup');
+    const content=hero?.querySelector('.hero-startup__content');
+    const preview=hero?.querySelector('.hero-startup__preview');
+    const facts=hero?.querySelector('.hero-startup__facts');
+    if(!hero || !content || !preview || !facts) return;
+    if(preview.parentElement!==content || preview.nextElementSibling!==facts){
+      content.insertBefore(preview,facts);
+    }
+    preview.style.setProperty('width','100%','important');
+    preview.style.setProperty('margin','28px 0 24px','important');
+  };
+
+  const observer=new MutationObserver(()=>{
+    lockMeinQPhone();
+    swapHeroImageAndFacts();
+  });
   observer.observe(document.documentElement,{childList:true,subtree:true});
-  window.addEventListener('resize',lockMeinQPhone,{passive:true});
-  window.addEventListener('load',lockMeinQPhone);
+  window.addEventListener('resize',()=>{
+    lockMeinQPhone();
+    swapHeroImageAndFacts();
+  },{passive:true});
+  window.addEventListener('load',()=>{
+    lockMeinQPhone();
+    swapHeroImageAndFacts();
+  });
 
   const core=document.createElement('script');
   core.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@62295bf5f1a33e7933693ce477cf403fa24ac2b8/script.js';
   core.defer=true;
   core.onload=()=>{
     lockMeinQPhone();
+    swapHeroImageAndFacts();
     const footer=document.createElement('script');
     footer.src='footer-v3-global.js?v=20260910-footer-v3-2';
     footer.defer=true;
