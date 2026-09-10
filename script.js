@@ -1,5 +1,16 @@
 // LAVUQ public runtime loader.
 (function(){
+  // Force the final CTA surround to the new light website style, even if an older
+  // cached version of the CTA component is still loaded by the runtime bundle.
+  const lightCtaStyle=document.createElement('style');
+  lightCtaStyle.id='final-cta-light-override';
+  lightCtaStyle.textContent=`
+    .final-cta-v2,
+    .final-cta-v2__scene{background:#fff!important;}
+    .final-cta-v2__photo:after{background:linear-gradient(180deg,rgba(255,255,255,0) 58%,#fff 100%)!important;}
+  `;
+  document.head.appendChild(lightCtaStyle);
+
   const core=document.createElement('script');
   core.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@62295bf5f1a33e7933693ce477cf403fa24ac2b8/script.js';
   core.defer=true;
