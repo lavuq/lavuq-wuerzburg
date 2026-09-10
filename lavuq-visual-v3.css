@@ -87,7 +87,7 @@ p{margin:0 0 16px}
 .brand-meaning-word{font-weight:800}
 .brand-meaning-item.q-item{border-color:#d9bd7c;background:#fffaf0}
 .brand-meaning-claim{margin-top:20px;padding:18px 20px;border-radius:13px;background:var(--navy);color:#fff;display:flex;gap:14px;align-items:center}
-.brand-meaning-claim strong{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--gold);color:var(--navy);font:700 1.35rem Georgia,serif;flex:none}
+.brand-meaning-claim strong{display:block;width:64px;height:64px;flex:none;font-size:0;color:transparent;background:url('CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png') center/contain no-repeat;border-radius:0}
 
 /* Sections */
 .section{padding:76px 0}
