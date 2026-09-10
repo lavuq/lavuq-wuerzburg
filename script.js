@@ -9,6 +9,9 @@
   `;
   document.head.appendChild(lightCtaStyle);
 
+  // Capture the exact image already inserted by home-preference-visual.js before legacy runtime rewrites the section.
+  const preferredMenIconSrc=document.querySelector('.preference-card--men .preference-card__icon img')?.src || '';
+
   const lockMeinQPhone=()=>{
     const phone=document.querySelector('.home-meinq-premium .home-meinq-phone');
     if(!phone || window.innerWidth>820) return;
@@ -86,10 +89,18 @@
 
   const enforcePreferenceMenIcon=()=>{
     const icon=document.querySelector('.preference-card--men .preference-card__icon');
-    if(!icon) return;
-    if(icon.dataset.lavuqGoldMenIcon==='1') return;
-    icon.innerHTML=`<svg viewBox="0 0 64 64" width="31" height="31" aria-hidden="true" focusable="false"><defs><linearGradient id="lavuqGoldMen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe477"/><stop offset="0.48" stop-color="#d9aa42"/><stop offset="1" stop-color="#b77a17"/></linearGradient></defs><circle cx="25" cy="39" r="14" fill="none" stroke="url(#lavuqGoldMen)" stroke-width="5.5"/><path d="M35 29L51 13M40 13h11v11" fill="none" stroke="url(#lavuqGoldMen)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    icon.dataset.lavuqGoldMenIcon='1';
+    if(!icon || !preferredMenIconSrc) return;
+    const img=icon.querySelector('img');
+    if(!img || img.src!==preferredMenIconSrc){
+      icon.innerHTML=`<img src="${preferredMenIconSrc}" alt="" aria-hidden="true">`;
+    }
+    const current=icon.querySelector('img');
+    if(current){
+      current.style.setProperty('width','34px','important');
+      current.style.setProperty('height','34px','important');
+      current.style.setProperty('object-fit','contain','important');
+      current.style.setProperty('display','block','important');
+    }
     icon.style.setProperty('color','transparent','important');
   };
 
@@ -102,7 +113,7 @@
   core.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@62295bf5f1a33e7933693ce477cf403fa24ac2b8/script.js';
   core.defer=true;
   core.onload=()=>{
-    // Legacy runtime rewrites the hero stylesheet; restore the current reference layout afterwards.
+    // Legacy runtime rewrites the hero and preference sections; restore the current versions afterwards.
     enforceHeroReference();
     enforcePreferenceMenIcon();
     setTimeout(enforceHeroReference,50);
