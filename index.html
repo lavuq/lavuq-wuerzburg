@@ -8,7 +8,22 @@
   <link rel="icon" href="favicon.svg">
   <link rel="stylesheet" href="lavuq-visual-v3.css?v=20260909-v3-8">
   <link rel="stylesheet" href="header-v4.css?v=20260909-header-light-3">
-  <link rel="stylesheet" href="homepage-startup-v5.css?v=20260910-benefit-cards-1">
+  <link rel="stylesheet" href="homepage-startup-v5.css?v=20260910-benefit-cards-2">
+  <style>
+    @media(max-width:980px){
+      .hero-benefits{width:min(calc(100% - 40px),760px);margin:30px auto 4px}
+      .hero-benefits__eyebrow{margin:0 0 12px 2px;color:#b88a33;font-size:.66rem;font-weight:900;letter-spacing:.17em;text-transform:uppercase}
+      .hero-benefits__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      .hero-benefit{min-height:132px;padding:18px 14px;border-radius:20px;border:1px solid rgba(184,138,51,.22);background:linear-gradient(145deg,#fffdfa,#fbf7ef);box-shadow:0 10px 26px rgba(9,35,63,.07);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px}
+      .hero-benefit__icon{width:36px;height:36px;border-radius:11px;background:rgba(184,138,51,.11);color:#b88a33;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;margin-bottom:4px}
+      .hero-benefit strong{color:#b88a33;font-size:.96rem;line-height:1.18;font-weight:850}
+      .hero-benefit span{color:#183554;font-size:.84rem;line-height:1.3;font-weight:650}
+    }
+    @media(max-width:390px){
+      .hero-benefits__grid{grid-template-columns:1fr}
+      .hero-benefit{min-height:104px}
+    }
+  </style>
 </head>
 <body>
 <div class="topbar"><div class="container">Jetzt kostenlos dabei sein. <span>Die aktuelle Startphase ist kostenlos. Für zukünftige Angebote können später Teilnahmegebühren gelten.</span></div></div>
@@ -23,7 +38,15 @@
       <p class="hero-startup__text">Lerne Menschen aus deiner Region kennen – für ehrliche Freundschaften, gemeinsame Unternehmungen und eine kleine Gruppe, in der man sich wirklich wohlfühlen kann.</p>
       <div class="hero-startup__actions"><a href="bewerben.html" class="hero-btn hero-btn--primary">Für eine Freundesgruppe bewerben</a><a href="#so-gehts" class="hero-btn hero-btn--link">So funktioniert’s <span aria-hidden="true">→</span></a></div>
       <div class="hero-startup__safety"><span class="hero-startup__safety-label">Sicher dabei</span><span class="hero-startup__safety-text">Begleitperson bei jedem Treffen erlaubt · Erstes Treffen immer öffentlich</span></div>
-      <div class="hero-startup__facts"><div class="hero-fact"><strong>4</strong><span>Menschen</span></div><div class="hero-fact"><strong>6</strong><span>Wochen</span></div><div class="hero-fact"><strong>3+</strong><span>echte Treffen</span></div><div class="hero-fact"><strong>+1</strong><span>Begleitperson möglich</span></div></div>
+      <div class="hero-benefits" aria-label="Vorteile von LAVUQ">
+        <p class="hero-benefits__eyebrow">Sicher. Lokal. Freundschaftlich.</p>
+        <div class="hero-benefits__grid">
+          <div class="hero-benefit"><div class="hero-benefit__icon">✓</div><strong>Verifizierte Mitglieder</strong><span>Sicherer Rahmen</span></div>
+          <div class="hero-benefit"><div class="hero-benefit__icon">♡</div><strong>Kein Dating</strong><span>Freundschaft im Fokus</span></div>
+          <div class="hero-benefit"><div class="hero-benefit__icon">⌖</div><strong>Würzburg &amp; Umgebung</strong><span>Menschen aus deiner Region</span></div>
+          <div class="hero-benefit"><div class="hero-benefit__icon">+1</div><strong>Begleitperson möglich</strong><span>Wenn du dich wohler fühlst</span></div>
+        </div>
+      </div>
     </div>
     <div class="hero-startup__preview" aria-label="Vorschau auf Mein Q"><div class="hero-preview-card"><div class="hero-preview-card__top"><div class="hero-preview-card__brand"><img src="CDB0DD01-2405-4ADE-952F-BBB1CE0EBEBD.png" alt=""><span class="hero-preview-card__label">Mein Q</span></div><span class="hero-preview-card__status">live</span></div><div class="hero-preview-card__image"><img src="wuerzburg-real.jpg" alt="Würzburg"></div><div class="hero-preview-card__grid"><div class="hero-preview-box">Meine Gruppe</div><div class="hero-preview-box">Chat</div><div class="hero-preview-box">Treffen</div><div class="hero-preview-box">Sicherheit</div></div></div></div>
   </div>
@@ -41,7 +64,7 @@
 </main>
 <footer><div class="container"><div class="footer-grid"><div><div class="brand"><img class="brand-mark" src="lavuq-q-square.png?v=correct-logo" alt="LAVUQ Logo">LAVUQ WÜRZBURG</div><p class="footer-intro">Neue Kontakte. Echte Freundschaften.<br>4 Menschen · 6 Wochen · mindestens 3 echte Treffen.<br><strong>Jetzt kostenlos dabei sein.</strong></p></div><div><h3>Entdecken</h3><div class="footer-links"><a href="index.html#so-gehts">So funktioniert’s</a><a href="mein-q.html">Mein Q</a><a href="sicherheit.html">Sicherheit</a><a href="kein-dating.html">Freundschaft im Fokus</a><a href="faq.html">FAQ</a><a href="bewerben.html">Bewerben</a></div></div><div><h3>Rechtliches</h3><div class="footer-links"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div></div></div></div></footer>
 <script src="home-preference-visual.js?v=20260910-visual-direct-3"></script>
-<script src="script.js?v=20260910-hero-reference-final-3"></script>
+<script src="script.js?v=20260910-hero-reference-final-4"></script>
 <script src="footer-v3-global.js?v=20260910-footer-v3-direct-4"></script>
 <script src="home-why-v3.js?v=20260910-why-v3-1"></script>
 </body>
