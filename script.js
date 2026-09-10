@@ -28,20 +28,6 @@
         justify-self:center!important;
       }
       .hero-startup__preview{display:none!important;}
-      .hero-startup > .hero-mobile-group-photo{
-        display:block!important;
-        position:relative!important;
-        width:calc(100% - 56px)!important;
-        max-width:760px!important;
-        min-height:0!important;
-        aspect-ratio:800/451!important;
-        margin:24px auto 26px!important;
-        border-radius:24px!important;
-        overflow:hidden!important;
-        background:url('hero-variant3.jpg?v=20260910-v5') center center/100% 100% no-repeat!important;
-        box-shadow:0 16px 34px rgba(9,35,63,.10)!important;
-      }
-      .hero-startup > .hero-mobile-group-photo::after{display:none!important;content:none!important;}
     }
     @media(max-width:520px){
       .home-meinq-premium .home-meinq-phone{
@@ -50,14 +36,7 @@
         transform:rotate(2deg)!important;
         margin:14px auto 30px!important;
       }
-      .hero-startup > .hero-mobile-group-photo{
-        width:calc(100% - 56px)!important;
-        aspect-ratio:800/451!important;
-        margin:22px auto 24px!important;
-        background-position:center center!important;
-      }
     }
-    @media(min-width:821px){.hero-startup > .hero-mobile-group-photo{display:none!important;}}
   `;
   document.head.appendChild(meinQScaleStyle);
 
@@ -77,29 +56,22 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  // Mobile hero order: image sits directly under the header, before the entire hero inner block.
+  // Mobile hero image sits directly below the header and spans the viewport.
   const ensureMobileHeroPhoto=()=>{
     const hero=document.querySelector('.hero-startup');
     if(!hero) return;
     let photo=hero.querySelector(':scope > .hero-mobile-group-photo');
-    if(!photo){
-      photo=hero.querySelector('.hero-mobile-group-photo');
-    }
+    if(!photo) photo=hero.querySelector('.hero-mobile-group-photo');
     if(!photo){
       photo=document.createElement('div');
       photo.className='hero-mobile-group-photo';
       photo.setAttribute('role','img');
       photo.setAttribute('aria-label','Vier Menschen mit Blick auf Würzburg in warmem Abendlicht');
     }
-    if(hero.firstElementChild!==photo){
-      hero.insertBefore(photo,hero.firstElementChild);
-    }
-    photo.style.setProperty('background-image',"url('hero-variant3.jpg?v=20260910-v5')",'important');
-    photo.style.setProperty('background-position','center center','important');
-    photo.style.setProperty('background-size','100% 100%','important');
-    photo.style.setProperty('background-repeat','no-repeat','important');
-    photo.style.setProperty('min-height','0','important');
-    photo.style.setProperty('aspect-ratio','800 / 451','important');
+    if(hero.firstElementChild!==photo) hero.insertBefore(photo,hero.firstElementChild);
+
+    // Remove legacy inline/card overrides so homepage-startup-v5.css controls the reference layout.
+    ['width','max-width','min-height','height','aspect-ratio','margin','border-radius','box-shadow','overflow','background-image','background-position','background-size','background-repeat'].forEach(prop=>photo.style.removeProperty(prop));
   };
 
   const observer=new MutationObserver(()=>{
