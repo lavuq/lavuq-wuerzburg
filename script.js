@@ -28,17 +28,22 @@
         justify-self:center!important;
       }
       .hero-startup__preview{display:none!important;}
+      .hero-startup__content{
+        display:flex!important;
+        flex-direction:column!important;
+      }
       .hero-mobile-group-photo{
         display:block!important;
-        position:relative;
-        width:100%;
+        position:relative!important;
+        order:-9999!important;
+        width:100%!important;
         min-height:0!important;
-        aspect-ratio:800/451;
-        margin:0 0 28px;
-        border-radius:24px;
-        overflow:hidden;
+        aspect-ratio:800/451!important;
+        margin:0 0 28px!important;
+        border-radius:24px!important;
+        overflow:hidden!important;
         background:url('hero-variant3.jpg?v=20260910-v5') center center/100% 100% no-repeat!important;
-        box-shadow:0 16px 34px rgba(9,35,63,.10)
+        box-shadow:0 16px 34px rgba(9,35,63,.10)!important;
       }
       .hero-mobile-group-photo::after{display:none!important;content:none!important;}
     }
@@ -49,7 +54,7 @@
         transform:rotate(2deg)!important;
         margin:14px auto 30px!important;
       }
-      .hero-mobile-group-photo{min-height:0!important;aspect-ratio:800/451;margin:0 0 24px;background-position:center center!important;}
+      .hero-mobile-group-photo{min-height:0!important;aspect-ratio:800/451!important;margin:0 0 24px!important;background-position:center center!important;order:-9999!important;}
     }
     @media(min-width:821px){.hero-mobile-group-photo{display:none!important;}}
   `;
@@ -85,6 +90,11 @@
     }
     if(content.firstElementChild!==photo){
       content.insertBefore(photo,content.firstElementChild);
+    }
+    if(window.innerWidth<=820){
+      content.style.setProperty('display','flex','important');
+      content.style.setProperty('flex-direction','column','important');
+      photo.style.setProperty('order','-9999','important');
     }
     photo.style.setProperty('background-image',"url('hero-variant3.jpg?v=20260910-v5')",'important');
     photo.style.setProperty('background-position','center center','important');
