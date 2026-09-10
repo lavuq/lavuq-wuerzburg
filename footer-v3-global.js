@@ -29,23 +29,40 @@
     icon.style.setProperty('justify-content','center','important');
   }
 
+  function applyMenPreferenceBackground(){
+    let card=document.querySelector('.preference-card--men');
+    if(!card){
+      card=[...document.querySelectorAll('.preference-card')].find(el=>/Nur\s+Männer/i.test(el.textContent||''));
+    }
+    if(!card) return;
+    card.style.setProperty('background-image',"url('preference-men-wuerzburg.jpg?v=20260911-1')",'important');
+    card.style.setProperty('background-size','cover','important');
+    card.style.setProperty('background-position','center 58%','important');
+    card.style.setProperty('background-repeat','no-repeat','important');
+  }
+
+  const applyPreferenceFixes=()=>{
+    applyOpenPreferenceIcon();
+    applyMenPreferenceBackground();
+  };
+
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
   original.defer=true;
   original.onload=()=>{
-    applyOpenPreferenceIcon();
-    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(applyOpenPreferenceIcon,ms));
+    applyPreferenceFixes();
+    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(applyPreferenceFixes,ms));
   };
   document.head.appendChild(original);
 
-  applyOpenPreferenceIcon();
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyOpenPreferenceIcon,{once:true});
-  window.addEventListener('load',applyOpenPreferenceIcon,{once:true});
-  const observer=new MutationObserver(applyOpenPreferenceIcon);
+  applyPreferenceFixes();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyPreferenceFixes,{once:true});
+  window.addEventListener('load',applyPreferenceFixes,{once:true});
+  const observer=new MutationObserver(applyPreferenceFixes);
   observer.observe(document.documentElement,{subtree:true,childList:true});
   let runs=0;
   const timer=setInterval(()=>{
-    applyOpenPreferenceIcon();
+    applyPreferenceFixes();
     if(++runs>20) clearInterval(timer);
   },500);
 })();
