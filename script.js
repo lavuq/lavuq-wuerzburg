@@ -12,6 +12,8 @@
   const meinQScaleStyle=document.createElement('style');
   meinQScaleStyle.id='home-meinq-global-scale-fix';
   meinQScaleStyle.textContent=`
+    .hero-startup__preview::before{background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,0) 18%),url('hero-variant3.jpg?v=20260910-v4') center 48%/cover no-repeat!important;}
+    .hero-startup__preview::after{display:none!important;content:none!important;}
     @media(max-width:820px){
       .home-meinq-premium{overflow:visible!important;}
       .home-meinq-premium__wrap{overflow:visible!important;}
@@ -26,7 +28,7 @@
         justify-self:center!important;
       }
       .hero-startup__preview{display:none!important;}
-      .hero-mobile-group-photo{display:block!important;position:relative;width:100%;min-height:310px;margin:28px 0 24px;border-radius:24px;overflow:hidden;background:url('hero-variant3.jpg?v=20260910-v3') center 48%/cover no-repeat;box-shadow:0 16px 34px rgba(9,35,63,.10)}
+      .hero-mobile-group-photo{display:block!important;position:relative;width:100%;min-height:310px;margin:28px 0 24px;border-radius:24px;overflow:hidden;background:url('hero-variant3.jpg?v=20260910-v4') center 48%/cover no-repeat!important;box-shadow:0 16px 34px rgba(9,35,63,.10)}
       .hero-mobile-group-photo::after{display:none!important;content:none!important;}
     }
     @media(max-width:520px){
@@ -58,8 +60,7 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  // Mobile hero order, made independent of the legacy preview layout:
-  // text -> buttons -> image -> trust facts.
+  // Mobile hero order: text -> buttons -> hero image -> trust facts.
   const ensureMobileHeroPhoto=()=>{
     const hero=document.querySelector('.hero-startup');
     const content=hero?.querySelector('.hero-startup__content');
@@ -75,6 +76,9 @@
     if(actions.nextElementSibling!==photo){
       actions.insertAdjacentElement('afterend',photo);
     }
+    photo.style.setProperty('background-image',"url('hero-variant3.jpg?v=20260910-v4')",'important');
+    photo.style.setProperty('background-position','center 48%','important');
+    photo.style.setProperty('background-size','cover','important');
   };
 
   const observer=new MutationObserver(()=>{
