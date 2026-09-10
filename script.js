@@ -34,7 +34,7 @@
         width:100%;
         min-height:0!important;
         aspect-ratio:800/451;
-        margin:28px 0 24px;
+        margin:0 0 28px;
         border-radius:24px;
         overflow:hidden;
         background:url('hero-variant3.jpg?v=20260910-v5') center center/100% 100% no-repeat!important;
@@ -49,7 +49,7 @@
         transform:rotate(2deg)!important;
         margin:14px auto 30px!important;
       }
-      .hero-mobile-group-photo{min-height:0!important;aspect-ratio:800/451;margin:24px 0 22px;background-position:center center!important;}
+      .hero-mobile-group-photo{min-height:0!important;aspect-ratio:800/451;margin:0 0 24px;background-position:center center!important;}
     }
     @media(min-width:821px){.hero-mobile-group-photo{display:none!important;}}
   `;
@@ -71,12 +71,11 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  // Mobile hero order: text -> buttons -> hero image -> trust facts.
+  // Mobile hero order: image -> eyebrow -> heading -> text -> buttons -> trust facts.
   const ensureMobileHeroPhoto=()=>{
     const hero=document.querySelector('.hero-startup');
     const content=hero?.querySelector('.hero-startup__content');
-    const actions=hero?.querySelector('.hero-startup__actions');
-    if(!hero || !content || !actions) return;
+    if(!hero || !content) return;
     let photo=content.querySelector('.hero-mobile-group-photo');
     if(!photo){
       photo=document.createElement('div');
@@ -84,8 +83,8 @@
       photo.setAttribute('role','img');
       photo.setAttribute('aria-label','Vier Menschen mit Blick auf Würzburg in warmem Abendlicht');
     }
-    if(actions.nextElementSibling!==photo){
-      actions.insertAdjacentElement('afterend',photo);
+    if(content.firstElementChild!==photo){
+      content.insertBefore(photo,content.firstElementChild);
     }
     photo.style.setProperty('background-image',"url('hero-variant3.jpg?v=20260910-v5')",'important');
     photo.style.setProperty('background-position','center center','important');
