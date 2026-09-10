@@ -70,7 +70,10 @@
     .lavuq-timeline-card h3{margin:0 0 7px;color:#071a34;font-family:Georgia,'Times New Roman',serif;font-size:1.55rem;line-height:1.15;font-weight:600}
     .lavuq-timeline-card p{margin:0;color:#667085;font-size:.98rem;line-height:1.5}
     .lavuq-timeline-icon{display:grid;place-items:center;flex:0 0 58px;width:58px;height:58px;border-radius:50%;background:#faf4e7;color:#a67828;font-size:1.75rem;font-weight:700}
-    .lavuq-timeline-dot{position:relative;z-index:2;display:grid;place-items:center;width:54px;height:54px;margin:0 auto;border-radius:50%;background:linear-gradient(180deg,#dcb75f,#bb8428);color:#fff;font-size:1.15rem;font-weight:900;box-shadow:0 9px 22px rgba(187,132,40,.25)}
+    .lavuq-timeline-dot{position:relative;z-index:2;display:grid;place-items:center;width:54px;height:54px;margin:0 auto;border-radius:50%;background:linear-gradient(180deg,#dcb75f,#bb8428);color:#fff;font-size:1.15rem;font-weight:900;box-shadow:0 9px 22px rgba(187,132,40,.25);opacity:0;transform:translateY(16px) scale(.72);transition:opacity .55s ease,transform .7s cubic-bezier(.2,.8,.2,1),box-shadow .7s ease}
+    .lavuq-timeline-dot.is-visible{opacity:1;transform:translateY(0) scale(1);box-shadow:0 9px 22px rgba(187,132,40,.25),0 0 0 0 rgba(220,183,95,0)}
+    .lavuq-timeline-dot.is-visible.is-pulsing{animation:lavuqDotPulse .9s ease-out 1}
+    @keyframes lavuqDotPulse{0%{box-shadow:0 9px 22px rgba(187,132,40,.25),0 0 0 0 rgba(220,183,95,.5)}55%{box-shadow:0 12px 26px rgba(187,132,40,.28),0 0 0 16px rgba(220,183,95,0)}100%{box-shadow:0 9px 22px rgba(187,132,40,.25),0 0 0 0 rgba(220,183,95,0)}}
     .lavuq-timeline-spacer{min-height:1px}
     .lavuq-timeline-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:12px 0 32px}
     .lavuq-timeline-badges span{display:inline-flex;align-items:center;min-height:42px;padding:9px 17px;border:1px solid rgba(184,137,48,.32);border-radius:999px;background:#fff;color:#10243f;font-size:.9rem;font-weight:800;box-shadow:0 6px 18px rgba(7,26,52,.035)}
@@ -102,6 +105,28 @@
       .lavuq-timeline-card h3{font-size:1.18rem}
       .lavuq-timeline-card p{font-size:.86rem}
     }
+    @media(prefers-reduced-motion:reduce){
+      .lavuq-timeline-dot{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+    }
   `;
   document.head.appendChild(style);
+
+  const dots=[...section.querySelectorAll('.lavuq-timeline-dot')];
+  if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const dotObserver=new IntersectionObserver((entries,observer)=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+        const dot=entry.target;
+        const index=dots.indexOf(dot);
+        setTimeout(()=>{
+          dot.classList.add('is-visible','is-pulsing');
+          setTimeout(()=>dot.classList.remove('is-pulsing'),950);
+        },Math.max(0,index)*110);
+        observer.unobserve(dot);
+      });
+    },{threshold:.6,rootMargin:'0px 0px -8% 0px'});
+    dots.forEach(dot=>dotObserver.observe(dot));
+  }else{
+    dots.forEach(dot=>dot.classList.add('is-visible'));
+  }
 })();
