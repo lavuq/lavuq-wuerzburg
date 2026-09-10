@@ -62,4 +62,9 @@
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@1f2b774b1dd69a16326703c27cf9b3ba88a32625/home-final-cta-v2.js';
   original.defer=true;
   document.head.appendChild(original);
+
+  const prefIcons=document.createElement('script');
+  prefIcons.src='preference-icons-final.js?v=20260910-2358';
+  prefIcons.defer=true;
+  document.head.appendChild(prefIcons);
 })();
