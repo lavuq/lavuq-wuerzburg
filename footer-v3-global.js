@@ -2,25 +2,25 @@
   function applyOpenPreferenceIcon(){
     const icon=document.querySelector('.preference-card--open .preference-card__icon');
     if(!icon) return;
-    icon.innerHTML='<span class="preference-open-symbol" aria-hidden="true"></span>';
+    const expected='icon-keine-praferenz-gold-96.png?v=20260911-0014';
+    const img=icon.querySelector('img');
+    if(!img || !img.src.includes('icon-keine-praferenz-gold-96.png')){
+      icon.innerHTML=`<img src="${expected}" alt="" aria-hidden="true">`;
+    }
+    const current=icon.querySelector('img');
+    if(current){
+      current.style.setProperty('width','34px','important');
+      current.style.setProperty('height','34px','important');
+      current.style.setProperty('object-fit','contain','important');
+      current.style.setProperty('display','block','important');
+      current.style.setProperty('opacity','1','important');
+      current.style.setProperty('visibility','visible','important');
+    }
     icon.style.setProperty('color','transparent','important');
     icon.style.setProperty('background-image','none','important');
     icon.style.setProperty('display','flex','important');
     icon.style.setProperty('align-items','center','important');
     icon.style.setProperty('justify-content','center','important');
-
-    const symbol=icon.querySelector('.preference-open-symbol');
-    if(symbol){
-      symbol.style.setProperty('width','28px','important');
-      symbol.style.setProperty('height','28px','important');
-      symbol.style.setProperty('border','3px solid #c9993f','important');
-      symbol.style.setProperty('border-radius','50%','important');
-      symbol.style.setProperty('box-sizing','border-box','important');
-      symbol.style.setProperty('position','relative','important');
-      symbol.style.setProperty('display','block','important');
-      symbol.style.setProperty('filter','drop-shadow(0 2px 3px rgba(120,82,18,.18))','important');
-      symbol.innerHTML='<span style="position:absolute;left:5px;right:5px;top:50%;height:3px;transform:translateY(-50%);border-radius:3px;background:linear-gradient(90deg,#b47a1c,#e0ba62,#b47a1c);display:block"></span>';
-    }
   }
 
   const original=document.createElement('script');
