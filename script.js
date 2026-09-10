@@ -53,19 +53,36 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  // Mobile hero order: image first, then the three trust facts.
+  // Mobile hero order: buttons -> large Würzburg/group image -> trust facts.
+  // The trust facts live inside .hero-startup__safety, so the preview must be
+  // inserted before that wrapper (not before .hero-startup__facts directly).
+  let heroPreviewPlaceholder=null;
   const swapHeroImageAndFacts=()=>{
-    if(window.innerWidth>820) return;
     const hero=document.querySelector('.hero-startup');
+    const inner=hero?.querySelector('.hero-startup__inner');
     const content=hero?.querySelector('.hero-startup__content');
     const preview=hero?.querySelector('.hero-startup__preview');
-    const facts=hero?.querySelector('.hero-startup__facts');
-    if(!hero || !content || !preview || !facts) return;
-    if(preview.parentElement!==content || preview.nextElementSibling!==facts){
-      content.insertBefore(preview,facts);
+    const safety=hero?.querySelector('.hero-startup__safety');
+    if(!hero || !inner || !content || !preview || !safety) return;
+
+    if(!heroPreviewPlaceholder){
+      heroPreviewPlaceholder=document.createComment('hero-preview-original-position');
+      if(preview.parentNode) preview.parentNode.insertBefore(heroPreviewPlaceholder,preview);
     }
-    preview.style.setProperty('width','100%','important');
-    preview.style.setProperty('margin','28px 0 24px','important');
+
+    if(window.innerWidth<=820){
+      if(preview.parentElement!==content || preview.nextElementSibling!==safety){
+        content.insertBefore(preview,safety);
+      }
+      preview.style.setProperty('width','100%','important');
+      preview.style.setProperty('margin','28px 0 24px','important');
+      preview.style.setProperty('min-height',window.innerWidth<=640?'310px':'430px','important');
+    }else if(heroPreviewPlaceholder?.parentNode){
+      heroPreviewPlaceholder.parentNode.insertBefore(preview,heroPreviewPlaceholder.nextSibling);
+      preview.style.removeProperty('width');
+      preview.style.removeProperty('margin');
+      preview.style.removeProperty('min-height');
+    }
   };
 
   const observer=new MutationObserver(()=>{
