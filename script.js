@@ -25,6 +25,9 @@
         right:auto!important;
         justify-self:center!important;
       }
+      .hero-startup__preview{display:none!important;}
+      .hero-mobile-group-photo{display:block!important;position:relative;width:100%;min-height:310px;margin:28px 0 24px;border-radius:24px;overflow:hidden;background:url('group-companions.jpg') center 40%/cover no-repeat;box-shadow:0 16px 34px rgba(9,35,63,.10)}
+      .hero-mobile-group-photo::after{content:'Würzburg\A verbindet uns.';white-space:pre;position:absolute;right:6%;bottom:8%;color:#f0cb73;font-family:'Brush Script MT','Segoe Script',cursive;font-size:2rem;line-height:.9;text-align:right;text-shadow:0 2px 10px rgba(0,0,0,.3);transform:rotate(-2deg)}
     }
     @media(max-width:520px){
       .home-meinq-premium .home-meinq-phone{
@@ -33,7 +36,9 @@
         transform:rotate(2deg)!important;
         margin:14px auto 30px!important;
       }
+      .hero-mobile-group-photo{min-height:300px;margin:24px 0 22px}
     }
+    @media(min-width:821px){.hero-mobile-group-photo{display:none!important;}}
   `;
   document.head.appendChild(meinQScaleStyle);
 
@@ -53,50 +58,37 @@
     if(section) section.style.setProperty('overflow','visible','important');
   };
 
-  // Mobile hero order: buttons -> large Würzburg/group image -> trust facts.
-  // The trust facts live inside .hero-startup__safety, so the preview must be
-  // inserted before that wrapper (not before .hero-startup__facts directly).
-  let heroPreviewPlaceholder=null;
-  const swapHeroImageAndFacts=()=>{
+  // Mobile hero order, made independent of the legacy preview layout:
+  // text -> buttons -> image -> trust facts.
+  const ensureMobileHeroPhoto=()=>{
     const hero=document.querySelector('.hero-startup');
-    const inner=hero?.querySelector('.hero-startup__inner');
     const content=hero?.querySelector('.hero-startup__content');
-    const preview=hero?.querySelector('.hero-startup__preview');
-    const safety=hero?.querySelector('.hero-startup__safety');
-    if(!hero || !inner || !content || !preview || !safety) return;
-
-    if(!heroPreviewPlaceholder){
-      heroPreviewPlaceholder=document.createComment('hero-preview-original-position');
-      if(preview.parentNode) preview.parentNode.insertBefore(heroPreviewPlaceholder,preview);
+    const actions=hero?.querySelector('.hero-startup__actions');
+    if(!hero || !content || !actions) return;
+    let photo=content.querySelector('.hero-mobile-group-photo');
+    if(!photo){
+      photo=document.createElement('div');
+      photo.className='hero-mobile-group-photo';
+      photo.setAttribute('role','img');
+      photo.setAttribute('aria-label','Freundliche Gruppe bei einem Treffen in Würzburg');
     }
-
-    if(window.innerWidth<=820){
-      if(preview.parentElement!==content || preview.nextElementSibling!==safety){
-        content.insertBefore(preview,safety);
-      }
-      preview.style.setProperty('width','100%','important');
-      preview.style.setProperty('margin','28px 0 24px','important');
-      preview.style.setProperty('min-height',window.innerWidth<=640?'310px':'430px','important');
-    }else if(heroPreviewPlaceholder?.parentNode){
-      heroPreviewPlaceholder.parentNode.insertBefore(preview,heroPreviewPlaceholder.nextSibling);
-      preview.style.removeProperty('width');
-      preview.style.removeProperty('margin');
-      preview.style.removeProperty('min-height');
+    if(actions.nextElementSibling!==photo){
+      actions.insertAdjacentElement('afterend',photo);
     }
   };
 
   const observer=new MutationObserver(()=>{
     lockMeinQPhone();
-    swapHeroImageAndFacts();
+    ensureMobileHeroPhoto();
   });
   observer.observe(document.documentElement,{childList:true,subtree:true});
   window.addEventListener('resize',()=>{
     lockMeinQPhone();
-    swapHeroImageAndFacts();
+    ensureMobileHeroPhoto();
   },{passive:true});
   window.addEventListener('load',()=>{
     lockMeinQPhone();
-    swapHeroImageAndFacts();
+    ensureMobileHeroPhoto();
   });
 
   const core=document.createElement('script');
@@ -104,7 +96,7 @@
   core.defer=true;
   core.onload=()=>{
     lockMeinQPhone();
-    swapHeroImageAndFacts();
+    ensureMobileHeroPhoto();
     const footer=document.createElement('script');
     footer.src='footer-v3-global.js?v=20260910-footer-v3-2';
     footer.defer=true;
