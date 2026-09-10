@@ -14,13 +14,51 @@
     });
   }
 
-  normalizeBrandTiles();
-  window.addEventListener('load',normalizeBrandTiles);
-  setTimeout(normalizeBrandTiles,100);
-  setTimeout(normalizeBrandTiles,500);
-  setTimeout(normalizeBrandTiles,1200);
+  function enableTimelineMotion(){
+    const dots=[...document.querySelectorAll('#so-gehts .lavuq-timeline-dot')];
+    if(!dots.length || dots.some(dot=>dot.dataset.motionReady==='1')) return;
 
-  const observer=new MutationObserver(()=>normalizeBrandTiles());
+    dots.forEach(dot=>{
+      dot.dataset.motionReady='1';
+      dot.style.opacity='0';
+      dot.style.transform='translateY(18px) scale(.68)';
+    });
+
+    const reveal=(dot,index)=>{
+      if(dot.dataset.motionDone==='1') return;
+      dot.dataset.motionDone='1';
+      setTimeout(()=>{
+        dot.animate([
+          {opacity:0,transform:'translateY(18px) scale(.68)',boxShadow:'0 9px 22px rgba(187,132,40,.18)'},
+          {opacity:1,transform:'translateY(-2px) scale(1.12)',boxShadow:'0 12px 28px rgba(187,132,40,.32),0 0 0 16px rgba(220,183,95,.18)'},
+          {opacity:1,transform:'translateY(0) scale(1)',boxShadow:'0 9px 22px rgba(187,132,40,.25),0 0 0 0 rgba(220,183,95,0)'}
+        ],{duration:900,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+      },index*130);
+    };
+
+    if('IntersectionObserver' in window){
+      const io=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(!entry.isIntersecting) return;
+          const dot=entry.target;
+          reveal(dot,dots.indexOf(dot));
+          io.unobserve(dot);
+        });
+      },{threshold:.35,rootMargin:'0px 0px -10% 0px'});
+      dots.forEach(dot=>io.observe(dot));
+    }else{
+      dots.forEach(reveal);
+    }
+  }
+
+  normalizeBrandTiles();
+  enableTimelineMotion();
+  window.addEventListener('load',()=>{normalizeBrandTiles();enableTimelineMotion();});
+  setTimeout(()=>{normalizeBrandTiles();enableTimelineMotion();},100);
+  setTimeout(()=>{normalizeBrandTiles();enableTimelineMotion();},500);
+  setTimeout(()=>{normalizeBrandTiles();enableTimelineMotion();},1200);
+
+  const observer=new MutationObserver(()=>{normalizeBrandTiles();enableTimelineMotion();});
   observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
 
   const original=document.createElement('script');
