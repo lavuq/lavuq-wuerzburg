@@ -1,22 +1,28 @@
 (function(){
   function applyOpenPreferenceIcon(){
-    const icon=document.querySelector('.preference-card--open .preference-card__icon');
+    let card=document.querySelector('.preference-card--open');
+    if(!card){
+      card=[...document.querySelectorAll('.preference-card')].find(el=>/Keine\s+Präferenz/i.test(el.textContent||''));
+    }
+    if(!card) return;
+    const icon=card.querySelector('.preference-card__icon');
     if(!icon) return;
-    const expected='icon-keine-praferenz-gold-96.png?v=20260911-0014';
-    const img=icon.querySelector('img');
-    if(!img || !img.src.includes('icon-keine-praferenz-gold-96.png')){
-      icon.innerHTML=`<img src="${expected}" alt="" aria-hidden="true">`;
+    const expected='icon-keine-praferenz-gold-96.png?v=20260911-0021';
+    let img=icon.querySelector('img[data-open-preference-icon="1"]');
+    if(!img){
+      icon.innerHTML='<img data-open-preference-icon="1" alt="" aria-hidden="true">';
+      img=icon.querySelector('img');
     }
-    const current=icon.querySelector('img');
-    if(current){
-      current.style.setProperty('width','34px','important');
-      current.style.setProperty('height','34px','important');
-      current.style.setProperty('object-fit','contain','important');
-      current.style.setProperty('display','block','important');
-      current.style.setProperty('opacity','1','important');
-      current.style.setProperty('visibility','visible','important');
-    }
+    if(!img) return;
+    if(!img.src.includes('icon-keine-praferenz-gold-96.png')) img.src=expected;
+    img.style.setProperty('width','34px','important');
+    img.style.setProperty('height','34px','important');
+    img.style.setProperty('object-fit','contain','important');
+    img.style.setProperty('display','block','important');
+    img.style.setProperty('opacity','1','important');
+    img.style.setProperty('visibility','visible','important');
     icon.style.setProperty('color','transparent','important');
+    icon.style.setProperty('font-size','0','important');
     icon.style.setProperty('background-image','none','important');
     icon.style.setProperty('display','flex','important');
     icon.style.setProperty('align-items','center','important');
@@ -28,15 +34,18 @@
   original.defer=true;
   original.onload=()=>{
     applyOpenPreferenceIcon();
-    setTimeout(applyOpenPreferenceIcon,50);
-    setTimeout(applyOpenPreferenceIcon,300);
-    setTimeout(applyOpenPreferenceIcon,900);
-    const observer=new MutationObserver(applyOpenPreferenceIcon);
-    observer.observe(document.documentElement,{subtree:true,childList:true});
+    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(applyOpenPreferenceIcon,ms));
   };
   document.head.appendChild(original);
 
   applyOpenPreferenceIcon();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyOpenPreferenceIcon,{once:true});
   window.addEventListener('load',applyOpenPreferenceIcon,{once:true});
+  const observer=new MutationObserver(applyOpenPreferenceIcon);
+  observer.observe(document.documentElement,{subtree:true,childList:true});
+  let runs=0;
+  const timer=setInterval(()=>{
+    applyOpenPreferenceIcon();
+    if(++runs>20) clearInterval(timer);
+  },500);
 })();
