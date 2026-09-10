@@ -1,165 +1,73 @@
-/* LAVUQ HOMEPAGE HERO — bright Würzburg layout */
+/* LAVUQ HOMEPAGE HERO */
 .hero-startup{position:relative;overflow:hidden;background:#fff;color:#08213b;padding:58px 0 0;border-bottom:1px solid #edf1f4}
 .hero-startup::before{content:"";position:absolute;left:-8%;top:-30%;width:68%;height:120%;background:radial-gradient(circle at 60% 45%,rgba(215,174,91,.12),rgba(215,174,91,0) 67%);pointer-events:none}
-.hero-startup::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(244,248,251,.97)),url('wuerzburg-real.jpg') center 55%/cover no-repeat;opacity:.18;filter:grayscale(.08) saturate(.75);pointer-events:none}
+.hero-startup::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(244,248,251,.97)),url('wuerzburg-real.jpg') center 55%/cover no-repeat;opacity:.18;pointer-events:none}
 .hero-startup__inner{position:relative;z-index:1;width:min(calc(100% - 48px),1280px);margin:0 auto;display:grid;grid-template-columns:minmax(0,.92fr) minmax(460px,1.08fr);gap:42px;align-items:center;min-height:610px;padding-bottom:90px}
 .hero-startup__content{max-width:650px;padding:10px 0 26px}
+.hero-mobile-group-photo{display:none}
 .hero-startup__eyebrow{margin:0 0 18px;color:#16375a;font-size:.72rem;font-weight:800;letter-spacing:.27em;text-transform:uppercase}
 .hero-startup__title{margin:0 0 24px;line-height:.88;letter-spacing:-.055em;max-width:720px}
-.hero-startup__title-main,.hero-startup__title-accent{display:block;font-family:Georgia,'Times New Roman',serif;font-weight:500;overflow-wrap:normal;word-break:normal}
+.hero-startup__title-main,.hero-startup__title-accent{display:block;font-family:Georgia,'Times New Roman',serif;font-weight:500}
 .hero-startup__title-main{font-size:clamp(4.2rem,7.4vw,6.85rem);color:#09233f}
 .hero-startup__title-accent{font-size:clamp(4.05rem,7vw,6.4rem);color:#b88a33}
 .hero-startup__text{margin:0;max-width:620px;color:#183554;font-size:1.05rem;line-height:1.62}
 .hero-startup__actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:27px}
 .hero-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:.2s ease}
 .hero-btn--primary{min-height:56px;padding:0 28px;border-radius:999px;background:linear-gradient(135deg,#d8b565 0%,#b8862f 100%);color:#fff;font-weight:850;font-size:.97rem;box-shadow:0 14px 32px rgba(158,113,31,.2)}
-.hero-btn--primary:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(158,113,31,.26)}
 .hero-btn--link{min-height:56px;padding:0 27px;border:1.4px solid #c9a052;border-radius:999px;color:#09233f;font-weight:780;font-size:.95rem;background:#fff;gap:8px}
-.hero-btn--link:hover{background:#fbf7ef}
-.hero-startup__safety{margin-top:27px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;max-width:620px;border:0;background:transparent;padding:0}
+.hero-startup__safety{margin-top:27px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;max-width:620px}
 .hero-startup__safety-label,.hero-startup__safety-text{display:none}
 .hero-startup__facts{display:contents}
-.hero-fact{position:relative;padding:8px 18px 8px 48px;min-height:48px;background:transparent;border:0;border-radius:0;color:#173654}
-.hero-fact+ .hero-fact{border-left:1px solid #dfe6ec}
-.hero-fact::before{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.55rem;color:#b88a33}
-.hero-fact:nth-child(1)::before{content:'✓'}
-.hero-fact:nth-child(2)::before{content:'♡'}
-.hero-fact:nth-child(3)::before{content:'⌖'}
-.hero-fact:nth-child(n+4){display:none}
-.hero-fact strong{display:block;margin:0;color:#09233f;font-size:.86rem;line-height:1.2}
-.hero-fact span{display:block;margin-top:3px;color:#5a7086;font-size:.75rem;line-height:1.2}
-.hero-startup__preview{position:relative;align-self:stretch;display:flex;align-items:flex-end;justify-content:center;min-height:560px}
-.hero-startup__preview::before{content:"";position:absolute;inset:6% -8% 0 -7%;border-radius:48% 0 0 52% / 52% 0 0 48%;background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,0) 18%),url('group-companions.jpg') center 42%/cover no-repeat;box-shadow:inset 46px 0 55px rgba(255,255,255,.92);z-index:0}
-.hero-startup__preview::after{content:'Würzburg\A verbindet uns.';white-space:pre;position:absolute;right:4%;bottom:18%;z-index:2;color:#f0cb73;font-family:'Brush Script MT','Segoe Script',cursive;font-size:clamp(2rem,3vw,3.4rem);line-height:.9;text-align:right;text-shadow:0 2px 10px rgba(0,0,0,.3);transform:rotate(-2deg)}
-.hero-preview-card{position:relative;z-index:1;width:100%;height:100%;min-height:560px;background:transparent;border:0;box-shadow:none;padding:0;color:inherit}
+.hero-fact{padding:8px 18px;color:#173654}
+.hero-startup__preview{position:relative;align-self:stretch;min-height:560px}
+.hero-startup__preview::before{content:"";position:absolute;inset:6% -8% 0 -7%;border-radius:48% 0 0 52% / 52% 0 0 48%;background:url('group-companions.jpg') center 42%/cover no-repeat}
+.hero-startup__preview::after{content:'Würzburg\A verbindet uns.';white-space:pre;position:absolute;right:4%;bottom:18%;color:#f0cb73;font-family:'Brush Script MT','Segoe Script',cursive;font-size:clamp(2rem,3vw,3.4rem);line-height:.9;text-align:right}
 .hero-preview-card__top,.hero-preview-card__image,.hero-preview-card__grid{display:none}
-.hero-startup__preview .hero-preview-card::before{content:"";position:absolute;left:-7%;bottom:4%;width:63%;height:34%;border-bottom:7px solid rgba(190,143,53,.82);border-radius:0 0 72% 42%;transform:rotate(8deg);filter:drop-shadow(0 8px 12px rgba(160,115,36,.12))}
+
+/* Referenzgetreuer mobiler Hero */
 @media(max-width:980px){
-.hero-startup__inner{grid-template-columns:1fr;min-height:auto;padding-bottom:55px}
-.hero-startup__content{max-width:760px}
-.hero-startup__preview{min-height:430px;margin-top:-12px}
-.hero-startup__preview::before{inset:0;border-radius:34px;box-shadow:none}
-.hero-preview-card{min-height:430px}
-.hero-startup__preview::after{right:5%;bottom:9%}
-.hero-startup__preview .hero-preview-card::before{display:none}
-}
-@media(max-width:640px){
-.hero-startup{padding:34px 0 0}
-.hero-startup::after{height:95px}
-.hero-startup__inner{width:min(calc(100% - 30px),1280px);gap:24px;padding-bottom:42px}
-.hero-startup__content{padding:0}
-.hero-startup__eyebrow{font-size:.62rem;line-height:1.5;letter-spacing:.19em;margin-bottom:13px}
-.hero-startup__title{margin-bottom:17px;line-height:.93}
-.hero-startup__title-main{font-size:clamp(3rem,15vw,4.5rem)}
-.hero-startup__title-accent{font-size:clamp(2.9rem,14vw,4.25rem)}
-.hero-startup__text{font-size:.93rem;line-height:1.52}
-.hero-startup__actions{margin-top:21px;display:grid;grid-template-columns:1fr;gap:9px}
-.hero-btn--primary,.hero-btn--link{width:100%;min-height:50px;padding:0 18px}
-.hero-startup__safety{margin-top:21px;grid-template-columns:1fr;gap:0}
-.hero-fact{padding:9px 12px 9px 46px;border-top:1px solid #edf1f4}
-.hero-fact+ .hero-fact{border-left:0}
-.hero-startup__preview{min-height:310px;margin-top:2px}
-.hero-preview-card{min-height:310px}
-.hero-startup__preview::before{inset:0;border-radius:24px;background-position:center 40%}
-.hero-startup__preview::after{font-size:2rem;right:6%;bottom:8%}
+.topbar{display:none!important}
+.hero-startup{padding:0!important;margin:0!important;background:#fff!important;background-image:none!important;border:0!important;overflow:hidden!important}
+.hero-startup::before,.hero-startup::after,.hero-startup__inner::before,.hero-startup__inner::after,.hero-startup__content::before,.hero-startup__content::after{display:none!important;content:none!important}
+.hero-startup__inner{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;min-height:0!important;background:#fff!important}
+.hero-startup__content{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0 0 34px!important;background:#fff!important;background-image:none!important}
+.hero-mobile-group-photo{display:block!important;position:relative!important;width:100vw!important;max-width:none!important;height:clamp(360px,61vw,470px)!important;min-height:0!important;margin:0 0 -44px calc(50% - 50vw)!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important;background:linear-gradient(to bottom,rgba(255,255,255,0) 66%,rgba(255,255,255,.5) 82%,#fff 100%),url('group-companions.jpg') center 37%/cover no-repeat!important}
+.hero-mobile-group-photo::before{display:none!important;content:none!important}
+.hero-mobile-group-photo::after{content:'Würzburg\A gemeinsam\A erleben.'!important;white-space:pre!important;position:absolute!important;right:6%!important;top:9%!important;color:#09233f!important;font-family:'Brush Script MT','Segoe Script',cursive!important;font-size:clamp(1.7rem,4.8vw,2.25rem)!important;font-weight:500!important;line-height:.94!important;text-align:right!important;transform:rotate(-5deg)!important;text-shadow:0 2px 8px rgba(255,255,255,.72)!important}
+.hero-startup__eyebrow,.hero-startup__title,.hero-startup__text,.hero-startup__actions{width:min(calc(100% - 68px),760px)!important;margin-left:auto!important;margin-right:auto!important}
+.hero-startup__eyebrow{position:relative!important;z-index:2!important;margin-top:0!important;margin-bottom:16px!important;font-size:0!important;line-height:1.45!important;letter-spacing:0!important;color:#0a2949!important}
+.hero-startup__eyebrow::after{content:'FREUNDE FINDEN. AKTIV SEIN. WÜRZBURG ERLEBEN.'!important;font-size:.75rem!important;font-weight:900!important;letter-spacing:.17em!important;line-height:1.45!important}
+.hero-startup__title{position:relative!important;z-index:2!important;margin-top:0!important;margin-bottom:22px!important;line-height:.89!important;letter-spacing:-.045em!important}
+.hero-startup__title-main,.hero-startup__title-accent{font-size:0!important;line-height:inherit!important}
+.hero-startup__title-main::after{content:'Gemeinsam'!important;font-size:clamp(3.55rem,11.6vw,5.8rem)!important;font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;color:#09233f!important}
+.hero-startup__title-accent::after{content:'statt allein.'!important;font-size:clamp(3.4rem,11.1vw,5.5rem)!important;font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;color:#c09032!important}
+.hero-startup__text{font-size:0!important;line-height:1.55!important;margin-top:0!important;margin-bottom:0!important;color:#193a5d!important}
+.hero-startup__text::after{content:'LAVUQ verbindet Menschen aus Würzburg und Umgebung in kleinen Gruppen für echte Aktivitäten und echte Begegnungen. Kein Dating. Einfach gemeinsam mehr erleben.'!important;font-size:1.06rem!important;line-height:1.55!important;font-weight:600!important}
+.hero-startup__actions{display:block!important;margin-top:26px!important}
+.hero-btn--primary{display:flex!important;width:100%!important;min-height:62px!important;padding:0 22px!important;font-size:0!important;border-radius:999px!important;background:linear-gradient(135deg,#d8b565 0%,#b8862f 100%)!important;color:#fff!important;box-shadow:0 12px 26px rgba(158,113,31,.18)!important}
+.hero-btn--primary::after{content:'Kostenlos bewerben  →'!important;font-size:1.08rem!important;font-weight:850!important}
+.hero-btn--link,.hero-startup__safety,.hero-startup__preview{display:none!important}
 }
 
-/* SAFETY FEATURE — standout version 1 */
+@media(max-width:640px){
+.hero-mobile-group-photo{height:58vw!important;min-height:300px!important;max-height:390px!important;margin-bottom:-38px!important;background-position:center 35%!important}
+.hero-startup__eyebrow,.hero-startup__title,.hero-startup__text,.hero-startup__actions{width:calc(100% - 40px)!important}
+.hero-startup__eyebrow::after{font-size:.66rem!important;letter-spacing:.145em!important}
+.hero-startup__title-main::after{font-size:clamp(3.1rem,14vw,4.25rem)!important}
+.hero-startup__title-accent::after{font-size:clamp(3rem,13.5vw,4.1rem)!important}
+.hero-startup__text::after{font-size:1rem!important;line-height:1.52!important}
+.hero-btn--primary{min-height:58px!important}
+.hero-btn--primary::after{font-size:1rem!important}
+}
+
+/* Safety-Bereich */
 .safety-feature{position:relative;overflow:hidden;background:linear-gradient(180deg,#fffdf8 0%,#fbf7ef 100%)!important;padding-top:76px!important;padding-bottom:82px!important}
-.safety-feature::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% 18%,rgba(216,181,101,.18),transparent 30%),radial-gradient(circle at 12% 88%,rgba(216,181,101,.10),transparent 28%);pointer-events:none}
-.safety-feature>.container{position:relative;z-index:1;display:grid!important;grid-template-columns:1.02fr .98fr!important;gap:34px!important;align-items:stretch!important}
+.safety-feature>.container{display:grid!important;grid-template-columns:1.02fr .98fr!important;gap:34px!important;align-items:stretch!important}
 .safety-feature .visual-frame.city-photo{grid-column:2!important;grid-row:1!important;position:relative;min-height:520px;border-radius:30px!important;overflow:hidden;border:1px solid rgba(184,138,51,.24)!important;box-shadow:0 22px 55px rgba(9,35,63,.12)!important}
-.safety-feature .visual-frame.city-photo::after{content:'♡\A SICHER\A GEMEINSAM\A UNTERWEGS';white-space:pre;position:absolute;right:22px;top:22px;width:142px;height:166px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:32% 32% 42% 42%/22% 22% 52% 52%;background:linear-gradient(145deg,#d8b565,#b8842d);color:#fff;font-weight:850;letter-spacing:.08em;line-height:1.25;box-shadow:0 14px 30px rgba(157,112,31,.28);border:4px solid rgba(255,255,255,.78)}
 .safety-feature .visual-frame.city-photo img{width:100%;height:100%!important;min-height:520px;object-fit:cover!important;object-position:center 42%;display:block}
-.safety-feature .visual-caption{position:absolute!important;left:22px;right:22px;bottom:22px;background:rgba(255,255,255,.92)!important;border:1px solid rgba(184,138,51,.2)!important;border-radius:18px!important;padding:16px 18px!important;backdrop-filter:blur(10px);color:#173654!important;box-shadow:0 10px 28px rgba(9,35,63,.10)}
-.safety-feature .visual-caption strong{display:block;color:#09233f!important;font-size:1.06rem;margin-bottom:3px}
-.safety-feature .visual-copy{grid-column:1!important;grid-row:1!important;display:flex;flex-direction:column;justify-content:center;padding:18px 4px}
-.safety-feature .eyebrow{color:#b88a33!important;font-size:.78rem!important;letter-spacing:.22em!important;font-weight:850!important;text-transform:uppercase!important;margin-bottom:12px!important}
-.safety-feature h2{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;color:#09233f!important;font-size:clamp(3.1rem,5.2vw,5.5rem)!important;line-height:.94!important;letter-spacing:-.045em!important;margin:0 0 22px!important;max-width:680px}
-.safety-feature h2::after{content:'Neue Menschen kennenlernen soll Freude machen. Deshalb setzen wir auf klare Regeln, transparente Abläufe und einen sicheren Rahmen – für alle.';display:block;margin-top:22px;color:#607087;font-family:Arial,sans-serif;font-size:1.05rem;font-weight:500;line-height:1.55;letter-spacing:0;max-width:620px}
-.safety-feature .compact-checks{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;margin:18px 0 28px!important}
-.safety-feature .compact-checks>div{position:relative;display:block!important;min-height:150px;padding:24px 22px 22px 86px!important;border-radius:22px;background:#fff!important;border:1px solid rgba(184,138,51,.22)!important;box-shadow:0 12px 28px rgba(9,35,63,.07);color:#617086!important;font-size:.95rem!important;line-height:1.45!important}
-.safety-feature .compact-checks>div::before{position:absolute;left:20px;top:22px;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fbf2d9;color:#b1842f;font-size:1.35rem;font-weight:900}
-.safety-feature .compact-checks>div:nth-child(1)::before{content:'⌖'}
-.safety-feature .compact-checks>div:nth-child(2)::before{content:'+'}
-.safety-feature .compact-checks>div:nth-child(3)::before{content:'4'}
-.safety-feature .compact-checks>div:nth-child(4)::before{content:'✓'}
-.safety-feature .compact-checks>div span{display:none!important}
-.safety-feature .compact-checks>div::after{display:block;margin-top:8px;color:#09233f;font-weight:850;font-size:1.12rem;line-height:1.25;order:-1}
-.safety-feature .compact-checks>div:nth-child(1)::after{content:'Erstes Treffen immer öffentlich'}
-.safety-feature .compact-checks>div:nth-child(2)::after{content:'Begleitperson bei jedem Treffen erlaubt'}
-.safety-feature .compact-checks>div:nth-child(3)::after{content:'Vierergruppe statt 1:1-Treffen'}
-.safety-feature .compact-checks>div:nth-child(4)::after{content:'Klare Regeln und direkter Meldeweg'}
-.safety-feature .section-actions{grid-column:1/-1!important;display:grid!important;grid-template-columns:1fr!important;gap:12px!important;margin-top:0!important}
-.safety-feature .section-actions .btn{width:100%!important;min-height:62px!important;border-radius:16px!important;font-size:1.05rem!important;font-weight:850!important;display:flex!important;align-items:center!important;justify-content:center!important}
-.safety-feature .section-actions .btn-dark{background:linear-gradient(135deg,#071b39,#0c2b52)!important;color:#fff!important;box-shadow:0 14px 30px rgba(7,27,57,.16)!important}
-.safety-feature .section-actions .btn-outline{background:#fff!important;color:#09233f!important;border:1.5px solid #cda24f!important}
-@media(max-width:880px){
-.safety-feature{padding-top:48px!important;padding-bottom:58px!important}
-.safety-feature>.container{grid-template-columns:1fr!important;gap:24px!important}
-.safety-feature .visual-copy{grid-column:1!important;grid-row:1!important;padding:0!important}
-.safety-feature .visual-frame.city-photo{grid-column:1!important;grid-row:2!important;min-height:390px!important}
-.safety-feature .visual-frame.city-photo img{min-height:390px!important}
-.safety-feature .compact-checks{grid-column:1!important;grid-template-columns:1fr 1fr!important;grid-row:3!important;margin-top:4px!important}
-.safety-feature .section-actions{grid-column:1!important;grid-row:4!important}
-}
-@media(max-width:620px){
-.safety-feature{padding-top:38px!important;padding-bottom:48px!important}
-.safety-feature>.container{width:min(calc(100% - 28px),1200px)!important;gap:18px!important}
-.safety-feature h2{font-size:clamp(2.8rem,13vw,4.1rem)!important;line-height:.96!important;margin-bottom:10px!important}
-.safety-feature h2::after{font-size:.96rem;line-height:1.5;margin-top:18px}
-.safety-feature .visual-frame.city-photo{min-height:360px!important;border-radius:24px!important}
-.safety-feature .visual-frame.city-photo img{min-height:360px!important}
-.safety-feature .visual-frame.city-photo::after{right:14px;top:14px;width:112px;height:132px;font-size:.76rem;border-width:3px}
-.safety-feature .visual-caption{left:14px;right:14px;bottom:14px;padding:14px!important;font-size:.88rem!important}
-.safety-feature .compact-checks{grid-template-columns:1fr!important;gap:12px!important}
-.safety-feature .compact-checks>div{min-height:126px!important;padding:20px 18px 18px 78px!important;font-size:.9rem!important;border-radius:18px!important}
-.safety-feature .compact-checks>div::before{left:17px;top:18px;width:44px;height:44px}
-.safety-feature .compact-checks>div::after{font-size:1.06rem}
-.safety-feature .section-actions .btn{min-height:58px!important;font-size:1rem!important}
-}
-
-/* 2026-09-10 — Hero redesign nach freigegebener Referenz */
-.hero-mobile-group-photo{display:none}
-
-@media(max-width:980px){
-.hero-startup{padding:0;background:#fbf8f2;border-bottom:0}
-.hero-startup::before,.hero-startup::after{display:none}
-.hero-startup__inner{width:100%;display:block;padding:0;min-height:0}
-.hero-startup__content{max-width:none;width:100%;padding:0 0 34px;background:linear-gradient(180deg,#fff 0%,#fff 82%,#fbf8f2 100%)}
-.hero-mobile-group-photo{display:block;position:relative;width:100%;height:clamp(300px,58vw,520px);background:linear-gradient(180deg,rgba(7,27,57,.03) 0%,rgba(7,27,57,0) 52%,rgba(255,255,255,.96) 100%),url('group-companions.jpg') center 38%/cover no-repeat;margin:0 0 -50px}
-.hero-mobile-group-photo::after{content:'Würzburg\A gemeinsam\A erleben.';white-space:pre;position:absolute;right:6%;top:9%;color:#09233f;font-family:'Brush Script MT','Segoe Script',cursive;font-size:clamp(1.65rem,5.5vw,2.45rem);font-weight:500;line-height:.92;text-align:right;transform:rotate(-5deg);text-shadow:0 2px 9px rgba(255,255,255,.62)}
-.hero-startup__eyebrow,.hero-startup__title,.hero-startup__text,.hero-startup__actions,.hero-startup__safety{width:min(calc(100% - 48px),760px);margin-left:auto;margin-right:auto}
-.hero-startup__eyebrow{position:relative;z-index:2;margin-top:0;margin-bottom:16px;font-size:0;line-height:1.45;color:#0a2949;letter-spacing:0}
-.hero-startup__eyebrow::after{content:'FREUNDE FINDEN. AKTIV SEIN. WÜRZBURG ERLEBEN.';font-size:.72rem;font-weight:900;letter-spacing:.17em;line-height:1.45}
-.hero-startup__title{position:relative;z-index:2;margin-bottom:20px;line-height:.88;letter-spacing:-.045em}
-.hero-startup__title-main,.hero-startup__title-accent{font-size:0!important;line-height:inherit}
-.hero-startup__title-main::after{content:'Gemeinsam';font-size:clamp(3.45rem,12vw,6rem);font-family:Georgia,'Times New Roman',serif;font-weight:500;color:#09233f}
-.hero-startup__title-accent::after{content:'statt allein.';font-size:clamp(3.3rem,11.5vw,5.8rem);font-family:Georgia,'Times New Roman',serif;font-weight:500;color:#b88a33}
-.hero-startup__text{font-size:0;line-height:1.52;margin-bottom:0;color:#193a5d}
-.hero-startup__text::after{content:'LAVUQ verbindet Menschen aus Würzburg und Umgebung in kleinen Gruppen für echte Aktivitäten und echte Begegnungen. Kein Dating. Einfach gemeinsam mehr erleben.';font-size:1.08rem;line-height:1.55;font-weight:560}
-.hero-startup__actions{display:block;margin-top:26px}
-.hero-btn--primary{width:100%;min-height:58px;padding:0 22px;font-size:0;border-radius:999px;background:linear-gradient(135deg,#d8b565 0%,#b8862f 100%);box-shadow:0 12px 26px rgba(158,113,31,.18)}
-.hero-btn--primary::after{content:'Kostenlos bewerben  →';font-size:1.05rem;font-weight:850}
-.hero-btn--link{display:none}
-.hero-startup__safety{display:none}
-.hero-startup__preview{display:none}
-}
-
-@media(max-width:640px){
-.hero-startup{padding:0}
-.hero-startup__content{padding-bottom:28px}
-.hero-mobile-group-photo{height:56vw;min-height:285px;max-height:410px;margin-bottom:-36px;background-position:center 34%}
-.hero-mobile-group-photo::after{right:6%;top:9%;font-size:1.65rem}
-.hero-startup__eyebrow,.hero-startup__title,.hero-startup__text,.hero-startup__actions{width:calc(100% - 40px)}
-.hero-startup__eyebrow{margin-bottom:14px}
-.hero-startup__eyebrow::after{font-size:.66rem;letter-spacing:.145em}
-.hero-startup__title{margin-bottom:18px;line-height:.9}
-.hero-startup__title-main::after{font-size:clamp(3.15rem,14.2vw,4.4rem)}
-.hero-startup__title-accent::after{font-size:clamp(3.05rem,13.6vw,4.2rem)}
-.hero-startup__text::after{font-size:1rem;line-height:1.52}
-.hero-startup__actions{margin-top:22px}
-.hero-btn--primary{min-height:56px}
-.hero-btn--primary::after{font-size:1rem}
-.topbar{display:none}
-}
+.safety-feature .visual-copy{grid-column:1!important;grid-row:1!important;display:flex;flex-direction:column;justify-content:center}
+.safety-feature h2{font-family:Georgia,'Times New Roman',serif!important;font-weight:500!important;color:#09233f!important;font-size:clamp(3.1rem,5.2vw,5.5rem)!important;line-height:.94!important;letter-spacing:-.045em!important}
+.safety-feature .compact-checks{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;margin:18px 0 28px!important}
+.safety-feature .compact-checks>div{min-height:120px;padding:22px!important;border-radius:22px;background:#fff!important;border:1px solid rgba(184,138,51,.22)!important;box-shadow:0 12px 28px rgba(9,35,63,.07)}
+@media(max-width:880px){.safety-feature>.container{grid-template-columns:1fr!important}.safety-feature .visual-copy,.safety-feature .visual-frame.city-photo{grid-column:1!important}.safety-feature .visual-frame.city-photo{grid-row:2!important;min-height:390px}.safety-feature .compact-checks{grid-template-columns:1fr 1fr!important}}
+@media(max-width:620px){.safety-feature{padding-top:38px!important;padding-bottom:48px!important}.safety-feature h2{font-size:clamp(2.8rem,13vw,4.1rem)!important}.safety-feature .compact-checks{grid-template-columns:1fr!important}.safety-feature .visual-frame.city-photo{min-height:360px!important}}
