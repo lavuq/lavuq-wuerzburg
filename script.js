@@ -26,8 +26,8 @@
         justify-self:center!important;
       }
       .hero-startup__preview{display:none!important;}
-      .hero-mobile-group-photo{display:block!important;position:relative;width:100%;min-height:310px;margin:28px 0 24px;border-radius:24px;overflow:hidden;background:url('group-companions.jpg') center 40%/cover no-repeat;box-shadow:0 16px 34px rgba(9,35,63,.10)}
-      .hero-mobile-group-photo::after{content:'Würzburg\A verbindet uns.';white-space:pre;position:absolute;right:6%;bottom:8%;color:#f0cb73;font-family:'Brush Script MT','Segoe Script',cursive;font-size:2rem;line-height:.9;text-align:right;text-shadow:0 2px 10px rgba(0,0,0,.3);transform:rotate(-2deg)}
+      .hero-mobile-group-photo{display:block!important;position:relative;width:100%;min-height:310px;margin:28px 0 24px;border-radius:24px;overflow:hidden;background:url('hero-variant3.jpg?v=20260910-v3') center 48%/cover no-repeat;box-shadow:0 16px 34px rgba(9,35,63,.10)}
+      .hero-mobile-group-photo::after{display:none!important;content:none!important;}
     }
     @media(max-width:520px){
       .home-meinq-premium .home-meinq-phone{
@@ -36,7 +36,7 @@
         transform:rotate(2deg)!important;
         margin:14px auto 30px!important;
       }
-      .hero-mobile-group-photo{min-height:300px;margin:24px 0 22px}
+      .hero-mobile-group-photo{min-height:300px;margin:24px 0 22px;background-position:center 48%}
     }
     @media(min-width:821px){.hero-mobile-group-photo{display:none!important;}}
   `;
@@ -70,7 +70,7 @@
       photo=document.createElement('div');
       photo.className='hero-mobile-group-photo';
       photo.setAttribute('role','img');
-      photo.setAttribute('aria-label','Freundliche Gruppe bei einem Treffen in Würzburg');
+      photo.setAttribute('aria-label','Vier Menschen mit Blick auf Würzburg in warmem Abendlicht');
     }
     if(actions.nextElementSibling!==photo){
       actions.insertAdjacentElement('afterend',photo);
