@@ -1,4 +1,9 @@
 (function(){
+  const iconFix=document.createElement('script');
+  iconFix.src='preference-icons-final.js?v=20260910-2350';
+  iconFix.defer=true;
+  document.head.appendChild(iconFix);
+
   const finalCtaScript=document.createElement('script');
   finalCtaScript.src='home-final-cta-v2.js?v=20260910-final-v2-1';
   finalCtaScript.defer=true;
