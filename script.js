@@ -11,26 +11,25 @@
   `;
   document.head.appendChild(lightCtaStyle);
 
-  // Robust mobile override for the complete Mein-Q phone mockup. The older
-  // runtime bundle can inject its own sizing later, so use higher specificity
-  // plus !important to ensure the full device is visually reduced by 15%.
+  // Mobile framing for the complete Mein-Q phone mockup. Keep every outer
+  // corner visible while preserving the slight premium tilt from the visual.
   const meinQScaleStyle=document.createElement('style');
   meinQScaleStyle.id='home-meinq-global-scale-fix';
   meinQScaleStyle.textContent=`
     @media(max-width:820px){
       .home-meinq-premium .home-meinq-phone{
         width:min(90vw,396px)!important;
-        transform:rotate(3deg) scale(.85)!important;
+        transform:rotate(2deg) scale(.80)!important;
         transform-origin:top center!important;
-        margin:0 auto -62px!important;
+        margin:0 auto -92px!important;
       }
     }
     @media(max-width:520px){
       .home-meinq-premium .home-meinq-phone{
-        width:min(96vw,374px)!important;
-        transform:rotate(3deg) scale(.85)!important;
+        width:min(92vw,360px)!important;
+        transform:rotate(2deg) scale(.80)!important;
         transform-origin:top center!important;
-        margin:0 auto -74px!important;
+        margin:0 auto -104px!important;
       }
     }
   `;
