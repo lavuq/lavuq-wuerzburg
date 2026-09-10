@@ -84,9 +84,19 @@
     }
   };
 
+  const enforcePreferenceMenIcon=()=>{
+    const icon=document.querySelector('.preference-card--men .preference-card__icon');
+    if(!icon) return;
+    if(icon.dataset.lavuqGoldMenIcon==='1') return;
+    icon.innerHTML=`<svg viewBox="0 0 64 64" width="31" height="31" aria-hidden="true" focusable="false"><defs><linearGradient id="lavuqGoldMen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe477"/><stop offset="0.48" stop-color="#d9aa42"/><stop offset="1" stop-color="#b77a17"/></linearGradient></defs><circle cx="25" cy="39" r="14" fill="none" stroke="url(#lavuqGoldMen)" stroke-width="5.5"/><path d="M35 29L51 13M40 13h11v11" fill="none" stroke="url(#lavuqGoldMen)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    icon.dataset.lavuqGoldMenIcon='1';
+    icon.style.setProperty('color','transparent','important');
+  };
+
   enforceHeroReference();
-  window.addEventListener('load',()=>{lockMeinQPhone();enforceHeroReference();});
-  window.addEventListener('resize',()=>{lockMeinQPhone();enforceHeroReference();},{passive:true});
+  enforcePreferenceMenIcon();
+  window.addEventListener('load',()=>{lockMeinQPhone();enforceHeroReference();enforcePreferenceMenIcon();});
+  window.addEventListener('resize',()=>{lockMeinQPhone();enforceHeroReference();enforcePreferenceMenIcon();},{passive:true});
 
   const core=document.createElement('script');
   core.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@62295bf5f1a33e7933693ce477cf403fa24ac2b8/script.js';
@@ -94,13 +104,20 @@
   core.onload=()=>{
     // Legacy runtime rewrites the hero stylesheet; restore the current reference layout afterwards.
     enforceHeroReference();
+    enforcePreferenceMenIcon();
     setTimeout(enforceHeroReference,50);
     setTimeout(enforceHeroReference,300);
+    setTimeout(enforcePreferenceMenIcon,50);
+    setTimeout(enforcePreferenceMenIcon,300);
+    setTimeout(enforcePreferenceMenIcon,900);
     const footer=document.createElement('script');
     footer.src='footer-v3-global.js?v=20260910-footer-v3-2';
     footer.defer=true;
     document.head.appendChild(footer);
   };
-  core.onerror=enforceHeroReference;
+  core.onerror=()=>{enforceHeroReference();enforcePreferenceMenIcon();};
   document.head.appendChild(core);
+
+  const prefObserver=new MutationObserver(()=>enforcePreferenceMenIcon());
+  prefObserver.observe(document.documentElement,{subtree:true,childList:true});
 })();
