@@ -41,15 +41,19 @@
     card.style.setProperty('background-repeat','no-repeat','important');
   }
 
+  function loadWomenFix(){
+    const s=document.createElement('script');
+    s.src='preference-women-background.js?v=20260911-0926-direct2';
+    s.defer=true;
+    document.head.appendChild(s);
+  }
+
   const applyPreferenceFixes=()=>{
     applyOpenPreferenceIcon();
     applyMenPreferenceBackground();
   };
 
-  const womenScript=document.createElement('script');
-  womenScript.src='https://raw.githubusercontent.com/lavuq/lavuq-wuerzburg/36b3b1237ca9c9df606bd6d8151f9d4ef63459df/preference-women-background.js';
-  womenScript.async=true;
-  document.head.appendChild(womenScript);
+  loadWomenFix();
 
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
