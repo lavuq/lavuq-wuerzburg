@@ -47,8 +47,8 @@
   };
 
   const womenScript=document.createElement('script');
-  womenScript.src='preference-women-background.js?v=20260911-0845';
-  womenScript.defer=true;
+  womenScript.src='https://raw.githubusercontent.com/lavuq/lavuq-wuerzburg/36b3b1237ca9c9df606bd6d8151f9d4ef63459df/preference-women-background.js';
+  womenScript.async=true;
   document.head.appendChild(womenScript);
 
   const original=document.createElement('script');
