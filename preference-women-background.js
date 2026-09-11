@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='preference-women-card-final-small.jpg.b64?v=20260911-1625';
+  const SOURCE='preference-women-card-final-small.jpg.b64.txt?v=20260911-1725';
   let dataUrl='';
   let loading=null;
 
