@@ -35,7 +35,7 @@
   function applyPreferenceFixes(){
     applyOpenPreferenceIcon();
     applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%');
-    applyBackground(findCard('.preference-card--women','Nur\\s+Frauen'),'preference-women-wuerzburg.jpg?v=20260911-1047','center 60%');
+    applyBackground(findCard('.preference-card--women','Nur\\s+Frauen'),'preference-women-wuerzburg-v2.jpg?v=20260911-1436','center 60%');
   }
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
