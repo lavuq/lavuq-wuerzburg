@@ -2,6 +2,7 @@
   function findCard(cls,text){
     return document.querySelector(cls)||[...document.querySelectorAll('.preference-card')].find(el=>new RegExp(text,'i').test(el.textContent||''));
   }
+
   function applyOpenPreferenceIcon(){
     const card=findCard('.preference-card--open','Keine\\s+Präferenz');
     if(!card) return;
@@ -9,7 +10,10 @@
     if(!icon) return;
     const expected='icon-keine-praferenz-gold-96.png?v=20260911-0021';
     let img=icon.querySelector('img[data-open-preference-icon="1"]');
-    if(!img){icon.innerHTML='<img data-open-preference-icon="1" alt="" aria-hidden="true">';img=icon.querySelector('img');}
+    if(!img){
+      icon.innerHTML='<img data-open-preference-icon="1" alt="" aria-hidden="true">';
+      img=icon.querySelector('img');
+    }
     if(!img) return;
     img.src=expected;
     img.style.setProperty('width','34px','important');
@@ -25,6 +29,7 @@
     icon.style.setProperty('align-items','center','important');
     icon.style.setProperty('justify-content','center','important');
   }
+
   function applyBackground(card,url,pos){
     if(!card) return;
     card.style.setProperty('background-image',`url('${url}')`,'important');
@@ -32,19 +37,40 @@
     card.style.setProperty('background-position',pos,'important');
     card.style.setProperty('background-repeat','no-repeat','important');
   }
+
   function applyPreferenceFixes(){
     applyOpenPreferenceIcon();
     applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%');
-    applyBackground(findCard('.preference-card--women','Nur\\s+Frauen'),'preference-women-wuerzburg-v2.jpg?v=20260911-1436','center 60%');
   }
+
+  function loadWomenFix(){
+    if(document.querySelector('script[data-women-fix="20260911-1455"]')) return;
+    const s=document.createElement('script');
+    s.src='preference-women-background.js?v=20260911-1455';
+    s.defer=true;
+    s.dataset.womenFix='20260911-1455';
+    document.head.appendChild(s);
+  }
+
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
   original.defer=true;
-  original.onload=()=>{applyPreferenceFixes();[50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(applyPreferenceFixes,ms));};
+  original.onload=()=>{
+    applyPreferenceFixes();
+    loadWomenFix();
+    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(()=>{applyPreferenceFixes();loadWomenFix();},ms));
+  };
   document.head.appendChild(original);
+
   applyPreferenceFixes();
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyPreferenceFixes,{once:true});
-  window.addEventListener('load',applyPreferenceFixes,{once:true});
+  loadWomenFix();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{applyPreferenceFixes();loadWomenFix();},{once:true});
+  window.addEventListener('load',()=>{applyPreferenceFixes();loadWomenFix();},{once:true});
   new MutationObserver(applyPreferenceFixes).observe(document.documentElement,{subtree:true,childList:true});
-  let runs=0;const timer=setInterval(()=>{applyPreferenceFixes();if(++runs>30)clearInterval(timer)},500);
+  let runs=0;
+  const timer=setInterval(()=>{
+    applyPreferenceFixes();
+    loadWomenFix();
+    if(++runs>30) clearInterval(timer);
+  },500);
 })();
