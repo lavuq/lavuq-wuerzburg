@@ -46,6 +46,11 @@
     applyMenPreferenceBackground();
   };
 
+  const womenScript=document.createElement('script');
+  womenScript.src='preference-women-background.js?v=20260911-0845';
+  womenScript.defer=true;
+  document.head.appendChild(womenScript);
+
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
   original.defer=true;
