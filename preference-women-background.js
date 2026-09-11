@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='preference-women-wuerzburg-v2.jpg?v=20260911-1615';
+  const SOURCE='preference-women-final.jpg?v=20260911-1618';
 
   function findCard(){
     return document.querySelector('.preference-card--women') || [...document.querySelectorAll('.preference-card')].find(el=>/Nur\s+Frauen/i.test(el.textContent||''));
