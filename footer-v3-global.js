@@ -41,7 +41,7 @@
   function applyPreferenceFixes(){
     applyOpenPreferenceIcon();
     applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%');
-    applyBackground(findCard('.preference-card--mixed','Gemischte\\s+Gruppe'),'preference-mixed-wuerzburg.jpg?v=20260912-1128','center 68%');
+    applyBackground(findCard('.preference-card--mixed','Gemischte\\s+Gruppe'),'preference-mixed-wuerzburg.jpg?v=20260912-1130','center bottom');
   }
 
   function loadWomenFix(){
