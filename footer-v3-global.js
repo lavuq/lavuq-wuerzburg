@@ -30,18 +30,18 @@
     icon.style.setProperty('justify-content','center','important');
   }
 
-  function applyBackground(card,url,pos){
+  function applyBackground(card,url,pos,size){
     if(!card) return;
     card.style.setProperty('background-image',`url('${url}')`,'important');
-    card.style.setProperty('background-size','cover','important');
+    card.style.setProperty('background-size',size||'cover','important');
     card.style.setProperty('background-position',pos,'important');
     card.style.setProperty('background-repeat','no-repeat','important');
   }
 
   function applyPreferenceFixes(){
     applyOpenPreferenceIcon();
-    applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%');
-    applyBackground(findCard('.preference-card--mixed','Gemischte\\s+Gruppe'),'preference-mixed-wuerzburg.jpg?v=20260912-1130','center bottom');
+    applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%','cover');
+    applyBackground(findCard('.preference-card--mixed','Gemischte\\s+Gruppe'),'preference-mixed-wuerzburg.jpg?v=20260912-1132','center bottom','145% auto');
   }
 
   function loadWomenFix(){
