@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='group-companions.jpg?v=20260912-open-sharp-crop-1';
+  const SOURCE='wuerzburg-real.jpg?v=20260912-open-city-only-1';
 
   function findCard(){
     return document.querySelector('.preference-card--open') || [...document.querySelectorAll('.preference-card')].find(el=>/Keine\s+Präferenz/i.test(el.textContent||''));
@@ -9,8 +9,8 @@
     const card=findCard();
     if(!card) return;
     card.style.setProperty('background-image',`url('${SOURCE}')`,'important');
-    card.style.setProperty('background-size','auto 210%','important');
-    card.style.setProperty('background-position','center top','important');
+    card.style.setProperty('background-size','cover','important');
+    card.style.setProperty('background-position','center 42%','important');
     card.style.setProperty('background-repeat','no-repeat','important');
   }
 
