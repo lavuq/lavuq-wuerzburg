@@ -62,11 +62,11 @@
   }
 
   function loadOpenFix(){
-    if(document.querySelector('script[data-open-fix="20260912-open-crop-1"]')) return;
+    if(document.querySelector('script[data-open-fix="20260912-direct-final-4"]')) return;
     const s=document.createElement('script');
-    s.src='preference-open-background.js?v=20260912-open-crop-1';
+    s.src='preference-open-background.js?v=20260912-direct-final-4';
     s.defer=true;
-    s.dataset.openFix='20260912-open-crop-1';
+    s.dataset.openFix='20260912-direct-final-4';
     document.head.appendChild(s);
   }
 
