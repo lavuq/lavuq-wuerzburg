@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='preference-open-wuerzburg-hq.b64.txt?v=20260912-open-hq-1';
+  const SOURCE='preference-open-compact.b64.txt?v=20260912-open-compact-1';
   let dataUrl='';
   let loading=null;
 
