@@ -41,7 +41,6 @@
   function applyPreferenceFixes(){
     applyOpenPreferenceIcon();
     applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%','cover');
-    applyBackground(findCard('.preference-card--open','Keine\\s+Präferenz'),'preference-open-wuerzburg.jpg?v=20260912-open-3','center 50%','cover');
   }
 
   function loadWomenFix(){
@@ -62,6 +61,15 @@
     document.head.appendChild(s);
   }
 
+  function loadOpenFix(){
+    if(document.querySelector('script[data-open-fix="20260912-hq-1"]')) return;
+    const s=document.createElement('script');
+    s.src='preference-open-background.js?v=20260912-hq-1';
+    s.defer=true;
+    s.dataset.openFix='20260912-hq-1';
+    document.head.appendChild(s);
+  }
+
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
   original.defer=true;
@@ -69,21 +77,24 @@
     applyPreferenceFixes();
     loadWomenFix();
     loadMixedFix();
-    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();},ms));
+    loadOpenFix();
+    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();loadOpenFix();},ms));
   };
   document.head.appendChild(original);
 
   applyPreferenceFixes();
   loadWomenFix();
   loadMixedFix();
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();},{once:true});
-  window.addEventListener('load',()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();},{once:true});
+  loadOpenFix();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();loadOpenFix();},{once:true});
+  window.addEventListener('load',()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();loadOpenFix();},{once:true});
   new MutationObserver(applyPreferenceFixes).observe(document.documentElement,{subtree:true,childList:true});
   let runs=0;
   const timer=setInterval(()=>{
     applyPreferenceFixes();
     loadWomenFix();
     loadMixedFix();
+    loadOpenFix();
     if(++runs>30) clearInterval(timer);
   },500);
 })();
