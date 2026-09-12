@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='preference-open-wuerzburg.jpg?v=20260912-direct-final-4';
+  const SOURCE='preference-open-wuerzburg.jpg?v=20260912-direct-final-5';
 
   function findCard(){
     return document.querySelector('.preference-card--open') || [...document.querySelectorAll('.preference-card')].find(el=>/Keine\s+Präferenz/i.test(el.textContent||''));
@@ -10,7 +10,7 @@
     if(!card) return;
     card.style.setProperty('background-image',`url('${SOURCE}')`,'important');
     card.style.setProperty('background-size','cover','important');
-    card.style.setProperty('background-position','center center','important');
+    card.style.setProperty('background-position','center 42%','important');
     card.style.setProperty('background-repeat','no-repeat','important');
   }
 
