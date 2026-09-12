@@ -62,11 +62,11 @@
   }
 
   function loadOpenFix(){
-    if(document.querySelector('script[data-open-fix="20260912-direct-final-5"]')) return;
+    if(document.querySelector('script[data-open-fix="20260912-open-sharp-crop-1"]')) return;
     const s=document.createElement('script');
-    s.src='preference-open-background.js?v=20260912-direct-final-5';
+    s.src='preference-open-background.js?v=20260912-open-sharp-crop-1';
     s.defer=true;
-    s.dataset.openFix='20260912-direct-final-5';
+    s.dataset.openFix='20260912-open-sharp-crop-1';
     document.head.appendChild(s);
   }
 
