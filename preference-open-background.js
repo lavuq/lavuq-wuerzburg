@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='preference-open-wuerzburg.jpg?v=20260912-direct-final-3';
+  const SOURCE='preference-open-wuerzburg.jpg?v=20260912-direct-final-4';
 
   function findCard(){
     return document.querySelector('.preference-card--open') || [...document.querySelectorAll('.preference-card')].find(el=>/Keine\s+Präferenz/i.test(el.textContent||''));
