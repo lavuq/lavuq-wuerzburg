@@ -1,5 +1,5 @@
 (function(){
-  const SOURCE='preference-men-wuerzburg.jpg?v=20260912-open-crop-1';
+  const SOURCE='preference-open-wuerzburg.jpg?v=20260912-direct-final-3';
 
   function findCard(){
     return document.querySelector('.preference-card--open') || [...document.querySelectorAll('.preference-card')].find(el=>/Keine\s+Präferenz/i.test(el.textContent||''));
@@ -9,8 +9,8 @@
     const card=findCard();
     if(!card) return;
     card.style.setProperty('background-image',`url('${SOURCE}')`,'important');
-    card.style.setProperty('background-size','auto 205%','important');
-    card.style.setProperty('background-position','center top','important');
+    card.style.setProperty('background-size','cover','important');
+    card.style.setProperty('background-position','center center','important');
     card.style.setProperty('background-repeat','no-repeat','important');
   }
 
