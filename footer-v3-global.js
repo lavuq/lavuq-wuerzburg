@@ -41,6 +41,7 @@
   function applyPreferenceFixes(){
     applyOpenPreferenceIcon();
     applyBackground(findCard('.preference-card--men','Nur\\s+Männer'),'preference-men-wuerzburg.jpg?v=20260911-1','center 58%','cover');
+    applyBackground(findCard('.preference-card--open','Keine\\s+Präferenz'),'preference-open-wuerzburg.jpg?v=20260912-open-1','center 52%','cover');
   }
 
   function loadWomenFix(){
