@@ -52,25 +52,37 @@
     document.head.appendChild(s);
   }
 
+  function loadMixedFix(){
+    if(document.querySelector('script[data-mixed-fix="20260912-base64-2"]')) return;
+    const s=document.createElement('script');
+    s.src='preference-mixed-background.js?v=20260912-base64-2';
+    s.defer=true;
+    s.dataset.mixedFix='20260912-base64-2';
+    document.head.appendChild(s);
+  }
+
   const original=document.createElement('script');
   original.src='https://cdn.jsdelivr.net/gh/lavuq/lavuq-wuerzburg@a6a40ed206e428307f9fce1e7160960e6718c367/footer-v3-global.js';
   original.defer=true;
   original.onload=()=>{
     applyPreferenceFixes();
     loadWomenFix();
-    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(()=>{applyPreferenceFixes();loadWomenFix();},ms));
+    loadMixedFix();
+    [50,150,300,600,900,1500,2500,4000].forEach(ms=>setTimeout(()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();},ms));
   };
   document.head.appendChild(original);
 
   applyPreferenceFixes();
   loadWomenFix();
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{applyPreferenceFixes();loadWomenFix();},{once:true});
-  window.addEventListener('load',()=>{applyPreferenceFixes();loadWomenFix();},{once:true});
+  loadMixedFix();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();},{once:true});
+  window.addEventListener('load',()=>{applyPreferenceFixes();loadWomenFix();loadMixedFix();},{once:true});
   new MutationObserver(applyPreferenceFixes).observe(document.documentElement,{subtree:true,childList:true});
   let runs=0;
   const timer=setInterval(()=>{
     applyPreferenceFixes();
     loadWomenFix();
+    loadMixedFix();
     if(++runs>30) clearInterval(timer);
   },500);
 })();
