@@ -9,6 +9,7 @@
       {name:'Café Lenz',address:'Spiegelstraße 21, 97070 Würzburg'},
       {name:'Café Mozart',address:'Theaterstraße 21, 97070 Würzburg'},
       {name:'Café Wunschlos glücklich',address:'Bronnbachergasse 22r, 97070 Würzburg'},
+      {name:'Lügensteinmuseum Würzburg – Café',address:'Korngasse 12, 97070 Würzburg'},
       {name:'Mainfranken Theater – Foyer/Treffpunkt',address:'Theaterstraße 21, 97070 Würzburg'},
       {name:'Central im Bürgerbräu',address:'Frankfurter Straße 87, 97082 Würzburg'}
     ],
@@ -34,7 +35,9 @@
       {name:'CinemaxX Würzburg',address:'Veitshöchheimer Straße 5A, 97080 Würzburg'},
       {name:'Museum im Kulturspeicher',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
       {name:'Martin von Wagner Museum',address:'Residenzplatz 2, Tor A, 97070 Würzburg'},
-      {name:'Kunstschiff ARTE NOAH',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'}
+      {name:'Kunstschiff ARTE NOAH',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
+      {name:'Lügensteinmuseum Würzburg',address:'Korngasse 12, 97070 Würzburg'},
+      {name:'Siebold-Museum Würzburg',address:'Frankfurter Straße 87, 97082 Würzburg'}
     ],
     '🌳 Draußen & spazieren':[
       {name:'Residenz & Hofgarten',address:'Residenzplatz 2, 97070 Würzburg'},
@@ -44,7 +47,8 @@
       {name:'Alter Kranen',address:'Kranenkai, 97070 Würzburg'},
       {name:'Ringpark',address:'Sanderring, 97070 Würzburg'},
       {name:'Festung Marienberg',address:'Festung Marienberg, 97082 Würzburg'},
-      {name:'Hofgarten der Residenz',address:'Residenzplatz 2, 97070 Würzburg'}
+      {name:'Hofgarten der Residenz',address:'Residenzplatz 2, 97070 Würzburg'},
+      {name:'Lusamgärtlein',address:'Domerschulgasse, 97070 Würzburg'}
     ],
     '🏛️ Würzburg entdecken':[
       {name:'Würzburger Residenz',address:'Residenzplatz 2, 97070 Würzburg'},
@@ -56,7 +60,10 @@
       {name:'Botanischer Garten der Universität Würzburg',address:'Julius-von-Sachs-Platz 4, 97082 Würzburg'},
       {name:'Central im Bürgerbräu',address:'Frankfurter Straße 87, 97082 Würzburg'},
       {name:'Jüdisches Museum Shalom Europa',address:'Valentin-Becker-Straße 11, 97072 Würzburg'},
-      {name:'Kunstschiff ARTE NOAH',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'}
+      {name:'Kunstschiff ARTE NOAH',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
+      {name:'Lügensteinmuseum Würzburg',address:'Korngasse 12, 97070 Würzburg'},
+      {name:'Siebold-Museum Würzburg',address:'Frankfurter Straße 87, 97082 Würzburg'},
+      {name:'Lusamgärtlein',address:'Domerschulgasse, 97070 Würzburg'}
     ],
     '🌧️ Schlechtwetter':[
       {name:'Museum im Kulturspeicher',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
@@ -71,14 +78,17 @@
       {name:'Mainfranken Theater Würzburg',address:'Theaterstraße 21, 97070 Würzburg'},
       {name:'Jüdisches Museum Shalom Europa',address:'Valentin-Becker-Straße 11, 97072 Würzburg'},
       {name:'Kunstschiff ARTE NOAH',address:'Oskar-Laredo-Platz 1, 97080 Würzburg'},
-      {name:'Stadtbücherei Würzburg – Falkenhaus',address:'Marktplatz 9, 97070 Würzburg'}
+      {name:'Stadtbücherei Würzburg – Falkenhaus',address:'Marktplatz 9, 97070 Würzburg'},
+      {name:'Lügensteinmuseum Würzburg',address:'Korngasse 12, 97070 Würzburg'},
+      {name:'Siebold-Museum Würzburg',address:'Frankfurter Straße 87, 97082 Würzburg'}
     ],
     '🆓 Kostenlos & unkompliziert':[
       {name:'Martin von Wagner Museum',address:'Residenzplatz 2, Tor A, 97070 Würzburg'},
       {name:'Stadtbücherei Würzburg – Falkenhaus',address:'Marktplatz 9, 97070 Würzburg'},
       {name:'Alte Mainbrücke',address:'Alte Mainbrücke, 97070 Würzburg'},
       {name:'Mainufer / Mainkai',address:'Mainkai, 97070 Würzburg'},
-      {name:'Ringpark',address:'Sanderring, 97070 Würzburg'}
+      {name:'Ringpark',address:'Sanderring, 97070 Würzburg'},
+      {name:'Lusamgärtlein',address:'Domerschulgasse, 97070 Würzburg'}
     ]
   };
 
